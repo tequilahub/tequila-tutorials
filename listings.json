@@ -1,0 +1,30 @@
+[
+  {
+    "listing": "/FAQ.html",
+    "items": [
+      "/FAQ/FAQ.html"
+    ]
+  },
+  {
+    "listing": "/research.html",
+    "items": [
+      "/Researches/molcirc/index.html",
+      "/Researches/quantum_classifier/quantum_classifier.html",
+      "/Researches/electronic-hamiltonians/index.html"
+    ]
+  },
+  {
+    "listing": "/tutorials.html",
+    "items": [
+      "/Tutorials/tq-get-started/index.html",
+      "/Tutorials/tq-circuits/index.html",
+      "/Tutorials/CircuitCompiler/CircuitCompiler.html",
+      "/Tutorials/OpenQASMConversions/OpenQASMConversions.html",
+      "/Tutorials/Braket/BraketTutorial.html",
+      "/Tutorials/QTensor/QTensor.html",
+      "/Tutorials/optimizer/Optimizers.html",
+      "/Tutorials/KrylovTutorial/KrylovTutorial.html",
+      "/Tutorials/AdaptiveMethods/jupyter_notebook.html"
+    ]
+  }
+]

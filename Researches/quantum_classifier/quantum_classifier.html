@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.554">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Simon Reichert">
+<meta name="author" content="Adapted by Thuy Truong">
+<meta name="dcterms.date" content="2024-07-19">
+
+<title>Tequila Tutorials - Building a Variational Quantum Classifier</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../favicon.ico" rel="icon">
+<script src="../../site_libs/cookie-consent/cookie-consent.js"></script>
+<link href="../../site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-V7DRP5E70N"></script>
+
+<script type="text/plain" cookie-consent="tracking">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-V7DRP5E70N', { 'anonymize_ip': true});
+</script>
+
+<script type="text/javascript" charset="UTF-8">
+document.addEventListener('DOMContentLoaded', function () {
+cookieconsent.run({
+  "notice_banner_type":"simple",
+  "consent_type":"express",
+  "palette":"light",
+  "language":"en",
+  "page_load_consent_levels":["strictly-necessary"],
+  "notice_banner_reject_button_hide":false,
+  "preferences_center_close_button_hide":false,
+  "website_name":""
+  ,
+"language":"en"
+  });
+});
+</script> 
+  
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Tequila Tutorials - Building a Variational Quantum Classifier">
+<meta property="og:description" content="quantum computing, quantum chemistry and tequila">
+<meta property="og:image" content="https://tequilahub.github.io/tequila-tutorials/Researches/quantum_classifier/classifier.png">
+<meta property="og:site_name" content="Tequila Tutorials">
+<meta property="og:image:height" content="1792">
+<meta property="og:image:width" content="2486">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../tequila_logo.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Tequila Tutorials</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../research.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../FAQ/FAQ.html"> 
+<span class="menu-text">FAQ</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../Contribution/Contribution.html"> 
+<span class="menu-text">Contribution</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Building a Variational Quantum Classifier</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Authors</div>
+      <div class="quarto-title-meta-contents">
+               <p>Simon Reichert </p>
+               <p>Adapted by Thuy Truong </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">July 19, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">1 Introduction</a></li>
+  <li><a href="#fundamentals" id="toc-fundamentals" class="nav-link" data-scroll-target="#fundamentals">2 Fundamentals</a>
+  <ul class="collapse">
+  <li><a href="#machine-learning" id="toc-machine-learning" class="nav-link" data-scroll-target="#machine-learning">Machine Learning</a></li>
+  <li><a href="#variational-quantum-algorithms-and-quantum-machine-learning" id="toc-variational-quantum-algorithms-and-quantum-machine-learning" class="nav-link" data-scroll-target="#variational-quantum-algorithms-and-quantum-machine-learning">Variational Quantum Algorithms and Quantum Machine Learning</a></li>
+  </ul></li>
+  <li><a href="#building-a-classifier" id="toc-building-a-classifier" class="nav-link" data-scroll-target="#building-a-classifier">3 Building a Classifier</a>
+  <ul class="collapse">
+  <li><a href="#the-data-for-classification" id="toc-the-data-for-classification" class="nav-link" data-scroll-target="#the-data-for-classification">3.1 The data for Classification</a></li>
+  <li><a href="#measurement-and-interpretation" id="toc-measurement-and-interpretation" class="nav-link" data-scroll-target="#measurement-and-interpretation">3.2 Measurement and interpretation</a>
+  <ul class="collapse">
+  <li><a href="#several-thresholds" id="toc-several-thresholds" class="nav-link" data-scroll-target="#several-thresholds">Several thresholds</a></li>
+  <li><a href="#assignment-using-projectors" id="toc-assignment-using-projectors" class="nav-link" data-scroll-target="#assignment-using-projectors">Assignment using Projectors</a></li>
+  <li><a href="#assignment-using-the-full-state" id="toc-assignment-using-the-full-state" class="nav-link" data-scroll-target="#assignment-using-the-full-state">Assignment using the full state</a></li>
+  </ul></li>
+  <li><a href="#ansatz" id="toc-ansatz" class="nav-link" data-scroll-target="#ansatz">3.3 Ansatz</a></li>
+  <li><a href="#loss-function" id="toc-loss-function" class="nav-link" data-scroll-target="#loss-function">3.4 Loss function</a></li>
+  <li><a href="#minimization" id="toc-minimization" class="nav-link" data-scroll-target="#minimization">3.5 Minimization</a></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">3.6 Results</a></li>
+  </ul></li>
+  <li><a href="#weighted-circuit" id="toc-weighted-circuit" class="nav-link" data-scroll-target="#weighted-circuit">4 Weighted circuit</a></li>
+  <li><a href="#final-remarks" id="toc-final-remarks" class="nav-link" data-scroll-target="#final-remarks">5 Final remarks</a></li>
+  <li><a href="#sources" id="toc-sources" class="nav-link" data-scroll-target="#sources">6 Sources</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/tequilahub/tequila/blob/main/Researches/quantum_classifier/quantum_classifier.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<section id="introduction" class="level1">
+<h1>1 Introduction</h1>
+<p>Currently, Convolutional and Deep Neural Networks are at the forefront of research in Machine Learning and Computer Science in general. These networks show the best results in solving complex tasks such as Language Processing and Image Generation. On the other hand, in the area of quantum algorithms, scientists are trying to find algorithms and use cases, where quantum computing creates a unique advantage over classical computers. With the current boom of Machine Learning and Neural Networks, one avenue where quantum advantage might be found would be quantum machine learning. In this area, certain aspects of the classical approach are replaced by quantum systems or data. With the currently available quantum computers, one of the most successful approaches uses Variational Quantum Algorithms, as these work fairly well with only a limited amount of qubits and noise. As a result, there has been a lot of work regarding Quantum Machine Learning using Variational Quantum Algorithms. This tutorial will implement one such algorithm. The implementation will solve a classification task and will do so based on the paper by <span class="citation" data-cites="PerezSalinas2020datareuploading">Pérez-Salinas et al. (<a href="#ref-PerezSalinas2020datareuploading" role="doc-biblioref">2020</a>)</span>, where the quantum circuit only uses a single qubit and rotational gates to solve the given task. The simulation will be implemented with the Tequila API <span class="citation" data-cites="Kottmann_2021">(<a href="#ref-Kottmann_2021" role="doc-biblioref">Kottmann et al. 2021</a>)</span> using the qulacs backend for computations. The data and result will be visualized with Matplotlib <span class="citation" data-cites="Hunter:2007">(<a href="#ref-Hunter:2007" role="doc-biblioref">Hunter 2007</a>)</span> and Qutip <span class="citation" data-cites="JOHANSSON20131234">(<a href="#ref-JOHANSSON20131234" role="doc-biblioref">Johansson, Nation, and Nori 2013</a>)</span>.</p>
+<div id="cell-2" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2023-08-02T11:57:32.041033700Z&quot;,&quot;start_time&quot;:&quot;2023-08-02T11:56:55.344417100Z&quot;}" data-execution_count="1">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tequila <span class="im">as</span> tq</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> qutip</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="fundamentals" class="level1">
+<h1>2 Fundamentals</h1>
+<section id="machine-learning" class="level2">
+<h2 class="anchored" data-anchor-id="machine-learning">Machine Learning</h2>
+<p>In the most general sense, supervised machine learning aims to train a model using known data to infer knowledge about unknown data based on the training result. In mathematical terms, we are trying to learn some function <span class="math inline">\(M: \mathcal{X} \to \mathcal{Y}\)</span> where <span class="math inline">\(\mathcal{X}\)</span> is the set of all possible data points and <span class="math inline">\(\mathcal{Y}\)</span> is the set of labels. We do this using only a relatively small set of data points <span class="math inline">\(\{x_i\}\subset \mathcal{X}\)</span> with their labels <span class="math inline">\(\{y_i\}\subset \mathcal{Y}\)</span> and use these to train the parameters <span class="math inline">\(\theta\)</span> of a model <span class="math inline">\(M_\theta(x)\)</span>. Through the training we get some optimal parameters <span class="math inline">\(\theta_{opt}\)</span> such that <span class="math inline">\(M_{\theta_{opt}}(x_i)\)</span> is the best approximation of <span class="math inline">\(y_i\)</span>. We can then take an unseen data point <span class="math inline">\(x\in\mathcal{X}\)</span> and use our trained model to assign a label <span class="math inline">\({y}\)</span>. We do this by calculating <span class="math inline">\(M_{\theta_{opt}}(x)\)</span> and assigning the result as the label for <span class="math inline">\(x\)</span>. One of the most famous examples for this would be the classification of images using a neural network. In that case, the function we are trying to learn maps images to labels. We take a neural network <span class="math inline">\(N_{w,\theta}(x)\)</span> with some tunable weights <span class="math inline">\(w\)</span> and biases <span class="math inline">\(\theta\)</span> and train it using some labeled images. After the training, the neural network should have learned some pattern in the data, and we now can insert a new image, which will return the optimal label based on the training images.</p>
+<p>There are many choices which determine the quality of the result. These consist of:</p>
+<ul>
+<li>The model and its associated parameters</li>
+<li>The choice of the loss function</li>
+<li>Th optimization routine</li>
+</ul>
+<p>The optimal answers to these questions are in most cases problem specific and chosen based on additional knowledge. The aforementioned choices will be further explained when we need to implement them in section 3.</p>
+</section>
+<section id="variational-quantum-algorithms-and-quantum-machine-learning" class="level2">
+<h2 class="anchored" data-anchor-id="variational-quantum-algorithms-and-quantum-machine-learning">Variational Quantum Algorithms and Quantum Machine Learning</h2>
+<p>We can view Quantum Machine Learning from two different perspectives. From a machine learning point of view, we simply use a parameterized quantum circuit as our model, and try to adapt all other parts to fit the concepts of this circuit. The other viewpoint considers general Variational Quantum Algorithms (VQAs), which are hybrid algorithms that involve a parameterized quantum circuit and classical computation to optimize the parameters. These VQAs can also be used to solve tasks that are native to machine learning, which would lead us again to quantum machine learning.</p>
+<p>We can examine the basic structure of a VQA through a simple example using Tequila:</p>
+<div id="cell-5" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2023-08-02T11:57:32.176881Z&quot;,&quot;start_time&quot;:&quot;2023-08-02T11:57:32.044034500Z&quot;}" data-execution_count="2">
+<div class="sourceCode cell-code" id="annotated-cell-2"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1">1</button><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> tq.Variable(name<span class="op">=</span><span class="st">"a"</span>)</span>
+<span id="annotated-cell-2-2"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> tq.Variable(name<span class="op">=</span><span class="st">"b"</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="2">2</button><span id="annotated-cell-2-3" class="code-annotation-target"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a>Unitary <span class="op">=</span> tq.gates.Rx(np.pi <span class="op">*</span> a, target<span class="op">=</span><span class="dv">0</span>) <span class="op">+</span> tq.gates.Ry(np.pi <span class="op">*</span> b, target<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="annotated-cell-2-4"><a href="#annotated-cell-2-4" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="3">3</button><span id="annotated-cell-2-5" class="code-annotation-target"><a href="#annotated-cell-2-5" aria-hidden="true" tabindex="-1"></a>Observable <span class="op">=</span> tq.paulis.X(<span class="dv">0</span>) <span class="op">+</span> tq.paulis.Y(<span class="dv">0</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="4">4</button><span id="annotated-cell-2-6" class="code-annotation-target"><a href="#annotated-cell-2-6" aria-hidden="true" tabindex="-1"></a>Objective <span class="op">=</span> tq.ExpectationValue(U<span class="op">=</span>Unitary, H<span class="op">=</span>Observable)</span>
+<span id="annotated-cell-2-7"><a href="#annotated-cell-2-7" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="5">5</button><span id="annotated-cell-2-8" class="code-annotation-target"><a href="#annotated-cell-2-8" aria-hidden="true" tabindex="-1"></a>initial_values <span class="op">=</span> {a: <span class="dv">1</span>, b:<span class="dv">1</span>}</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="6">6</button><span id="annotated-cell-2-9" class="code-annotation-target"><a href="#annotated-cell-2-9" aria-hidden="true" tabindex="-1"></a>minimized <span class="op">=</span> tq.minimize(Objective,variables<span class="op">=</span>[a,b],initial_values<span class="op">=</span>initial_values, silent<span class="op">=</span><span class="va">True</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="7">7</button><span id="annotated-cell-2-10" class="code-annotation-target"><a href="#annotated-cell-2-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'minimal value of the objective: '</span>, minimized.energy)</span>
+<span id="annotated-cell-2-11"><a href="#annotated-cell-2-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'optimal variable values: </span><span class="ch">\n</span><span class="st">'</span>, minimized.angles)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="1,2" data-code-annotation="1">Initialize tunable variables, that will be optimized later</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="3" data-code-annotation="2">Create a unitary/quantum circuit using a given problem structure</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="5" data-code-annotation="3">Define an Observable whose expectation we want to measure</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="6" data-code-annotation="4">Define the Objective/Loss function we want to minimize as the expectation value of the Observable after applying the Unitary</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="8" data-code-annotation="5">Define some initial values for the variables we want to optimize</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="6">6</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="9" data-code-annotation="6">Minimize the Objective through one of many different minimization methods to compute optimal variable assignments</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="7">7</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="10,11" data-code-annotation="7">Return the calculated parameters of the circuit and the minimal value of the Objective</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>minimal value of the objective:  -1.4142135607453392
+optimal variable values: 
+ a : 0.2499994506269027
+b : -0.499978415813107
+</code></pre>
+</div>
+</div>
+<p>The bulk of the work is done in the minimization step, where we iteratively calculate the current value of the objective and its gradient and use these values to determine some small changes to the parameters so that we can further improve the result. The objective describes the error of our circuit and the minimum would be the parameter assignment that has the least error. Using this setup, we can now build a VQA to do classification.</p>
+</section>
+</section>
+<section id="building-a-classifier" class="level1">
+<h1>3 Building a Classifier</h1>
+<section id="the-data-for-classification" class="level2">
+<h2 class="anchored" data-anchor-id="the-data-for-classification">3.1 The data for Classification</h2>
+<p>We first need to determine the data we want to classify. For general data, there are several complicated questions that arise when trying to insert a data point in the circuit. The usual data, like numbers, vectors, matrices or higher dimensional data are best represented using a classical computer, and we need to figure out how to transform the representation as many bits onto a quantum circuit with only a few qubits. We will address this in section 3.3. In order to visualize the data and to assess the quality of our training, we will be using elements of <span class="math inline">\(\mathbb{R}^2\)</span>. We further restrict ourselves to the area <span class="math inline">\([0,2]\times [0,2]\)</span>. In this area we draw three partially overlapping circles, resulting in four total classes including the background (<a href="#fig-data" class="quarto-xref">Figure&nbsp;1</a>). We create three different lists. <code>visual</code> to simply show what the classes look like, <code>test_data</code> to see if the trained circuit is able to classify correctly, and <code>training_data</code> with associated <code>labels</code>, which is used to train the model.</p>
+<div id="cell-9" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2023-08-02T11:57:32.185483200Z&quot;,&quot;start_time&quot;:&quot;2023-08-02T11:57:32.180883200Z&quot;}" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_random_point():</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> random.uniform(<span class="fl">0.0</span>, <span class="fl">2.0</span>), random.uniform(<span class="fl">0.0</span>, <span class="fl">2.0</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_label(datapoint):</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    circle1 <span class="op">=</span> ((<span class="fl">0.0</span>,<span class="fl">0.0</span>), np.pi <span class="op">/</span> <span class="dv">2</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    circle2 <span class="op">=</span> ((<span class="fl">0.5</span>,<span class="fl">1.75</span>), np.pi <span class="op">/</span> <span class="dv">8</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    circle3 <span class="op">=</span> ((<span class="fl">2.0</span>,<span class="fl">2.0</span>), np.pi <span class="op">/</span> <span class="dv">4</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> np.linalg.norm((datapoint[<span class="dv">0</span>] <span class="op">-</span> circle1[<span class="dv">0</span>][<span class="dv">0</span>], datapoint[<span class="dv">1</span>]<span class="op">-</span> circle1[<span class="dv">0</span>][<span class="dv">1</span>])) <span class="op">&lt;</span> circle1[<span class="dv">1</span>]:</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> np.linalg.norm((datapoint[<span class="dv">0</span>] <span class="op">-</span> circle2[<span class="dv">0</span>][<span class="dv">0</span>], datapoint[<span class="dv">1</span>]<span class="op">-</span> circle2[<span class="dv">0</span>][<span class="dv">1</span>])) <span class="op">&lt;</span> circle2[<span class="dv">1</span>]:</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">2</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> np.linalg.norm((datapoint[<span class="dv">0</span>] <span class="op">-</span> circle3[<span class="dv">0</span>][<span class="dv">0</span>], datapoint[<span class="dv">1</span>]<span class="op">-</span> circle3[<span class="dv">0</span>][<span class="dv">1</span>])) <span class="op">&lt;</span> circle3[<span class="dv">1</span>]:</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">3</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">0</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> visualize_points(data_set):</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    colors <span class="op">=</span> []</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> data_point <span class="kw">in</span> data_set:</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> data_point[<span class="dv">2</span>] <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>            colors.append(<span class="st">'r'</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> data_point[<span class="dv">2</span>] <span class="op">==</span> <span class="dv">2</span>:</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>            colors.append(<span class="st">'g'</span>)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> data_point[<span class="dv">2</span>] <span class="op">==</span> <span class="dv">3</span>:</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>            colors.append(<span class="st">'y'</span>)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>            colors.append(<span class="st">'b'</span>)</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    ax.scatter([dp[<span class="dv">0</span>] <span class="cf">for</span> dp <span class="kw">in</span> data_set], [dp[<span class="dv">1</span>] <span class="cf">for</span> dp <span class="kw">in</span> data_set], c<span class="op">=</span>colors, marker<span class="op">=</span><span class="st">'.'</span>)</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'x'</span>)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'y'</span>)</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-fig-data" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2023-08-02T11:57:33.154172400Z&quot;,&quot;start_time&quot;:&quot;2023-08-02T11:57:32.185483200Z&quot;}" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>visual <span class="op">=</span> [get_random_point() <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10000</span>)]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>visual <span class="op">=</span> [(dp[<span class="dv">0</span>],dp[<span class="dv">1</span>],calculate_label(dp)) <span class="cf">for</span> dp <span class="kw">in</span> visual]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>test_data <span class="op">=</span>[get_random_point() <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>)]</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>training_data <span class="op">=</span> [get_random_point() <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">250</span>)]</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> [calculate_label(dp) <span class="cf">for</span> dp <span class="kw">in</span> training_data]</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>visualize_points(visual)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="fig-data" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="quantum_classifier_files/figure-html/fig-data-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Data to be classified
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="measurement-and-interpretation" class="level2">
+<h2 class="anchored" data-anchor-id="measurement-and-interpretation">3.2 Measurement and interpretation</h2>
+<p>Before looking at our Ansatz, we will first look at what we do with the final state. When we insert a data point in the circuit, we will find some final state, which we now need to measure, to infer the classification result. The circuit prepares a state <span class="math inline">\(|\phi\rangle = c_0 |0\rangle + c_1 |1\rangle\)</span>. If we simply measure in the computational basis, we have the result <span class="math inline">\(|0\rangle\)</span> with a probability of <span class="math inline">\(p_0=|c_0|^2\)</span> and the result <span class="math inline">\(|1\rangle\)</span> with probability <span class="math inline">\(p_1=|c_1|^2\)</span>.</p>
+<p>For more information, we need to prepare the final state several times in order to measure the expectation value of some observable. The simplest case would be to measure the observable <span class="math inline">\(\Lambda = |1\rangle\langle 1| =  \begin{pmatrix}
+0 &amp; 0\\
+0 &amp; 1
+\end{pmatrix}\)</span>, where we would receive <span class="math display">\[\langle \Lambda \rangle = \langle \phi |\Lambda| \phi \rangle = \langle \phi | 1\rangle\langle 1|\phi \rangle =  c_1^* c_1 = |c_1|^2 =  p_1\]</span> which lets us classify based on the probabilities. Binary data with only two classes <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span> can be labeled in a straightforward manner: If <span class="math inline">\(p_1 &lt; 0.5\)</span> we choose class <span class="math inline">\(0\)</span>, otherwise we assign the label <span class="math inline">\(1\)</span>. For our more general case with four classes, we have several different ways we could assign labels:</p>
+<section id="several-thresholds" class="level3">
+<h3 class="anchored" data-anchor-id="several-thresholds">Several thresholds</h3>
+<p>We can directly generalize the way we classify by adding more divisions of <span class="math inline">\(p_1\)</span>. <span class="math inline">\(p_1\)</span> takes values in <span class="math inline">\([0,1]\)</span>. If we divide this interval into <span class="math inline">\(n\)</span> different sections, we have a way of distinguishing <span class="math inline">\(n\)</span> classes. We can interpret this on the Bloch sphere as making parallel slices of the sphere so that we get <span class="math inline">\(n\)</span> bands. We than classify based on the band the state is on.</p>
+</section>
+<section id="assignment-using-projectors" class="level3">
+<h3 class="anchored" data-anchor-id="assignment-using-projectors">Assignment using Projectors</h3>
+<p>One interpretation of the binary classification, would be to think of <span class="math inline">\(p_1\)</span> as the fidelity between <span class="math inline">\(|1\rangle\)</span> and <span class="math inline">\(|\phi\rangle\)</span>. This would mean, that we choose label <span class="math inline">\(1\)</span> if the fidelity between <span class="math inline">\(|1\rangle\)</span> and <span class="math inline">\(|\phi\rangle\)</span> is bigger than between <span class="math inline">\(|0\rangle\)</span> and <span class="math inline">\(|\phi\rangle\)</span>. This allows for a different kind of generalization: We determine <span class="math inline">\(n\)</span> different states <span class="math inline">\(|\psi_i\rangle\)</span> as the representatives of <span class="math inline">\(n\)</span> different classes. We then calculate the fidelity between the output of the circuit with all of these <span class="math inline">\(n\)</span> label states and assign the label that is closest to the output, i.e.&nbsp;the one with the highest fidelity. We can compute these fidelities by calculating the expectation value of the projector onto the label states <span class="math inline">\(\Lambda_i = |\psi_i\rangle\langle\psi_i|\)</span>, which would be <span class="math display">\[
+\langle\Lambda_i\rangle = \langle \phi |\psi_i\rangle\langle\psi_i| \phi \rangle = \langle \psi_i |\phi\rangle^*\langle\psi_i| \phi \rangle = |\langle\psi_i| \phi \rangle|^2.
+\]</span> The <span class="math inline">\(i\)</span> for which this value is maximal will be the label for <span class="math inline">\(| \phi \rangle\)</span>. We will use this method to assign labels using the trained circuit. We still need to examine how we choose these label states. The criterion for these should be, that they are as far apart as possible. One way to specify that would be to find states such that <span class="math inline">\(min_{i,j} |\langle\psi_i|\psi_j \rangle |^2\)</span> is as big as possible. In terms of the Bloch Sphere we search <span class="math inline">\(n\)</span> points on the sphere that have the highest pairwise distance. For 4,6,8,12 and 20 classes it is fairly intuitive that we get these label states as the vertices of the respective regular polyhedron. For all other amounts this is a harder question to answer. For 4 classes the label states can be seen in (<a href="#fig-states" class="quarto-xref">Figure&nbsp;2</a>).</p>
+<div id="cell-13" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2023-08-02T11:57:33.155172400Z&quot;,&quot;start_time&quot;:&quot;2023-08-02T11:57:33.148229Z&quot;}" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_label_state(n):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> tq.QubitWaveFunction.from_array([<span class="dv">1</span>,<span class="dv">0</span>])</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> tq.QubitWaveFunction.from_array([<span class="dv">1</span> <span class="op">/</span> np.sqrt(<span class="dv">3</span>), np.sqrt(<span class="dv">2</span><span class="op">/</span><span class="dv">3</span>)])</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="op">==</span> <span class="dv">2</span>:</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> tq.QubitWaveFunction.from_array([<span class="dv">1</span> <span class="op">/</span> np.sqrt(<span class="dv">3</span>),np.exp(<span class="ot">1j</span> <span class="op">*</span> <span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">/</span> <span class="dv">3</span>) <span class="op">*</span> np.sqrt(<span class="dv">2</span> <span class="op">/</span> <span class="dv">3</span>)])</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="op">==</span> <span class="dv">3</span>:</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> tq.QubitWaveFunction.from_array([<span class="dv">1</span> <span class="op">/</span> np.sqrt(<span class="dv">3</span>), np.exp(<span class="op">-</span><span class="ot">1j</span> <span class="op">*</span> <span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">/</span> <span class="dv">3</span>) <span class="op">*</span> np.sqrt(<span class="dv">2</span> <span class="op">/</span> <span class="dv">3</span>)])</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-14" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2023-08-02T11:57:33.170300200Z&quot;,&quot;start_time&quot;:&quot;2023-08-02T11:57:33.155172400Z&quot;}" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fidelity(circuit, label_state):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">    :param circuit: The quantum circuit</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">    :param label_state: The wave function of the label state</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">    :return: The expectation value of the projector onto func in the state prepared by circuit</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    projector <span class="op">=</span> tq.paulis.Projector(wfn<span class="op">=</span>label_state)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    objective <span class="op">=</span> tq.ExpectationValue(circuit, projector)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> objective</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-fig-states" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2023-08-02T11:57:34.274600800Z&quot;,&quot;start_time&quot;:&quot;2023-08-02T11:57:33.172301400Z&quot;}" data-fig-format="png" data-execution_count="7">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show_label_states():</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    x1 <span class="op">=</span> qutip.Qobj(tq.QubitWaveFunction.to_array(get_label_state(<span class="dv">0</span>)))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    x2 <span class="op">=</span> qutip.Qobj(tq.QubitWaveFunction.to_array(get_label_state(<span class="dv">1</span>)))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    x3 <span class="op">=</span> qutip.Qobj(tq.QubitWaveFunction.to_array(get_label_state(<span class="dv">2</span>)))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    x4 <span class="op">=</span> qutip.Qobj(tq.QubitWaveFunction.to_array(get_label_state(<span class="dv">3</span>)))</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">13</span>,<span class="dv">12</span>), layout<span class="op">=</span><span class="st">'constrained'</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    ax1 <span class="op">=</span> fig.add_subplot(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">1</span>, projection<span class="op">=</span><span class="st">'3d'</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    ax1.set_title(<span class="st">"label states"</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    ax2 <span class="op">=</span> fig.add_subplot(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">2</span>, projection<span class="op">=</span><span class="st">'3d'</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    ax2.set_title(<span class="st">"Real part"</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    ax2.azim <span class="op">=</span> <span class="dv">90</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    ax2.elev <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    ax3 <span class="op">=</span> fig.add_subplot(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">3</span>, projection<span class="op">=</span><span class="st">'3d'</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    ax3.set_title(<span class="st">"Top down view"</span>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    ax3.elev <span class="op">=</span> <span class="dv">90</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    b <span class="op">=</span> qutip.Bloch(fig<span class="op">=</span>fig, axes<span class="op">=</span>ax1)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    b.vector_width <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    b.add_states([x1,x2,x3,x4])</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    b.render()</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    b2 <span class="op">=</span> qutip.Bloch(fig<span class="op">=</span>fig, axes<span class="op">=</span>ax2)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    b2.vector_width <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    b2.add_states([x1,x2,x3,x4])</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    b2.render()</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    b3 <span class="op">=</span> qutip.Bloch(fig<span class="op">=</span>fig, axes<span class="op">=</span>ax3)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    b3.vector_width <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    b3.add_states([x1,x2,x3,x4])</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    b3.render()</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>show_label_states()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-states" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-states-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="quantum_classifier_files/figure-html/fig-states-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-states-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Label states for 4 classes from several angles
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="assignment-using-the-full-state" class="level3">
+<h3 class="anchored" data-anchor-id="assignment-using-the-full-state">Assignment using the full state</h3>
+<p>In the previous solution, we needed one measurement of an expectation value for each class. For a circuit with only one qubit, this seems unreasonably high, as the full state is only characterized by two real numbers and given the full state we could easily calculate the fidelities with all label states. So we might be able to get rid of the scaling number of calculated expectation values if we are able to just calculate the full state with a constant number of expectation values. This is indeed possible using a state tomography protocol, which allows us to obtain the full state with only three expectation values for a single qubit <span class="citation" data-cites="Schmied_2016">(<a href="#ref-Schmied_2016" role="doc-biblioref">Schmied 2016</a>)</span>. We can visualize the information we gain from a single expectation value using the Bloch sphere. For this we look at the state <span class="math inline">\(|-i\rangle\)</span> and the three pojectors <span class="math inline">\(|0\rangle\langle 0|\)</span>, <span class="math inline">\(|+\rangle\langle +|\)</span>,<span class="math inline">\(|i\rangle\langle i|\)</span>. Assuming we don’t know that the sytem is in state <span class="math inline">\(|-i\rangle\)</span>, we will figure this out using the three expectation values of the projectors. The expectation value of <span class="math inline">\(|0\rangle\langle 0|\)</span> will have the result <span class="math inline">\(0.5\)</span>, which gives us the information that the state has to be on the ring seen in <a href="#fig-tom" class="quarto-xref">Figure&nbsp;3</a>. <span class="math inline">\(\langle (|+\rangle\langle +|)\rangle\)</span> will also be <span class="math inline">\(0.5\)</span>, so that we are now restricted to two possible states, the ones where both rings intersect in <a href="#fig-tom" class="quarto-xref">Figure&nbsp;3</a>. After the final measurement we will now be able to fully determine the final state of the system. This works for all one-qubit states.</p>
+<p>Theoretically this an also be done for more qubits, but requires an exponential amount of expectation values, as the dimensionality of the state also grows exponentially.</p>
+<div id="cell-fig-tom" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2023-08-02T11:57:35.260985100Z&quot;,&quot;start_time&quot;:&quot;2023-08-02T11:57:34.278602Z&quot;}" data-execution_count="8">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add_line(bloch, x,y):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    bloch.add_arc(x, y)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    bloch.add_arc(<span class="op">-</span>x, y)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    bloch.add_arc(x, <span class="op">-</span>y)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    bloch.add_arc(<span class="op">-</span>y, <span class="op">-</span>x)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> tomography():</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">10</span>), layout<span class="op">=</span><span class="st">'constrained'</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    ax1 <span class="op">=</span> fig.add_subplot(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">1</span>, projection<span class="op">=</span><span class="st">'3d'</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    ax2 <span class="op">=</span> fig.add_subplot(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">2</span>, projection<span class="op">=</span><span class="st">'3d'</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    ax3 <span class="op">=</span> fig.add_subplot(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">3</span>, projection<span class="op">=</span><span class="st">'3d'</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    b1 <span class="op">=</span> qutip.Bloch(fig<span class="op">=</span>fig, axes<span class="op">=</span>ax1)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    b2 <span class="op">=</span> qutip.Bloch(fig<span class="op">=</span>fig, axes<span class="op">=</span>ax2)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    b3 <span class="op">=</span> qutip.Bloch(fig<span class="op">=</span>fig, axes<span class="op">=</span>ax3)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">0.1</span>)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    Y <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">0.1</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    Z <span class="op">=</span> np.ones((<span class="dv">20</span>,<span class="dv">20</span>))</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    b1.add_vectors([<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>])</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    add_line(b1, np.array([<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>]), np.array([<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>]))</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    ax1.plot_surface(X, Y, Z)</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    b2.add_vectors([<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>])</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    add_line(b2, np.array([<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>]), np.array([<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>]))</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    add_line(b2, np.array([<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>]), np.array([<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>]))</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    b2.add_points([[<span class="dv">0</span>,<span class="dv">0</span>],[<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>],[<span class="dv">0</span>,<span class="dv">0</span>]])</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    b3.add_vectors([<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>])</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>    b3.add_points([<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>])</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    b1.render()</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>    b2.render()</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>    b3.render()</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>tomography()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-tom" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tom-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="quantum_classifier_files/figure-html/fig-tom-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tom-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Possible states after one, two and three measurements. The arrow describes the projector we are measuring
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="ansatz" class="level2">
+<h2 class="anchored" data-anchor-id="ansatz">3.3 Ansatz</h2>
+<p>After figuring out how we turn the final state into a classification result, we can look at the circuit that prepares the final state. We need to build a parameterized circuit, that allows us to insert a datapoint <span class="math inline">\(x\)</span> and parameters <span class="math inline">\(\theta\)</span>. We will be limited to gates that operate on one qubit, so our main choices are rotations <span class="math inline">\(R_x,R_y,R_z\)</span>. Using only rotations, it would be impossible to separate the data nonlinearly if we inserted the datapoint only once. We need a layered structure, where each layer inserts the datapoint and some of the parameters. The entire circuit has the form <span class="math display">\[
+U(\theta,x) = L(N)...L(1)
+\]</span> where <span class="math inline">\(N\)</span> is the amount of layers in our circuit. One layer is then composed of several rotations <span class="math display">\[
+L(i)= R_z(\theta_{2i+1}+x_2) R_y(\theta_{2i} + x_1)
+\]</span> using a set of <span class="math inline">\(2N\)</span> angles <span class="math inline">\(\theta\)</span> and the datapoint <span class="math inline">\(x=(x_1,x_2)\)</span>. The amount of layers determines the depth of our circuit, as we apply two gates per layer. Also, the amount of computation needed increases as we introduce more layers, as we get two parameters for each layer.</p>
+<p>Why did we choose the setup with one <span class="math inline">\(R_z\)</span> and <span class="math inline">\(R_y\)</span> gate? This choice was to a certain level arbitrary. We chose two gates as we use data from <span class="math inline">\(\mathbb{R}^2\)</span>, where every gate encodes one of the two values. The choice for the type of gates was made, so that it is possible to rotate every state to every other state. Any combination of two different rotations would be satisfactory, so this choice was arbitrary.</p>
+<p>We could adapt the layers to encode more parameters, by introducing weights <span class="math inline">\(w\)</span> for every insertion of the datapoint. One layer would then look like <span class="math display">\[
+L(i)= R_z(\theta_{2i+1}+w_{2i+1} x_2) R_y(\theta_{2i} + w_{2i}x_1).
+\]</span> In theory this increases the expressiveness of the circuit. If we replaced the unweighted layers with their weighted alternatives, we only need to set all weights to 1 and would receive the same result as the unweighted case. The computation will be more expensive, but the final result should always be as good as for the unweighted case or even better. We will see if this assumption holds true in section 4.</p>
+<div id="cell-19" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2023-07-27T08:26:24.428862100Z&quot;,&quot;start_time&quot;:&quot;2023-07-27T08:26:24.424817900Z&quot;}" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_circuit(x, angles):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    circuit <span class="op">=</span> tq.QCircuit()</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(angles) <span class="op">//</span> <span class="dv">2</span>):</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        circuit <span class="op">+=</span> tq.gates.Ry(angles[<span class="dv">2</span><span class="op">*</span>i] <span class="op">+</span> x[<span class="dv">0</span>],<span class="dv">0</span>) <span class="op">+</span> tq.gates.Rz(angles[<span class="dv">2</span><span class="op">*</span>i<span class="op">+</span><span class="dv">1</span>] <span class="op">+</span> x[<span class="dv">1</span>],<span class="dv">0</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> circuit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="loss-function" class="level2">
+<h2 class="anchored" data-anchor-id="loss-function">3.4 Loss function</h2>
+<p>Now we have everything required to calculate a label for a datapoint and will now examine how we determine the correctness of this assignment. This is done through the loss function. Given a set of values for the parameters in the circuit and the training data, the loss function evaluates how close the result of the circuit is to the actual labels. One possible function is <span class="math display">\[
+\lambda(X,\theta) = \frac{1}{|X|}\sum_{x\in X} (1-|\langle \psi_c(x)| U(\theta,x)|0\rangle|^2)^2
+\]</span> where <span class="math inline">\(| \psi_c(x)\rangle\)</span> is the label state of the class that <span class="math inline">\(x\)</span> belongs to and <span class="math inline">\(X\)</span> is the training data. Each element of the sum is one minus the fidelity between the circuit result and the correct label, therefore each element takes values in <span class="math inline">\([0,1]\)</span>. If for one <span class="math inline">\(x\)</span> it is <span class="math inline">\(0\)</span>, that means the fidelity between the correct label and the circuit result is <span class="math inline">\(1\)</span>, so the circuit has transformed <span class="math inline">\(x\)</span> in the correct state. Alternatively, if the fidelity is low, this datapoint would contribute a fairly big amount to the loss function. In the optimal case, that everything gets classified correctly, the value of the loss function would be zero. In order to get a proper classifier, all that is needed now, is the values of <span class="math inline">\(\theta\)</span> such that <span class="math inline">\(\lambda\)</span> is minimal. We try to find these values in the optimization step in the next section.</p>
+<p>For the optimization it is useful to rewrite <span class="math inline">\(\lambda\)</span>. Instead of looking at fidelities between states, we express the loss in terms of expectation values <span class="math display">\[
+\lambda(X,\theta) = \frac{1}{|X|}\sum_{x\in X} (1-\langle 0|U(\theta,x)^T \Psi_c(x) U(\theta,x)|0\rangle)^2
+\]</span> where <span class="math inline">\(\Psi_c(x) = | \psi_c(x)\rangle \langle \psi_c(x)|\)</span> is the projector defined by the correct label state of <span class="math inline">\(x\in X\)</span>. This is also the way it is implemented.</p>
+<div id="cell-21" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2023-07-27T08:26:24.441970400Z&quot;,&quot;start_time&quot;:&quot;2023-07-27T08:26:24.430861400Z&quot;}" data-execution_count="10">
+<div class="sourceCode cell-code" id="annotated-cell-10"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-10-1"><a href="#annotated-cell-10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cost(train_set, labels, parameters, circuit):</span>
+<span id="annotated-cell-10-2"><a href="#annotated-cell-10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="annotated-cell-10-3"><a href="#annotated-cell-10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-10-4"><a href="#annotated-cell-10-4" aria-hidden="true" tabindex="-1"></a><span class="co">    :param train_set: A list of the datapoints in the training set</span></span>
+<span id="annotated-cell-10-5"><a href="#annotated-cell-10-5" aria-hidden="true" tabindex="-1"></a><span class="co">    :param labels: A list of the labels of the datapoints</span></span>
+<span id="annotated-cell-10-6"><a href="#annotated-cell-10-6" aria-hidden="true" tabindex="-1"></a><span class="co">    :param parameters: The values of the parameters in the parameterized circuit</span></span>
+<span id="annotated-cell-10-7"><a href="#annotated-cell-10-7" aria-hidden="true" tabindex="-1"></a><span class="co">    :param circuit: A function that returns a circuit and takes one datapoint and</span></span>
+<span id="annotated-cell-10-8"><a href="#annotated-cell-10-8" aria-hidden="true" tabindex="-1"></a><span class="co">                    the parameters as arguments</span></span>
+<span id="annotated-cell-10-9"><a href="#annotated-cell-10-9" aria-hidden="true" tabindex="-1"></a><span class="co">    :return: The value of the loss function</span></span>
+<span id="annotated-cell-10-10"><a href="#annotated-cell-10-10" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="annotated-cell-10-11"><a href="#annotated-cell-10-11" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> <span class="fl">0.0</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="1">1</button><span id="annotated-cell-10-12" class="code-annotation-target"><a href="#annotated-cell-10-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(train_set)):</span>
+<span id="annotated-cell-10-13"><a href="#annotated-cell-10-13" aria-hidden="true" tabindex="-1"></a>        qc <span class="op">=</span> circuit(train_set[i],parameters)</span>
+<span id="annotated-cell-10-14"><a href="#annotated-cell-10-14" aria-hidden="true" tabindex="-1"></a>        target <span class="op">=</span> get_label_state(labels[i])</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="2">2</button><span id="annotated-cell-10-15" class="code-annotation-target"><a href="#annotated-cell-10-15" aria-hidden="true" tabindex="-1"></a>        fid <span class="op">=</span> fidelity(qc, target)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="3">3</button><span id="annotated-cell-10-16" class="code-annotation-target"><a href="#annotated-cell-10-16" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> loss <span class="op">+</span> ((<span class="dv">1</span><span class="op">-</span>fid) <span class="op">**</span> <span class="dv">2</span>)</span>
+<span id="annotated-cell-10-17"><a href="#annotated-cell-10-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> loss <span class="op">/</span> <span class="bu">len</span>(train_set)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-10" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-10" data-code-lines="12" data-code-annotation="1">We iterate through the training data and calculate the impact of that datapoint on the loss function</span>
+</dd>
+<dt data-target-cell="annotated-cell-10" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-10" data-code-lines="15" data-code-annotation="2">The fidelity between the circuit result and the correct label state is expressed as a expectation value</span>
+</dd>
+<dt data-target-cell="annotated-cell-10" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-10" data-code-lines="16" data-code-annotation="3">A value in <span class="math inline">\([0,1]\)</span> gets added based on how good the current datapoint is treated by the circuit</span>
+</dd>
+</dl>
+</div>
+</div>
+</section>
+<section id="minimization" class="level2">
+<h2 class="anchored" data-anchor-id="minimization">3.5 Minimization</h2>
+<p>The training requires us to find values of the tunable parameters <span class="math inline">\(\theta\)</span> such that the loss function <span class="math inline">\(\lambda(X,\theta)\)</span> is minimal. There are many different methods with different advantages and properties to solve optimization problems. Many of these optimization algorithms have a local approach for minimization, meaning we iteratively calculate values <span class="math inline">\(\theta_0,\theta_1,...,\theta_n\)</span> where we calculate <span class="math inline">\(\theta_i\)</span> based on some calculation using <span class="math inline">\(\theta_{i-1}\)</span>. For most algorithms, we compute or approximate the gradient <span class="math inline">\(\nabla \lambda(X,\theta_{i-1})\)</span> or the hessian <span class="math inline">\(H \lambda(X,\theta_{i-1})\)</span> in order to calculate <span class="math inline">\(\theta_{i}\)</span>. The gradient is the vector of the first derivatives and the hessian is the matrix containing all second derivatives. The calculation of these values is fairly expensive and explains why they are in many cases only approximated.</p>
+<p>We can view our loss function as a function of expectation values, which are in turn functions of the parameters and a single datapoint. This means for the calculation of the gradient we can split the function using the chain rule: <span class="math display">\[
+\frac{\partial \lambda(X,\theta)}{\partial\theta} = \sum_{x\in X}\frac{\partial \lambda(X,\theta)}{\partial \langle E_x\rangle} \frac{\partial \langle E_x\rangle}{\partial\theta}
+\]</span> where <span class="math inline">\(\langle E_x\rangle = \langle 0|U(\theta,x)^T \Psi_c(x) U(\theta,x)|0\rangle\)</span>. This way we get two parts that we can examine separately. The left part can be done through automatic differentiation like it is usually done for differentiation problems. The right part concerns the differentiation of a quantum circuit with respect to one of the parameters, for which there are several methods, two of these are numerical differentiation and the parameter shift rule <span class="citation" data-cites="crooks2019gradients">(<a href="#ref-crooks2019gradients" role="doc-biblioref">Crooks 2019</a>)</span>. Using the result of these calculations, we now have the gradient to determine the next step in an iteration of the optimization.</p>
+<p>Without further examining whether our choice theoretically leads to a good result, we will be choosing <code>BFGS</code> as our optimization algorithm as used in <span class="citation" data-cites="PerezSalinas2020datareuploading">(<a href="#ref-PerezSalinas2020datareuploading" role="doc-biblioref">Pérez-Salinas et al. 2020</a>)</span>.</p>
+<div id="cell-24" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2023-07-27T09:22:57.112289700Z&quot;,&quot;start_time&quot;:&quot;2023-07-27T08:26:24.445190200Z&quot;}" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>layers <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>param_unweighted <span class="op">=</span> [tq.Variable(<span class="st">'p'</span> <span class="op">+</span> <span class="bu">str</span>(i)) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(layers <span class="op">*</span> <span class="dv">2</span>)]</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>initials_unweighted <span class="op">=</span> {key: random.uniform(<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span> np.pi) <span class="cf">for</span> key <span class="kw">in</span> param_unweighted}</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>Objective1 <span class="op">=</span> cost(training_data, labels, param_unweighted, create_circuit)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">=</span> tq.minimize(objective<span class="op">=</span>Objective1, initial_values<span class="op">=</span>initials_unweighted,  silent<span class="op">=</span><span class="va">True</span>, backend<span class="op">=</span><span class="st">"qulacs"</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result1.history.plot(<span class="st">'energies'</span>, label<span class="op">=</span><span class="st">'loss'</span>))</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result1.history.plot(<span class="st">'angles'</span>, label<span class="op">=</span><span class="st">""</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="quantum_classifier_files/figure-html/cell-12-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>None
+None</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="quantum_classifier_files/figure-html/cell-12-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">3.6 Results</h2>
+<p>We have done the optimization and have the optimal parameter assignment stored in <code>result1.angles</code>. With these results we can run through our test set and assign the labels according to the method from section 3.2. For this, we calculate the fidelity to the different label states and assign the label with the highest fidelity. We can use the visualization we used earlier for <a href="#fig-data" class="quarto-xref">Figure&nbsp;1</a> to compare the correct labels with the trained circuit. By computing the correct label through <code>calculate_label()</code>, we can also calculate the percentage of correct guesses. As a reference, guessing randomly would give us a success rate of <span class="math inline">\(0.25\)</span>.</p>
+<div id="cell-26" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2023-07-27T09:23:12.862076200Z&quot;,&quot;start_time&quot;:&quot;2023-07-27T09:22:57.115290Z&quot;}" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> assign_label(datapoint, opt_params, circuit, param):</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    qc <span class="op">=</span> circuit(datapoint,param)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    max_fid <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    choice <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>):</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        H <span class="op">=</span> tq.paulis.Projector(get_label_state(i))</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        Exp <span class="op">=</span> tq.ExpectationValue(U<span class="op">=</span>qc, H<span class="op">=</span>H)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        fid <span class="op">=</span> tq.simulate(Exp, variables<span class="op">=</span>opt_params)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> fid <span class="op">&gt;</span> max_fid:</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>            max_fid <span class="op">=</span> fid</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>            choice <span class="op">=</span> i</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> choice</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_and_visualize(testing_data, opt_params, circuit, param):</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    labeled_set <span class="op">=</span> []</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    num_correct <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> x <span class="kw">in</span> testing_data:</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>        label <span class="op">=</span> assign_label(x, opt_params, circuit, param)</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> label <span class="op">==</span> calculate_label(x):</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>            num_correct <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>        labeled_set.append((x[<span class="dv">0</span>], x[<span class="dv">1</span>], label))</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Success Rate: "</span>, num_correct <span class="op">/</span> <span class="bu">len</span>(testing_data))</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    visualize_points(labeled_set)</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>test_and_visualize(test_data, result1.angles, create_circuit, param_unweighted)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Success Rate:  0.877</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="quantum_classifier_files/figure-html/cell-13-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As we can see, the circuit has learned the data fairly well, leading to a success rate of <span class="math inline">\(88\%\)</span> using 5 layers. In comparison to other machine learning algorithms like neural networks, this result holds up well, as we are only using 10 parameters in our circuit, and are still able to perform fairly well. For many other systems the amount of required parameters would rise significantly faster.</p>
+</section>
+</section>
+<section id="weighted-circuit" class="level1">
+<h1>4 Weighted circuit</h1>
+<p>Now that we have seen a full example for a Variational Quantum Algorithm used to classify data, we can try to adapt certain parts of it, to see what impact some changes can have. We had already described, how we could add weights for the insertion of a datapoint. This change will only affect the circuit, while everything else stays the same in order to have a direct comparison.</p>
+<div id="cell-30" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2023-07-27T09:23:12.867512900Z&quot;,&quot;start_time&quot;:&quot;2023-07-27T09:23:12.864076400Z&quot;}" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_weighted_circuit(x, parameters):</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    circuit <span class="op">=</span> tq.QCircuit()</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(parameters) <span class="op">//</span> <span class="dv">4</span>):</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>        circuit <span class="op">+=</span> tq.gates.Ry(parameters[<span class="dv">4</span><span class="op">*</span>i] <span class="op">+</span> (parameters[<span class="dv">4</span><span class="op">*</span>i<span class="op">+</span><span class="dv">1</span>]  <span class="op">*</span> x[<span class="dv">0</span>]),<span class="dv">0</span>) <span class="op">+</span> tq.gates.Rz(parameters[<span class="dv">4</span><span class="op">*</span>i<span class="op">+</span><span class="dv">2</span>] <span class="op">+</span> (parameters[<span class="dv">4</span><span class="op">*</span>i<span class="op">+</span><span class="dv">3</span>] <span class="op">*</span> x[<span class="dv">1</span>]),<span class="dv">0</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> circuit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can see that every layer now uses 4 parameters. Because we keep the amount of layers the same, we need to optimize twice as many parameters, which will increase the needed computation. We are able to use the previous result as our initial guess in order to start at a decent value. If we assign the value <span class="math inline">\(1\)</span> to all newly introduced weights and use the optimization result for all other parameters, we now start with exactly the same circuit as we finished on the previous optimization, but we now have many new parameters that can be further optimized.</p>
+<div id="cell-32" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2023-07-27T16:45:26.825268500Z&quot;,&quot;start_time&quot;:&quot;2023-07-27T13:36:31.629872200Z&quot;}" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>param_weighted <span class="op">=</span> [tq.Variable(<span class="st">'th_'</span> <span class="op">+</span> <span class="bu">str</span>(i)) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(layers <span class="op">*</span> <span class="dv">4</span>)]</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">#initialize the variables so that we start out with the optimized circuit from the first optimization</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>initials_weighted <span class="op">=</span> {}</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(param_weighted)):</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>        initials_weighted[param_weighted[i]] <span class="op">=</span> result1.angles[(<span class="st">'p'</span> <span class="op">+</span> <span class="bu">str</span>(i<span class="op">//</span><span class="dv">2</span>))]</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>        initials_weighted[param_weighted[i]] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>Objective2 <span class="op">=</span> cost(training_data, labels, param_weighted, create_weighted_circuit)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>result2 <span class="op">=</span> tq.minimize(objective<span class="op">=</span>Objective2,variables<span class="op">=</span>param_weighted, initial_values<span class="op">=</span>initials_weighted, maxiter<span class="op">=</span><span class="dv">150</span>,  silent<span class="op">=</span><span class="va">True</span>, backend<span class="op">=</span><span class="st">"qulacs"</span>)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result2.history.plot(<span class="st">'energies'</span>, label<span class="op">=</span><span class="st">'loss'</span>))</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result2.history.plot(<span class="st">'angles'</span>, label<span class="op">=</span><span class="st">""</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="quantum_classifier_files/figure-html/cell-15-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>None
+None</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="quantum_classifier_files/figure-html/cell-15-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-33" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2023-07-27T16:45:46.845829700Z&quot;,&quot;start_time&quot;:&quot;2023-07-27T16:45:26.827269200Z&quot;}" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>test_and_visualize(test_data, result2.angles, create_weighted_circuit, param_weighted)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Success Rate:  0.936</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="quantum_classifier_files/figure-html/cell-16-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As we can see, our first result has been increased by a slight margin. Sadly, we don’t have options to check if there are any better solutions, as our used method only converges to a local minimum. The first optimization already determined the rough area we will be able to examine, the second iteration was only able to find a deepest valley in the already determined region. With a different result for our first round, we might have ended up with a way better or worse result, but we would need to run the entire process several times in order to increase our chances for finding a very good solution.</p>
+</section>
+<section id="final-remarks" class="level1">
+<h1>5 Final remarks</h1>
+<p>We have seen how to build a Variational Quantum Algorithm to classify data from four different classes using only one qubit in the quantum circuit. The circuit was built out of layers of unitary transformations, where each layer introduces the datapoint and two new parameters. Using this setup, we minimized the loss function, which was based on the fidelity of the result of the circuit and the label state of the correct class. The resulting circuit was able to mostly succeed in classifying the test data. We then increased the amount of parameters in the circuit, which lead to even further improvement of the classification. While this result is promising, this is not really a result that has a lot of practical use, as we are only using one qubit and probably should consider a circuit with more qubits, as one of the main strengths in quantum computing comes from the ability to entangle the qubits and use the structures formed with many qubits to gain computational advantage over classical computers. Nevertheless, this example shows that even a single qubit is able to solve a classification task using a variational approach.</p>
+<div id="cell-36" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2023-08-02T11:57:55.137660400Z&quot;,&quot;start_time&quot;:&quot;2023-08-02T11:57:54.835787200Z&quot;}" data-execution_count="11">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">10</span>), layout<span class="op">=</span><span class="st">'constrained'</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>ax1 <span class="op">=</span> fig.add_subplot(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>, projection<span class="op">=</span><span class="st">'3d'</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>b1 <span class="op">=</span> qutip.Bloch(fig<span class="op">=</span>fig, axes<span class="op">=</span>ax1)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>b1.add_vectors([<span class="dv">0</span>,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>add_line(b1, np.array([<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>]), np.array([<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>]))</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>b1.render()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="quantum_classifier_files/figure-html/cell-17-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sources" class="level1">
+<h1>6 Sources</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Cerezo_2021" class="csl-entry" role="listitem">
+Cerezo, M., Andrew Arrasmith, Ryan Babbush, Simon C. Benjamin, Suguru Endo, Keisuke Fujii, Jarrod R. McClean, et al. 2021. <span>“Variational Quantum Algorithms.”</span> <em>Nature Reviews Physics</em> 3 (9): 625–44. <a href="https://doi.org/10.1038/s42254-021-00348-9">https://doi.org/10.1038/s42254-021-00348-9</a>.
+</div>
+<div id="ref-crooks2019gradients" class="csl-entry" role="listitem">
+Crooks, Gavin E. 2019. <span>“Gradients of Parameterized Quantum Gates Using the Parameter-Shift Rule and Gate Decomposition.”</span> <a href="https://arxiv.org/abs/1905.13311">https://arxiv.org/abs/1905.13311</a>.
+</div>
+<div id="ref-Hunter:2007" class="csl-entry" role="listitem">
+Hunter, J. D. 2007. <span>“Matplotlib: A 2D Graphics Environment.”</span> <em>Computing in Science &amp; Engineering</em> 9 (3): 90–95. <a href="https://doi.org/10.1109/MCSE.2007.55">https://doi.org/10.1109/MCSE.2007.55</a>.
+</div>
+<div id="ref-JOHANSSON20131234" class="csl-entry" role="listitem">
+Johansson, J. R., P. D. Nation, and Franco Nori. 2013. <span>“QuTiP 2: A Python Framework for the Dynamics of Open Quantum Systems.”</span> <em>Computer Physics Communications</em> 184 (4): 1234–40. https://doi.org/<a href="https://doi.org/10.1016/j.cpc.2012.11.019">https://doi.org/10.1016/j.cpc.2012.11.019</a>.
+</div>
+<div id="ref-Kottmann_2021" class="csl-entry" role="listitem">
+Kottmann, Jakob S, Sumner Alperin-Lea, Teresa Tamayo-Mendoza, Alba Cervera-Lierta, Cyrille Lavigne, Tzu-Ching Yen, Vladyslav Verteletskyi, et al. 2021. <span>“<span>TEQUILA</span>: A Platform for Rapid Development of Quantum Algorithms.”</span> <em>Quantum Science and Technology</em> 6 (2): 024009. <a href="https://doi.org/10.1088/2058-9565/abe567">https://doi.org/10.1088/2058-9565/abe567</a>.
+</div>
+<div id="ref-PerezSalinas2020datareuploading" class="csl-entry" role="listitem">
+Pérez-Salinas, Adrián, Alba Cervera-Lierta, Elies Gil-Fuster, and José I. Latorre. 2020. <span>“Data Re-Uploading for a Universal Quantum Classifier.”</span> <em><span>Quantum</span></em> 4 (February): 226. <a href="https://doi.org/10.22331/q-2020-02-06-226">https://doi.org/10.22331/q-2020-02-06-226</a>.
+</div>
+<div id="ref-Schmied_2016" class="csl-entry" role="listitem">
+Schmied, Roman. 2016. <span>“Quantum State Tomography of a Single Qubit: Comparison of Methods.”</span> <em>Journal of Modern Optics</em> 63 (18): 1744–58. <a href="https://doi.org/10.1080/09500340.2016.1142018">https://doi.org/10.1080/09500340.2016.1142018</a>.
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/tequilahub\.github\.io\/tequila-tutorials\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+      for (let i=0; i<annoteTargets.length; i++) {
+        const annoteTarget = annoteTargets[i];
+        const targetCell = annoteTarget.getAttribute("data-target-cell");
+        const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+        const contentFn = () => {
+          const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          if (content) {
+            const tipContent = content.cloneNode(true);
+            tipContent.classList.add("code-annotation-tip-content");
+            return tipContent.outerHTML;
+          }
+        }
+        const config = {
+          allowHTML: true,
+          content: contentFn,
+          onShow: (instance) => {
+            selectCodeLines(instance.reference);
+            instance.reference.classList.add('code-annotation-active');
+            window.tippy.hideAll();
+          },
+          onHide: (instance) => {
+            unselectCodeLines();
+            instance.reference.classList.remove('code-annotation-active');
+          },
+          maxWidth: 300,
+          delay: [50, 0],
+          duration: [200, 0],
+          offset: [5, 10],
+          arrow: true,
+          appendTo: function(el) {
+            return el.parentElement.parentElement.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'quarto',
+          placement: 'right',
+          popperOptions: {
+            modifiers: [
+            {
+              name: 'flip',
+              options: {
+                flipVariations: false, // true by default
+                allowedAutoPlacements: ['right'],
+                fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+              },
+            },
+            {
+              name: 'preventOverflow',
+              options: {
+                mainAxis: false,
+                altAxis: false
+              }
+            }
+            ]        
+          }      
+        };
+        window.tippy(annoteTarget, config); 
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="tequilahub/tequila-tutorials" issue-term="pathname" theme="preferred-color-scheme" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tequilahub/tequila/blob/main/Researches/quantum_classifier/quantum_classifier.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

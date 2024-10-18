@@ -1,0 +1,258 @@
+COLOR tq 0.03137254901960784 0.1607843137254902 0.23921568627450981
+COLOR guo 0.988 0.141 0.757
+a0 W 0
+a1 W 1
+a2 W 2
+a3 W 3
+a4 W 4
+a5 W 5
+a6 W 6
+a7 W 7
+ a0 P:fill=tq  \textcolor{white}{+} 
+
+ a1 P:fill=tq  \textcolor{white}{+} 
+
+ a2 P:fill=tq  \textcolor{white}{+} 
+
+ a3 P:fill=tq  \textcolor{white}{+} 
+
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Y}  a7 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{X}  a7 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Y}  a7 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{X}  a7 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Y}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{X}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Y}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{X}  a7 P:fill=guo  \textcolor{black}{Y} 
+
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y} 
+
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Y} 
+
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Y} 
+
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Y}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{X}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Y}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{X}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Y}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{X}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Y}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{X}  a7 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Y} 
+
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Y} 
+
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Y}  a7 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{X}  a7 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Y}  a7 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{X}  a7 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Y}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{X}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Y}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{X}  a7 P:fill=guo  \textcolor{black}{Y} 
+
+ a2 P:fill=guo  \textcolor{black}{X}  a3 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X} 
+ a2 P:fill=guo  \textcolor{black}{Y}  a3 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X} 
+ a2 P:fill=guo  \textcolor{black}{Y}  a3 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X} 
+ a2 P:fill=guo  \textcolor{black}{X}  a3 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X} 
+ a2 P:fill=guo  \textcolor{black}{Y}  a3 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y} 
+ a2 P:fill=guo  \textcolor{black}{X}  a3 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y} 
+ a2 P:fill=guo  \textcolor{black}{X}  a3 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y} 
+ a2 P:fill=guo  \textcolor{black}{Y}  a3 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y} 
+
+ a2 P:fill=guo  \textcolor{black}{X}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{X} 
+ a2 P:fill=guo  \textcolor{black}{Y}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a2 P:fill=guo  \textcolor{black}{Y}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{X} 
+ a2 P:fill=guo  \textcolor{black}{X}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a2 P:fill=guo  \textcolor{black}{Y}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{X} 
+ a2 P:fill=guo  \textcolor{black}{X}  a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Y} 
+ a2 P:fill=guo  \textcolor{black}{X}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{X} 
+ a2 P:fill=guo  \textcolor{black}{Y}  a3 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Y} 
+
+ a2 P:fill=guo  \textcolor{black}{X}  a3 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a2 P:fill=guo  \textcolor{black}{Y}  a3 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a2 P:fill=guo  \textcolor{black}{Y}  a3 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a2 P:fill=guo  \textcolor{black}{X}  a3 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a2 P:fill=guo  \textcolor{black}{Y}  a3 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a2 P:fill=guo  \textcolor{black}{X}  a3 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a2 P:fill=guo  \textcolor{black}{X}  a3 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Y}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a2 P:fill=guo  \textcolor{black}{Y}  a3 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+
+ a2 P:fill=guo  \textcolor{black}{X}  a3 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Y}  a7 P:fill=guo  \textcolor{black}{X} 
+ a2 P:fill=guo  \textcolor{black}{Y}  a3 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{X}  a7 P:fill=guo  \textcolor{black}{X} 
+ a2 P:fill=guo  \textcolor{black}{Y}  a3 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Y}  a7 P:fill=guo  \textcolor{black}{X} 
+ a2 P:fill=guo  \textcolor{black}{X}  a3 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{X}  a7 P:fill=guo  \textcolor{black}{X} 
+ a2 P:fill=guo  \textcolor{black}{Y}  a3 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{Y}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a2 P:fill=guo  \textcolor{black}{X}  a3 P:fill=guo  \textcolor{black}{X}  a6 P:fill=guo  \textcolor{black}{X}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a2 P:fill=guo  \textcolor{black}{X}  a3 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{Y}  a7 P:fill=guo  \textcolor{black}{Y} 
+ a2 P:fill=guo  \textcolor{black}{Y}  a3 P:fill=guo  \textcolor{black}{Y}  a6 P:fill=guo  \textcolor{black}{X}  a7 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Z}  a4 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Z}  a4 P:fill=guo  \textcolor{black}{Y} 
+
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Z}  a4 P:fill=guo  \textcolor{black}{Z}  a5 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Z}  a4 P:fill=guo  \textcolor{black}{Z}  a5 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{Y}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Z}  a4 P:fill=guo  \textcolor{black}{Z}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{X} 
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Z}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Z}  a4 P:fill=guo  \textcolor{black}{Z}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Y} 
+
+ a1 P:fill=guo  \textcolor{black}{Y}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Z}  a4 P:fill=guo  \textcolor{black}{Z}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a1 P:fill=guo  \textcolor{black}{X}  a2 P:fill=guo  \textcolor{black}{Z}  a3 P:fill=guo  \textcolor{black}{Z}  a4 P:fill=guo  \textcolor{black}{Z}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+
+ a2 P:fill=guo  \textcolor{black}{Y}  a3 P:fill=guo  \textcolor{black}{Z}  a4 P:fill=guo  \textcolor{black}{X} 
+ a2 P:fill=guo  \textcolor{black}{X}  a3 P:fill=guo  \textcolor{black}{Z}  a4 P:fill=guo  \textcolor{black}{Y} 
+
+ a3 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Z}  a5 P:fill=guo  \textcolor{black}{X} 
+ a3 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Z}  a5 P:fill=guo  \textcolor{black}{Y} 
+
+ a2 P:fill=guo  \textcolor{black}{Y}  a3 P:fill=guo  \textcolor{black}{Z}  a4 P:fill=guo  \textcolor{black}{Z}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{X} 
+ a2 P:fill=guo  \textcolor{black}{X}  a3 P:fill=guo  \textcolor{black}{Z}  a4 P:fill=guo  \textcolor{black}{Z}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Y} 
+
+ a3 P:fill=guo  \textcolor{black}{Y}  a4 P:fill=guo  \textcolor{black}{Z}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{X} 
+ a3 P:fill=guo  \textcolor{black}{X}  a4 P:fill=guo  \textcolor{black}{Z}  a5 P:fill=guo  \textcolor{black}{Z}  a6 P:fill=guo  \textcolor{black}{Z}  a7 P:fill=guo  \textcolor{black}{Y} 
+

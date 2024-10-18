@@ -1,0 +1,44 @@
+---
+title: "Tequila Tutorials"
+subtitle: "Quantum Computing, Quantum Chemistry and Tequila"
+page-layout: full
+title-block-banner: true
+
+about:
+  template: marquee
+  links:
+    - icon: github
+      text: github
+      href: https://github.com/tequilahub/tequila
+---
+
+<br/>
+<center>
+![](tequila.png){width=400}
+</center>
+<br/>
+
+# Welcome to the Official Website of Tequila Tutorials
+
+Tequila is an abstraction framework for (variational) quantum algorithms.
+It operates on abstract data structures allowing the formulation, combination, automatic differentiation and optimization of generalized objectives. 
+Tequila can execute the underlying quantum expectation values on state of the art simulators as well as on real quantum devices.  
+
+This [website](index.html) contains some hands-on examples using tequila.
+A good starting point from a very fundamental tutorial is [here](Tutorials/tq-get-started/index.html).
+
+The main sections of this website are:
+
+- a wide collection of [tutorials](tutorials.html) for getting to know tequila's basic functionalities and general usage
+- a collection of more specific tutorials regarding [research](research.html)
+- a page with frequently asked questions regarding various aspects and usage of tequila [FAQ](FAQ/FAQ.html)
+
+
+# Contribute
+
+Tequila is free and open source. You're welcome to contribute if you have ideas to improve the library.
+The standard way to contribute is via pull-requests or issues on [github](https://github.com/tequilahub/tequila#how-to-contribute). For larger projects it might be useful to let us know in advance what you are planning.  
+
+# Influences
+
+The design of tequilas API was inspired by [madness](https://arxiv.org/abs/1507.01888). Agnostic backend handling and forcing differentiability was inspired by [pennylane](https://arxiv.org/abs/1811.04968v3).

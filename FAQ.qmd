@@ -1,0 +1,15 @@
+---
+title: "FAQ"
+subtitle: "Frequently asked questions"
+listing:
+    contents: FAQ
+    sort: "date desc"
+    type: default
+    categories: true
+    sort-ui: false
+    filter-ui: false
+page-layout: full
+title-block-banner: true
+---
+
+

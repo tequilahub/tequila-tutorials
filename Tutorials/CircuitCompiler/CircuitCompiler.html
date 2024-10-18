@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.554">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -25,7 +25,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -87,13 +87,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
+  "limit": 20,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -102,7 +96,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -129,8 +122,6 @@ cookieconsent.run({
   "notice_banner_reject_button_hide":false,
   "preferences_center_close_button_hide":false,
   "website_name":""
-  ,
-"language":"en"
   });
 });
 </script> 
@@ -139,38 +130,11 @@ cookieconsent.run({
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Tequila Tutorials - Circuit Compiler">
-<meta property="og:description" content="quantum computing, quantum chemistry and tequila">
-<meta property="og:image" content="https://tequilahub.github.io/tequila-tutorials/Tutorials/CircuitCompiler/Circuit_Compiler_preview_photo.png">
-<meta property="og:site_name" content="Tequila Tutorials">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://github.com/tequilahub/tequila-tutorials/Tutorials/CircuitCompiler/Circuit_Compiler_preview_photo.png">
+<meta property="og:site-name" content="Tequila Tutorials">
 <meta property="og:image:height" content="2478">
 <meta property="og:image:width" content="3482">
 </head>
@@ -178,10 +142,10 @@ window.Quarto = {
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container mx-auto">
+      <div class="navbar-brand-container">
     <a href="../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../tequila_logo.png" alt="" class="navbar-logo">
     </a>
@@ -196,26 +160,26 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../research.html"> 
-<span class="menu-text">Research</span></a>
+    <a class="nav-link" href="../../research.html" rel="" target="">
+ <span class="menu-text">Research</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../tutorials.html"> 
-<span class="menu-text">Tutorials</span></a>
+    <a class="nav-link" href="../../tutorials.html" rel="" target="">
+ <span class="menu-text">Tutorials</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../FAQ/FAQ.html"> 
-<span class="menu-text">FAQ</span></a>
+    <a class="nav-link" href="../../FAQ/FAQ.html" rel="" target="">
+ <span class="menu-text">FAQ</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../Contribution/Contribution.html"> 
-<span class="menu-text">Contribution</span></a>
+    <a class="nav-link" href="../../Contribution/Contribution.html" rel="" target="">
+ <span class="menu-text">Contribution</span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -262,11 +226,10 @@ window.Quarto = {
   <ul>
   <li><a href="#gates-decomposition" id="toc-gates-decomposition" class="nav-link active" data-scroll-target="#gates-decomposition">Gates decomposition</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/tequilahub/tequila/blob/main/Tutorials/CircuitCompiler/CircuitCompiler.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/tequilahub/tequila/blob/main/Tutorials/CircuitCompiler/CircuitCompiler.ipynb" class="toc-action">View source</a></p><p><a href="https://github.com/tequilahub/tequila/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
-
 
 
 
@@ -284,7 +247,7 @@ window.Quarto = {
 </ul>
 <p>To avoid confusion, <span class="math inline">\(U\)</span> should be of type <code>QGateImpl</code></p>
 <p>Usually in Tequila, one has high level access to <code>QCircuit</code> data structure</p>
-<div id="cell-4" class="cell" data-execution_count="1">
+<div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">### first import all relevant modules</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> numpy <span class="im">import</span> pi</span>
@@ -299,7 +262,7 @@ window.Quarto = {
 <li><p>Rotation around Z - axis of angle <span class="math inline">\(a\)</span>: <span class="math inline">\(\hspace{0.7em} R_z(a) = e^{-i \frac{a}{2} Z}\)</span></p></li>
 <li><p><span class="math inline">\(a\)</span> -th power of Z: <span class="math inline">\(\hspace{1.5em} Z = e^{-i \frac{\pi}{2} (Z - 1)} \implies Z^a = e^{-i \frac{a \cdot \pi}{2} (Z - 1)} = e^{i \frac{a \cdot \pi}{2}} \cdot R_z(a \cdot \pi)\)</span></p></li>
 </ul>
-<div id="cell-6" class="cell" data-execution_count="2">
+<div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="annotated-cell-2"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1">1</button><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a>qc  <span class="op">=</span> QCircuit()</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="2">2</button><span id="annotated-cell-2-2" class="code-annotation-target"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a>qc <span class="op">+=</span> gates.Rz(pi <span class="op">/</span> <span class="dv">2</span>, <span class="dv">0</span>)</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="3">3</button><span id="annotated-cell-2-3" class="code-annotation-target"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a>qc <span class="op">+=</span> gates.Z(<span class="dv">0</span>, power<span class="op">=</span><span class="fl">0.5</span>)</span>
@@ -312,19 +275,19 @@ window.Quarto = {
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="1" data-code-annotation="1">create a circuit object</span>
+<span data-code-annotation="1" data-code-cell="annotated-cell-2" data-code-lines="1">create a circuit object</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="2" data-code-annotation="2">add a rotation Z gate with an angle of 90 deg.</span>
+<span data-code-annotation="2" data-code-cell="annotated-cell-2" data-code-lines="2">add a rotation Z gate with an angle of 90 deg.</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="3" data-code-annotation="3">add a Z gate with a power of 0.5</span>
+<span data-code-annotation="3" data-code-cell="annotated-cell-2" data-code-lines="3">add a Z gate with a power of 0.5</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="8" data-code-annotation="4">print the gates with their names and generator values</span>
+<span data-code-annotation="4" data-code-cell="annotated-cell-2" data-code-lines="8">print the gates with their names and generator values</span>
 </dd>
 </dl>
 </div>
@@ -349,7 +312,7 @@ Gate: Z | Generator +1.0000Z(0)-1.0000</code></pre>
    U_c |\psi \rangle = |1 \rangle^{\otimes k} U |t \rangle
 \]</span></p>
 <p>In Tequila:</p>
-<div id="cell-9" class="cell" data-execution_count="3">
+<div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="annotated-cell-3"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="1">1</button><span id="annotated-cell-3-1" class="code-annotation-target"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a>qc <span class="op">=</span> gates.Rx(pi <span class="op">/</span> <span class="dv">2</span>, control<span class="op">=</span><span class="dv">0</span>, target<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="annotated-cell-3-2"><a href="#annotated-cell-3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-3-3"><a href="#annotated-cell-3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> U <span class="kw">in</span> qc.gates: </span>
@@ -364,19 +327,19 @@ Gate: Z | Generator +1.0000Z(0)-1.0000</code></pre>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-3" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-3" data-code-lines="1" data-code-annotation="1">add a conrtolled X rotation of 90 deg. with. Control qubit is the first and target the second</span>
+<span data-code-annotation="1" data-code-cell="annotated-cell-3" data-code-lines="1">add a conrtolled X rotation of 90 deg. with. Control qubit is the first and target the second</span>
 </dd>
 <dt data-target-cell="annotated-cell-3" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-3" data-code-lines="4" data-code-annotation="2">collect generators parameters of each generator in circuit qc</span>
+<span data-code-annotation="2" data-code-cell="annotated-cell-3" data-code-lines="4">collect generators parameters of each generator in circuit qc</span>
 </dd>
 <dt data-target-cell="annotated-cell-3" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-3" data-code-lines="5" data-code-annotation="3">collect parameters of full generators in qc</span>
+<span data-code-annotation="3" data-code-cell="annotated-cell-3" data-code-lines="5">collect parameters of full generators in qc</span>
 </dd>
 <dt data-target-cell="annotated-cell-3" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-cell="annotated-cell-3" data-code-lines="7" data-code-annotation="4">output the parameters of each gate in circuit qc</span>
+<span data-code-annotation="4" data-code-cell="annotated-cell-3" data-code-lines="7">output the parameters of each gate in circuit qc</span>
 </dd>
 </dl>
 </div>
@@ -393,23 +356,22 @@ Gate:  Rx
 <p>In this section we explain the gates decomposition used by Tequila’s compiler.</p>
 <p>As a start, for backends that do not natively support power gates (eg. <code>qiskit</code>), we decompose them as an equivalent up to a global phase sequence of rotations (see above for <span class="math inline">\(Z^a\)</span>).</p>
 <p>A special case is the Hadamard gate:</p>
-<p><span class="math inline">\(\hspace{0.5em}
-H = R_y(\frac{\pi}{4}) \cdot Z \cdot R_y(-\frac{\pi}{4}) \implies
-H^a =  e^{i \frac{a \cdot \pi}{2}} \cdot R_y(\frac{\pi}{4}) \cdot R_z(a \cdot \pi) \cdot R_y(-\frac{\pi}{4})\)</span></p>
-<div id="cell-12" class="cell" data-execution_count="4">
+<p><span class="math inline">\(\hspace{0.5em} H = R_y(\frac{\pi}{4}) \cdot Z \cdot R_y(-\frac{\pi}{4}) \implies H^a = e^{i \frac{a \cdot \pi}{2}} \cdot R_y(\frac{\pi}{4}) \cdot R_z(a \cdot \pi) \cdot R_y(-\frac{\pi}{4})\)</span></p>
+<div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="annotated-cell-4"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="1">1</button><span id="annotated-cell-4-1" class="code-annotation-target"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a>qc <span class="op">=</span> gates.H(target<span class="op">=</span><span class="dv">0</span>, power<span class="op">=</span><span class="fl">0.5</span>)</span>
 <span id="annotated-cell-4-2"><a href="#annotated-cell-4-2" aria-hidden="true" tabindex="-1"></a></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="2">2</button><span id="annotated-cell-4-3" class="code-annotation-target"><a href="#annotated-cell-4-3" aria-hidden="true" tabindex="-1"></a>compiled <span class="op">=</span> tq.<span class="bu">compile</span>(qc, backend<span class="op">=</span><span class="st">'qiskit'</span>)</span>
-<span id="annotated-cell-4-4"><a href="#annotated-cell-4-4" aria-hidden="true" tabindex="-1"></a></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="annotated-cell-4-4"><a href="#annotated-cell-4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-4-5"><a href="#annotated-cell-4-5" aria-hidden="true" tabindex="-1"></a></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-4" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-4" data-code-lines="1" data-code-annotation="1">create a squared hadamard gate with a target qubit</span>
+<span data-code-annotation="1" data-code-cell="annotated-cell-4" data-code-lines="1">create a squared hadamard gate with a target qubit</span>
 </dd>
 <dt data-target-cell="annotated-cell-4" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-4" data-code-lines="3" data-code-annotation="2">compile the circuit <code>qc</code>, containing only one hadamard gate, - this will decompose the gate as shown above to rotations and paulis</span>
+<span data-code-annotation="2" data-code-cell="annotated-cell-4" data-code-lines="3">compile the circuit <code>qc</code>, containing only one hadamard gate, - this will decompose the gate as shown above to rotations and paulis</span>
 </dd>
 </dl>
 </div>
@@ -430,7 +392,7 @@ e^{-i \frac{a/4}{2} I_0 I_1 Z} \cdot
 e^{i \frac{a/4}{2} Z_0 I_1 Z}  \cdot
 e^{-i \frac{a/4}{2} Z_0 Z_1 Z} \cdot
 e^{i \frac{a/4}{2} I_0 Z_1 Z} \]</span></p>
-<div id="cell-17" class="cell" data-execution_count="5">
+<div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="annotated-cell-5"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1">1</button><span id="annotated-cell-5-1" class="code-annotation-target"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a>qc <span class="op">=</span> gates.Rz(pi, control<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">1</span>], target<span class="op">=</span><span class="dv">2</span>)</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="2">2</button><span id="annotated-cell-5-2" class="code-annotation-target"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a>compiled <span class="op">=</span> tq.<span class="bu">compile</span>(qc, backend<span class="op">=</span><span class="st">'qiskit'</span>)</span>
 <span id="annotated-cell-5-3"><a href="#annotated-cell-5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -439,15 +401,15 @@ e^{i \frac{a/4}{2} I_0 Z_1 Z} \]</span></p>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-5" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-5" data-code-lines="1" data-code-annotation="1">create a parametrized rotation <span class="math inline">\(Z\)</span> gate with two controls and an angle of 180 deg.</span>
+<span data-code-annotation="1" data-code-cell="annotated-cell-5" data-code-lines="1">create a parametrized rotation <span class="math inline">\(Z\)</span> gate with two controls and an angle of 180 deg.</span>
 </dd>
 <dt data-target-cell="annotated-cell-5" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-5" data-code-lines="2" data-code-annotation="2">compile the circuit - this will decompose it to a sequence of parametrized rotation <span class="math inline">\(Z\)</span> gates and <span class="math inline">\(CNOT\)</span> gates</span>
+<span data-code-annotation="2" data-code-cell="annotated-cell-5" data-code-lines="2">compile the circuit - this will decompose it to a sequence of parametrized rotation <span class="math inline">\(Z\)</span> gates and <span class="math inline">\(CNOT\)</span> gates</span>
 </dd>
 <dt data-target-cell="annotated-cell-5" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-5" data-code-lines="4" data-code-annotation="3">display the compiled circuit</span>
+<span data-code-annotation="3" data-code-cell="annotated-cell-5" data-code-lines="4">display the compiled circuit</span>
 </dd>
 </dl>
 </div>
@@ -468,7 +430,7 @@ c: 3/═════════════════════════
 <p>Note that a print will also denote the angular parametrization of the rotations gates in each one of them. Moreover the <span class="math inline">\(CNOT\)</span> gates are displayed as <span class="math inline">\(X\)</span> gates, which is physically the same.</p>
 <p>That was a lot at once.</p>
 <p>Let’s see how the decomposition of <span class="math inline">\(e^{-i \frac{a/4}{2} Z_0 Z_1 Z}\)</span> looks like.</p>
-<div id="cell-20" class="cell" data-execution_count="6">
+<div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="annotated-cell-6"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="1">1</button><span id="annotated-cell-6-1" class="code-annotation-target"><a href="#annotated-cell-6-1" aria-hidden="true" tabindex="-1"></a>qc <span class="op">=</span> gates.ExpPauli(paulistring<span class="op">=</span><span class="st">'Z(0)Z(1)Z(2)'</span>, angle<span class="op">=</span>pi<span class="op">/</span><span class="dv">4</span>)</span>
 <span id="annotated-cell-6-2"><a href="#annotated-cell-6-2" aria-hidden="true" tabindex="-1"></a></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="2">2</button><span id="annotated-cell-6-3" class="code-annotation-target"><a href="#annotated-cell-6-3" aria-hidden="true" tabindex="-1"></a>compiled <span class="op">=</span> tq.<span class="bu">compile</span>(qc, backend<span class="op">=</span><span class="st">'qiskit'</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -476,11 +438,11 @@ c: 3/═════════════════════════
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-6" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="1" data-code-annotation="1">create a gate based of a given Pauli-String of <span class="math inline">\(Z\)</span> gates parameterized with an angle of 45 deg.</span>
+<span data-code-annotation="1" data-code-cell="annotated-cell-6" data-code-lines="1">create a gate based of a given Pauli-String of <span class="math inline">\(Z\)</span> gates parameterized with an angle of 45 deg.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="3" data-code-annotation="2">compile this gate - this will decompose it to a combination of <span class="math inline">\(CNOT\)</span> gates and rotations</span>
+<span data-code-annotation="2" data-code-cell="annotated-cell-6" data-code-lines="3">compile this gate - this will decompose it to a combination of <span class="math inline">\(CNOT\)</span> gates and rotations</span>
 </dd>
 </dl>
 </div>
@@ -493,7 +455,7 @@ c: 3/═════════════════════════
 e^{i \frac{a}{2} \big(\frac{I - Z}{2}\big)^{\otimes k}} \cdot e^{-i \frac{a}{2} \big(\frac{I - Z}{2}\big)^{\otimes k} Z} =
 CP_{k-1}(\frac{a}{2}) \cdot CRz_k(a)\]</span></p>
 <p>The above equality provides a recurrent way to decompose <span class="math inline">\(CP_k(a)\)</span> with base case <span class="math inline">\(CP_0(a) = Phase(a) = e^{i\frac{a}{2}} R_z(a)\)</span></p>
-<div id="cell-24" class="cell" data-execution_count="7">
+<div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="annotated-cell-7"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="1">1</button><span id="annotated-cell-7-1" class="code-annotation-target"><a href="#annotated-cell-7-1" aria-hidden="true" tabindex="-1"></a>qc <span class="op">=</span> gates.Phase(phase<span class="op">=</span>pi, control<span class="op">=</span><span class="dv">0</span>, target<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="annotated-cell-7-2"><a href="#annotated-cell-7-2" aria-hidden="true" tabindex="-1"></a></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="2">2</button><span id="annotated-cell-7-3" class="code-annotation-target"><a href="#annotated-cell-7-3" aria-hidden="true" tabindex="-1"></a>compiled <span class="op">=</span> tq.<span class="bu">compile</span>(qc, backend<span class="op">=</span><span class="st">'qiskit'</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -501,11 +463,11 @@ CP_{k-1}(\frac{a}{2}) \cdot CRz_k(a)\]</span></p>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-7" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-7" data-code-lines="1" data-code-annotation="1">create a controlled gate in qubit 1. with control qubit in 0. and a phase of 180 deg.</span>
+<span data-code-annotation="1" data-code-cell="annotated-cell-7" data-code-lines="1">create a controlled gate in qubit 1. with control qubit in 0. and a phase of 180 deg.</span>
 </dd>
 <dt data-target-cell="annotated-cell-7" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-7" data-code-lines="3" data-code-annotation="2">compile this gate - thus decompose it to rotations and <span class="math inline">\(CNOT\)</span>s</span>
+<span data-code-annotation="2" data-code-cell="annotated-cell-7" data-code-lines="3">compile this gate - thus decompose it to rotations and <span class="math inline">\(CNOT\)</span>s</span>
 </dd>
 </dl>
 </div>
@@ -515,11 +477,11 @@ CP_{k-1}(\frac{a}{2}) \cdot CRz_k(a)\]</span></p>
 <p>Controlled power gates are equivalent to controlled - phase gates after a basis change. Specifically:</p>
 <ul>
 <li><span class="math inline">\(X = H Z H \implies CX_k^a = H \cdot CP_k(a \cdot \pi) \cdot H\)</span></li>
-<li><span class="math inline">\(Y = R_x(- \frac{\pi}{2}) \cdot Z \cdot R_x(\frac{\pi}{2})  \implies CY_k^a = R_x(- \frac{\pi}{2}) \cdot CP_k(a \cdot \pi) \cdot R_x(\frac{\pi}{2})\)</span></li>
+<li><span class="math inline">\(Y = R_x(- \frac{\pi}{2}) \cdot Z \cdot R_x(\frac{\pi}{2}) \implies CY_k^a = R_x(- \frac{\pi}{2}) \cdot CP_k(a \cdot \pi) \cdot R_x(\frac{\pi}{2})\)</span></li>
 </ul>
 <p>It is worth mentioning here that Tequila decomposes gates only when it is needed, i.e either a backend does not support a gate type or a translation between Tequila and backend object is not supported.</p>
 <p>For example, a Toffoli gate in <code>cirq</code> backend will not be decomposed further:</p>
-<div id="cell-29" class="cell" data-execution_count="8">
+<div class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="annotated-cell-8"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="1">1</button><span id="annotated-cell-8-1" class="code-annotation-target"><a href="#annotated-cell-8-1" aria-hidden="true" tabindex="-1"></a>qc <span class="op">=</span> gates.Toffoli(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>)</span>
 <span id="annotated-cell-8-2"><a href="#annotated-cell-8-2" aria-hidden="true" tabindex="-1"></a></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="2">2</button><span id="annotated-cell-8-3" class="code-annotation-target"><a href="#annotated-cell-8-3" aria-hidden="true" tabindex="-1"></a>compiled <span class="op">=</span> tq.<span class="bu">compile</span>(qc, backend<span class="op">=</span><span class="st">'cirq'</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -527,11 +489,11 @@ CP_{k-1}(\frac{a}{2}) \cdot CRz_k(a)\]</span></p>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="1" data-code-annotation="1">create a Toffoli gate with controls in qubits 1 and 2 and target in qubit 2</span>
+<span data-code-annotation="1" data-code-cell="annotated-cell-8" data-code-lines="1">create a Toffoli gate with controls in qubits 1 and 2 and target in qubit 2</span>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="3" data-code-annotation="2">compile this gate - since this gate is recognized by the backend it won’t get decomposed to rotations and <span class="math inline">\(CNOT\)</span> gates</span>
+<span data-code-annotation="2" data-code-cell="annotated-cell-8" data-code-lines="3">compile this gate - since this gate is recognized by the backend it won’t get decomposed to rotations and <span class="math inline">\(CNOT\)</span> gates</span>
 </dd>
 </dl>
 </div>
@@ -539,19 +501,20 @@ CP_{k-1}(\frac{a}{2}) \cdot CRz_k(a)\]</span></p>
 <p><img src="circuit_5.png" class="img-fluid" style="width:18.0%"></p>
 <p>Printing <code>compiled.circuit</code> should result in the above circuit</p>
 <p>But with <code>qiskit</code> we have to decompose it in terms of one and two qubit gates.</p>
-<div id="cell-33" class="cell" data-execution_count="9">
+<div class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="annotated-cell-9"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="1">1</button><span id="annotated-cell-9-1" class="code-annotation-target"><a href="#annotated-cell-9-1" aria-hidden="true" tabindex="-1"></a>qc <span class="op">=</span> gates.Toffoli(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>)</span>
 <span id="annotated-cell-9-2"><a href="#annotated-cell-9-2" aria-hidden="true" tabindex="-1"></a></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="2">2</button><span id="annotated-cell-9-3" class="code-annotation-target"><a href="#annotated-cell-9-3" aria-hidden="true" tabindex="-1"></a>compiled <span class="op">=</span> tq.<span class="bu">compile</span>(qc, backend<span class="op">=</span><span class="st">'qiskit'</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="2">2</button><span id="annotated-cell-9-3" class="code-annotation-target"><a href="#annotated-cell-9-3" aria-hidden="true" tabindex="-1"></a>compiled <span class="op">=</span> tq.<span class="bu">compile</span>(qc, backend<span class="op">=</span><span class="st">'qiskit'</span>)</span>
+<span id="annotated-cell-9-4"><a href="#annotated-cell-9-4" aria-hidden="true" tabindex="-1"></a></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-9" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-9" data-code-lines="1" data-code-annotation="1">create the same Toffoli gate as before</span>
+<span data-code-annotation="1" data-code-cell="annotated-cell-9" data-code-lines="1">create the same Toffoli gate as before</span>
 </dd>
 <dt data-target-cell="annotated-cell-9" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-9" data-code-lines="3" data-code-annotation="2">compile the gate with a different backend “qiskit”. Since this backend doesn’t recognize this gate it will decompose it to smaller gates</span>
+<span data-code-annotation="2" data-code-cell="annotated-cell-9" data-code-lines="3">compile the gate with a different backend “qiskit”. Since this backend doesn’t recognize this gate it will decompose it to smaller gates</span>
 </dd>
 </dl>
 </div>
@@ -605,33 +568,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       } else {
         el.classList.add('notransition');
       }
-    }
-  }
-  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
-    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
-    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
-    let newTheme = '';
-    if(darkModeDefault) {
-      newTheme = isAlternate ? baseTheme : alternateTheme;
-    } else {
-      newTheme = isAlternate ? alternateTheme : baseTheme;
-    }
-    const changeGiscusTheme = () => {
-      // From: https://github.com/giscus/giscus/issues/336
-      const sendMessage = (message) => {
-        const iframe = document.querySelector('iframe.giscus-frame');
-        if (!iframe) return;
-        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
-      }
-      sendMessage({
-        setConfig: {
-          theme: newTheme
-        }
-      });
-    }
-    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
-    if (isGiscussLoaded) {
-      changeGiscusTheme();
     }
   }
   const toggleColorMode = (alternate) => {
@@ -700,15 +636,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  const darkModeDefault = false;
-  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  let localAlternateSentinel = 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
-    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -838,27 +772,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-    var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/tequilahub\.github\.io\/tequila-tutorials\/");
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-        // undo the damage that might have been done by quarto-nav.js in the case of
-        // links that we want to consider external
-        if (link.dataset.originalHref !== undefined) {
-          link.href = link.dataset.originalHref;
-        }
-      }
-    }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -868,17 +785,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -890,130 +798,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      if (note) {
-        return note.innerHTML;
-      } else {
-        return "";
-      }
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
-          }
-        }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
-        }
-        return container.innerHTML
-      } else {
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(note);
-        }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      // TODO in 1.5, we should make sure this works without a callout special case
-      if (note.classList.contains("callout")) {
-        return note.outerHTML;
-      } else {
-        return note.innerHTML;
-      }
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
-          }
-        } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
-          .then(res => res.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
-            if (note !== null) {
-              const html = processXRef(id, note);
-              instance.setContent(html);
-            } 
-          }).finally(() => {
-            instance.enable();
-            instance.show();
-          });
-        }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
+      return note.innerHTML;
     });
   }
       let selectedAnnoteEl;
@@ -1057,7 +842,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
-            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1083,8 +867,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-        // Handle positioning of the toggle
-    window.addEventListener(
+      // Handle positioning of the toggle
+      window.addEventListener(
       "resize",
       throttle(() => {
         elRect = undefined;
@@ -1092,23 +876,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
           selectCodeLines(selectedAnnoteEl);
         }
       }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
               fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
       const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
       for (let i=0; i<annoteTargets.length; i++) {
         const annoteTarget = annoteTargets[i];
@@ -1153,7 +937,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
               options: {
                 flipVariations: false, // true by default
                 allowedAutoPlacements: ['right'],
-                fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                fallbackPlacements: ['right', 'top', 'top-start', 'top-end'],
               },
             },
             {
@@ -1215,15 +999,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">
-
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tequilahub/tequila/blob/main/Tutorials/CircuitCompiler/CircuitCompiler.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
+    <div class="nav-footer-center"><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
-
 
 
 

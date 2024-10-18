@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.554">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -86,13 +86,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
+  "limit": 20,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -101,7 +95,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -128,8 +121,6 @@ cookieconsent.run({
   "notice_banner_reject_button_hide":false,
   "preferences_center_close_button_hide":false,
   "website_name":""
-  ,
-"language":"en"
   });
 });
 </script> 
@@ -138,38 +129,11 @@ cookieconsent.run({
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Tequila Tutorials - Tequila Basics: Circuits">
-<meta property="og:description" content="quantum computing, quantum chemistry and tequila">
-<meta property="og:image" content="https://tequilahub.github.io/tequila-tutorials/Tutorials/tq-circuits/tq-circuits-pic.png">
-<meta property="og:site_name" content="Tequila Tutorials">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://github.com/tequilahub/tequila-tutorials/Tutorials/tq-circuits/tq-circuits-pic.png">
+<meta property="og:site-name" content="Tequila Tutorials">
 <meta property="og:image:height" content="700">
 <meta property="og:image:width" content="1000">
 </head>
@@ -177,10 +141,10 @@ window.Quarto = {
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container mx-auto">
+      <div class="navbar-brand-container">
     <a href="../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../tequila_logo.png" alt="" class="navbar-logo">
     </a>
@@ -195,26 +159,26 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../research.html"> 
-<span class="menu-text">Research</span></a>
+    <a class="nav-link" href="../../research.html" rel="" target="">
+ <span class="menu-text">Research</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../tutorials.html"> 
-<span class="menu-text">Tutorials</span></a>
+    <a class="nav-link" href="../../tutorials.html" rel="" target="">
+ <span class="menu-text">Tutorials</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../FAQ/FAQ.html"> 
-<span class="menu-text">FAQ</span></a>
+    <a class="nav-link" href="../../FAQ/FAQ.html" rel="" target="">
+ <span class="menu-text">FAQ</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../Contribution/Contribution.html"> 
-<span class="menu-text">Contribution</span></a>
+    <a class="nav-link" href="../../Contribution/Contribution.html" rel="" target="">
+ <span class="menu-text">Contribution</span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -269,11 +233,10 @@ window.Quarto = {
   <li><a href="#get-generators" id="toc-get-generators" class="nav-link" data-scroll-target="#get-generators">Get Generators</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/tequilahub/tequila/blob/main/Tutorials/tq-circuits/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/tequilahub/tequila/blob/main/Tutorials/tq-circuits/index.qmd" class="toc-action">View source</a></p><p><a href="https://github.com/tequilahub/tequila/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
-
 
 
 
@@ -290,7 +253,7 @@ window.Quarto = {
 <section id="sec-init" class="level1">
 <h1>Initialize Tequila Circuits</h1>
 <p>Quantum circuits can be initialized in an intuitive way by assembling <code>tq.gates</code> objects (see <a href="https://github.com/tequilahub/tequila/blob/master/src/tequila/circuit/gates.py">here</a> for a list of all gates). Take for example:</p>
-<div id="8471f8a0" class="cell" data-execution_count="1">
+<div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tequila <span class="im">as</span> tq</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> tq.gates.Ry(target<span class="op">=</span><span class="dv">0</span>, angle<span class="op">=</span><span class="fl">1.0</span>) <span class="op">+</span> tq.gates.X(control<span class="op">=</span><span class="dv">0</span>,target<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -304,7 +267,7 @@ window.Quarto = {
 </ul>
 <p>the <code>angle</code> is optional for some gates that have a defined default value - like <code>X</code>, <code>Y</code>, <code>Z</code> and <code>H</code>.</p>
 <p>We can simulate the circuit and get the corresponding wavefunction back. This is convenient, although not the main purpose of tequila</p>
-<div id="5eb5503e" class="cell" data-execution_count="2">
+<div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>wfn <span class="op">=</span> tq.simulate(U)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(wfn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -312,8 +275,8 @@ window.Quarto = {
 </div>
 </div>
 <p>In the code block above, we did not specify the simulator to be used, tequila determines this automatically. You can however specify the similator via the <code>backend</code> keyword. If you are not sure which simulators are installed on your system, use <code>tq.show_available_simulators()</code></p>
-<div id="ad753f7f" class="cell" data-execution_count="3">
-<details class="code-fold">
+<div class="cell" data-execution_count="3">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>wfn <span class="op">=</span> tq.simulate(U, backend<span class="op">=</span><span class="st">"cirq"</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>tq.show_available_simulators()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -326,7 +289,7 @@ window.Quarto = {
 <p><span class="math display">\[ U(\theta) = e^{-i\frac{\theta}{2} G}  \]</span></p>
 <p>were <span class="math inline">\(G\)</span> is the so called <strong>generator</strong> of the gate. With <span class="math inline">\(G=X\)</span> we obtain the standard <span class="math inline">\(R_x(\theta)\)</span> rotation gate while with <span class="math inline">\(G=\left(X-1\right)\)</span> and <span class="math inline">\(\theta=\pi\)</span> we obtain the standard Pauli-<span class="math inline">\(X\)</span> gate. In the same way, initializing <code>tq.gates.X(target=0, angle="a")</code> defines the gate <span class="math display">\[ e^{-i\frac{a}{2} \left(X-1\right)} = X^{\frac{a}{\pi}}.\]</span><br>
 Usually it is convenient to leave gates like <span class="math inline">\(X,Y,Z,H\)</span> and <span class="math inline">\(CNOT\)</span> unparametrized and use parametrized gates generated from single tensor products of Pauli operators. The latter can be viewed as the native gate set of tequila. An example is</p>
-<div id="0ed4dc6a" class="cell" data-execution_count="4">
+<div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> tq.gates.Rp(paulistring<span class="op">=</span><span class="st">"X(0)Y(2)"</span>, angle<span class="op">=</span><span class="st">"a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>which initialize the gate <span class="math inline">\(e^{-i\frac{a}{2} \left(X(0)Y(2)\right)}\)</span>.</p>
@@ -339,7 +302,7 @@ Usually it is convenient to leave gates like <span class="math inline">\(X,Y,Z,H
 <li>any callable type that returns a float when given a dictionary of variables</li>
 </ul>
 <p>we have already seen an example for the first type. Let’s do it again for the other two. Let’s start with strings</p>
-<div id="15062072" class="cell" data-execution_count="5">
+<div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> tq.gates.Ry(<span class="st">"a"</span>,<span class="dv">0</span>) <span class="op">+</span> tq.gates.CNOT(<span class="dv">0</span>,<span class="dv">1</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>wfn <span class="op">=</span> tq.simulate(U, variables<span class="op">=</span>{<span class="st">"a"</span>:<span class="fl">1.0</span>})</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(wfn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -348,7 +311,7 @@ Usually it is convenient to leave gates like <span class="math inline">\(X,Y,Z,H
 </div>
 </div>
 <p>note that we need to specify the values of all parameters when we are simulating the circuit. The same example with the <code>tq.Variable</code> type</p>
-<div id="6c1cf1ee" class="cell" data-execution_count="6">
+<div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> tq.Variable(<span class="st">"a"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> tq.gates.Ry(a,<span class="dv">0</span>) <span class="op">+</span> tq.gates.CNOT(<span class="dv">0</span>,<span class="dv">1</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>wfn <span class="op">=</span> tq.simulate(U, variables<span class="op">=</span>{<span class="st">"a"</span>:<span class="fl">1.0</span>})</span>
@@ -359,7 +322,7 @@ Usually it is convenient to leave gates like <span class="math inline">\(X,Y,Z,H
 </div>
 <p>note here, that the variables dictionary does not need to be initialized with the variable type, the plain names (as hashable types like strings) are enough - in the background this will all be converted to <code>tq.Variable</code>.</p>
 <p>For the last datatype, we already saw an example, that is <code>tq.Variable</code> itself, as it can be evaluated</p>
-<div id="6693992f" class="cell" data-execution_count="7">
+<div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>variable <span class="op">=</span> tq.Variable(<span class="st">"name"</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>evaluated <span class="op">=</span> variable(variables<span class="op">=</span>{<span class="st">"name"</span>:<span class="fl">1.0</span>})</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(evaluated)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -368,7 +331,7 @@ Usually it is convenient to leave gates like <span class="math inline">\(X,Y,Z,H
 </div>
 </div>
 <p>as this alone would be boring, we can manipulate the variable object, here is some example in which we initialize a circuit parameterized by the function <span class="math display">\[ f(a) = \sin^2\left(\frac{a}{2}\pi\right) \]</span></p>
-<div id="581427e3" class="cell" data-execution_count="8">
+<div class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> numpy <span class="im">import</span> pi,sin</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> tq.Variable(<span class="st">"a"</span>)</span>
@@ -388,25 +351,25 @@ Usually it is convenient to leave gates like <span class="math inline">\(X,Y,Z,H
 <section id="add-controls" class="level2">
 <h2 class="anchored" data-anchor-id="add-controls">Add Controls</h2>
 <p>You can take one circuit and add control-options to it</p>
-<div id="d786e764" class="cell" data-execution_count="9">
+<div class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>cU <span class="op">=</span> U.add_controls([<span class="dv">3</span>,<span class="dv">4</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="circuit.png" class="img-fluid figure-img" style="width:30.0%"></p>
-<figcaption>original</figcaption>
+<figcaption class="figure-caption">original</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="cU.png" class="img-fluid figure-img" style="width:30.0%"></p>
-<figcaption>added controls</figcaption>
+<figcaption class="figure-caption">added controls</figcaption>
 </figure>
 </div>
 </section>
 <section id="re-parametrize" class="level2">
 <h2 class="anchored" data-anchor-id="re-parametrize">Re-Parametrize</h2>
-<div id="64a07afc" class="cell" data-execution_count="10">
+<div class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>UX <span class="op">=</span> U.map_variables({<span class="st">"a"</span>:<span class="st">"b"</span>})</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>UY <span class="op">=</span> UX.map_variables({<span class="st">"b"</span>:<span class="fl">1.0</span>})</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"angles in U :"</span>,U.extract_variables())</span>
@@ -421,7 +384,7 @@ angles in UY: []</code></pre>
 </section>
 <section id="map-qubits" class="level2">
 <h2 class="anchored" data-anchor-id="map-qubits">Map-Qubits</h2>
-<div id="b636e154" class="cell" data-execution_count="11">
+<div class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>UZ <span class="op">=</span> U.map_qubits({<span class="dv">0</span>:<span class="dv">1</span>,<span class="dv">1</span>:<span class="dv">2</span>}) </span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(UZ)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -435,7 +398,7 @@ X(target=(2,), control=(1,))
 <section id="decompose-gates" class="level2">
 <h2 class="anchored" data-anchor-id="decompose-gates">Decompose Gates</h2>
 <p>Tequila can decompose gates automatically (e.g.&nbsp;for differentiation or translation to backend), you can however also do this manually with <code>tq.compile_circuit</code>. The default compiles down to the lowest lever (only standard single qubit gates and controlled-nots). You can specifiy the compile options with keywords like <code>controlled_rotation=False</code>. See <a href="https://github.com/tequilahub/tequila/blob/master/src/tequila/circuit/compiler.py">here</a> for all keywords.</p>
-<div id="30ce6be4" class="cell" data-execution_count="12">
+<div class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>U1 <span class="op">=</span> tq.gates.H(<span class="dv">0</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>U1<span class="op">+=</span> tq.gates.Ry(<span class="st">"a"</span>,<span class="dv">0</span>,control<span class="op">=</span><span class="dv">1</span>) </span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>U1<span class="op">+=</span> tq.gates.ExpPauli(angle<span class="op">=</span><span class="st">"b"</span>, paulistring<span class="op">=</span><span class="st">"X(0)X(2)"</span>)</span>
@@ -448,32 +411,32 @@ X(target=(2,), control=(1,))
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="U1.png" class="img-fluid figure-img" style="width:30.0%"></p>
-<figcaption>U1</figcaption>
+<figcaption class="figure-caption">U1</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="U2.png" class="img-fluid figure-img" style="width:70.0%"></p>
-<figcaption>U2 (full compile)</figcaption>
+<figcaption class="figure-caption">U2 (full compile)</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="U3.png" class="img-fluid figure-img" style="width:50.0%"></p>
-<figcaption>U3 (conrolled_rotation=False)</figcaption>
+<figcaption class="figure-caption">U3 (conrolled_rotation=False)</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="U4.png" class="img-fluid figure-img" style="width:50.0%"></p>
-<figcaption>U4 (exponential_pauli=False)</figcaption>
+<figcaption class="figure-caption">U4 (exponential_pauli=False)</figcaption>
 </figure>
 </div>
 </section>
 <section id="get-generators" class="level2">
 <h2 class="anchored" data-anchor-id="get-generators">Get Generators</h2>
 <p>The generators of individual gates can be constructed with the <code>make_generator</code> function. Here we can include the control qubits in the definition of the generator. Take for example</p>
-<div id="487ec420" class="cell" data-execution_count="13">
+<div class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> tq.gates.Ry(angle<span class="op">=</span><span class="st">"a"</span>, target<span class="op">=</span><span class="dv">0</span>) <span class="op">+</span> tq.gates.X(control<span class="op">=</span><span class="dv">0</span>, target<span class="op">=</span><span class="dv">1</span>) </span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> gate <span class="kw">in</span> U.gates:</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    generator <span class="op">=</span> gate.make_generator()</span>
@@ -536,33 +499,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       } else {
         el.classList.add('notransition');
       }
-    }
-  }
-  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
-    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
-    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
-    let newTheme = '';
-    if(darkModeDefault) {
-      newTheme = isAlternate ? baseTheme : alternateTheme;
-    } else {
-      newTheme = isAlternate ? alternateTheme : baseTheme;
-    }
-    const changeGiscusTheme = () => {
-      // From: https://github.com/giscus/giscus/issues/336
-      const sendMessage = (message) => {
-        const iframe = document.querySelector('iframe.giscus-frame');
-        if (!iframe) return;
-        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
-      }
-      sendMessage({
-        setConfig: {
-          theme: newTheme
-        }
-      });
-    }
-    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
-    if (isGiscussLoaded) {
-      changeGiscusTheme();
     }
   }
   const toggleColorMode = (alternate) => {
@@ -631,15 +567,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  const darkModeDefault = false;
-  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  let localAlternateSentinel = 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
-    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -769,27 +703,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-    var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/tequilahub\.github\.io\/tequila-tutorials\/");
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-        // undo the damage that might have been done by quarto-nav.js in the case of
-        // links that we want to consider external
-        if (link.dataset.originalHref !== undefined) {
-          link.href = link.dataset.originalHref;
-        }
-      }
-    }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -799,17 +716,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -821,130 +729,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      if (note) {
-        return note.innerHTML;
-      } else {
-        return "";
-      }
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
-          }
-        }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
-        }
-        return container.innerHTML
-      } else {
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(note);
-        }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      // TODO in 1.5, we should make sure this works without a callout special case
-      if (note.classList.contains("callout")) {
-        return note.outerHTML;
-      } else {
-        return note.innerHTML;
-      }
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
-          }
-        } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
-          .then(res => res.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
-            if (note !== null) {
-              const html = processXRef(id, note);
-              instance.setContent(html);
-            } 
-          }).finally(() => {
-            instance.enable();
-            instance.show();
-          });
-        }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
+      return note.innerHTML;
     });
   }
       let selectedAnnoteEl;
@@ -988,7 +773,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
-            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1014,32 +798,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1122,9 +880,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Parametrization</span><span class="co">](#sec-param)</span></span>
 <span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Tricks (re-parametrize, map qubits, decompose gates, get generators)</span><span class="co">](#sec-tricks)</span></span>
 <span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>&lt;center&gt;</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;center&gt;</span></span>
 <span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a><span class="al">![](tq-circuits-pic.png)</span>{width=400}</span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>&lt;/center&gt;</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/center&gt;</span></span>
 <span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a><span class="fu"># Initialize Tequila Circuits {#sec-init}</span></span>
@@ -1298,15 +1056,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">
-
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tequilahub/tequila/blob/main/Tutorials/tq-circuits/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
+    <div class="nav-footer-center"><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
-
 
 
 

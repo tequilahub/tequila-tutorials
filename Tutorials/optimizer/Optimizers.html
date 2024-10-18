@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.554">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -25,7 +25,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -87,13 +87,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
+  "limit": 20,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -102,7 +96,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -129,8 +122,6 @@ cookieconsent.run({
   "notice_banner_reject_button_hide":false,
   "preferences_center_close_button_hide":false,
   "website_name":""
-  ,
-"language":"en"
   });
 });
 </script> 
@@ -139,38 +130,11 @@ cookieconsent.run({
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Tequila Tutorials - Optimizer">
-<meta property="og:description" content="quantum computing, quantum chemistry and tequila">
-<meta property="og:image" content="https://tequilahub.github.io/tequila-tutorials/Tutorials/optimizer/optimizer.png">
-<meta property="og:site_name" content="Tequila Tutorials">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://github.com/tequilahub/tequila-tutorials/Tutorials/optimizer/optimizer.png">
+<meta property="og:site-name" content="Tequila Tutorials">
 <meta property="og:image:height" content="1792">
 <meta property="og:image:width" content="2486">
 </head>
@@ -178,10 +142,10 @@ window.Quarto = {
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container mx-auto">
+      <div class="navbar-brand-container">
     <a href="../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../tequila_logo.png" alt="" class="navbar-logo">
     </a>
@@ -196,26 +160,26 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../research.html"> 
-<span class="menu-text">Research</span></a>
+    <a class="nav-link" href="../../research.html" rel="" target="">
+ <span class="menu-text">Research</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../tutorials.html"> 
-<span class="menu-text">Tutorials</span></a>
+    <a class="nav-link" href="../../tutorials.html" rel="" target="">
+ <span class="menu-text">Tutorials</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../FAQ/FAQ.html"> 
-<span class="menu-text">FAQ</span></a>
+    <a class="nav-link" href="../../FAQ/FAQ.html" rel="" target="">
+ <span class="menu-text">FAQ</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../Contribution/Contribution.html"> 
-<span class="menu-text">Contribution</span></a>
+    <a class="nav-link" href="../../Contribution/Contribution.html" rel="" target="">
+ <span class="menu-text">Contribution</span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -268,7 +232,7 @@ window.Quarto = {
   </ul></li>
   <li><a href="#numerical-and-customized-gradients" id="toc-numerical-and-customized-gradients" class="nav-link" data-scroll-target="#numerical-and-customized-gradients">Numerical and Customized Gradients</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/tequilahub/tequila/blob/main/Tutorials/optimizer/Optimizers.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/tequilahub/tequila/blob/main/Tutorials/optimizer/Optimizers.ipynb" class="toc-action">View source</a></p><p><a href="https://github.com/tequilahub/tequila/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
@@ -276,10 +240,9 @@ window.Quarto = {
 
 
 
-
 <p>Explore the two different optimizers available through Tequila interfaces:<br>
 A native gradient descent (GD) optimizer, as well as interfaces for SciPy optimizers.</p>
-<div id="cell-2" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:11.971055Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:11.969183Z&quot;}" data-execution_count="51">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:11.971055Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:11.969183Z&quot;}" data-execution_count="51">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tequila <span class="im">as</span> tq</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -310,7 +273,7 @@ A native gradient descent (GD) optimizer, as well as interfaces for SciPy optimi
 </ul>
 <p>Some of the optimizers take more, or different, keywords from the others, so check the documentation for each one. In case the optimizer has some degree of verbosity (currently, they all do), you can deactivate this with <code>silent=True</code>.</p>
 <p>The following optimization methods are available on your system in <code>Tequila</code>:</p>
-<div id="cell-4" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.061485Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.059640Z&quot;}" data-execution_count="52">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.061485Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.059640Z&quot;}" data-execution_count="52">
 <div class="sourceCode cell-code" id="annotated-cell-2"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1">1</button><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a>tq.optimizers.show_available_optimizers()</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
@@ -357,7 +320,7 @@ Installed optimizer modules:  ['scipy', 'gd', 'gpyopt']</code></pre>
 </div>
 <p>We will use two different <code>Objectives</code> for optimization in this tutorial.<br>
 The first <code>Objective</code> <span class="math inline">\(O_1\)</span> computes a two qubit expectation value using the tractable but non-trivial hamiltonian <span class="math inline">\([Y(0)+Qm(0)]\otimes X(1)\)</span>, where <span class="math inline">\(Qm=\frac{1}{2} (I - Z)\)</span> is the projector onto the <span class="math inline">\(\Ket{1}\)</span> state.</p>
-<div id="cell-7" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.067424Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.063005Z&quot;}" data-execution_count="53">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.067424Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.063005Z&quot;}" data-execution_count="53">
 <div class="sourceCode cell-code" id="annotated-cell-3"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="1">1</button><span id="annotated-cell-3-1" class="code-annotation-target"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> tq.Variable(name<span class="op">=</span><span class="st">"a"</span>)<span class="op">*</span>tq.numpy.pi</span>
 <span id="annotated-cell-3-2"><a href="#annotated-cell-3-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> tq.Variable(name<span class="op">=</span><span class="st">"b"</span>)<span class="op">*</span>tq.numpy.pi</span>
 <span id="annotated-cell-3-3"><a href="#annotated-cell-3-3" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> tq.Variable(name<span class="op">=</span><span class="st">"c"</span>)<span class="op">*</span>tq.numpy.pi</span>
@@ -403,7 +366,7 @@ The first <code>Objective</code> <span class="math inline">\(O_1\)</span> comput
 </div>
 <p><img src="O1.png" class="img-fluid" style="width:60.0%"></p>
 <p>Our second <code>Objective</code> <span class="math inline">\(O_2\)</span> will measure a 3-qubit circuit with respect to the Hamiltonian <span class="math inline">\(Y(0)\otimes X(1) \otimes Y(2)\)</span>.</p>
-<div id="cell-11" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.072192Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.068242Z&quot;}" data-execution_count="54">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.072192Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.068242Z&quot;}" data-execution_count="54">
 <div class="sourceCode cell-code" id="annotated-cell-4"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="1">1</button><span id="annotated-cell-4-1" class="code-annotation-target"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="2">2</button><span id="annotated-cell-4-2" class="code-annotation-target"><a href="#annotated-cell-4-2" aria-hidden="true" tabindex="-1"></a>U2 <span class="op">=</span> tq.gates.Ry(tq.numpy.pi<span class="op">/</span><span class="dv">2</span>,<span class="dv">0</span>) <span class="op">+</span>tq.gates.Ry(tq.numpy.pi<span class="op">/</span><span class="dv">3</span>,<span class="dv">1</span>)<span class="op">+</span>tq.gates.Ry(tq.numpy.pi<span class="op">/</span><span class="dv">4</span>,<span class="dv">2</span>)</span>
 <span id="annotated-cell-4-3"><a href="#annotated-cell-4-3" aria-hidden="true" tabindex="-1"></a>U2 <span class="op">+=</span> tq.gates.Rz(<span class="st">'a'</span>,<span class="dv">0</span>)<span class="op">+</span>tq.gates.Rz(<span class="st">'b'</span>,<span class="dv">1</span>)</span>
@@ -449,7 +412,7 @@ The first <code>Objective</code> <span class="math inline">\(O_1\)</span> comput
 <section id="the-gd-optimizer" class="level2">
 <h2 class="anchored" data-anchor-id="the-gd-optimizer">The GD Optimizer</h2>
 <p>We will start this tutorial by looking at the GD optimizer. Here is an overview over the available optimization methods.</p>
-<div id="cell-15" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.074697Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.072932Z&quot;}" data-execution_count="55">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.074697Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.072932Z&quot;}" data-execution_count="55">
 <div class="sourceCode cell-code" id="annotated-cell-5"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1">1</button><span id="annotated-cell-5-1" class="code-annotation-target"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a>tq.show_available_optimizers(module<span class="op">=</span><span class="st">"gd"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
@@ -477,7 +440,7 @@ spsa                 | gd</code></pre>
 </div>
 <p>A variety of methods are available for optimization. Here, ‘sgd’ refers to the standard gradient descent algorithm, without momentum. Like all Tequila optimizers, the GD optimizer has a <code>minimize</code> function and most of the arguments are the same. However, there is one important difference: the GD optimizer takes a learning rate (lr). This parameter mediates step size in all of the GD optimizer methods; It is a positive float which scales the step in the direction of the gradient.</p>
 <p>We will now optimize <span class="math inline">\(O_1\)</span>, our two-qubit expectation value, starting with angles equivalent to <span class="math inline">\(\frac{1}{4}\pi\)</span> for all four variables, and optimizing via the <a href="https://towardsdatascience.com/_adam-latest-trends-in-deep-learning-optimization-6be9a291375c">‘Adam’</a> method.</p>
-<div id="cell-19" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.143971Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.075479Z&quot;}" data-execution_count="56">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.143971Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.075479Z&quot;}" data-execution_count="56">
 <div class="sourceCode cell-code" id="annotated-cell-6"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="1">1</button><span id="annotated-cell-6-1" class="code-annotation-target"><a href="#annotated-cell-6-1" aria-hidden="true" tabindex="-1"></a>init<span class="op">=</span>{<span class="st">'a'</span>:<span class="fl">0.25</span>,<span class="st">'b'</span>:<span class="fl">0.25</span>,<span class="st">'c'</span>:<span class="fl">0.25</span>,<span class="st">'d'</span>:<span class="fl">0.25</span>}</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="2">2</button><span id="annotated-cell-6-2" class="code-annotation-target"><a href="#annotated-cell-6-2" aria-hidden="true" tabindex="-1"></a>lr<span class="op">=</span><span class="fl">0.1</span></span>
 <span id="annotated-cell-6-3"><a href="#annotated-cell-6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -509,7 +472,7 @@ spsa                 | gd</code></pre>
 </div>
 </div>
 <p>The plots below show the trajectory of both the value of the objective and the values of the angles as a function of time.</p>
-<div id="cell-22" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.276677Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.144993Z&quot;}" data-execution_count="57">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.276677Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.144993Z&quot;}" data-execution_count="57">
 <div class="sourceCode cell-code" id="annotated-cell-7"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="1">1</button><span id="annotated-cell-7-1" class="code-annotation-target"><a href="#annotated-cell-7-1" aria-hidden="true" tabindex="-1"></a>adam_result.history.plot(<span class="st">'energies'</span>)</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="2">2</button><span id="annotated-cell-7-2" class="code-annotation-target"><a href="#annotated-cell-7-2" aria-hidden="true" tabindex="-1"></a>adam_result.history.plot(<span class="st">'angles'</span>)</span>
 <span id="annotated-cell-7-3"><a href="#annotated-cell-7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'best energy: '</span>,adam_result.energy)</span>
@@ -527,18 +490,10 @@ spsa                 | gd</code></pre>
 </dl>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-8-output-2.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-8-output-2.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>best energy:  -1.6179942179567814
@@ -551,7 +506,7 @@ d : -0.4982090391144128
 </div>
 <p><strong>We see that, apart from a few hiccups, all the angles converge to optimimal values.</strong></p>
 <p><strong>Let’s repeat what we did above, but with a few other methods! Here’s RMSprop:</strong></p>
-<div id="cell-26" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.464087Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.277946Z&quot;}" data-execution_count="58">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.464087Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.277946Z&quot;}" data-execution_count="58">
 <div class="sourceCode cell-code" id="annotated-cell-8"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="1">1</button><span id="annotated-cell-8-1" class="code-annotation-target"><a href="#annotated-cell-8-1" aria-hidden="true" tabindex="-1"></a>init<span class="op">=</span>{<span class="st">'a'</span>:<span class="fl">0.25</span>,<span class="st">'b'</span>:<span class="fl">0.25</span>,<span class="st">'c'</span>:<span class="fl">0.25</span>,<span class="st">'d'</span>:<span class="fl">0.25</span>}</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="2">2</button><span id="annotated-cell-8-2" class="code-annotation-target"><a href="#annotated-cell-8-2" aria-hidden="true" tabindex="-1"></a>lr<span class="op">=</span><span class="fl">0.01</span></span>
 <span id="annotated-cell-8-3"><a href="#annotated-cell-8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -602,22 +557,14 @@ d : -0.5
 </code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-9-output-2.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-9-output-2.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-9-output-3.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-9-output-3.png" class="img-fluid"></p>
 </div>
 </div>
 <p><strong>… And now let’s take a look at Momentum:</strong></p>
-<div id="cell-29" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.723674Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.466517Z&quot;}" data-execution_count="59">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.723674Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.466517Z&quot;}" data-execution_count="59">
 <div class="sourceCode cell-code" id="annotated-cell-9"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="1">1</button><span id="annotated-cell-9-1" class="code-annotation-target"><a href="#annotated-cell-9-1" aria-hidden="true" tabindex="-1"></a>init<span class="op">=</span>{<span class="st">'a'</span>:<span class="fl">0.25</span>,<span class="st">'b'</span>:<span class="fl">0.25</span>,<span class="st">'c'</span>:<span class="fl">0.25</span>,<span class="st">'d'</span>:<span class="fl">0.25</span>}</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="2">2</button><span id="annotated-cell-9-2" class="code-annotation-target"><a href="#annotated-cell-9-2" aria-hidden="true" tabindex="-1"></a>lr<span class="op">=</span><span class="fl">0.1</span></span>
 <span id="annotated-cell-9-3"><a href="#annotated-cell-9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -667,18 +614,10 @@ d : -0.5018117058023004
 </code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-10-output-2.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-10-output-2.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-10-output-3.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-10-output-3.png" class="img-fluid"></p>
 </div>
 </div>
 <p>Note that when using the <a href="https://towardsdatascience.com/understanding-rmsprop-faster-neural-network-learning-62e116fcf29a">RMSprop</a> method, we reduced the learning rate from <span class="math inline">\(0.1\)</span> to <span class="math inline">\(0.01\)</span>. Different methods may be more or less sensitive to choices of initial learning rate. Feel free to revisit previous examples, and experiment with different learning rates, or initial parameters to gain insight into the sensitivity of different methods.</p>
@@ -686,7 +625,7 @@ d : -0.5018117058023004
 <p>One issue with gradient descent is that they are slow when it comes to converging to machine precision. As optimization nears an optimum, the gradient goes to zero, which means that each successive step is smaller and smaller, and convergence slows down. This is not really a problem in machine learning, where convergence to many digits is not needed, but it is an issue in chemistry.</p>
 <p>The standard method used to converge quantum chemical calculations is an accelerated form of gradient descent alternatively called <code>Direct Inversion of the Iterative Subspace (DIIS)</code> or <code>Pulay mixing</code> (for its inventor Peter Pulay). DIIS extrapolates from the error on past function evaluation to where the error is zero using a subspace approach. It is closely related to other subpsace and Krylov methods, such as <code>GMRES</code>.</p>
 <p>DIIS works best once we are pretty close to our solution. In this case, we start from a significantly better initial guess, and try to achieve a tolerance of <span class="math inline">\(\texttt{1e-10}\)</span> with just standard gradient descent.</p>
-<div id="cell-33" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.769088Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.724632Z&quot;}" data-execution_count="60">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.769088Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.724632Z&quot;}" data-execution_count="60">
 <div class="sourceCode cell-code" id="annotated-cell-10"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="1">1</button><span id="annotated-cell-10-1" class="code-annotation-target"><a href="#annotated-cell-10-1" aria-hidden="true" tabindex="-1"></a>init<span class="op">=</span>{<span class="st">'a'</span>:<span class="fl">0.18</span>,<span class="st">'b'</span>:<span class="fl">0.8</span>,<span class="st">'c'</span>:<span class="op">-</span><span class="fl">0.1</span>,<span class="st">'d'</span>:<span class="op">-</span><span class="fl">0.4</span>}</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="2">2</button><span id="annotated-cell-10-2" class="code-annotation-target"><a href="#annotated-cell-10-2" aria-hidden="true" tabindex="-1"></a>lr<span class="op">=</span><span class="fl">0.1</span></span>
 <span id="annotated-cell-10-3"><a href="#annotated-cell-10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -716,7 +655,7 @@ d : -0.5018117058023004
 </div>
 <p>Looking at the printout (obtained with <code>silent=False</code> instead of <code>silent=True</code>), we see that convergence is achieved after 46 steps. We note that specifically convergence slows down significantly after 5 steps, as the gradients (and thus step sizes) become smaller the closer we get to the minima. This is the problem DIIS solves.</p>
 <p>Let’s try again with acceleration.</p>
-<div id="cell-36" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.788696Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.769939Z&quot;}" data-execution_count="61">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.788696Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.769939Z&quot;}" data-execution_count="61">
 <div class="sourceCode cell-code" id="annotated-cell-11"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="1">1</button><span id="annotated-cell-11-1" class="code-annotation-target"><a href="#annotated-cell-11-1" aria-hidden="true" tabindex="-1"></a>diis_result<span class="op">=</span>tq.minimize(objective<span class="op">=</span>O1,</span>
 <span id="annotated-cell-11-2"><a href="#annotated-cell-11-2" aria-hidden="true" tabindex="-1"></a>                        lr<span class="op">=</span>lr,</span>
 <span id="annotated-cell-11-3"><a href="#annotated-cell-11-3" aria-hidden="true" tabindex="-1"></a>                        method<span class="op">=</span><span class="st">'sgd'</span>,</span>
@@ -740,7 +679,7 @@ d : -0.5018117058023004
 </div>
 <p>With the printout here (change to <code>silent=False</code>), the convergence is obtained in just 8 steps. We can see here that DIIS kicks in at step 3, that is, when <span class="math inline">\(\texttt{max(gradient)}\)</span> is below <span class="math inline">\(\texttt{1e-1}\)</span> (the <code>tol=</code> argument in the DIIS dictionary) and we have accumulated at least 3 vectors. Once DIIS starts, convergence is very rapid, with a four orders of magnitude drop in the error within just three steps.</p>
 <p>We can see this most clearly in a logarithmic plot of the error.</p>
-<div id="cell-39" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.875112Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.789725Z&quot;}" data-execution_count="62">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:12.875112Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.789725Z&quot;}" data-execution_count="62">
 <div class="sourceCode cell-code" id="annotated-cell-12"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-12" data-target-annotation="1">1</button><span id="annotated-cell-12-1" class="code-annotation-target"><a href="#annotated-cell-12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy</span>
 <span id="annotated-cell-12-2"><a href="#annotated-cell-12-2" aria-hidden="true" tabindex="-1"></a>                            </span>
 <span id="annotated-cell-12-3"><a href="#annotated-cell-12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'SGD + DIIS optimization results:'</span>)                                   </span>
@@ -783,19 +722,18 @@ d : -0.5018117058023004
 <div class="cell-output cell-output-stdout">
 <pre><code>SGD + DIIS optimization results:</code></pre>
 </div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-13-output-2.png" class="img-fluid figure-img"></p>
-</figure>
+<div class="cell-output cell-output-display" data-execution_count="62">
+<pre><code>&lt;matplotlib.legend.Legend at 0x16eabb100&gt;</code></pre>
 </div>
+<div class="cell-output cell-output-display">
+<p><img src="Optimizers_files/figure-html/cell-13-output-3.png" class="img-fluid"></p>
 </div>
 </div>
 <p>We clearly see here that when DIIS kicks in, convergence rapidly accelerates. In comparison, the convergence rate of standard gradient descent actually slows down as we approach a solution. However, it should be noted that DIIS is not entirely stable and only really works close to an optima. Furthermore, the implementation here is somewhat experimental. Please use it at your own risk!</p>
 <p><strong>The GD optimizer, with the Quantum Natural Gradient:</strong></p>
 <p>The <code>Quantum Natural Gradient</code>, or QNG, is a novel method of calculating gradients for quantum systems, inspired by the natural gradient sometimes employed in classical machine learning. The usual gradient we employ is with respect to a Euclidean manifold, but this is not the only geometry – nor even the optimal geometry – of quantum space. The QNG is, in essence, a method of taking gradients with respect to (an approximation to) the Fubini-Study metric. For information on how (and why) the QNG is used, see <a href="https://arxiv.org/abs/1909.02108">Stokes et.al</a>.</p>
 <p>Using the QNG in Tequila is as simple as passing in the keyword <code>gradient='qng'</code> to optimizers which support it, such as the GD optimizer. We will use it to optimize <span class="math inline">\(O_2\)</span>, our 3 qubit <code>Objective</code>, and then compare the results to optimizing the same circuit with the regular gradient.</p>
-<div id="cell-43" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:13.106790Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.876217Z&quot;}" data-execution_count="63">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:13.106790Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:12.876217Z&quot;}" data-execution_count="63">
 <div class="sourceCode cell-code" id="annotated-cell-13"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="1">1</button><span id="annotated-cell-13-1" class="code-annotation-target"><a href="#annotated-cell-13-1" aria-hidden="true" tabindex="-1"></a></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="2">2</button><span id="annotated-cell-13-2" class="code-annotation-target"><a href="#annotated-cell-13-2" aria-hidden="true" tabindex="-1"></a>init<span class="op">=</span>{k:np.random.uniform(<span class="op">-</span><span class="dv">2</span>,<span class="dv">2</span>) <span class="cf">for</span> k <span class="kw">in</span> [<span class="st">'a'</span>,<span class="st">'b'</span>,<span class="st">'c'</span>,<span class="st">'d'</span>]}</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="3">3</button><span id="annotated-cell-13-3" class="code-annotation-target"><a href="#annotated-cell-13-3" aria-hidden="true" tabindex="-1"></a>lr<span class="op">=</span><span class="fl">0.01</span></span>
@@ -832,7 +770,7 @@ d : -0.5018117058023004
 </dl>
 </div>
 </div>
-<div id="cell-45" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:13.221683Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:13.107532Z&quot;}" data-execution_count="64">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:13.221683Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:13.107532Z&quot;}" data-execution_count="64">
 <div class="sourceCode cell-code" id="annotated-cell-14"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="1">1</button><span id="annotated-cell-14-1" class="code-annotation-target"><a href="#annotated-cell-14-1" aria-hidden="true" tabindex="-1"></a>qng_result.history.plot(<span class="st">'energies'</span>)</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="2">2</button><span id="annotated-cell-14-2" class="code-annotation-target"><a href="#annotated-cell-14-2" aria-hidden="true" tabindex="-1"></a>qng_result.history.plot(<span class="st">'angles'</span>)</span>
 <span id="annotated-cell-14-3"><a href="#annotated-cell-14-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -851,18 +789,10 @@ d : -0.5018117058023004
 </dl>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-15-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-15-output-2.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-15-output-2.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>best energy with qng:  -0.6121445376182162
@@ -874,7 +804,7 @@ d : -0.0017630474321783914
 </div>
 </div>
 <p>To appreciate the benefits of using the QNG, let’s optimize the same circuit with the same learning rate and method, but without QNG.</p>
-<div id="cell-48" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:13.447491Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:13.225272Z&quot;}" data-execution_count="65">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:13.447491Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:13.225272Z&quot;}" data-execution_count="65">
 <div class="sourceCode cell-code" id="annotated-cell-15"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-15" data-target-annotation="1">1</button><span id="annotated-cell-15-1" class="code-annotation-target"><a href="#annotated-cell-15-1" aria-hidden="true" tabindex="-1"></a>lr<span class="op">=</span><span class="fl">0.01</span></span>
 <span id="annotated-cell-15-2"><a href="#annotated-cell-15-2" aria-hidden="true" tabindex="-1"></a></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-15" data-target-annotation="2">2</button><span id="annotated-cell-15-3" class="code-annotation-target"><a href="#annotated-cell-15-3" aria-hidden="true" tabindex="-1"></a>sgd_noqng_result <span class="op">=</span> tq.minimize(objective<span class="op">=</span>O2,</span>
@@ -922,18 +852,10 @@ d : -0.8675949678046627
 </code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-16-output-2.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-16-output-2.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-16-output-3.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-16-output-3.png" class="img-fluid"></p>
 </div>
 </div>
 <p>Although the starting point was random, you will most likely see that the QNG run achieved a greater degree of improvement - it will not perform worse - and that the trajectories followed by the angles were different from those in the SGD-only optimization. Feel free to play around with other methods, learning rates, or circuits in your own code!</p>
@@ -941,7 +863,7 @@ d : -0.8675949678046627
 <section id="the-scipy-optimizer" class="level2">
 <h2 class="anchored" data-anchor-id="the-scipy-optimizer">The SciPy Optimizer</h2>
 <p><code>SciPy</code> is one of the most popular optimization packages in <code>Python</code>. It offers a wide variety of optimization strategies. We will not cover them here; for a full exploration of all the <code>SciPy</code> methods, see <a href="https://docs.scipy.org/doc/scipy/reference/tutorial/optimize.html">their documentation</a>. Instead, we will showcase a few of the more powerful options available. Most <code>SciPy</code> keywords like <code>method_options</code>, can be passed directly to <code>minimize</code> in the same way as when using <code>SciPy</code> directly.</p>
-<div id="cell-52" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:13.451349Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:13.448924Z&quot;}" data-execution_count="66">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:13.451349Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:13.448924Z&quot;}" data-execution_count="66">
 <div class="sourceCode cell-code" id="annotated-cell-16"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="1">1</button><span id="annotated-cell-16-1" class="code-annotation-target"><a href="#annotated-cell-16-1" aria-hidden="true" tabindex="-1"></a>tq.show_available_optimizers(module<span class="op">=</span><span class="st">"scipy"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
@@ -974,7 +896,7 @@ TRUST-CONSTR         | scipy</code></pre>
 <p>We will try three different optimizers: <code>COBYLA</code>, which is gradient-free; <code>L-BFGS-B</code>, which employs gradients; and <code>NEWTON-CG</code>, which employs the Hessian.</p>
 <p>Aa a reminder, we will optimize:</p>
 <p><img src="O1.png" class="img-fluid" style="width:60.0%"></p>
-<div id="cell-57" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:13.648906Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:13.452148Z&quot;}" data-execution_count="67">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:13.648906Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:13.452148Z&quot;}" data-execution_count="67">
 <div class="sourceCode cell-code" id="annotated-cell-17"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-17" data-target-annotation="1">1</button><span id="annotated-cell-17-1" class="code-annotation-target"><a href="#annotated-cell-17-1" aria-hidden="true" tabindex="-1"></a>init<span class="op">=</span>{<span class="st">'a'</span>:<span class="fl">0.25</span>,<span class="st">'b'</span>:<span class="fl">0.25</span>,<span class="st">'c'</span>:<span class="fl">0.25</span>,<span class="st">'d'</span>:<span class="fl">0.25</span>}</span>
 <span id="annotated-cell-17-2"><a href="#annotated-cell-17-2" aria-hidden="true" tabindex="-1"></a></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-17" data-target-annotation="2">2</button><span id="annotated-cell-17-3" class="code-annotation-target"><a href="#annotated-cell-17-3" aria-hidden="true" tabindex="-1"></a>cobyla_result <span class="op">=</span> tq.minimize(objective<span class="op">=</span>O1,</span>
@@ -1014,18 +936,10 @@ TRUST-CONSTR         | scipy</code></pre>
 </dl>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-18-output-1.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-18-output-2.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-18-output-2.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>best energy with cobyla:  -1.618031464593162
@@ -1036,7 +950,7 @@ d : -0.5000442705117792
 </code></pre>
 </div>
 </div>
-<div id="cell-59" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:13.844722Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:13.664490Z&quot;}" data-execution_count="68">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:13.844722Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:13.664490Z&quot;}" data-execution_count="68">
 <div class="sourceCode cell-code" id="annotated-cell-18"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="1">1</button><span id="annotated-cell-18-1" class="code-annotation-target"><a href="#annotated-cell-18-1" aria-hidden="true" tabindex="-1"></a>lb_result <span class="op">=</span> tq.minimize(objective<span class="op">=</span>O1,</span>
 <span id="annotated-cell-18-2"><a href="#annotated-cell-18-2" aria-hidden="true" tabindex="-1"></a>                        method<span class="op">=</span><span class="st">"l-bfgs-b"</span>,</span>
 <span id="annotated-cell-18-3"><a href="#annotated-cell-18-3" aria-hidden="true" tabindex="-1"></a>                        initial_values<span class="op">=</span>init,</span>
@@ -1070,18 +984,10 @@ d : -0.5000442705117792
 </dl>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-19-output-1.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-19-output-2.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-19-output-2.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>best energy with L-BFGS-B:  -1.6178070274606597
@@ -1092,7 +998,7 @@ d : -0.5036909456037741
 </code></pre>
 </div>
 </div>
-<div id="cell-61" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:14.130953Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:13.846559Z&quot;}" data-execution_count="69">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:14.130953Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:13.846559Z&quot;}" data-execution_count="69">
 <div class="sourceCode cell-code" id="annotated-cell-19"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-19" data-target-annotation="1">1</button><span id="annotated-cell-19-1" class="code-annotation-target"><a href="#annotated-cell-19-1" aria-hidden="true" tabindex="-1"></a>newton_result <span class="op">=</span> tq.minimize(objective<span class="op">=</span>O1,</span>
 <span id="annotated-cell-19-2"><a href="#annotated-cell-19-2" aria-hidden="true" tabindex="-1"></a>                            method<span class="op">=</span><span class="st">"newton-cg"</span>,</span>
 <span id="annotated-cell-19-3"><a href="#annotated-cell-19-3" aria-hidden="true" tabindex="-1"></a>                            initial_values<span class="op">=</span>init,</span>
@@ -1126,18 +1032,10 @@ d : -0.5036909456037741
 </dl>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-20-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-20-output-1.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-20-output-2.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-20-output-2.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>best energy with NEWTON-CG:  -1.618032396266234
@@ -1152,7 +1050,7 @@ d : -0.49984554761229166
 <p><strong>Scipy Extras: numerical gradients and Hessians</strong></p>
 <p>Scipy allows for the use of numerical gradients. To use them, pass down keywords to the <code>gradient</code> argument, such as <code>'2-point'</code>. When using the numerical gradients of <code>SciPy</code>, it is often crucial to determine a feasible step size for the procedure. This can be done with the <code>method_options</code> entry <code>finite_diff_rel_step</code> (for <code>SciPy</code> version 1.5 or higher) or <code>eps</code> (for <code>SciPy</code> version &lt; 1.5).</p>
 <p>Here is one example. <strong>Please ensure to check your SciPy version!</strong></p>
-<div id="cell-65" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:14.276979Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:14.132114Z&quot;}" data-execution_count="70">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:14.276979Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:14.132114Z&quot;}" data-execution_count="70">
 <div class="sourceCode cell-code" id="annotated-cell-20"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-20" data-target-annotation="1">1</button><span id="annotated-cell-20-1" class="code-annotation-target"><a href="#annotated-cell-20-1" aria-hidden="true" tabindex="-1"></a>lb_result <span class="op">=</span> tq.minimize(objective<span class="op">=</span>O1,</span>
 <span id="annotated-cell-20-2"><a href="#annotated-cell-20-2" aria-hidden="true" tabindex="-1"></a>                        method<span class="op">=</span><span class="st">"l-bfgs-b"</span>,</span>
 <span id="annotated-cell-20-3"><a href="#annotated-cell-20-3" aria-hidden="true" tabindex="-1"></a>                        initial_values<span class="op">=</span>init,</span>
@@ -1191,18 +1089,10 @@ d : -0.49984554761229166
 </dl>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-21-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-21-output-1.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-21-output-2.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-21-output-2.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>best energy with L-BFGS-B:  -1.6178082631717572
@@ -1215,7 +1105,7 @@ d : -0.5036839801675221
 </div>
 <p><strong>Scipy Extras: the QNG in SciPy</strong></p>
 <p>Scipy is also configured to use the QNG, just as the GD optimizer is. All one needs to do is set <code>gradient=qng</code>. Let’s see how QNG interacts with the <code>BFGS</code> optimizer. We will use <span class="math inline">\(0_2\)</span>, our 3-qubit expectation value, that we used previously.</p>
-<div id="cell-68" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:14.445114Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:14.278104Z&quot;}" data-execution_count="71">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:14.445114Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:14.278104Z&quot;}" data-execution_count="71">
 <div class="sourceCode cell-code" id="annotated-cell-21"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-21" data-target-annotation="1">1</button><span id="annotated-cell-21-1" class="code-annotation-target"><a href="#annotated-cell-21-1" aria-hidden="true" tabindex="-1"></a>init<span class="op">=</span>{k:np.random.uniform(<span class="op">-</span><span class="dv">2</span>,<span class="dv">2</span>) <span class="cf">for</span> k <span class="kw">in</span> [<span class="st">'a'</span>,<span class="st">'b'</span>,<span class="st">'c'</span>,<span class="st">'d'</span>]}</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-21" data-target-annotation="2">2</button><span id="annotated-cell-21-2" class="code-annotation-target"><a href="#annotated-cell-21-2" aria-hidden="true" tabindex="-1"></a>lr<span class="op">=</span><span class="fl">0.01</span></span>
 <span id="annotated-cell-21-3"><a href="#annotated-cell-21-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1272,21 +1162,13 @@ d : 1.5706630278472251
 </code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-22-output-2.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-22-output-2.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-22-output-3.png" class="img-fluid figure-img"></p>
-</figure>
+<p><img src="Optimizers_files/figure-html/cell-22-output-3.png" class="img-fluid"></p>
 </div>
 </div>
-</div>
-<div id="cell-70" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:14.651676Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:14.446463Z&quot;}" data-execution_count="72">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:14.651676Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:14.446463Z&quot;}" data-execution_count="72">
 <div class="sourceCode cell-code" id="annotated-cell-22"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-22" data-target-annotation="1">1</button><span id="annotated-cell-22-1" class="code-annotation-target"><a href="#annotated-cell-22-1" aria-hidden="true" tabindex="-1"></a>bfgs_noqng_result <span class="op">=</span> tq.minimize(objective<span class="op">=</span>O2,</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-22" data-target-annotation="2">2</button><span id="annotated-cell-22-2" class="code-annotation-target"><a href="#annotated-cell-22-2" aria-hidden="true" tabindex="-1"></a>                                gradient<span class="op">=</span><span class="va">None</span>,</span>
 <span id="annotated-cell-22-3"><a href="#annotated-cell-22-3" aria-hidden="true" tabindex="-1"></a>                                method<span class="op">=</span><span class="st">'bfgs'</span>,</span>
@@ -1332,18 +1214,10 @@ d : -0.00029333277886757145
 </code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-23-output-2.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-23-output-2.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-23-output-3.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-23-output-3.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
@@ -1353,7 +1227,7 @@ d : -0.00029333277886757145
 <p>By default <code>Tequila</code> compiles analytical gradients of the objectives using <code>jax</code>, internal recompilation, and the parameter shift rule. The default setting is not to set the <code>gradient</code> keyword or to set it to <code>None</code>. The keyword can also be set to a dictionary, where keys are the variables and values are the <code>Tequila</code>objectives assumed to evaluate to the corresponding gradients of the objective. For example, <code>gradient=tq.grad(objective)</code> will result in the same behavior as <code>gradient=None</code> or simply not setting it.</p>
 <p><code>Tequila</code> offers its own way of compiling numerical gradients, which can then be used troughout all gradient-based optimizers. This can be activated by setting <code>gradient</code> to a dictionary holding the finite difference stencil as the <code>method</code>, as well as the <code>stepsize</code>.</p>
 <p>Numerical gradients of this type come with the cost of <span class="math inline">\(2 \cdot\)</span> <code>len(variables)</code> and can lead to significantly cheaper gradients, especially if many expectation values are involved in the objective and/or if heavy recompilation of parametrized gates is necessary. Here is a small example using our <span class="math inline">\(O_2\)</span> objective. Here, the numerical 2-point procedure leads to 4 expectation values in the gradients (while analytical gradients would lead to 8). You can set <code>silent</code> to <code>False</code> in the upper example or remove the <code>gradient</code> statement here for comparison.</p>
-<div id="cell-73" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:14.775008Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:14.653207Z&quot;}" data-execution_count="73">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:14.775008Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:14.653207Z&quot;}" data-execution_count="73">
 <div class="sourceCode cell-code" id="annotated-cell-23"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="1">1</button><span id="annotated-cell-23-1" class="code-annotation-target"><a href="#annotated-cell-23-1" aria-hidden="true" tabindex="-1"></a>lr<span class="op">=</span><span class="fl">0.01</span></span>
 <span id="annotated-cell-23-2"><a href="#annotated-cell-23-2" aria-hidden="true" tabindex="-1"></a></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="2">2</button><span id="annotated-cell-23-3" class="code-annotation-target"><a href="#annotated-cell-23-3" aria-hidden="true" tabindex="-1"></a>num_result <span class="op">=</span> tq.minimize(objective<span class="op">=</span>O2,</span>
@@ -1380,7 +1254,7 @@ d : -0.00029333277886757145
 </dl>
 </div>
 </div>
-<div id="cell-75" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:14.830883Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:14.775603Z&quot;}" data-execution_count="74">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:14.830883Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:14.775603Z&quot;}" data-execution_count="74">
 <div class="sourceCode cell-code" id="annotated-cell-24"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-24" data-target-annotation="1">1</button><span id="annotated-cell-24-1" class="code-annotation-target"><a href="#annotated-cell-24-1" aria-hidden="true" tabindex="-1"></a>num_result.history.plot(<span class="st">'energies'</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
@@ -1391,15 +1265,11 @@ d : -0.00029333277886757145
 </dl>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-25-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-25-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p><code>Tequila</code> currently offers <code>2-point</code>, <code>2-point-forward</code> and <code>2-point-backward</code> stencils as <code>method</code>. The method can also be set to a Python function performing the task. Here is an example that implements the same functionality as <code>2-point</code>. The function can be replaced by any function with the same signature.</p>
-<div id="cell-78" class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:15.005224Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:14.831858Z&quot;}" data-execution_count="75">
+<div class="cell" data-executetime="{&quot;end_time&quot;:&quot;2024-07-19T13:02:15.005224Z&quot;,&quot;start_time&quot;:&quot;2024-07-19T13:02:14.831858Z&quot;}" data-execution_count="75">
 <div class="sourceCode cell-code" id="annotated-cell-25"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-25" data-target-annotation="1">1</button><span id="annotated-cell-25-1" class="code-annotation-target"><a href="#annotated-cell-25-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> copy</span>
 <span id="annotated-cell-25-2"><a href="#annotated-cell-25-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-25-3"><a href="#annotated-cell-25-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> my_finite_difference_stencil(obj, var_vals, key, step, <span class="op">*</span>args, <span class="op">**</span>kwargs):</span>
@@ -1476,11 +1346,7 @@ d : -0.00029333277886757145
 </dl>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Optimizers_files/figure-html/cell-26-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="Optimizers_files/figure-html/cell-26-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>The <code>gradient</code> keyword can also be replaced by a dictionary of <code>Tequila</code> objectives which evaluate to gradients approximations of it.</p>
@@ -1530,33 +1396,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       } else {
         el.classList.add('notransition');
       }
-    }
-  }
-  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
-    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
-    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
-    let newTheme = '';
-    if(darkModeDefault) {
-      newTheme = isAlternate ? baseTheme : alternateTheme;
-    } else {
-      newTheme = isAlternate ? alternateTheme : baseTheme;
-    }
-    const changeGiscusTheme = () => {
-      // From: https://github.com/giscus/giscus/issues/336
-      const sendMessage = (message) => {
-        const iframe = document.querySelector('iframe.giscus-frame');
-        if (!iframe) return;
-        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
-      }
-      sendMessage({
-        setConfig: {
-          theme: newTheme
-        }
-      });
-    }
-    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
-    if (isGiscussLoaded) {
-      changeGiscusTheme();
     }
   }
   const toggleColorMode = (alternate) => {
@@ -1625,15 +1464,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  const darkModeDefault = false;
-  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  let localAlternateSentinel = 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
-    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -1763,27 +1600,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-    var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/tequilahub\.github\.io\/tequila-tutorials\/");
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-        // undo the damage that might have been done by quarto-nav.js in the case of
-        // links that we want to consider external
-        if (link.dataset.originalHref !== undefined) {
-          link.href = link.dataset.originalHref;
-        }
-      }
-    }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1793,17 +1613,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1815,130 +1626,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      if (note) {
-        return note.innerHTML;
-      } else {
-        return "";
-      }
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
-          }
-        }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
-        }
-        return container.innerHTML
-      } else {
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(note);
-        }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      // TODO in 1.5, we should make sure this works without a callout special case
-      if (note.classList.contains("callout")) {
-        return note.outerHTML;
-      } else {
-        return note.innerHTML;
-      }
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
-          }
-        } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
-          .then(res => res.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
-            if (note !== null) {
-              const html = processXRef(id, note);
-              instance.setContent(html);
-            } 
-          }).finally(() => {
-            instance.enable();
-            instance.show();
-          });
-        }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
+      return note.innerHTML;
     });
   }
       let selectedAnnoteEl;
@@ -1982,7 +1670,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
-            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -2008,8 +1695,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-        // Handle positioning of the toggle
-    window.addEventListener(
+      // Handle positioning of the toggle
+      window.addEventListener(
       "resize",
       throttle(() => {
         elRect = undefined;
@@ -2017,23 +1704,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
           selectCodeLines(selectedAnnoteEl);
         }
       }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
               fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
       const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
       for (let i=0; i<annoteTargets.length; i++) {
         const annoteTarget = annoteTargets[i];
@@ -2078,7 +1765,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
               options: {
                 flipVariations: false, // true by default
                 allowedAutoPlacements: ['right'],
-                fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                fallbackPlacements: ['right', 'top', 'top-start', 'top-end'],
               },
             },
             {
@@ -2140,15 +1827,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">
-
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tequilahub/tequila/blob/main/Tutorials/optimizer/Optimizers.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
+    <div class="nav-footer-center"><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
-
 
 
 

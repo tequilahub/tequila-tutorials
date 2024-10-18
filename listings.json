@@ -1,8 +1,16 @@
 [
   {
-    "listing": "/FAQ.html",
+    "listing": "/tutorials.html",
     "items": [
-      "/FAQ/FAQ.html"
+      "/Tutorials/tq-get-started/index.html",
+      "/Tutorials/tq-circuits/index.html",
+      "/Tutorials/CircuitCompiler/CircuitCompiler.html",
+      "/Tutorials/Braket/BraketTutorial.html",
+      "/Tutorials/OpenQASMConversions/OpenQASMConversions.html",
+      "/Tutorials/QTensor/QTensor.html",
+      "/Tutorials/optimizer/Optimizers.html",
+      "/Tutorials/KrylovTutorial/KrylovTutorial.html",
+      "/Tutorials/AdaptiveMethods/jupyter_notebook.html"
     ]
   },
   {
@@ -14,17 +22,9 @@
     ]
   },
   {
-    "listing": "/tutorials.html",
+    "listing": "/FAQ.html",
     "items": [
-      "/Tutorials/tq-get-started/index.html",
-      "/Tutorials/tq-circuits/index.html",
-      "/Tutorials/CircuitCompiler/CircuitCompiler.html",
-      "/Tutorials/OpenQASMConversions/OpenQASMConversions.html",
-      "/Tutorials/Braket/BraketTutorial.html",
-      "/Tutorials/QTensor/QTensor.html",
-      "/Tutorials/optimizer/Optimizers.html",
-      "/Tutorials/KrylovTutorial/KrylovTutorial.html",
-      "/Tutorials/AdaptiveMethods/jupyter_notebook.html"
+      "/FAQ/FAQ.html"
     ]
   }
 ]

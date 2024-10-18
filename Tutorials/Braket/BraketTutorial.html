@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.554">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -25,7 +25,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -87,13 +87,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
+  "limit": 20,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -102,7 +96,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -129,8 +122,6 @@ cookieconsent.run({
   "notice_banner_reject_button_hide":false,
   "preferences_center_close_button_hide":false,
   "website_name":""
-  ,
-"language":"en"
   });
 });
 </script> 
@@ -139,38 +130,11 @@ cookieconsent.run({
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Tequila Tutorials - Braket Module">
-<meta property="og:description" content="quantum computing, quantum chemistry and tequila">
-<meta property="og:image" content="https://tequilahub.github.io/tequila-tutorials/Tutorials/Braket/braket_cover.png">
-<meta property="og:site_name" content="Tequila Tutorials">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://github.com/tequilahub/tequila-tutorials/Tutorials/Braket/braket_cover.png">
+<meta property="og:site-name" content="Tequila Tutorials">
 <meta property="og:image:height" content="1265">
 <meta property="og:image:width" content="1769">
 </head>
@@ -178,10 +142,10 @@ window.Quarto = {
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container mx-auto">
+      <div class="navbar-brand-container">
     <a href="../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../tequila_logo.png" alt="" class="navbar-logo">
     </a>
@@ -196,26 +160,26 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../research.html"> 
-<span class="menu-text">Research</span></a>
+    <a class="nav-link" href="../../research.html" rel="" target="">
+ <span class="menu-text">Research</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../tutorials.html"> 
-<span class="menu-text">Tutorials</span></a>
+    <a class="nav-link" href="../../tutorials.html" rel="" target="">
+ <span class="menu-text">Tutorials</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../FAQ/FAQ.html"> 
-<span class="menu-text">FAQ</span></a>
+    <a class="nav-link" href="../../FAQ/FAQ.html" rel="" target="">
+ <span class="menu-text">FAQ</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../Contribution/Contribution.html"> 
-<span class="menu-text">Contribution</span></a>
+    <a class="nav-link" href="../../Contribution/Contribution.html" rel="" target="">
+ <span class="menu-text">Contribution</span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -279,11 +243,10 @@ window.Quarto = {
   <li><a href="#make_overlap-and-make_transition" id="toc-make_overlap-and-make_transition" class="nav-link" data-scroll-target="#make_overlap-and-make_transition"><code>Make_overlap</code> and <code>make_transition</code></a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/tequilahub/tequila/blob/main/Tutorials/Braket/BraketTutorial.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/tequilahub/tequila/blob/main/Tutorials/Braket/BraketTutorial.ipynb" class="toc-action">View source</a></p><p><a href="https://github.com/tequilahub/tequila/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
-
 
 
 
@@ -297,7 +260,7 @@ window.Quarto = {
 <li>the transition element of an operator</li>
 </ol>
 <p>So, let’s import Tequila (and some of its modules) and see how this function works.</p>
-<div id="cell-3" class="cell" data-execution_count="1">
+<div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#tequila importations</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tequila <span class="im">as</span> tq</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tequila.circuit.gates <span class="im">import</span> H, X, Rx, CX</span>
@@ -315,7 +278,7 @@ window.Quarto = {
 <p>Let’s begin from the simplest (and maybe trivial) possible application of the <code>braket</code> function: the computation of the self overlap of a quantum state. One can prepare an arbitrary circuit, corresponding to the state <span class="math inline">\(|\psi\rangle\)</span> and then calculate the self overlap <span class="math display">\[\langle \psi|\psi\rangle.\]</span></p>
 <p>We can prepare for example a Bell state of two qubits:</p>
 <p>Note you can also run <code>tq.draw(bell, backend='qiskit')</code> for drawing the circuit (optional). It would result in a circuit like the one below</p>
-<div id="cell-6" class="cell" data-execution_count="2">
+<div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="annotated-cell-2"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1">1</button><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a>bell <span class="op">=</span> tq.QCircuit()</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="2">2</button><span id="annotated-cell-2-2" class="code-annotation-target"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a>bell <span class="op">+=</span> H(<span class="dv">0</span>)</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="3">3</button><span id="annotated-cell-2-3" class="code-annotation-target"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a>bell <span class="op">+=</span> CX(<span class="dv">0</span>,<span class="dv">1</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -323,22 +286,22 @@ window.Quarto = {
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="1" data-code-annotation="1">creates an empty circuit object with no gates</span>
+<span data-code-cell="annotated-cell-2" data-code-annotation="1" data-code-lines="1">creates an empty circuit object with no gates</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="2" data-code-annotation="2">add a hadamard gate to qubit 0</span>
+<span data-code-cell="annotated-cell-2" data-code-annotation="2" data-code-lines="2">add a hadamard gate to qubit 0</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="3" data-code-annotation="3">add a <span class="math inline">\(CNOT\)</span> with control in qubit 1 and target in 1</span>
+<span data-code-cell="annotated-cell-2" data-code-annotation="3" data-code-lines="3">add a <span class="math inline">\(CNOT\)</span> with control in qubit 1 and target in 1</span>
 </dd>
 </dl>
 </div>
 </div>
 <p><img src="B1.png" class="img-fluid" style="width:30.0%"></p>
 <p>Then, we can simply call the <code>braket</code> function passing as unique argument our quantum circuit, this can also be specified as <code>ket</code>:</p>
-<div id="cell-9" class="cell" data-execution_count="3">
+<div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="annotated-cell-3"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="1">1</button><span id="annotated-cell-3-1" class="code-annotation-target"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a>self_overlap_real, self_overlap_im <span class="op">=</span> tq.braket(ket<span class="op">=</span>bell)</span>
 <span id="annotated-cell-3-2"><a href="#annotated-cell-3-2" aria-hidden="true" tabindex="-1"></a></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="2">2</button><span id="annotated-cell-3-3" class="code-annotation-target"><a href="#annotated-cell-3-3" aria-hidden="true" tabindex="-1"></a>self_overlap <span class="op">=</span> self_overlap_real <span class="op">+</span> <span class="ot">1.0j</span><span class="op">*</span>self_overlap_im</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -346,29 +309,29 @@ window.Quarto = {
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-3" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-3" data-code-lines="1" data-code-annotation="1">get the real and the imaginary part of the state</span>
+<span data-code-cell="annotated-cell-3" data-code-annotation="1" data-code-lines="1">get the real and the imaginary part of the state</span>
 </dd>
 <dt data-target-cell="annotated-cell-3" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-3" data-code-lines="3" data-code-annotation="2">join the save and imaginary part of the overlap. <code>self_overlap</code> is not a complex number</span>
+<span data-code-cell="annotated-cell-3" data-code-annotation="2" data-code-lines="3">join the save and imaginary part of the overlap. <code>self_overlap</code> is not a complex number</span>
 </dd>
 </dl>
 </div>
 </div>
 <p>As we have seen the braket function always return two objects, one for the real part and one for the imaginary one. These are <code>tq.Objecitve</code> and need to be simulated in order to obtain a numeric value.</p>
 <p>Due to the laws of quantum mechanics the overlap of a state with itself, namely the self overlap, must always be equal to 1, namely <span class="math display">\[\langle \psi|\psi\rangle=1.\]</span></p>
-<div id="cell-12" class="cell" data-execution_count="4">
+<div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="annotated-cell-4"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="1">1</button><span id="annotated-cell-4-1" class="code-annotation-target"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a>self_overlap_value <span class="op">=</span> tq.simulate(self_overlap)</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="2">2</button><span id="annotated-cell-4-2" class="code-annotation-target"><a href="#annotated-cell-4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> self_overlap_value <span class="op">==</span> <span class="dv">1</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-4" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-4" data-code-lines="1" data-code-annotation="1">compute the self overlap of the state</span>
+<span data-code-cell="annotated-cell-4" data-code-annotation="1" data-code-lines="1">compute the self overlap of the state</span>
 </dd>
 <dt data-target-cell="annotated-cell-4" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-4" data-code-lines="2" data-code-annotation="2">if the self overlap is not equal to <span class="math inline">\(1\)</span>, this should throw an exception</span>
+<span data-code-cell="annotated-cell-4" data-code-annotation="2" data-code-lines="2">if the self overlap is not equal to <span class="math inline">\(1\)</span>, this should throw an exception</span>
 </dd>
 </dl>
 </div>
@@ -379,13 +342,13 @@ window.Quarto = {
 </div>
 <p>In this particular case Tequila is aware that the self overlap is always 1, so no circuit needs to be executed. This can be checked by printing the <code>self_overlap</code> Objective:</p>
 <p>Note that this object consists of further attributes rather than only the mere value</p>
-<div id="cell-15" class="cell" data-execution_count="5">
+<div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="annotated-cell-5"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1">1</button><span id="annotated-cell-5-1" class="code-annotation-target"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(self_overlap)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-5" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-5" data-code-lines="1" data-code-annotation="1">printing the overlap shows all of its object attributes</span>
+<span data-code-cell="annotated-cell-5" data-code-annotation="1" data-code-lines="1">printing the overlap shows all of its object attributes</span>
 </dd>
 </dl>
 </div>
@@ -401,24 +364,24 @@ types              = []</code></pre>
 <h2 class="anchored" data-anchor-id="overlap-between-two-different-states">2. Overlap between two different states</h2>
 <p>The second step will be to compute the overlap between different states <span class="math display">\[\langle\psi _2|\psi _1\rangle.\]</span> Even in this case we can exploit the <code>braket</code> function.</p>
 <p>Let’s prepare two orthogonal states. In this case the overlap must be equal to 0:</p>
-<div id="cell-18" class="cell" data-execution_count="6">
+<div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="annotated-cell-6"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="1">1</button><span id="annotated-cell-6-1" class="code-annotation-target"><a href="#annotated-cell-6-1" aria-hidden="true" tabindex="-1"></a>U0 <span class="op">=</span> X(<span class="dv">0</span>) <span class="co"># state |10&gt;</span></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="2">2</button><span id="annotated-cell-6-2" class="code-annotation-target"><a href="#annotated-cell-6-2" aria-hidden="true" tabindex="-1"></a>U1 <span class="op">=</span> H(<span class="dv">0</span>)<span class="op">+</span>CX(<span class="dv">0</span>,<span class="dv">1</span>) <span class="co"># Bell state 1/sqrt(2)*(|00&gt;+|11&gt;)</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-6" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="1" data-code-annotation="1">this circuit will perpare the two-qubit state |10&gt; since we assume two input-qubits in state |0&gt; and a <span class="math inline">\(X\)</span> (NOT) is applied to the first one</span>
+<span data-code-cell="annotated-cell-6" data-code-annotation="1" data-code-lines="1">this circuit will perpare the two-qubit state |10&gt; since we assume two input-qubits in state |0&gt; and a <span class="math inline">\(X\)</span> (NOT) is applied to the first one</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="2" data-code-annotation="2">also here we assume an input of |00&gt; and send it through the circuit that generated the 4 bell-states</span>
+<span data-code-cell="annotated-cell-6" data-code-annotation="2" data-code-lines="2">also here we assume an input of |00&gt; and send it through the circuit that generated the 4 bell-states</span>
 </dd>
 </dl>
 </div>
 </div>
 <p>Now, we can call the <code>braket</code> function passing as arguments our quantum circuits, specifying which will be the <code>ket</code> and which the <code>bra</code>. Otherwise the first will be automatically selected as <code>ket</code> and second as <code>bra</code>:</p>
-<div id="cell-21" class="cell" data-execution_count="7">
+<div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="annotated-cell-7"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="1">1</button><span id="annotated-cell-7-1" class="code-annotation-target"><a href="#annotated-cell-7-1" aria-hidden="true" tabindex="-1"></a>br_objective_real, br_objective_im <span class="op">=</span> tq.braket(ket<span class="op">=</span>U0, bra<span class="op">=</span>U1)</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="2">2</button><span id="annotated-cell-7-2" class="code-annotation-target"><a href="#annotated-cell-7-2" aria-hidden="true" tabindex="-1"></a>br_overlap <span class="op">=</span> br_objective_real <span class="op">+</span> <span class="ot">1.0j</span><span class="op">*</span>br_objective_im</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="3">3</button><span id="annotated-cell-7-3" class="code-annotation-target"><a href="#annotated-cell-7-3" aria-hidden="true" tabindex="-1"></a>br_overlap_value <span class="op">=</span> tq.simulate(br_overlap)</span>
@@ -428,19 +391,19 @@ types              = []</code></pre>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-7" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-7" data-code-lines="1" data-code-annotation="1">specify input states for writing them in the braket notation</span>
+<span data-code-cell="annotated-cell-7" data-code-annotation="1" data-code-lines="1">specify input states for writing them in the braket notation</span>
 </dd>
 <dt data-target-cell="annotated-cell-7" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-7" data-code-lines="2" data-code-annotation="2">joining real and imaginary part based on the states produced by the circuits <code>U0</code> and <code>U1</code></span>
+<span data-code-cell="annotated-cell-7" data-code-annotation="2" data-code-lines="2">joining real and imaginary part based on the states produced by the circuits <code>U0</code> and <code>U1</code></span>
 </dd>
 <dt data-target-cell="annotated-cell-7" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-7" data-code-lines="3" data-code-annotation="3">simulates the <code>tq.Objective</code> object to obtain a numeric values</span>
+<span data-code-cell="annotated-cell-7" data-code-annotation="3" data-code-lines="3">simulates the <code>tq.Objective</code> object to obtain a numeric values</span>
 </dd>
 <dt data-target-cell="annotated-cell-7" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-cell="annotated-cell-7" data-code-lines="5" data-code-annotation="4">prints the overlap, this one should be equal to <span class="math inline">\(0\)</span></span>
+<span data-code-cell="annotated-cell-7" data-code-annotation="4" data-code-lines="5">prints the overlap, this one should be equal to <span class="math inline">\(0\)</span></span>
 </dd>
 </dl>
 </div>
@@ -450,7 +413,7 @@ types              = []</code></pre>
 </div>
 <p>We can also define a non-orthogonal state with respect to the previous prepared Bell state. This can be obtained for example by preparing a Bell state followed by a rotation around X-axis.</p>
 <p>One can then check that changing the angle value will result in changing the overlap between the two states:</p>
-<div id="cell-24" class="cell" data-execution_count="8">
+<div class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="annotated-cell-8"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="1">1</button><span id="annotated-cell-8-1" class="code-annotation-target"><a href="#annotated-cell-8-1" aria-hidden="true" tabindex="-1"></a>angle <span class="op">=</span> tq.Variable(<span class="st">"angle"</span>)</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="2">2</button><span id="annotated-cell-8-2" class="code-annotation-target"><a href="#annotated-cell-8-2" aria-hidden="true" tabindex="-1"></a>U2 <span class="op">=</span> U1 <span class="op">+</span> Rx(angle<span class="op">*</span>np.pi, <span class="dv">1</span>)</span>
 <span id="annotated-cell-8-3"><a href="#annotated-cell-8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -476,43 +439,43 @@ types              = []</code></pre>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="1" data-code-annotation="1">declare a variable of for a parametrized angle</span>
+<span data-code-cell="annotated-cell-8" data-code-annotation="1" data-code-lines="1">declare a variable of for a parametrized angle</span>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="2" data-code-annotation="2">Bell state followed by a rotation around X-axis</span>
+<span data-code-cell="annotated-cell-8" data-code-annotation="2" data-code-lines="2">Bell state followed by a rotation around X-axis</span>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="4" data-code-annotation="3">fetch once again the real and imaginary components after writing the input states in braket form</span>
+<span data-code-cell="annotated-cell-8" data-code-annotation="3" data-code-lines="4">fetch once again the real and imaginary components after writing the input states in braket form</span>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="5" data-code-annotation="4">prepare real and imaginary part for overlap computation</span>
+<span data-code-cell="annotated-cell-8" data-code-annotation="4" data-code-lines="5">prepare real and imaginary part for overlap computation</span>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="5">5</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="6" data-code-annotation="5">translate to backend - compile the state with an arbitrary parametrized angle</span>
+<span data-code-cell="annotated-cell-8" data-code-annotation="5" data-code-lines="6">translate to backend - compile the state with an arbitrary parametrized angle</span>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="6">6</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="9" data-code-annotation="6">generates values from the intervall <span class="math inline">\([0,4.1]\)</span> with steps of <span class="math inline">\(0.1\)</span> for simulating multiple angles</span>
+<span data-code-cell="annotated-cell-8" data-code-annotation="6" data-code-lines="9">generates values from the intervall <span class="math inline">\([0,4.1]\)</span> with steps of <span class="math inline">\(0.1\)</span> for simulating multiple angles</span>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="7">7</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="11" data-code-annotation="7">associate angle with generated value from range above</span>
+<span data-code-cell="annotated-cell-8" data-code-annotation="7" data-code-lines="11">associate angle with generated value from range above</span>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="8">8</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="13" data-code-annotation="8">simulate the <code>tq.Objective</code> object ad get the computed overlap</span>
+<span data-code-cell="annotated-cell-8" data-code-annotation="8" data-code-lines="13">simulate the <code>tq.Objective</code> object ad get the computed overlap</span>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="9">9</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="14" data-code-annotation="9">append the achieved value to a list of overlaps, since we compute multiple overlaps for multiple angles</span>
+<span data-code-cell="annotated-cell-8" data-code-annotation="9" data-code-lines="14">append the achieved value to a list of overlaps, since we compute multiple overlaps for multiple angles</span>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="10">10</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="17" data-code-annotation="10">display the resulted numerical values of the overlaps as a graph</span>
+<span data-code-cell="annotated-cell-8" data-code-annotation="10" data-code-lines="17">display the resulted numerical values of the overlaps as a graph</span>
 </dd>
 </dl>
 </div>
@@ -520,11 +483,7 @@ types              = []</code></pre>
 <pre><code>Text(0, 0.5, 'Overlap')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="BraketTutorial_files/figure-html/cell-9-output-2.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="BraketTutorial_files/figure-html/cell-9-output-2.png" class="img-fluid"></p>
 </div>
 </div>
 <p>The resulting graphic depicts the trend of the overlaps for the given states above and angles within the interval <span class="math inline">\([0, 4.1]\)</span> with steps of <span class="math inline">\(0.1\)</span> between interval begin and interval end.</p>
@@ -532,7 +491,7 @@ types              = []</code></pre>
 <section id="expectation-value-of-an-hamiltonian" class="level2">
 <h2 class="anchored" data-anchor-id="expectation-value-of-an-hamiltonian">3. Expectation value of an Hamiltonian</h2>
 <p>At this stage, we can see how to use the <code>braket</code> function to calculate the expectation value of an Hamiltonian <span class="math inline">\(H\)</span> with respect to a given state <span class="math inline">\(|\psi\rangle\)</span>: <span class="math display">\[\langle\psi|H|\psi\rangle.\]</span></p>
-<div id="cell-27" class="cell" data-execution_count="9">
+<div class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="annotated-cell-9"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="1">1</button><span id="annotated-cell-9-1" class="code-annotation-target"><a href="#annotated-cell-9-1" aria-hidden="true" tabindex="-1"></a>psi <span class="op">=</span> H(<span class="dv">0</span>)<span class="op">+</span>CX(<span class="dv">0</span>,<span class="dv">1</span>) <span class="co"># Bell state 1/sqrt(2)*(|00&gt;+|11&gt;)</span></span>
 <span id="annotated-cell-9-2"><a href="#annotated-cell-9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-9-3"><a href="#annotated-cell-9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Hamiltonian definition</span></span>
@@ -541,11 +500,11 @@ types              = []</code></pre>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-9" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-9" data-code-lines="1" data-code-annotation="1">as before define the first bell state with the circuit generating the bell-basis and an input of |00&gt;</span>
+<span data-code-cell="annotated-cell-9" data-code-annotation="1" data-code-lines="1">as before define the first bell state with the circuit generating the bell-basis and an input of |00&gt;</span>
 </dd>
 <dt data-target-cell="annotated-cell-9" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-9" data-code-lines="4" data-code-annotation="2">define an hamiltonian - this one is a sequence of Pauli-<span class="math inline">\(X\)</span> matrices acting on the second and the first qubits respectivly and then a scale factor of <span class="math inline">\(-1\)</span></span>
+<span data-code-cell="annotated-cell-9" data-code-annotation="2" data-code-lines="4">define an hamiltonian - this one is a sequence of Pauli-<span class="math inline">\(X\)</span> matrices acting on the second and the first qubits respectivly and then a scale factor of <span class="math inline">\(-1\)</span></span>
 </dd>
 </dl>
 </div>
@@ -554,7 +513,7 @@ types              = []</code></pre>
 <p>As already seen before, always keep in mind that the <code>braket</code> function returns two Objecitves that need to be compiled afterwards.</p>
 <p>With previous defined state and Hamiltonian we need to obtain an expectation value equal to <span class="math inline">\(-1\)</span>.</p>
 <p><strong>Note</strong>: now we utilize the <code>braket</code> function for computing an <em>expectation value</em> and not an <em>overlap</em> between two states as we did before, but since we provide the function this time with an <em>hamiltonian = hermitian operator</em> and a state instead of two states, the expectation value will be computed and not the overlap - no special changes needed.</p>
-<div id="cell-30" class="cell" data-execution_count="10">
+<div class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="annotated-cell-10"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="1">1</button><span id="annotated-cell-10-1" class="code-annotation-target"><a href="#annotated-cell-10-1" aria-hidden="true" tabindex="-1"></a>br_exp_value_real, br_exp_value_im <span class="op">=</span> tq.braket(ket<span class="op">=</span>psi, operator<span class="op">=</span>operator)</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="2">2</button><span id="annotated-cell-10-2" class="code-annotation-target"><a href="#annotated-cell-10-2" aria-hidden="true" tabindex="-1"></a>br_exp_value_tmp <span class="op">=</span> br_exp_value_real <span class="op">+</span> <span class="ot">1.0j</span><span class="op">*</span>br_exp_value_im</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="3">3</button><span id="annotated-cell-10-3" class="code-annotation-target"><a href="#annotated-cell-10-3" aria-hidden="true" tabindex="-1"></a>br_exp_value <span class="op">=</span> tq.simulate(br_exp_value_tmp)</span>
@@ -564,19 +523,19 @@ types              = []</code></pre>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-10" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-10" data-code-lines="1" data-code-annotation="1">applying the braket function on the bell-state and the hamiltonian, defining the hamiltonian as an <code>operator</code> - important</span>
+<span data-code-cell="annotated-cell-10" data-code-annotation="1" data-code-lines="1">applying the braket function on the bell-state and the hamiltonian, defining the hamiltonian as an <code>operator</code> - important</span>
 </dd>
 <dt data-target-cell="annotated-cell-10" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-10" data-code-lines="2" data-code-annotation="2">joining real and imaginary part for computation</span>
+<span data-code-cell="annotated-cell-10" data-code-annotation="2" data-code-lines="2">joining real and imaginary part for computation</span>
 </dd>
 <dt data-target-cell="annotated-cell-10" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-10" data-code-lines="3" data-code-annotation="3">simulate the expectation value</span>
+<span data-code-cell="annotated-cell-10" data-code-annotation="3" data-code-lines="3">simulate the expectation value</span>
 </dd>
 <dt data-target-cell="annotated-cell-10" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-cell="annotated-cell-10" data-code-lines="5" data-code-annotation="4">show the expectatino value, should be equal to <span class="math inline">\(1\)</span></span>
+<span data-code-cell="annotated-cell-10" data-code-annotation="4" data-code-lines="5">show the expectatino value, should be equal to <span class="math inline">\(1\)</span></span>
 </dd>
 </dl>
 </div>
@@ -585,7 +544,7 @@ types              = []</code></pre>
 </div>
 </div>
 <p>Tequila is aware that an <code>ExpectationValue</code> is always real, so no circuit needs to be executed for the imaginary part. One can see this by printing <code>br_exp_value_im</code>:</p>
-<div id="cell-33" class="cell" data-execution_count="11">
+<div class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(br_exp_value_im)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Objective with 0 unique expectation values
@@ -599,7 +558,7 @@ types              = []</code></pre>
 <h2 class="anchored" data-anchor-id="transition-element-of-an-hamiltonian">4. Transition element of an Hamiltonian</h2>
 <p>As last application, the <code>braket</code> function can be used to calculate transition elements of an operator <span class="math inline">\(H\)</span> with respect to two different states <span class="math inline">\(|\alpha\rangle, \ |\beta\rangle\)</span>: <span class="math display">\[\langle\beta|H|\alpha\rangle.\]</span></p>
 <p>In order to see how things can change, we can proceed similarly to section 2 and vary the angle of a rotation:</p>
-<div id="cell-35" class="cell" data-execution_count="12">
+<div class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="annotated-cell-12"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-12-1"><a href="#annotated-cell-12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#states definition</span></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-12" data-target-annotation="1">1</button><span id="annotated-cell-12-2" class="code-annotation-target"><a href="#annotated-cell-12-2" aria-hidden="true" tabindex="-1"></a>alpha <span class="op">=</span> H(<span class="dv">0</span>)<span class="op">+</span>CX(<span class="dv">0</span>,<span class="dv">1</span>) <span class="co"># Bell state 1/sqrt(2)*(|00&gt;+|11&gt;)</span></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-12" data-target-annotation="2">2</button><span id="annotated-cell-12-3" class="code-annotation-target"><a href="#annotated-cell-12-3" aria-hidden="true" tabindex="-1"></a>angle <span class="op">=</span> tq.Variable(<span class="st">"angle"</span>)</span>
@@ -621,52 +580,52 @@ types              = []</code></pre>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-12" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-12" data-code-lines="2" data-code-annotation="1">create the bell state the same way as before</span>
+<span data-code-cell="annotated-cell-12" data-code-annotation="1" data-code-lines="2">create the bell state the same way as before</span>
 </dd>
 <dt data-target-cell="annotated-cell-12" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-12" data-code-lines="3" data-code-annotation="2">define a general angle for later computations as in the last example</span>
+<span data-code-cell="annotated-cell-12" data-code-annotation="2" data-code-lines="3">define a general angle for later computations as in the last example</span>
 </dd>
 <dt data-target-cell="annotated-cell-12" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-12" data-code-lines="4" data-code-annotation="3">add a rotation after the bell state</span>
+<span data-code-cell="annotated-cell-12" data-code-annotation="3" data-code-lines="4">add a rotation after the bell state</span>
 </dd>
 <dt data-target-cell="annotated-cell-12" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-cell="annotated-cell-12" data-code-lines="7" data-code-annotation="4">define the hamiltonian the same way as before</span>
+<span data-code-cell="annotated-cell-12" data-code-annotation="4" data-code-lines="7">define the hamiltonian the same way as before</span>
 </dd>
 <dt data-target-cell="annotated-cell-12" data-target-annotation="5">5</dt>
 <dd>
-<span data-code-cell="annotated-cell-12" data-code-lines="9" data-code-annotation="5">apply <code>braket</code> function, specify the <code>ket</code> and the <code>bra</code> as the bell state and the bell state followed by the <span class="math inline">\(X\)</span> rotation respectively and get the real and imaginary part</span>
+<span data-code-cell="annotated-cell-12" data-code-annotation="5" data-code-lines="9">apply <code>braket</code> function, specify the <code>ket</code> and the <code>bra</code> as the bell state and the bell state followed by the <span class="math inline">\(X\)</span> rotation respectively and get the real and imaginary part</span>
 </dd>
 <dt data-target-cell="annotated-cell-12" data-target-annotation="6">6</dt>
 <dd>
-<span data-code-cell="annotated-cell-12" data-code-lines="10" data-code-annotation="6">use the real and imaginary part for creating a complex number</span>
+<span data-code-cell="annotated-cell-12" data-code-annotation="6" data-code-lines="10">use the real and imaginary part for creating a complex number</span>
 </dd>
 <dt data-target-cell="annotated-cell-12" data-target-annotation="7">7</dt>
 <dd>
-<span data-code-cell="annotated-cell-12" data-code-lines="11" data-code-annotation="7">compile this complex number by translating it to the backend</span>
+<span data-code-cell="annotated-cell-12" data-code-annotation="7" data-code-lines="11">compile this complex number by translating it to the backend</span>
 </dd>
 <dt data-target-cell="annotated-cell-12" data-target-annotation="8">8</dt>
 <dd>
-<span data-code-cell="annotated-cell-12" data-code-lines="14" data-code-annotation="8">use the same interval as a range for angle generation as before and the same step size</span>
+<span data-code-cell="annotated-cell-12" data-code-annotation="8" data-code-lines="14">use the same interval as a range for angle generation as before and the same step size</span>
 </dd>
 <dt data-target-cell="annotated-cell-12" data-target-annotation="9">9</dt>
 <dd>
-<span data-code-cell="annotated-cell-12" data-code-lines="15" data-code-annotation="9">set the of the angle we want to simulate</span>
+<span data-code-cell="annotated-cell-12" data-code-annotation="9" data-code-lines="15">set the of the angle we want to simulate</span>
 </dd>
 <dt data-target-cell="annotated-cell-12" data-target-annotation="10">10</dt>
 <dd>
-<span data-code-cell="annotated-cell-12" data-code-lines="16" data-code-annotation="10">simulate the <code>tq.Objective</code> to get the computed value</span>
+<span data-code-cell="annotated-cell-12" data-code-annotation="10" data-code-lines="16">simulate the <code>tq.Objective</code> to get the computed value</span>
 </dd>
 <dt data-target-cell="annotated-cell-12" data-target-annotation="11">11</dt>
 <dd>
-<span data-code-cell="annotated-cell-12" data-code-lines="17" data-code-annotation="11">store these values rounded by 3 digits after the comma into a list of transitions for later plot</span>
+<span data-code-cell="annotated-cell-12" data-code-annotation="11" data-code-lines="17">store these values rounded by 3 digits after the comma into a list of transitions for later plot</span>
 </dd>
 </dl>
 </div>
 </div>
-<div id="cell-37" class="cell" data-execution_count="13">
+<div class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#plotting the trend</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>)) </span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>plt.plot(np.arange(<span class="dv">0</span>,<span class="fl">4.1</span>, <span class="fl">0.1</span>), transitions, marker <span class="op">=</span> <span class="st">'o'</span>)</span>
@@ -676,15 +635,11 @@ types              = []</code></pre>
 <pre><code>Text(0, 0.5, 'Transitions')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="BraketTutorial_files/figure-html/cell-14-output-2.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="BraketTutorial_files/figure-html/cell-14-output-2.png" class="img-fluid"></p>
 </div>
 </div>
 <p>Even in this particular case the imaginary part is 0 (as for an <code>ExpectationValue</code>), but in this case this happens because the wave functions are real. The difference can be noticed again by printing <code>br_trans_im</code> where in this case there is one circuit to be executed:</p>
-<div id="cell-39" class="cell" data-execution_count="14">
+<div class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(br_trans_im)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Objective with 1 unique expectation values
@@ -695,7 +650,7 @@ types              = not compiled</code></pre>
 </div>
 <p>In the end, we can address one small example in which the imaginary part is not 0. We have: <span class="math display">\[|\psi_0\rangle=R_x(a)\rvert  0 \rangle = \cos(a/2) \rvert 0 \rangle - i\sin(a/2)\rvert 1\rangle\]</span> <span class="math display">\[|\psi_1\rangle=R_y(b)\rvert  0 \rangle = \cos(b/2) \rvert 0 \rangle + \sin(b/2)\rvert 1\rangle\]</span></p>
 <p>and so the imaginary part of the transition amplitude comes down to <span class="math display">\[\text{Im}(\langle\psi_1|Z|\psi_0\rangle ) = -\sin(a/2)\sin(b/2).\]</span></p>
-<div id="cell-41" class="cell" data-execution_count="15">
+<div class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="annotated-cell-15"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-15-1"><a href="#annotated-cell-15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#states definition</span></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-15" data-target-annotation="1">1</button><span id="annotated-cell-15-2" class="code-annotation-target"><a href="#annotated-cell-15-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> tq.Variable(<span class="st">"a"</span>)</span>
 <span id="annotated-cell-15-3"><a href="#annotated-cell-15-3" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> <span class="dv">1</span> </span>
@@ -719,48 +674,48 @@ types              = not compiled</code></pre>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-15" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-15" data-code-lines="2" data-code-annotation="1">declare a variable of a general angle <span class="math inline">\(a\)</span></span>
+<span data-code-cell="annotated-cell-15" data-code-annotation="1" data-code-lines="2">declare a variable of a general angle <span class="math inline">\(a\)</span></span>
 </dd>
 <dt data-target-cell="annotated-cell-15" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-15" data-code-lines="5" data-code-annotation="2">declare a rotation around <span class="math inline">\(X\)</span> with the angle <span class="math inline">\(a\pi\)</span></span>
+<span data-code-cell="annotated-cell-15" data-code-annotation="2" data-code-lines="5">declare a rotation around <span class="math inline">\(X\)</span> with the angle <span class="math inline">\(a\pi\)</span></span>
 </dd>
 <dt data-target-cell="annotated-cell-15" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-15" data-code-lines="6" data-code-annotation="3">rotation around <span class="math inline">\(Y\)</span> axis with a fixed angle of <span class="math inline">\(\pi\)</span></span>
+<span data-code-cell="annotated-cell-15" data-code-annotation="3" data-code-lines="6">rotation around <span class="math inline">\(Y\)</span> axis with a fixed angle of <span class="math inline">\(\pi\)</span></span>
 </dd>
 <dt data-target-cell="annotated-cell-15" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-cell="annotated-cell-15" data-code-lines="9" data-code-annotation="4">hamiltonian with a paulii <span class="math inline">\(Z\)</span> gate on the first qubit</span>
+<span data-code-cell="annotated-cell-15" data-code-annotation="4" data-code-lines="9">hamiltonian with a paulii <span class="math inline">\(Z\)</span> gate on the first qubit</span>
 </dd>
 <dt data-target-cell="annotated-cell-15" data-target-annotation="5">5</dt>
 <dd>
-<span data-code-cell="annotated-cell-15" data-code-lines="11" data-code-annotation="5">specify ket, bra and operator and fetch the imaginary and real part</span>
+<span data-code-cell="annotated-cell-15" data-code-annotation="5" data-code-lines="11">specify ket, bra and operator and fetch the imaginary and real part</span>
 </dd>
 <dt data-target-cell="annotated-cell-15" data-target-annotation="6">6</dt>
 <dd>
-<span data-code-cell="annotated-cell-15" data-code-lines="13" data-code-annotation="6">transalte to backend and get the operator</span>
+<span data-code-cell="annotated-cell-15" data-code-annotation="6" data-code-lines="13">transalte to backend and get the operator</span>
 </dd>
 <dt data-target-cell="annotated-cell-15" data-target-annotation="7">7</dt>
 <dd>
-<span data-code-cell="annotated-cell-15" data-code-lines="16" data-code-annotation="7">same range and step size as before</span>
+<span data-code-cell="annotated-cell-15" data-code-annotation="7" data-code-lines="16">same range and step size as before</span>
 </dd>
 <dt data-target-cell="annotated-cell-15" data-target-annotation="8">8</dt>
 <dd>
-<span data-code-cell="annotated-cell-15" data-code-lines="17" data-code-annotation="8">set the angle values we want to simulate</span>
+<span data-code-cell="annotated-cell-15" data-code-annotation="8" data-code-lines="17">set the angle values we want to simulate</span>
 </dd>
 <dt data-target-cell="annotated-cell-15" data-target-annotation="9">9</dt>
 <dd>
-<span data-code-cell="annotated-cell-15" data-code-lines="18" data-code-annotation="9">simulate the <code>tq.Objective</code> to get the computed value</span>
+<span data-code-cell="annotated-cell-15" data-code-annotation="9" data-code-lines="18">simulate the <code>tq.Objective</code> to get the computed value</span>
 </dd>
 <dt data-target-cell="annotated-cell-15" data-target-annotation="10">10</dt>
 <dd>
-<span data-code-cell="annotated-cell-15" data-code-lines="19" data-code-annotation="10">store the computed values in a list for plotting</span>
+<span data-code-cell="annotated-cell-15" data-code-annotation="10" data-code-lines="19">store the computed values in a list for plotting</span>
 </dd>
 </dl>
 </div>
 </div>
-<div id="cell-43" class="cell" data-execution_count="16">
+<div class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#plotting the trend</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>plt.plot(np.arange(<span class="dv">0</span>,<span class="fl">4.1</span>, <span class="fl">0.1</span>), transitions, marker <span class="op">=</span> <span class="st">'o'</span>)</span>
@@ -770,11 +725,7 @@ types              = not compiled</code></pre>
 <pre><code>Text(0, 0.5, 'Transitions')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="BraketTutorial_files/figure-html/cell-17-output-2.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="BraketTutorial_files/figure-html/cell-17-output-2.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
@@ -824,7 +775,7 @@ types              = not compiled</code></pre>
 <p>In the end measuring the ancilla in the <span class="math inline">\(2\sigma_+\)</span> base, gives as output:</p>
 <p><span class="math display">\[^n\langle 0|U_ 0 ^\dagger U_1 |0\rangle^n=\langle\psi _ 0 |\psi _ 1 \rangle \quad \]</span></p>
 <p>We can check the circuit build by the <code>braket</code> function with the code contained in the next cell:</p>
-<div id="cell-46" class="cell" data-execution_count="17">
+<div class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="annotated-cell-17"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-17" data-target-annotation="1">1</button><span id="annotated-cell-17-1" class="code-annotation-target"><a href="#annotated-cell-17-1" aria-hidden="true" tabindex="-1"></a>U0 <span class="op">=</span> X(<span class="dv">0</span>) <span class="co"># state |10&gt;</span></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-17" data-target-annotation="2">2</button><span id="annotated-cell-17-2" class="code-annotation-target"><a href="#annotated-cell-17-2" aria-hidden="true" tabindex="-1"></a>U1 <span class="op">=</span> H(<span class="dv">0</span>)<span class="op">+</span>CX(<span class="dv">0</span>,<span class="dv">1</span>) <span class="co"># Bell state 1/sqrt(2)*(|00&gt;+|11&gt;)</span></span>
 <span id="annotated-cell-17-3"><a href="#annotated-cell-17-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -835,19 +786,19 @@ types              = not compiled</code></pre>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-17" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-17" data-code-lines="1" data-code-annotation="1">assume two qubits in <span class="math inline">\(|00&gt;\)</span> and flip the first qubit to get <span class="math inline">\(|10&gt;\)</span></span>
+<span data-code-cell="annotated-cell-17" data-code-annotation="1" data-code-lines="1">assume two qubits in <span class="math inline">\(|00&gt;\)</span> and flip the first qubit to get <span class="math inline">\(|10&gt;\)</span></span>
 </dd>
 <dt data-target-cell="annotated-cell-17" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-17" data-code-lines="2" data-code-annotation="2">prepare a bell state as before</span>
+<span data-code-cell="annotated-cell-17" data-code-annotation="2" data-code-lines="2">prepare a bell state as before</span>
 </dd>
 <dt data-target-cell="annotated-cell-17" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-17" data-code-lines="4" data-code-annotation="3">get the real and imaginary parts consistently with the explained notation</span>
+<span data-code-cell="annotated-cell-17" data-code-annotation="3" data-code-lines="4">get the real and imaginary parts consistently with the explained notation</span>
 </dd>
 <dt data-target-cell="annotated-cell-17" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-cell="annotated-cell-17" data-code-lines="6" data-code-annotation="4">optionally draw the resulted circuit, should look like the one below</span>
+<span data-code-cell="annotated-cell-17" data-code-annotation="4" data-code-lines="6">optionally draw the resulted circuit, should look like the one below</span>
 </dd>
 </dl>
 </div>
@@ -860,7 +811,7 @@ types              = not compiled</code></pre>
 <p>where <span class="math inline">\(P_k\)</span> are Pauli strings (tensor product of Pauli operators acting on different qubits). Then, in order to calcuate the transition element, we can compute the single contributions and sum them up:</p>
 <p><span class="math display">\[\langle\psi _ 0 | H |\psi _ 1 \rangle = \sum_k c_k \langle\psi _ 0 | P_k |\psi _ 1 \rangle \quad \]</span></p>
 <p>Each of these contributions can be obtained from <code>make_overlap</code> by appending to the <span class="math inline">\(U_1\)</span> circuit the one that implements the Pauli string: <span class="math display">\[\langle\psi _ 0 | H |\psi _ 1 \rangle = \sum_k c_k \langle\psi _ 0 | P_k \psi _ 1 \rangle \quad \]</span></p>
-<div id="cell-51" class="cell" data-execution_count="18">
+<div class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="annotated-cell-18"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="1">1</button><span id="annotated-cell-18-1" class="code-annotation-target"><a href="#annotated-cell-18-1" aria-hidden="true" tabindex="-1"></a>U0 <span class="op">=</span> X(<span class="dv">0</span>) <span class="co"># state |10&gt;</span></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="2">2</button><span id="annotated-cell-18-2" class="code-annotation-target"><a href="#annotated-cell-18-2" aria-hidden="true" tabindex="-1"></a>U1 <span class="op">=</span> H(<span class="dv">0</span>)<span class="op">+</span>CX(<span class="dv">0</span>,<span class="dv">1</span>) <span class="co"># Bell state 1/sqrt(2)*(|00&gt;+|11&gt;)</span></span>
 <span id="annotated-cell-18-3"><a href="#annotated-cell-18-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -874,23 +825,23 @@ types              = not compiled</code></pre>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-18" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-18" data-code-lines="1" data-code-annotation="1">prepare state for <span class="math inline">\(U_0\)</span> the same way as before</span>
+<span data-code-cell="annotated-cell-18" data-code-annotation="1" data-code-lines="1">prepare state for <span class="math inline">\(U_0\)</span> the same way as before</span>
 </dd>
 <dt data-target-cell="annotated-cell-18" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-18" data-code-lines="2" data-code-annotation="2">prepare bell state</span>
+<span data-code-cell="annotated-cell-18" data-code-annotation="2" data-code-lines="2">prepare bell state</span>
 </dd>
 <dt data-target-cell="annotated-cell-18" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-18" data-code-lines="5" data-code-annotation="3">decalre hermitian operator consisting of a <span class="math inline">\(Z\)</span> and two <span class="math inline">\(X\)</span> paulis</span>
+<span data-code-cell="annotated-cell-18" data-code-annotation="3" data-code-lines="5">decalre hermitian operator consisting of a <span class="math inline">\(Z\)</span> and two <span class="math inline">\(X\)</span> paulis</span>
 </dd>
 <dt data-target-cell="annotated-cell-18" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-cell="annotated-cell-18" data-code-lines="7" data-code-annotation="4">use the <code>braket</code>function to fetch imaginary and real consistently with the explained notation as before</span>
+<span data-code-cell="annotated-cell-18" data-code-annotation="4" data-code-lines="7">use the <code>braket</code>function to fetch imaginary and real consistently with the explained notation as before</span>
 </dd>
 <dt data-target-cell="annotated-cell-18" data-target-annotation="5">5</dt>
 <dd>
-<span data-code-cell="annotated-cell-18" data-code-lines="9" data-code-annotation="5">optional: draw the circuits, thuy should look like the two circuits below</span>
+<span data-code-cell="annotated-cell-18" data-code-annotation="5" data-code-lines="9">optional: draw the circuits, thuy should look like the two circuits below</span>
 </dd>
 </dl>
 </div>
@@ -948,33 +899,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       } else {
         el.classList.add('notransition');
       }
-    }
-  }
-  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
-    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
-    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
-    let newTheme = '';
-    if(darkModeDefault) {
-      newTheme = isAlternate ? baseTheme : alternateTheme;
-    } else {
-      newTheme = isAlternate ? alternateTheme : baseTheme;
-    }
-    const changeGiscusTheme = () => {
-      // From: https://github.com/giscus/giscus/issues/336
-      const sendMessage = (message) => {
-        const iframe = document.querySelector('iframe.giscus-frame');
-        if (!iframe) return;
-        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
-      }
-      sendMessage({
-        setConfig: {
-          theme: newTheme
-        }
-      });
-    }
-    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
-    if (isGiscussLoaded) {
-      changeGiscusTheme();
     }
   }
   const toggleColorMode = (alternate) => {
@@ -1043,15 +967,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  const darkModeDefault = false;
-  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  let localAlternateSentinel = 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
-    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -1181,27 +1103,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-    var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/tequilahub\.github\.io\/tequila-tutorials\/");
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-        // undo the damage that might have been done by quarto-nav.js in the case of
-        // links that we want to consider external
-        if (link.dataset.originalHref !== undefined) {
-          link.href = link.dataset.originalHref;
-        }
-      }
-    }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1211,17 +1116,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1233,130 +1129,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      if (note) {
-        return note.innerHTML;
-      } else {
-        return "";
-      }
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
-          }
-        }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
-        }
-        return container.innerHTML
-      } else {
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(note);
-        }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      // TODO in 1.5, we should make sure this works without a callout special case
-      if (note.classList.contains("callout")) {
-        return note.outerHTML;
-      } else {
-        return note.innerHTML;
-      }
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
-          }
-        } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
-          .then(res => res.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
-            if (note !== null) {
-              const html = processXRef(id, note);
-              instance.setContent(html);
-            } 
-          }).finally(() => {
-            instance.enable();
-            instance.show();
-          });
-        }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
+      return note.innerHTML;
     });
   }
       let selectedAnnoteEl;
@@ -1400,7 +1173,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
-            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1426,8 +1198,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-        // Handle positioning of the toggle
-    window.addEventListener(
+      // Handle positioning of the toggle
+      window.addEventListener(
       "resize",
       throttle(() => {
         elRect = undefined;
@@ -1435,23 +1207,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
           selectCodeLines(selectedAnnoteEl);
         }
       }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
               fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
       const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
       for (let i=0; i<annoteTargets.length; i++) {
         const annoteTarget = annoteTargets[i];
@@ -1496,7 +1268,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
               options: {
                 flipVariations: false, // true by default
                 allowedAutoPlacements: ['right'],
-                fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                fallbackPlacements: ['right', 'top', 'top-start', 'top-end'],
               },
             },
             {
@@ -1558,15 +1330,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">
-
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tequilahub/tequila/blob/main/Tutorials/Braket/BraketTutorial.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
+    <div class="nav-footer-center"><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
-
 
 
 

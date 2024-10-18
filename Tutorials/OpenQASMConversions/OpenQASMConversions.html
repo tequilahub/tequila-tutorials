@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.554">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -25,7 +25,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -87,13 +87,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
+  "limit": 20,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -102,7 +96,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -129,19 +122,17 @@ cookieconsent.run({
   "notice_banner_reject_button_hide":false,
   "preferences_center_close_button_hide":false,
   "website_name":""
-  ,
-"language":"en"
   });
 });
 </script> 
   
 
 
-<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Tequila Tutorials - OpenQASMConversions">
-<meta property="og:description" content="quantum computing, quantum chemistry and tequila">
-<meta property="og:image" content="https://tequilahub.github.io/tequila-tutorials/Tutorials/OpenQASMConversions/OpenQASMConversions.png">
-<meta property="og:site_name" content="Tequila Tutorials">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://github.com/tequilahub/tequila-tutorials/Tutorials/OpenQASMConversions/OpenQASMConversions.png">
+<meta property="og:site-name" content="Tequila Tutorials">
 <meta property="og:image:height" content="2478">
 <meta property="og:image:width" content="3482">
 </head>
@@ -149,10 +140,10 @@ cookieconsent.run({
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container mx-auto">
+      <div class="navbar-brand-container">
     <a href="../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../tequila_logo.png" alt="" class="navbar-logo">
     </a>
@@ -167,26 +158,26 @@ cookieconsent.run({
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../research.html"> 
-<span class="menu-text">Research</span></a>
+    <a class="nav-link" href="../../research.html" rel="" target="">
+ <span class="menu-text">Research</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../tutorials.html"> 
-<span class="menu-text">Tutorials</span></a>
+    <a class="nav-link" href="../../tutorials.html" rel="" target="">
+ <span class="menu-text">Tutorials</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../FAQ/FAQ.html"> 
-<span class="menu-text">FAQ</span></a>
+    <a class="nav-link" href="../../FAQ/FAQ.html" rel="" target="">
+ <span class="menu-text">FAQ</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../Contribution/Contribution.html"> 
-<span class="menu-text">Contribution</span></a>
+    <a class="nav-link" href="../../Contribution/Contribution.html" rel="" target="">
+ <span class="menu-text">Contribution</span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -238,11 +229,10 @@ cookieconsent.run({
   <li><a href="#export-to-openqasm" id="toc-export-to-openqasm" class="nav-link" data-scroll-target="#export-to-openqasm">Export to OpenQASM</a></li>
   <li><a href="#import-from-openqasm" id="toc-import-from-openqasm" class="nav-link" data-scroll-target="#import-from-openqasm">Import from OpenQASM</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/tequilahub/tequila/blob/main/Tutorials/OpenQASMConversions/OpenQASMConversions.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/tequilahub/tequila/blob/main/Tutorials/OpenQASMConversions/OpenQASMConversions.ipynb" class="toc-action">View source</a></p><p><a href="https://github.com/tequilahub/tequila/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
-
 
 
 
@@ -301,7 +291,7 @@ measure cout[0] -&gt; ans[4];</code></pre>
 <section id="export-to-openqasm" class="level1">
 <h1>Export to OpenQASM</h1>
 <p>Once you have a circuit in Tequila, it is possible to generate its equivalent in OpenQASM code, using the <code>export_open_qasm</code> function, for example:</p>
-<div id="cell-3" class="cell" data-execution_count="32">
+<div class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="annotated-cell-3"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-3-1"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tequila <span class="im">as</span> tq</span>
 <span id="annotated-cell-3-2"><a href="#annotated-cell-3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> numpy <span class="im">import</span> pi</span>
 <span id="annotated-cell-3-3"><a href="#annotated-cell-3-3" aria-hidden="true" tabindex="-1"></a>circuit <span class="op">=</span> tq.gates.H(target<span class="op">=</span>[<span class="dv">0</span>,<span class="dv">1</span>]) <span class="op">+</span> <span class="op">\</span></span>
@@ -314,18 +304,18 @@ measure cout[0] -&gt; ans[4];</code></pre>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-3" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-3" data-code-lines="7" data-code-annotation="1">A circuit is being created</span>
+<span data-code-cell="annotated-cell-3" data-code-annotation="1" data-code-lines="7">A circuit is being created</span>
 </dd>
 <dt data-target-cell="annotated-cell-3" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-3" data-code-lines="8" data-code-annotation="2">The corresponding qpic-file to this circuit is being created. For generating the corresponding png one has to write “qpic -f png C1_new.qpic” into the command line</span>
+<span data-code-cell="annotated-cell-3" data-code-annotation="2" data-code-lines="8">The corresponding qpic-file to this circuit is being created. For generating the corresponding png one has to write “qpic -f png C1_new.qpic” into the command line</span>
 </dd>
 </dl>
 </div>
 </div>
 <p><img src="C1_new.png" class="img-fluid" style="width:30.0%"></p>
-<div id="cell-6" class="cell" data-execution_count="33">
-<details class="code-fold">
+<div class="cell" data-execution_count="33">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="annotated-cell-4"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-4-1"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a>openqasmcode <span class="op">=</span> tq.export_open_qasm(circuit)</span>
 <span id="annotated-cell-4-2"><a href="#annotated-cell-4-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -335,18 +325,18 @@ measure cout[0] -&gt; ans[4];</code></pre>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-4" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-4" data-code-lines="3" data-code-annotation="1">Shows the circuit of openqasmcode</span>
+<span data-code-cell="annotated-cell-4" data-code-annotation="1" data-code-lines="3">Shows the circuit of openqasmcode</span>
 </dd>
 </dl>
 </div>
 </div>
 <p>It is possible to generate the OpenQASM code for <a href="https://en.wikipedia.org/wiki/ZX-calculus">ZX-Calculus</a>, that is, without <code>Y</code> gates (<code>Y</code>, <code>Ry</code>, <code>Cy</code>, <code>CRy</code>), if you want to activate this option you need to use the <code>zx_calculus</code> flag. If enabled, the OpenQASM code will be generated without <code>Y</code> gates and will instead place their equivalents for each gate.</p>
-<div id="cell-9" class="cell" data-execution_count="34">
+<div class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>openqasmcode_no_y <span class="op">=</span> tq.export_open_qasm(circuit, zx_calculus<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>If the Tequila circuit is created with variables, the corresponding values must be indicated when exporting it to OpenQASM code:</p>
-<div id="cell-11" class="cell" data-execution_count="35">
-<details class="code-fold">
+<div class="cell" data-execution_count="35">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>circuit_var <span class="op">=</span> tq.gates.H(target<span class="op">=</span>[<span class="dv">0</span>,<span class="dv">1</span>]) <span class="op">+</span> <span class="op">\</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>              tq.gates.Y(target<span class="op">=</span><span class="dv">0</span>) <span class="op">+</span> <span class="op">\</span></span>
@@ -359,8 +349,8 @@ measure cout[0] -&gt; ans[4];</code></pre>
 </details>
 </div>
 <p><img src="C2_new.png" class="img-fluid" style="width:30.0%"></p>
-<div id="cell-13" class="cell" data-execution_count="36">
-<details class="code-fold">
+<div class="cell" data-execution_count="36">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>variables <span class="op">=</span> {<span class="st">"var1"</span>:<span class="fl">2.8</span>, <span class="st">"var2"</span>: pi<span class="op">/</span><span class="dv">7</span>}</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -368,8 +358,8 @@ measure cout[0] -&gt; ans[4];</code></pre>
 </details>
 </div>
 <p>For convenience, it is possible to generate the code in OpenQASM and send the result to a file for external use. The name of the file must be indicated in the <code>filename</code> parameter:</p>
-<div id="cell-15" class="cell" data-execution_count="37">
-<details class="code-fold">
+<div class="cell" data-execution_count="37">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="annotated-cell-8"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-8-1"><a href="#annotated-cell-8-1" aria-hidden="true" tabindex="-1"></a>openqasmcode <span class="op">=</span> tq.export_open_qasm(circuit, filename<span class="op">=</span><span class="st">"MyOpenQASMCode.qasm"</span>)</span>
 <span id="annotated-cell-8-2"><a href="#annotated-cell-8-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -379,7 +369,7 @@ measure cout[0] -&gt; ans[4];</code></pre>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="3" data-code-annotation="1">Shows the circuit of openqasmcode</span>
+<span data-code-cell="annotated-cell-8" data-code-annotation="1" data-code-lines="3">Shows the circuit of openqasmcode</span>
 </dd>
 </dl>
 </div>
@@ -389,8 +379,8 @@ measure cout[0] -&gt; ans[4];</code></pre>
 <section id="import-from-openqasm" class="level1">
 <h1>Import from OpenQASM</h1>
 <p>It is possible to take a code in OpenQASM and use it to generate a circuit in Tequila, using the <code>import_open_qasm</code> function, for example:</p>
-<div id="cell-18" class="cell" data-execution_count="38">
-<details class="code-fold">
+<div class="cell" data-execution_count="38">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>openqasmcode <span class="op">=</span> <span class="st">"OPENQASM 2.0;</span><span class="ch">\n</span><span class="st">"</span> \</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>               <span class="st">"include </span><span class="ch">\"</span><span class="st">qelib1.inc</span><span class="ch">\"</span><span class="st">;</span><span class="ch">\n</span><span class="st">"</span> \</span>
@@ -413,8 +403,8 @@ measure cout[0] -&gt; ans[4];</code></pre>
 </div>
 <p><img src="C3_new.png" class="img-fluid" style="width:30.0%"></p>
 <p>You can import an OpenQASM code that is not written strictly, but only has the instructions of the gates without containing the definition lines, for this the <code>rigorous</code> flag is used, for example:</p>
-<div id="cell-21" class="cell" data-execution_count="39">
-<details class="code-fold">
+<div class="cell" data-execution_count="39">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="annotated-cell-10"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-10-1"><a href="#annotated-cell-10-1" aria-hidden="true" tabindex="-1"></a>openqasmcode_not_rigorous <span class="op">=</span> <span class="st">"qreg q1[3];</span><span class="ch">\n</span><span class="st">"</span> \</span>
 <span id="annotated-cell-10-2"><a href="#annotated-cell-10-2" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"qreg q2[4];</span><span class="ch">\n</span><span class="st">"</span> \</span>
@@ -434,14 +424,14 @@ measure cout[0] -&gt; ans[4];</code></pre>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-10" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-10" data-code-lines="11" data-code-annotation="1">In the case of having the OpenQASM code in a file, it is possible to load that file to generate the Tequila circuit from there, for this the <code>import_open_qasm_from_file</code> function is used</span>
+<span data-code-cell="annotated-cell-10" data-code-annotation="1" data-code-lines="11">In the case of having the OpenQASM code in a file, it is possible to load that file to generate the Tequila circuit from there, for this the <code>import_open_qasm_from_file</code> function is used</span>
 </dd>
 </dl>
 </div>
 </div>
 <p><img src="C8_new.png" class="img-fluid" style="width:100.0%"></p>
-<div id="cell-24" class="cell" data-execution_count="40">
-<details class="code-fold">
+<div class="cell" data-execution_count="40">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>openqasmcode_not_rigorous <span class="op">=</span> <span class="st">"qreg q1[3];</span><span class="ch">\n</span><span class="st">"</span> \</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"qreg q2[4];</span><span class="ch">\n</span><span class="st">"</span> \</span>
@@ -459,8 +449,8 @@ measure cout[0] -&gt; ans[4];</code></pre>
 </div>
 <p><img src="C4_new.png" class="img-fluid" style="width:30.0%"></p>
 <p>If the OpenQASM code contains <em>custom gates</em>, importing into a Tequila circuit will generate the equivalent with the gates in the proper place with their corresponding parameters, for example:</p>
-<div id="cell-27" class="cell" data-execution_count="41">
-<details class="code-fold">
+<div class="cell" data-execution_count="41">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>openqasmcode_custom <span class="op">=</span> <span class="st">"OPENQASM 2.0;</span><span class="ch">\n</span><span class="st">"</span> \</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"include </span><span class="ch">\"</span><span class="st">qelib1.inc</span><span class="ch">\"</span><span class="st">;</span><span class="ch">\n</span><span class="st">"</span> \</span>
@@ -484,8 +474,8 @@ measure cout[0] -&gt; ans[4];</code></pre>
 </details>
 </div>
 <p><img src="C5_new.png" class="img-fluid" style="width:30.0%"></p>
-<div id="cell-29" class="cell" data-execution_count="42">
-<details class="code-fold">
+<div class="cell" data-execution_count="42">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>openqasmcode <span class="op">=</span> tq.export_open_qasm(circuit)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -494,8 +484,8 @@ measure cout[0] -&gt; ans[4];</code></pre>
 </div>
 <p>It is possible to generate the OpenQASM code for <a href="https://en.wikipedia.org/wiki/ZX-calculus">ZX-Calculus</a>, that is, without <code>Y</code> gates (<code>Y</code>, <code>Ry</code>, <code>Cy</code>, <code>CRy</code>), if you want to activate this option you need to use the <code>zx_calculus</code> flag. If enabled, the OpenQASM code will be generated without <code>Y</code> gates and will instead place their equivalents for each gate.</p>
 <p>If the Tequila circuit is created with variables, the corresponding values must be indicated when exporting it to OpenQASM code:</p>
-<div id="cell-31" class="cell" data-execution_count="43">
-<details class="code-fold">
+<div class="cell" data-execution_count="43">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="annotated-cell-14"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-14-1"><a href="#annotated-cell-14-1" aria-hidden="true" tabindex="-1"></a>openqasmcode_no_y <span class="op">=</span> tq.export_open_qasm(circuit, zx_calculus<span class="op">=</span><span class="va">True</span>)</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="1">1</button><span id="annotated-cell-14-2" class="code-annotation-target"><a href="#annotated-cell-14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#print(opencasmcode)</span></span>
@@ -511,14 +501,14 @@ measure cout[0] -&gt; ans[4];</code></pre>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-14" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-14" data-code-lines="2" data-code-annotation="1">Shows the circuit of openqasmcode_no_y</span>
+<span data-code-cell="annotated-cell-14" data-code-annotation="1" data-code-lines="2">Shows the circuit of openqasmcode_no_y</span>
 </dd>
 </dl>
 </div>
 </div>
 <p><img src="C6_new.png" class="img-fluid" style="width:30.0%"></p>
-<div id="cell-34" class="cell" data-execution_count="44">
-<details class="code-fold">
+<div class="cell" data-execution_count="44">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>variables <span class="op">=</span> {<span class="st">"var1"</span>:<span class="fl">2.8</span>, <span class="st">"var2"</span>: pi<span class="op">/</span><span class="dv">7</span>}</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -528,8 +518,8 @@ measure cout[0] -&gt; ans[4];</code></pre>
 </details>
 </div>
 <p>For convenience, it is possible to generate the code in OpenQASM and send the result to a file for external use. The name of the file must be indicated in the <code>filename</code> parameter:</p>
-<div id="cell-36" class="cell" data-execution_count="45">
-<details class="code-fold">
+<div class="cell" data-execution_count="45">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="annotated-cell-16"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-16-1"><a href="#annotated-cell-16-1" aria-hidden="true" tabindex="-1"></a>openqasmcode <span class="op">=</span> tq.export_open_qasm(circuit, filename<span class="op">=</span><span class="st">"MyOpenQASMCode.qasm"</span>)</span>
 <span id="annotated-cell-16-2"><a href="#annotated-cell-16-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -539,7 +529,7 @@ measure cout[0] -&gt; ans[4];</code></pre>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-16" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-16" data-code-lines="3" data-code-annotation="1">Shows the circuit of openqasmcode</span>
+<span data-code-cell="annotated-cell-16" data-code-annotation="1" data-code-lines="3">Shows the circuit of openqasmcode</span>
 </dd>
 </dl>
 </div>
@@ -590,33 +580,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       } else {
         el.classList.add('notransition');
       }
-    }
-  }
-  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
-    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
-    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
-    let newTheme = '';
-    if(darkModeDefault) {
-      newTheme = isAlternate ? baseTheme : alternateTheme;
-    } else {
-      newTheme = isAlternate ? alternateTheme : baseTheme;
-    }
-    const changeGiscusTheme = () => {
-      // From: https://github.com/giscus/giscus/issues/336
-      const sendMessage = (message) => {
-        const iframe = document.querySelector('iframe.giscus-frame');
-        if (!iframe) return;
-        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
-      }
-      sendMessage({
-        setConfig: {
-          theme: newTheme
-        }
-      });
-    }
-    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
-    if (isGiscussLoaded) {
-      changeGiscusTheme();
     }
   }
   const toggleColorMode = (alternate) => {
@@ -685,15 +648,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  const darkModeDefault = false;
-  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  let localAlternateSentinel = 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
-    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -823,27 +784,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-    var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/tequilahub\.github\.io\/tequila-tutorials\/");
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-        // undo the damage that might have been done by quarto-nav.js in the case of
-        // links that we want to consider external
-        if (link.dataset.originalHref !== undefined) {
-          link.href = link.dataset.originalHref;
-        }
-      }
-    }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -853,17 +797,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -875,130 +810,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      if (note) {
-        return note.innerHTML;
-      } else {
-        return "";
-      }
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
-          }
-        }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
-        }
-        return container.innerHTML
-      } else {
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(note);
-        }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      // TODO in 1.5, we should make sure this works without a callout special case
-      if (note.classList.contains("callout")) {
-        return note.outerHTML;
-      } else {
-        return note.innerHTML;
-      }
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
-          }
-        } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
-          .then(res => res.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
-            if (note !== null) {
-              const html = processXRef(id, note);
-              instance.setContent(html);
-            } 
-          }).finally(() => {
-            instance.enable();
-            instance.show();
-          });
-        }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
+      return note.innerHTML;
     });
   }
       let selectedAnnoteEl;
@@ -1042,7 +854,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
-            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1068,8 +879,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-        // Handle positioning of the toggle
-    window.addEventListener(
+      // Handle positioning of the toggle
+      window.addEventListener(
       "resize",
       throttle(() => {
         elRect = undefined;
@@ -1077,23 +888,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
           selectCodeLines(selectedAnnoteEl);
         }
       }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
               fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
       const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
       for (let i=0; i<annoteTargets.length; i++) {
         const annoteTarget = annoteTargets[i];
@@ -1138,7 +949,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
               options: {
                 flipVariations: false, // true by default
                 allowedAutoPlacements: ['right'],
-                fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                fallbackPlacements: ['right', 'top', 'top-start', 'top-end'],
               },
             },
             {
@@ -1200,15 +1011,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">
-
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tequilahub/tequila/blob/main/Tutorials/OpenQASMConversions/OpenQASMConversions.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
+    <div class="nav-footer-center"><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
-
 
 
 

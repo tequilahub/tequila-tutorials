@@ -6,7 +6,7 @@ dependencies:
   - ipykernel
   - psi4
   - pip
-  - texlive-core
+  - texlive
   - pip:
       - tequila-basic
       - pyyaml

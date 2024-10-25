@@ -16,5 +16,4 @@ dependencies:
       - matplotlib
       - qulacs
       - pyscf
-      - texlive
       

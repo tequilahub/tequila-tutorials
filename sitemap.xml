@@ -2,74 +2,78 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://github.com/tequilahub/tequila-tutorials/index.html</loc>
-    <lastmod>2024-10-18T13:57:22.214Z</lastmod>
+    <lastmod>2024-10-25T13:47:01.576Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/tequilahub/tequila-tutorials/FAQ/FAQ.html</loc>
-    <lastmod>2024-10-18T13:57:21.566Z</lastmod>
+    <lastmod>2024-10-25T13:47:00.964Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/tequilahub/tequila-tutorials/Tutorials/QTensor/QTensor.html</loc>
-    <lastmod>2024-10-18T13:57:16.418Z</lastmod>
+    <lastmod>2024-10-25T13:46:55.928Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/tequilahub/tequila-tutorials/Tutorials/CircuitCompiler/CircuitCompiler.html</loc>
-    <lastmod>2024-10-18T13:57:15.518Z</lastmod>
+    <lastmod>2024-10-25T13:46:55.048Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/tequilahub/tequila-tutorials/Tutorials/tq-get-started/index.html</loc>
-    <lastmod>2024-10-18T13:57:14.246Z</lastmod>
+    <lastmod>2024-10-25T13:46:53.772Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/tequilahub/tequila-tutorials/Tutorials/AdaptiveMethods/jupyter_notebook.html</loc>
-    <lastmod>2024-10-18T13:57:08.466Z</lastmod>
+    <lastmod>2024-10-25T13:46:48.167Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/tequilahub/tequila-tutorials/tutorials.html</loc>
-    <lastmod>2024-10-18T13:57:04.826Z</lastmod>
+    <lastmod>2024-10-25T13:46:44.375Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/tequilahub/tequila-tutorials/research.html</loc>
-    <lastmod>2024-10-18T13:57:03.206Z</lastmod>
+    <lastmod>2024-10-25T13:46:42.859Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/tequilahub/tequila-tutorials/Researches/electronic-hamiltonians/index.html</loc>
-    <lastmod>2024-10-18T13:57:00.462Z</lastmod>
+    <lastmod>2024-10-25T13:46:40.239Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/tequilahub/tequila-tutorials/Researches/molcirc/index.html</loc>
-    <lastmod>2024-10-18T13:56:53.958Z</lastmod>
+    <lastmod>2024-10-25T13:45:38.755Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/tequilahub/tequila-tutorials/Researches/Eigensolver/Eigensolver.html</loc>
+    <lastmod>2024-10-25T13:46:34.743Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/tequilahub/tequila-tutorials/Researches/quantum_classifier/quantum_classifier.html</loc>
-    <lastmod>2024-10-18T13:57:02.166Z</lastmod>
+    <lastmod>2024-10-25T13:46:41.811Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/tequilahub/tequila-tutorials/Contribution/Contribution.html</loc>
-    <lastmod>2024-10-18T13:57:03.594Z</lastmod>
+    <lastmod>2024-10-25T13:46:43.227Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/tequilahub/tequila-tutorials/Tutorials/optimizer/Optimizers.html</loc>
-    <lastmod>2024-10-18T13:57:06.034Z</lastmod>
+    <lastmod>2024-10-25T13:46:45.435Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/tequilahub/tequila-tutorials/Tutorials/KrylovTutorial/KrylovTutorial.html</loc>
-    <lastmod>2024-10-18T13:57:08.942Z</lastmod>
+    <lastmod>2024-10-25T13:46:48.611Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/tequilahub/tequila-tutorials/Tutorials/Braket/BraketTutorial.html</loc>
-    <lastmod>2024-10-18T13:57:15.018Z</lastmod>
+    <lastmod>2024-10-25T13:46:54.564Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/tequilahub/tequila-tutorials/Tutorials/OpenQASMConversions/OpenQASMConversions.html</loc>
-    <lastmod>2024-10-18T13:57:15.998Z</lastmod>
+    <lastmod>2024-10-25T13:46:55.508Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/tequilahub/tequila-tutorials/Tutorials/tq-circuits/index.html</loc>
-    <lastmod>2024-10-18T13:57:21.050Z</lastmod>
+    <lastmod>2024-10-25T13:47:00.436Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/tequilahub/tequila-tutorials/FAQ.html</loc>
-    <lastmod>2024-10-18T13:57:21.898Z</lastmod>
+    <lastmod>2024-10-25T13:47:01.272Z</lastmod>
   </url>
 </urlset>

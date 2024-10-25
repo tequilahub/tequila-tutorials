@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Elisabeth Welizky">
+<meta name="dcterms.date" content="2024-10-15">
+
+<title>Tequila Tutorials - Excited State Methods</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../favicon.ico" rel="icon">
+<script src="../../site_libs/cookie-consent/cookie-consent.js"></script>
+<link href="../../site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-V7DRP5E70N"></script>
+
+<script type="text/plain" cookie-consent="tracking">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-V7DRP5E70N', { 'anonymize_ip': true});
+</script>
+
+<script type="text/javascript" charset="UTF-8">
+document.addEventListener('DOMContentLoaded', function () {
+cookieconsent.run({
+  "notice_banner_type":"simple",
+  "consent_type":"express",
+  "palette":"light",
+  "language":"en",
+  "page_load_consent_levels":["strictly-necessary"],
+  "notice_banner_reject_button_hide":false,
+  "preferences_center_close_button_hide":false,
+  "website_name":""
+  });
+});
+</script> 
+  
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="Tequila Tutorials - Excited State Methods">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://github.com/tequilahub/tequila-tutorials/Researches/Eigensolver/main_image.png">
+<meta property="og:site-name" content="Tequila Tutorials">
+<meta property="og:image:height" content="1792">
+<meta property="og:image:width" content="2486">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../tequila_logo.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Tequila Tutorials</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../research.html" rel="" target="">
+ <span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials.html" rel="" target="">
+ <span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../FAQ/FAQ.html" rel="" target="">
+ <span class="menu-text">FAQ</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../Contribution/Contribution.html" rel="" target="">
+ <span class="menu-text">Contribution</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Excited State Methods</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+                                <div class="quarto-categories">
+                <div class="quarto-category">mra</div>
+                <div class="quarto-category">code</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Elisabeth Welizky </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 15, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction-and-ansatz" id="toc-introduction-and-ansatz" class="nav-link active" data-scroll-target="#introduction-and-ansatz">Introduction and Ansatz</a></li>
+  <li><a href="#excited-state-methods" id="toc-excited-state-methods" class="nav-link" data-scroll-target="#excited-state-methods">Excited state methods</a>
+  <ul class="collapse">
+  <li><a href="#folded-spectrum-method" id="toc-folded-spectrum-method" class="nav-link" data-scroll-target="#folded-spectrum-method">Folded Spectrum Method</a></li>
+  <li><a href="#approximation-method" id="toc-approximation-method" class="nav-link" data-scroll-target="#approximation-method">Approximation Method</a></li>
+  <li><a href="#projection-method" id="toc-projection-method" class="nav-link" data-scroll-target="#projection-method">Projection Method</a></li>
+  </ul></li>
+  <li><a href="#optimization-process" id="toc-optimization-process" class="nav-link" data-scroll-target="#optimization-process">Optimization process</a></li>
+  <li><a href="#chemistry-example" id="toc-chemistry-example" class="nav-link" data-scroll-target="#chemistry-example">Chemistry example</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a>
+  <ul class="collapse">
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading">Further Reading</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/tequilahub/tequila/blob/main/Researches/Eigensolver/Eigensolver.ipynb" class="toc-action">View source</a></p><p><a href="https://github.com/tequilahub/tequila/issues/new" class="toc-action">Report an issue</a></p></div></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="Eigensolver.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="introduction-and-ansatz" class="level1">
+<h1>Introduction and Ansatz</h1>
+<p>In this work we discuss an Eigensolver, which aims to find the ground state of a given Electronic Hamiltonian. To briefly recap: A Hamiltonian itself describes the possible energies of a physical system, including both the kinetic and potential energy of that system and is represented by a matrix. If we know the Hamiltonian, we can gain information about the physical states of the system. In the covered example, the Hamiltonian takes the following form</p>
+<p><span class="math display">\[ 1.5  - 0.5 \cdot (Z_1 - Z_0 + Z_0 \cdot Z_1 + X_1 - Z_0 \cdot X_1)\]</span></p>
+<div class="cell" data-execution_count="49">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: True</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tequila <span class="im">as</span> tq</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>H <span class="op">=</span> <span class="fl">1.5</span><span class="op">-</span><span class="fl">0.5</span><span class="op">*</span>(tq.paulis.Z(<span class="dv">1</span>)<span class="op">-</span>tq.paulis.Z(<span class="dv">0</span>)<span class="op">+</span>tq.paulis.Z(<span class="dv">0</span>)<span class="op">*</span>tq.paulis.Z(<span class="dv">1</span>)<span class="op">+</span> tq.paulis.X(<span class="dv">1</span>)<span class="op">-</span>tq.paulis.Z(<span class="dv">0</span>)<span class="op">*</span>tq.paulis.X(<span class="dv">1</span>))</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>v, vv <span class="op">=</span> np.linalg.eigh(H.to_matrix())</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Eigenvalues: "</span>, v)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Eigenvalues:  [0. 1. 2. 3.]</code></pre>
+</div>
+</div>
+<p>An Ansatz is the parameterized quantum circuit, which, in our case, we are going to define as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> tq.Variable(<span class="st">"a"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> tq.gates.Ry(angle<span class="op">=</span>(a)<span class="op">*</span>np.pi,target<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>U<span class="op">+=</span> tq.gates.CNOT(<span class="dv">0</span>,<span class="dv">1</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>U<span class="op">+=</span> tq.gates.Ry(angle<span class="op">=</span>(a<span class="op">/</span><span class="dv">2</span>)<span class="op">*</span>np.pi, target<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<center>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="circuit.png" class="img-fluid figure-img" width="400"></p>
+<figcaption class="figure-caption">Circuit</figcaption>
+</figure>
+</div>
+</center>
+<p>At this point we need to take into consideration, that Ansatz errors may occur, since we perceive the Ansatz as an educated guess.</p>
+<p>By computing the Eigenvalues beforehand, we were able to match the circuit on smooth values ​​at the angles 0,1,2 and 3. It should also be noted that in the following only values ​​in the interval [0,3] are considered. Therefore, values ​​outside the interval are mapped back to the interval by applying modulo 4.</p>
+<p>Our circuit consists of two qubits, hence we are able to have four Eigenvalues <span class="math inline">\(\psi_{k}\)</span>. Furthermore, we know that every state has its expectation value. Since we can regard the Hamiltonian as a Hermition Operator we can write it as follows:<br>
+<span class="math display">\[H\ket{\psi_{guess}} =  E_{guess}\ket{\psi_{guess}}\]</span> We assume <span class="math inline">\(E_{guess}\)</span> to represent the expectation value of the given Hamiltonian. Furthermore we know, that <span class="math inline">\(E_{guess}\)</span> is a minimum under the precondition that it approximates to a specific Eigenstate.</p>
+<p>Our goal is to minimize the expectation value of the energy, such that no other energy is greater than <span class="math inline">\(E_{guess}\)</span>. Therefore we will have a solid approximation of the ground state energy. In our case the sought Eigenvalue is the angle of the minimum Eigenstate, which corresponds to the desired ground state energy. It can be found by applying a minimization method to the expectation value <span class="math inline">\(E_{guess}\)</span>.</p>
+<p>In the following graphic we can observe the plotted, expected energy depending on the angle a. The Eigenstates are those energies corresponding to the already calculated Eigenvalues for our circuit.</p>
+<center>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Original_Hamiltonian.png" class="img-fluid figure-img" width="400"></p>
+<figcaption class="figure-caption">Hamiltonian</figcaption>
+</figure>
+</div>
+</center>
+<p>The circles in this graph represent the sought Eigenstates of <span class="math inline">\(H\)</span>. Therefore, the corresponding angles are the targeted Eigenvalues. It is essential to point out that the minima and maxima of this graph are potential Eigenvalues, but they don´t neccessarily need to be. Only, when applying different excited state methods the real Eigenvalues will emerge. In this example we know the values. However, without prior knowledge, we are forced to assume certain starting values. Therefore, on one hand, it is possible to get some potential Eigenvalues at first, which will later turn out to be irrelevant. On the other hand, saddle points might turn into minima or maxima when applying the minimization on multiple, consecutively executed excited state methods.</p>
+</section>
+<section id="excited-state-methods" class="level1">
+<h1>Excited state methods</h1>
+<p>After having introduced the main goal and concept, we should clarify the implementation and usage of different excited state methods. We assume, that the Hamiltonian and our computed circuit <span class="math inline">\(U\)</span>, depending on the angles <span class="math inline">\(\phi\)</span>, is already given in the beginning. These methods particularly differ in the way of defining the expectation value, with the given Hamiltonian and circuit. Also, their superposition and the parametrization of our given circuit play a crucial role.</p>
+<section id="folded-spectrum-method" class="level3">
+<h3 class="anchored" data-anchor-id="folded-spectrum-method">Folded Spectrum Method</h3>
+<p>First we discuss the popular Folded Spectrum method. In general, it is formulated like this: <span class="math inline">\(\langle (H-\mu)^2\rangle_{U(\phi)}\)</span> with <span class="math inline">\(\mu\)</span> being the estimated value. Here it is initially assigned to 1, since this is the first excited state in our case.<br>
+</p>
+<div class="cell" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> expectation_value_folded_spectrum(H,U, constant):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> tq.ExpectationValue(H<span class="op">=</span>(H<span class="op">-</span>constant)<span class="op">**</span><span class="dv">2</span>, U<span class="op">=</span>U)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<center>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Folded_spectrum.png" class="img-fluid figure-img" width="400"></p>
+<figcaption class="figure-caption">Folded Spectrum Method</figcaption>
+</figure>
+</div>
+</center>
+<p>This method modifies the Hamiltonian, by shifting its energy values. If done properly, this concludes in the targeted excited state becoming the lowest energy state in the plotted graph. Here, the local maximum at angle 2.0 and local minimum at angle 3.0 are being shifted to their initial energy value + 1.0. Simultaneously, every other value is being shifted to the initial energy value - 1.0.</p>
+</section>
+<section id="approximation-method" class="level3">
+<h3 class="anchored" data-anchor-id="approximation-method">Approximation Method</h3>
+<p>The next method is the approximation method, which differs in the way of applying the expectation value. This looks as follows: <span class="math inline">\((\langle H\rangle_{U(\phi)}-\mu)^2\)</span>.<br>
+</p>
+<p>At first we compute the expectation value of our Hamiltonian. As next step we approximate the difference to the constant <span class="math inline">\(\mu\)</span>. This constant is an assumption of what we think might be the target Eigenstate. Therefore we are minimizing the difference between the output energy of our Hamiltonian and the target energy <span class="math inline">\(\mu\)</span>.</p>
+<div class="cell" data-execution_count="50">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> expectation_value_approximation(H,U, constant):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (tq.ExpectationValue(H<span class="op">=</span>H, U<span class="op">=</span>U)<span class="op">-</span>constant)<span class="op">**</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<center>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Approximation.png" class="img-fluid figure-img" width="400"></p>
+<figcaption class="figure-caption">Approximation Method</figcaption>
+</figure>
+</div>
+</center>
+<p>Since we initialized <span class="math inline">\(\mu\)</span> to 1, we mapped every energy value from 1.0 to 0.0. Thus, all affected points become the new local minima. This is caused by minimizing the difference between our initial energy values and the target energy <span class="math inline">\(\mu\)</span> and <span class="math inline">\((1.0 - 1.0)^2 = 0.0\)</span>. The same procedure is also applied to any other value of our energy graph. In the end, the approximation affects the energy graph similarly to the Folded Spectrum method, since it alters the initial Hamiltonian by distorting or smoothing the spectrum. Here, the energies of the local maxima are being shifted to their initial energy value + <span class="math inline">\(\mu\)</span> as well. In contrast to the Folded Spectrum method, this graph now mainly differs in the amount of local minimas, since the Hamiltonian had two energies of value 1.0 before.</p>
+</section>
+<section id="projection-method" class="level3">
+<h3 class="anchored" data-anchor-id="projection-method">Projection Method</h3>
+<p>Our last presented strategy is the Projection method, which is also known as the Variational Quantum Deflation (VQD) algorithm.</p>
+<p>This method uses a variational technique to find the k Eigenvalues of the given Hamiltonian. With this approach we are also able to find excited states by minimizing an objective function, which represents the disparity between the measured expectation values and the true ground state energy. This strategy penalizes overlapping states over several applications of the excited state methods.<br>
+</p>
+To find the k-th lowest excited state, VQD requires us to find the lowest k - 1 states first. We then minimize the energy, while constraining the state <span class="math inline">\(|\psi(\phi)\rangle\)</span> to be orthogonal to the lower known states <span class="math inline">\(|\psi(\phi_{i})\rangle\)</span> :<br>
+<span class="math display">\[\begin{align}
+\underset{\phi}{\text{minimize}} &amp; &amp; \langle H\rangle_{\psi(\phi)} &amp; \\
+\text{subject to } &amp; &amp; \langle\psi(\phi_{i})~|~\psi(\phi)\rangle = 0, &amp; \forall i \in \{ 0,\ldots k - 1\}
+\end{align}\]</span><br>
+
+The constraint is given by the orthonormality of the eigenbasis of <span class="math inline">\(H\)</span>. We can write the optimization problem as the cost function:<br>
+
+<br>
+<span class="math inline">\(C(\phi) = \langle\psi(\phi)|H|\psi(\phi)\rangle + \sum_{i = 0}^{k - 1}\lambda_{i}|\langle\psi(\phi_{i})|\psi(\phi)\rangle|^{2}\)</span><br>
+
+<p><br>
+where <span class="math inline">\(\lambda_{i}\)</span> are the penalty weights. By optimizing over this cost function we are able to compute the excited state energies.</p>
+<br>
+We define <span class="math inline">\(\left( U_{i} \right)_{i \in \{ 0,\ldots k - 1\}}\)</span> to be the circuits preparing the i-th state and U as the circuit preparing <span class="math inline">\(|\psi(\phi)\rangle\)</span>.<br>
+The second term describes the squares of overlaps of the current circuit U, generally known as the fidelity.<br>
+Referring to this <a href="https://arxiv.org/pdf/2011.05938" target="_blank">paper</a>, we get the following conversion:
+<p><br>
+<span class="math inline">\(|\braket{\psi(\phi _{i}) | \psi(\phi)}|^2\)</span><br>
+<span class="math inline">\(= \braket{\psi(\phi _{i}) | \psi(\phi)} \braket{\psi(\phi) | \psi(\phi _{i})}\)</span><br>
+<span class="math inline">\(= \bra{\psi(\phi _{i})}U_{i}\ket{0} \bra{0}U_{i}^{\textdagger}\ket{\psi(\phi _{i})}\)</span><br>
+<span class="math inline">\(=\langle P_0\rangle_{U_{i}^{\textdagger} U(\phi)}\)</span></p>
+<p>The expectation values of the projected Hamiltonian can then be described as sum of expectation values of the original Hamiltonian and projectors of the current circuit U:<br>
+</p>
+<p><span class="math inline">\(\langle H\rangle_{U(\phi)} + \sum_{i=0}^{k-1} \lambda_{i} \langle P_0\rangle_{U_{i}^{\textdagger} U(\phi)}\)</span>.</p>
+<p>Thereby we create a sequential strategy in which the ground state is first being calculated and then projected outwards. Therefore, a new possible ground state is able to emerge from the projection.</p>
+<div class="cell" data-execution_count="51">
+<div class="sourceCode cell-code" id="annotated-cell-5"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-5-1"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> expectation_value_orthogonality_constraint(H,U, circuit_list, constant_list):</span>
+<span id="annotated-cell-5-2"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a>    E <span class="op">=</span> tq.ExpectationValue(H<span class="op">=</span>H, U<span class="op">=</span>U)</span>
+<span id="annotated-cell-5-3"><a href="#annotated-cell-5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="bu">len</span>(circuit_list) <span class="op">!=</span> <span class="bu">len</span>(constant_list)):</span>
+<span id="annotated-cell-5-4"><a href="#annotated-cell-5-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"Circuit_list and constant_list have different lengths. len(circuit_list): '</span><span class="sc">{</span><span class="bu">len</span>(circuit_list)<span class="sc">}</span><span class="ss">', len(constant_list): '</span><span class="sc">{</span><span class="bu">len</span>(constant_list)<span class="sc">}</span><span class="ss">'"</span>)</span>
+<span id="annotated-cell-5-5"><a href="#annotated-cell-5-5" aria-hidden="true" tabindex="-1"></a>    list_length <span class="op">=</span> <span class="bu">len</span>(circuit_list)</span>
+<span id="annotated-cell-5-6"><a href="#annotated-cell-5-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> l <span class="kw">in</span> <span class="bu">range</span>(list_length):</span>
+<span id="annotated-cell-5-7"><a href="#annotated-cell-5-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (circuit_list[l].extract_variables() <span class="op">==</span> <span class="va">None</span>):</span>
+<span id="annotated-cell-5-8"><a href="#annotated-cell-5-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"Circuit_list contains unparametrized elements"</span>)</span>
+<span id="annotated-cell-5-9"><a href="#annotated-cell-5-9" aria-hidden="true" tabindex="-1"></a>    U_list <span class="op">=</span> []</span>
+<span id="annotated-cell-5-10"><a href="#annotated-cell-5-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, list_length):</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1">1</button><span id="annotated-cell-5-11" class="code-annotation-target"><a href="#annotated-cell-5-11" aria-hidden="true" tabindex="-1"></a>        U_k <span class="op">=</span> U <span class="op">+</span> circuit_list[i].dagger()</span>
+<span id="annotated-cell-5-12"><a href="#annotated-cell-5-12" aria-hidden="true" tabindex="-1"></a>        P_k <span class="op">=</span> <span class="dv">1</span></span>
+<span id="annotated-cell-5-13"><a href="#annotated-cell-5-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> k <span class="kw">in</span> U_k.qubits:</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="2">2</button><span id="annotated-cell-5-14" class="code-annotation-target"><a href="#annotated-cell-5-14" aria-hidden="true" tabindex="-1"></a>            P_k<span class="op">*=</span> tq.paulis.Qp(k)</span>
+<span id="annotated-cell-5-15"><a href="#annotated-cell-5-15" aria-hidden="true" tabindex="-1"></a>        E_k <span class="op">=</span> tq.ExpectationValue(H<span class="op">=</span>P_k, U<span class="op">=</span>U_k)</span>
+<span id="annotated-cell-5-16"><a href="#annotated-cell-5-16" aria-hidden="true" tabindex="-1"></a>        U_list.append(constant_list[i]<span class="op">*</span>E_k)</span>
+<span id="annotated-cell-5-17"><a href="#annotated-cell-5-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> E <span class="op">+</span> <span class="bu">sum</span>(U_list)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-5" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-annotation="1" data-code-lines="11">The circuit list consists of the circuits preparing the i-th state. The addition is not an actual addition, but the concatenation operator for quantum circuits.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-annotation="2" data-code-lines="14">This is the 0-projector.</span>
+</dd>
+</dl>
+</div>
+</div>
+<center>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="VQD.png" class="img-fluid figure-img" width="400"></p>
+<figcaption class="figure-caption">Variational Quantum Deflation Algorithm</figcaption>
+</figure>
+</div>
+</center>
+<p>In our case, we already know that the energy is 0 at angle 3.0 (so we reached a possible ground state). Hence, we set <span class="math inline">\(\lambda_{i}\)</span> to 10, so that the energy at angle 3.0 will become greater than any other energy in this graph.</p>
+<p>While the Folded Spectrum and Approximation methods are generally easier to implement, they may have limitations in terms of accuracy and efficiency. The Projection method offers a higher accuracy and ensures orthogonality between the excited states, but it can be more complex and computationally demanding, particularly for larger systems. Therefore it is a good idea to experiment with different methods to determine the most suitable one for a given application.</p>
+</section>
+</section>
+<section id="optimization-process" class="level1">
+<h1>Optimization process</h1>
+<p>Now, having discussed all possible methods, we´re going to test different ways of concatenating those to find the ground state energy with regard to the optimal Eigenstates and the corresponding Eigenvalues. The whole process of finding the ground state energy functions similarly to the popular gradient descent, since we work stepwise through our generated graph and create a new minimum at each iteration. For this purpose Tequila provides its own method for the entire optimization process, the minimize-function. This method takes the expectation value as well as a dictionary of additional parameters, such as the initial values, as input.</p>
+<div class="cell" data-execution_count="52">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> minimization(E, dict_of_parameters<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> dict_of_parameters <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        dict_of_parameters <span class="op">=</span> {}</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> <span class="bu">isinstance</span>(dict_of_parameters, <span class="bu">dict</span>):</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">TypeError</span>(<span class="ss">f"dict expected, got '</span><span class="sc">{</span><span class="bu">type</span>(dict_of_parameters)<span class="sc">.</span><span class="va">__name__</span><span class="sc">}</span><span class="ss">'"</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    dict_of_parameters.setdefault(<span class="st">"method"</span>, <span class="st">"BFGS"</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    dict_of_parameters.setdefault(<span class="st">"initial_values"</span>, <span class="st">"random"</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> tq.minimize(E, <span class="op">**</span>dict_of_parameters)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Below you can first see all neccessary functions, including the excited state methods, for the minimization as well as for plotting. Here, when calling the main function, we pass the following input parameters: Hamiltonian H, curcuit U, variables/angles as dictionary, a variance threshold (optional) and list of ordered excited state methods (optional) eg. [“A”,“P”,“F”] for Approximation, Projection, Folded Spectrum. In this implementation, the final minimum, found after applying the optimization on a certain excited state method, will become the starting point of the minimization of the next method. Also, we use the previous result energy as expectation value for the input of the current minimization.</p>
+<p>After the optimization process was completed successfully, you are able to trace the derivation process of the ground state energies in the corresponding 1D or 2D diagrams.</p>
+<div class="cell" data-execution_count="53">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tequila <span class="im">as</span> tq</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tequila <span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> numpy <span class="im">import</span> pi</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main(H,U, variables, variance_threshold<span class="op">=</span><span class="fl">1.e-8</span>, <span class="bu">list</span><span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''This is the main part of this programm, where the optimization strategies "folded spectrum", "approximation" and "projection"</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">    are being tested and plotted.</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">    Input:  Hamiltonian H</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">            curcuit U</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">            variables/angles as dictionary</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">            variance threshold (optional)</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">            list of ordered functions (optional) eg. ["A","P","F"] for Approximation, Projection, Folded Spectrum</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">    Output: 1D or 2D graphics showing the optimization process as well as the Eigenvalues/Eigenstates of H'''</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    eigenvalues, vv <span class="op">=</span> np.linalg.eigh(H.to_matrix())</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    oneDimensional <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="bu">len</span>(variables) <span class="op">==</span> <span class="dv">2</span>):</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        oneDimensional<span class="op">=</span><span class="va">False</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>        variables <span class="op">=</span> {<span class="st">"a"</span>: <span class="op">-</span><span class="dv">1</span>, <span class="st">"b"</span>: <span class="op">-</span><span class="fl">0.5</span>}</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        variables <span class="op">=</span> {<span class="st">"a"</span>: <span class="op">-</span><span class="dv">1</span>}</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    circuit_list <span class="op">=</span> []</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    constant_list <span class="op">=</span> []</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    list_length <span class="op">=</span> <span class="dv">4</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    constant <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> l <span class="kw">in</span> <span class="bu">range</span>(list_length):</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>        circuit_list.append(U.map_variables(variables))</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>        constant_list.append(constant)</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>        constant <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">list</span><span class="op">==</span><span class="va">None</span>:</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>        <span class="co"># First Projection, then Approximation, then Folded Spectrum</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>        E <span class="op">=</span> eigensolver.expectation_value_orthogonality_constraint(H,U, circuit_list, constant_list)</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>        E_optimized <span class="op">=</span> eigensolver.minimization(E, {<span class="st">"method"</span>:<span class="st">"BFGS"</span>})</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>        eigensolver.plotting_preparation(E, E_optimized, <span class="st">"Energy with orthogonality constraint"</span>, eigenvalues, oneDimensional)</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> eigensolver.proof_eigenstate(H,U, variables, variance_threshold):</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="st">"The optimal eigenstate with a variance &lt;= "</span>, variance_threshold, <span class="st">"was found."</span>)</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>        variables <span class="op">=</span> E_optimized.variables</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>        mu <span class="op">=</span> tq.simulate(tq.ExpectationValue(H<span class="op">=</span>H, U<span class="op">=</span>U), variables<span class="op">=</span>variables)</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>        E_AFS <span class="op">=</span> eigensolver.expectation_value_approximation(H,U, mu)</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>        E_AFS_optimized <span class="op">=</span> eigensolver.minimization(E_AFS, {<span class="st">"method"</span>:<span class="st">"BFGS"</span>, <span class="st">"initial_values"</span>:variables})</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>        eigensolver.plotting_preparation(E_AFS, E_AFS_optimized, <span class="st">"Energy with approximation"</span>, eigenvalues, oneDimensional)</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> eigensolver.proof_eigenstate(H,U, variables, variance_threshold):</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="st">"The optimal eigenstate with a variance &lt;= "</span>, variance_threshold, <span class="st">"was found."</span>)</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>        variables <span class="op">=</span> E_AFS_optimized.variables</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>        mu <span class="op">=</span> tq.simulate(tq.ExpectationValue(H<span class="op">=</span>H, U<span class="op">=</span>U), variables<span class="op">=</span>variables)</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>        E_FS <span class="op">=</span> eigensolver.expectation_value_folded_spectrum(H,U, mu)</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>        E_FS_optimized <span class="op">=</span> eigensolver.minimization(E_FS, {<span class="st">"method"</span>:<span class="st">"BFGS"</span>, <span class="st">"initial_values"</span>:variables})</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>        eigensolver.plotting_preparation(E_FS, E_FS_optimized, <span class="st">"Energy with folded spectrum"</span>, eigenvalues, oneDimensional)</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> eigensolver.proof_eigenstate(H,U, variables, variance_threshold):</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="st">"The optimal eigenstate with a variance &lt;= "</span>, variance_threshold, <span class="st">"was found."</span>)</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> l <span class="kw">in</span> <span class="bu">list</span>:</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (l.isalpha()<span class="op">==</span><span class="va">False</span> <span class="kw">or</span> <span class="bu">len</span>(l)<span class="op">!=</span> <span class="dv">1</span>):</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">'An elemet of the list is not one letter'</span>)</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (l <span class="op">==</span> <span class="bu">list</span>[<span class="dv">0</span>]):</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>                mu <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>                variables <span class="op">=</span> E_optimized.variables</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>                mu <span class="op">=</span> tq.simulate(tq.ExpectationValue(H<span class="op">=</span>H, U<span class="op">=</span>U), variables<span class="op">=</span>variables)</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (l <span class="op">==</span> <span class="st">"A"</span>):</span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>                E <span class="op">=</span> eigensolver.expectation_value_approximation(H,U, mu)</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (l <span class="op">==</span> <span class="bu">list</span>[<span class="dv">0</span>]):</span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>                    E_optimized <span class="op">=</span> eigensolver.minimization(E, {<span class="st">"method"</span>:<span class="st">"BFGS"</span>})</span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span>: </span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>                    E_optimized <span class="op">=</span> eigensolver.minimization(E, {<span class="st">"method"</span>:<span class="st">"BFGS"</span>, <span class="st">"initial_values"</span>:variables})</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>                eigensolver.plotting_preparation(E, E_optimized, <span class="st">"Energy with approximation"</span>, eigenvalues, oneDimensional)</span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> eigensolver.proof_eigenstate(H,U, variables, variance_threshold):</span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>                        <span class="bu">print</span>(<span class="st">"The optimal eigenstate with a variance &lt;= "</span>, variance_threshold, <span class="st">"was found."</span>)</span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>            <span class="cf">elif</span> (l <span class="op">==</span> <span class="st">"P"</span>):</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>                E <span class="op">=</span> eigensolver.expectation_value_orthogonality_constraint(H,U, circuit_list, constant_list)</span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (l <span class="op">==</span> <span class="bu">list</span>[<span class="dv">0</span>]):</span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>                    E_optimized <span class="op">=</span> eigensolver.minimization(E, {<span class="st">"method"</span>:<span class="st">"BFGS"</span>})</span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span>: </span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>                    E_optimized <span class="op">=</span> eigensolver.minimization(E, {<span class="st">"method"</span>:<span class="st">"BFGS"</span>, <span class="st">"initial_values"</span>:variables})</span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>                eigensolver.plotting_preparation(E, E_optimized, <span class="st">"Energy with orthogonality constraint"</span>, eigenvalues, oneDimensional)</span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> eigensolver.proof_eigenstate(H,U, variables, variance_threshold):</span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>                        <span class="bu">print</span>(<span class="st">"The optimal eigenstate with a variance &lt;= "</span>, variance_threshold, <span class="st">"was found."</span>)</span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>            <span class="cf">elif</span> (l <span class="op">==</span> <span class="st">"F"</span>):</span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>                E <span class="op">=</span> eigensolver.expectation_value_folded_spectrum(H,U, mu)</span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (l <span class="op">==</span> <span class="bu">list</span>[<span class="dv">0</span>]):</span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>                    E_optimized <span class="op">=</span> eigensolver.minimization(E, {<span class="st">"method"</span>:<span class="st">"BFGS"</span>})</span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span>: </span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>                    E_optimized <span class="op">=</span> eigensolver.minimization(E, {<span class="st">"method"</span>:<span class="st">"BFGS"</span>, <span class="st">"initial_values"</span>:variables})</span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>                eigensolver.plotting_preparation(E, E_optimized, <span class="st">"Energy with folded spectrum"</span>, eigenvalues, oneDimensional)</span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> eigensolver.proof_eigenstate(H,U, variables, variance_threshold):</span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>                        <span class="bu">print</span>(<span class="st">"The optimal eigenstate with a variance &lt;= "</span>, variance_threshold, <span class="st">"was found."</span>)</span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">'An elemet of the list is not letter "A", "P" or "F"'</span>)</span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a><span class="co">#----------------General functions------------</span></span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> eigensolver:</span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> expectation_value_folded_spectrum(H,U, constant):</span>
+<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> tq.ExpectationValue(H<span class="op">=</span>(H<span class="op">-</span>constant)<span class="op">**</span><span class="dv">2</span>, U<span class="op">=</span>U)</span>
+<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> expectation_value_approximation(H,U, constant):</span>
+<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (tq.ExpectationValue(H<span class="op">=</span>H, U<span class="op">=</span>U)<span class="op">-</span>constant)<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> expectation_value_orthogonality_constraint(H,U, circuit_list, constant_list):</span>
+<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a>        E <span class="op">=</span> tq.ExpectationValue(H<span class="op">=</span>H, U<span class="op">=</span>U)</span>
+<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="bu">len</span>(circuit_list) <span class="op">!=</span> <span class="bu">len</span>(constant_list)):</span>
+<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"Circuit_list and constant_list have different lengths. len(circuit_list): '</span><span class="sc">{</span><span class="bu">len</span>(circuit_list)<span class="sc">}</span><span class="ss">', len(constant_list): '</span><span class="sc">{</span><span class="bu">len</span>(constant_list)<span class="sc">}</span><span class="ss">'"</span>)</span>
+<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a>        list_length <span class="op">=</span> <span class="bu">len</span>(circuit_list)</span>
+<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> l <span class="kw">in</span> <span class="bu">range</span>(list_length):</span>
+<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (circuit_list[l].extract_variables() <span class="op">==</span> <span class="va">None</span>):</span>
+<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"Circuit_list contains unparametrized elements"</span>)</span>
+<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a>        U_list <span class="op">=</span> []</span>
+<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, list_length):</span>
+<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a>            U_k <span class="op">=</span> U <span class="op">+</span> circuit_list[i].dagger()</span>
+<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a>            P_k <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> k <span class="kw">in</span> U_k.qubits:</span>
+<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a>                P_k<span class="op">*=</span> tq.paulis.Qp(k)</span>
+<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a>            E_k <span class="op">=</span> tq.ExpectationValue(H<span class="op">=</span>P_k, U<span class="op">=</span>U_k)</span>
+<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a>            U_list.append(constant_list[i]<span class="op">*</span>E_k)</span>
+<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> E <span class="op">+</span> <span class="bu">sum</span>(U_list)</span>
+<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> minimization(E, dict_of_parameters<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> dict_of_parameters <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a>            dict_of_parameters <span class="op">=</span> {}</span>
+<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> <span class="bu">isinstance</span>(dict_of_parameters, <span class="bu">dict</span>):</span>
+<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">TypeError</span>(<span class="ss">f"dict expected, got '</span><span class="sc">{</span><span class="bu">type</span>(dict_of_parameters)<span class="sc">.</span><span class="va">__name__</span><span class="sc">}</span><span class="ss">'"</span>)</span>
+<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a>        dict_of_parameters.setdefault(<span class="st">"method"</span>, <span class="st">"BFGS"</span>)</span>
+<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a>        dict_of_parameters.setdefault(<span class="st">"initial_values"</span>, <span class="st">"random"</span>)</span>
+<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> tq.minimize(E, <span class="op">**</span>dict_of_parameters)</span>
+<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> proof_eigenstate(H, U, variables, variance_threshold<span class="op">=</span><span class="fl">1.e-4</span>):</span>
+<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a>        V <span class="op">=</span> ((tq.ExpectationValue(H<span class="op">=</span>H, U<span class="op">=</span>U))  <span class="op">**</span><span class="dv">2</span> <span class="op">-</span> tq.ExpectationValue(H<span class="op">=</span>H<span class="op">**</span><span class="dv">2</span>, U<span class="op">=</span>U)).<span class="bu">apply</span>(<span class="bu">abs</span>)</span>
+<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a>        V <span class="op">=</span> tq.simulate(V, variables)</span>
+<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> V <span class="op">&lt;=</span> variance_threshold</span>
+<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_optimization_energies(result):</span>
+<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> result.history.energies_calls</span>
+<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_optimization_angles(result, eigenvalues):</span>
+<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a>        mod <span class="op">=</span> <span class="bu">len</span>(eigenvalues)</span>
+<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a>        angle_dots <span class="op">=</span> [{k:v <span class="op">%</span> mod <span class="cf">for</span> k,v <span class="kw">in</span> x.items()} <span class="cf">for</span> x <span class="kw">in</span> result.history.angles_calls]</span>
+<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a>        angles_np <span class="op">=</span> np.array([<span class="bu">list</span>(i.values()) <span class="cf">for</span> i <span class="kw">in</span> angle_dots])</span>
+<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> angles_np</span>
+<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> compile_E_values1D(fE, angle_range):</span>
+<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> [fE({<span class="st">"a"</span>:v}) <span class="cf">for</span> v <span class="kw">in</span> angle_range]</span>
+<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> compile_E_values2D(fE, angle_range):</span>
+<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a>        fE_result <span class="op">=</span> []</span>
+<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> v <span class="kw">in</span> angle_range:</span>
+<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> w <span class="kw">in</span> angle_range:</span>
+<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a>                fE_result.append(fE({<span class="st">"a"</span>:v, <span class="st">"b"</span>:w}))</span>
+<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> fE_result</span>
+<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> compile_dE_values1D(fdE, angle_range):</span>
+<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> [fdE({<span class="st">"a"</span>:v}) <span class="cf">for</span> v <span class="kw">in</span> angle_range]</span>
+<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> compile_dE_values2D(fdE, angle_range):</span>
+<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a>        fE_result <span class="op">=</span> []</span>
+<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> v <span class="kw">in</span> angle_range:</span>
+<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> w <span class="kw">in</span> angle_range:</span>
+<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a>                fE_result.append(fdE({<span class="st">"a"</span>:v, <span class="st">"b"</span>:w}))</span>
+<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> fE_result</span>
+<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a>    <span class="co"># calculating min and max values of range of all energies (E or dE) for plotting. Returning array [y_min, y_max]</span></span>
+<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> min_max_y_value(E, values_E, values_dE, energy_dots):</span>
+<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a>        min_max <span class="op">=</span> []</span>
+<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a>        all_energy_values <span class="op">=</span> []</span>
+<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> v <span class="kw">in</span> values_E:</span>
+<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a>            all_energy_values.append(v)</span>
+<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> v <span class="kw">in</span> values_dE:</span>
+<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a>            all_energy_values.append(v)</span>
+<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a>        y_min <span class="op">=</span> energy_dots[<span class="dv">0</span>]</span>
+<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a>        y_max <span class="op">=</span> energy_dots[<span class="dv">0</span>]</span>
+<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> energy <span class="kw">in</span> all_energy_values:</span>
+<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> energy <span class="op">&lt;</span> y_min:</span>
+<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a>                y_min <span class="op">=</span> energy</span>
+<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> energy <span class="op">&gt;</span> y_max:</span>
+<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a>                y_max <span class="op">=</span> energy</span>
+<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a>        min_max.append(y_min)</span>
+<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a>        min_max.append(y_max)</span>
+<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> min_max</span>
+<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plotting1D(aprox_name, angle_range, angles_np, values_E, values_dE, fE, energy_np, start_dot_E, end_dot_E, start_dot_angle, end_dot_angle, angles_of_eigenvalues, y_min, y_max):</span>
+<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a>        plt.plot(angle_range, values_E, label<span class="op">=</span> <span class="bu">str</span>(aprox_name))</span>
+<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a>        plt.plot(angle_range, values_dE, label<span class="op">=</span> <span class="st">'Derivation of the '</span> <span class="op">+</span> <span class="bu">str</span>(aprox_name))</span>
+<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a>        plt.legend([<span class="bu">str</span>(aprox_name), <span class="st">'Derivation of the '</span> <span class="op">+</span> <span class="bu">str</span>(aprox_name)])</span>
+<span id="cb7-193"><a href="#cb7-193" aria-hidden="true" tabindex="-1"></a>        plt.scatter(angles_np, energy_np)</span>
+<span id="cb7-194"><a href="#cb7-194" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-195"><a href="#cb7-195" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> a <span class="kw">in</span> angles_of_eigenvalues:</span>
+<span id="cb7-196"><a href="#cb7-196" aria-hidden="true" tabindex="-1"></a>            plt.plot(a, fE({<span class="st">"a"</span>:a}), <span class="st">"o"</span>,mfc <span class="op">=</span> <span class="st">'#4CAF50'</span>,ms <span class="op">=</span> <span class="dv">10</span>,mec <span class="op">=</span> <span class="st">'r'</span>)</span>
+<span id="cb7-197"><a href="#cb7-197" aria-hidden="true" tabindex="-1"></a>            plt.vlines(x<span class="op">=</span>a, colors<span class="op">=</span><span class="st">'purple'</span>, ymin<span class="op">=</span>y_min<span class="op">-</span><span class="dv">5</span>, ymax<span class="op">=</span>y_max<span class="op">+</span><span class="dv">5</span>, ls<span class="op">=</span><span class="st">'--'</span>, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'Eigenvalues'</span>)</span>
+<span id="cb7-198"><a href="#cb7-198" aria-hidden="true" tabindex="-1"></a>        plt.annotate(<span class="st">'Starting point'</span>,</span>
+<span id="cb7-199"><a href="#cb7-199" aria-hidden="true" tabindex="-1"></a>        ha <span class="op">=</span> <span class="st">'center'</span>, va <span class="op">=</span> <span class="st">'bottom'</span>,</span>
+<span id="cb7-200"><a href="#cb7-200" aria-hidden="true" tabindex="-1"></a>        xytext <span class="op">=</span> (start_dot_angle , start_dot_E <span class="op">-</span> <span class="dv">2</span>),</span>
+<span id="cb7-201"><a href="#cb7-201" aria-hidden="true" tabindex="-1"></a>        xy <span class="op">=</span> (start_dot_angle, start_dot_E),</span>
+<span id="cb7-202"><a href="#cb7-202" aria-hidden="true" tabindex="-1"></a>        arrowprops <span class="op">=</span> { <span class="st">'facecolor'</span> : <span class="st">'black'</span>, <span class="st">'shrink'</span> : <span class="fl">0.5</span>, <span class="st">'width'</span> : <span class="fl">0.5</span>, <span class="st">'headwidth'</span> : <span class="dv">10</span>})</span>
+<span id="cb7-203"><a href="#cb7-203" aria-hidden="true" tabindex="-1"></a>        plt.annotate(<span class="st">'End point'</span>,</span>
+<span id="cb7-204"><a href="#cb7-204" aria-hidden="true" tabindex="-1"></a>        ha <span class="op">=</span> <span class="st">'center'</span>, va <span class="op">=</span> <span class="st">'bottom'</span>,</span>
+<span id="cb7-205"><a href="#cb7-205" aria-hidden="true" tabindex="-1"></a>        xytext <span class="op">=</span> (end_dot_angle, end_dot_E <span class="op">+</span> <span class="dv">2</span>),</span>
+<span id="cb7-206"><a href="#cb7-206" aria-hidden="true" tabindex="-1"></a>        xy <span class="op">=</span> (end_dot_angle, end_dot_E),</span>
+<span id="cb7-207"><a href="#cb7-207" aria-hidden="true" tabindex="-1"></a>        arrowprops <span class="op">=</span> { <span class="st">'facecolor'</span> : <span class="st">'black'</span>, <span class="st">'shrink'</span> : <span class="fl">0.5</span>, <span class="st">'width'</span> : <span class="fl">0.5</span>, <span class="st">'headwidth'</span> : <span class="dv">10</span>})</span>
+<span id="cb7-208"><a href="#cb7-208" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-209"><a href="#cb7-209" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">"Eigenvalues"</span>)</span>
+<span id="cb7-210"><a href="#cb7-210" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">"Eigenstates"</span>)</span>
+<span id="cb7-211"><a href="#cb7-211" aria-hidden="true" tabindex="-1"></a>        plt.show()</span>
+<span id="cb7-212"><a href="#cb7-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-213"><a href="#cb7-213" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plotting2D(aprox_name, start_dot_E, end_dot_E, start_dot_angle, end_dot_angle, fE, angles_of_eigenvalues):</span>
+<span id="cb7-214"><a href="#cb7-214" aria-hidden="true" tabindex="-1"></a>        X<span class="op">=</span>np.linspace(<span class="fl">0.0</span>, <span class="fl">2.0</span><span class="op">*</span>np.pi,<span class="dv">25</span>)</span>
+<span id="cb7-215"><a href="#cb7-215" aria-hidden="true" tabindex="-1"></a>        Y<span class="op">=</span>X</span>
+<span id="cb7-216"><a href="#cb7-216" aria-hidden="true" tabindex="-1"></a>        Z <span class="op">=</span> np.zeros([<span class="dv">25</span>,<span class="dv">25</span>])</span>
+<span id="cb7-217"><a href="#cb7-217" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i,x <span class="kw">in</span> <span class="bu">enumerate</span>(X):</span>
+<span id="cb7-218"><a href="#cb7-218" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> j,y <span class="kw">in</span> <span class="bu">enumerate</span>(Y):</span>
+<span id="cb7-219"><a href="#cb7-219" aria-hidden="true" tabindex="-1"></a>                Z[i,j]<span class="op">=</span> fE({<span class="st">"a"</span>:x, <span class="st">"b"</span>:y})</span>
+<span id="cb7-220"><a href="#cb7-220" aria-hidden="true" tabindex="-1"></a>        X, Y <span class="op">=</span> np.meshgrid(X, Y)</span>
+<span id="cb7-221"><a href="#cb7-221" aria-hidden="true" tabindex="-1"></a>        ax <span class="op">=</span> plt.figure().add_subplot(projection<span class="op">=</span><span class="st">'3d'</span>)</span>
+<span id="cb7-222"><a href="#cb7-222" aria-hidden="true" tabindex="-1"></a>        ax.plot_surface(X, Y, Z, edgecolor<span class="op">=</span><span class="st">'royalblue'</span>, lw<span class="op">=</span><span class="fl">0.5</span>, rstride<span class="op">=</span><span class="dv">8</span>, cstride<span class="op">=</span><span class="dv">8</span>,</span>
+<span id="cb7-223"><a href="#cb7-223" aria-hidden="true" tabindex="-1"></a>                        alpha<span class="op">=</span><span class="fl">0.3</span>, shade<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-224"><a href="#cb7-224" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-225"><a href="#cb7-225" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> a <span class="kw">in</span> angles_of_eigenvalues:</span>
+<span id="cb7-226"><a href="#cb7-226" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> b <span class="kw">in</span> angles_of_eigenvalues:</span>
+<span id="cb7-227"><a href="#cb7-227" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (a <span class="op">==</span> angles_of_eigenvalues[<span class="dv">0</span>] <span class="kw">and</span> b <span class="op">==</span> angles_of_eigenvalues[<span class="dv">0</span>]):</span>
+<span id="cb7-228"><a href="#cb7-228" aria-hidden="true" tabindex="-1"></a>                    ax.plot(a,b, fE({<span class="st">"a"</span>:a, <span class="st">"b"</span>:b}), <span class="st">"o"</span>,mfc <span class="op">=</span> <span class="st">'#4CAF50'</span>,ms <span class="op">=</span> <span class="dv">10</span>,mec <span class="op">=</span> <span class="st">'r'</span>,label<span class="op">=</span><span class="st">"Possible Eigenvalues"</span>)</span>
+<span id="cb7-229"><a href="#cb7-229" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span>:</span>
+<span id="cb7-230"><a href="#cb7-230" aria-hidden="true" tabindex="-1"></a>                    ax.plot(a,b, fE({<span class="st">"a"</span>:a, <span class="st">"b"</span>:b}), <span class="st">"o"</span>,mfc <span class="op">=</span> <span class="st">'#4CAF50'</span>,ms <span class="op">=</span> <span class="dv">10</span>,mec <span class="op">=</span> <span class="st">'r'</span>)</span>
+<span id="cb7-231"><a href="#cb7-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-232"><a href="#cb7-232" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (fE({<span class="st">"a"</span>:end_dot_angle[<span class="dv">0</span>], <span class="st">"b"</span>:end_dot_angle[<span class="dv">1</span>]}) <span class="op">==</span> fE({<span class="st">"a"</span>:start_dot_angle[<span class="dv">0</span>], <span class="st">"b"</span>:start_dot_angle[<span class="dv">1</span>]})):</span>
+<span id="cb7-233"><a href="#cb7-233" aria-hidden="true" tabindex="-1"></a>            ax.scatter3D(start_dot_angle[<span class="dv">0</span>], start_dot_angle[<span class="dv">1</span>],fE({<span class="st">"a"</span>:start_dot_angle[<span class="dv">0</span>], <span class="st">"b"</span>:start_dot_angle[<span class="dv">1</span>]}),color<span class="op">=</span><span class="st">'red'</span>, s<span class="op">=</span><span class="dv">25</span>, label<span class="op">=</span><span class="st">"Starting point equals End point"</span>)</span>
+<span id="cb7-234"><a href="#cb7-234" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb7-235"><a href="#cb7-235" aria-hidden="true" tabindex="-1"></a>            ax.scatter3D(end_dot_angle[<span class="dv">0</span>], end_dot_angle[<span class="dv">1</span>],fE({<span class="st">"a"</span>:end_dot_angle[<span class="dv">0</span>], <span class="st">"b"</span>:end_dot_angle[<span class="dv">1</span>]}),color<span class="op">=</span><span class="st">'black'</span>, s<span class="op">=</span><span class="dv">25</span>, label<span class="op">=</span><span class="st">"Starting point"</span>)</span>
+<span id="cb7-236"><a href="#cb7-236" aria-hidden="true" tabindex="-1"></a>            ax.scatter3D(start_dot_angle[<span class="dv">0</span>], start_dot_angle[<span class="dv">1</span>],fE({<span class="st">"a"</span>:start_dot_angle[<span class="dv">0</span>], <span class="st">"b"</span>:start_dot_angle[<span class="dv">1</span>]}),color<span class="op">=</span><span class="st">'red'</span>, s<span class="op">=</span><span class="dv">25</span>, label<span class="op">=</span><span class="st">"End point"</span>)</span>
+<span id="cb7-237"><a href="#cb7-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-238"><a href="#cb7-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-239"><a href="#cb7-239" aria-hidden="true" tabindex="-1"></a>        ax.set_xlabel(<span class="st">'Angle "a"'</span>)</span>
+<span id="cb7-240"><a href="#cb7-240" aria-hidden="true" tabindex="-1"></a>        ax.set_ylabel(<span class="st">'Angle "b"'</span>)</span>
+<span id="cb7-241"><a href="#cb7-241" aria-hidden="true" tabindex="-1"></a>        ax.set_zlabel(<span class="st">'Energy'</span>)</span>
+<span id="cb7-242"><a href="#cb7-242" aria-hidden="true" tabindex="-1"></a>        ax.legend()</span>
+<span id="cb7-243"><a href="#cb7-243" aria-hidden="true" tabindex="-1"></a>        ax.set_title(<span class="bu">str</span>(aprox_name))</span>
+<span id="cb7-244"><a href="#cb7-244" aria-hidden="true" tabindex="-1"></a>        plt.show()</span>
+<span id="cb7-245"><a href="#cb7-245" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-246"><a href="#cb7-246" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plotting2D_chemistry(aprox_name, fE):</span>
+<span id="cb7-247"><a href="#cb7-247" aria-hidden="true" tabindex="-1"></a>        X<span class="op">=</span>np.linspace(<span class="fl">0.0</span>, <span class="fl">2.0</span><span class="op">*</span>np.pi,<span class="dv">25</span>)</span>
+<span id="cb7-248"><a href="#cb7-248" aria-hidden="true" tabindex="-1"></a>        Y<span class="op">=</span>X</span>
+<span id="cb7-249"><a href="#cb7-249" aria-hidden="true" tabindex="-1"></a>        Z <span class="op">=</span> np.zeros([<span class="dv">25</span>,<span class="dv">25</span>])</span>
+<span id="cb7-250"><a href="#cb7-250" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i,x <span class="kw">in</span> <span class="bu">enumerate</span>(X):</span>
+<span id="cb7-251"><a href="#cb7-251" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> j,y <span class="kw">in</span> <span class="bu">enumerate</span>(Y):</span>
+<span id="cb7-252"><a href="#cb7-252" aria-hidden="true" tabindex="-1"></a>                Z[i,j]<span class="op">=</span> fE({<span class="st">"a"</span>:x, <span class="st">"b"</span>:y})</span>
+<span id="cb7-253"><a href="#cb7-253" aria-hidden="true" tabindex="-1"></a>        X, Y <span class="op">=</span> np.meshgrid(X, Y)</span>
+<span id="cb7-254"><a href="#cb7-254" aria-hidden="true" tabindex="-1"></a>        ax <span class="op">=</span> plt.figure().add_subplot(projection<span class="op">=</span><span class="st">'3d'</span>)</span>
+<span id="cb7-255"><a href="#cb7-255" aria-hidden="true" tabindex="-1"></a>        ax.plot_surface(X, Y, Z, edgecolor<span class="op">=</span><span class="st">'royalblue'</span>, lw<span class="op">=</span><span class="fl">0.5</span>, rstride<span class="op">=</span><span class="dv">8</span>, cstride<span class="op">=</span><span class="dv">8</span>,</span>
+<span id="cb7-256"><a href="#cb7-256" aria-hidden="true" tabindex="-1"></a>                        alpha<span class="op">=</span><span class="fl">0.3</span>, shade<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-257"><a href="#cb7-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-258"><a href="#cb7-258" aria-hidden="true" tabindex="-1"></a>        ax.set_xlabel(<span class="st">'Angle "a"'</span>)</span>
+<span id="cb7-259"><a href="#cb7-259" aria-hidden="true" tabindex="-1"></a>        ax.set_ylabel(<span class="st">'Angle "b"'</span>)</span>
+<span id="cb7-260"><a href="#cb7-260" aria-hidden="true" tabindex="-1"></a>        ax.set_zlabel(<span class="st">'Energy'</span>)</span>
+<span id="cb7-261"><a href="#cb7-261" aria-hidden="true" tabindex="-1"></a>        ax.legend()</span>
+<span id="cb7-262"><a href="#cb7-262" aria-hidden="true" tabindex="-1"></a>        ax.set_title(<span class="bu">str</span>(aprox_name))</span>
+<span id="cb7-263"><a href="#cb7-263" aria-hidden="true" tabindex="-1"></a>        plt.show()</span>
+<span id="cb7-264"><a href="#cb7-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-265"><a href="#cb7-265" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plotting_preparation(E, result, aprox_name, eigenvalues, oneDimensional<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb7-266"><a href="#cb7-266" aria-hidden="true" tabindex="-1"></a>        angle_range <span class="op">=</span> (np.linspace(<span class="dv">0</span>,<span class="dv">4</span>,<span class="dv">100</span>))</span>
+<span id="cb7-267"><a href="#cb7-267" aria-hidden="true" tabindex="-1"></a>        angles_of_eigenvalues <span class="op">=</span> eigenvalues</span>
+<span id="cb7-268"><a href="#cb7-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-269"><a href="#cb7-269" aria-hidden="true" tabindex="-1"></a>        fE <span class="op">=</span> tq.<span class="bu">compile</span>(E)</span>
+<span id="cb7-270"><a href="#cb7-270" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-271"><a href="#cb7-271" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> oneDimensional:</span>
+<span id="cb7-272"><a href="#cb7-272" aria-hidden="true" tabindex="-1"></a>            values_E <span class="op">=</span> eigensolver.compile_E_values1D(fE, angle_range)</span>
+<span id="cb7-273"><a href="#cb7-273" aria-hidden="true" tabindex="-1"></a>            dE <span class="op">=</span> tq.grad(E, <span class="st">"a"</span>)</span>
+<span id="cb7-274"><a href="#cb7-274" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb7-275"><a href="#cb7-275" aria-hidden="true" tabindex="-1"></a>            values_E <span class="op">=</span> eigensolver.compile_E_values2D(fE, angle_range)</span>
+<span id="cb7-276"><a href="#cb7-276" aria-hidden="true" tabindex="-1"></a>            dE <span class="op">=</span> tq.grad(E, <span class="st">"a"</span>, <span class="st">"b"</span>)</span>
+<span id="cb7-277"><a href="#cb7-277" aria-hidden="true" tabindex="-1"></a>        fdE <span class="op">=</span> tq.<span class="bu">compile</span>(dE)</span>
+<span id="cb7-278"><a href="#cb7-278" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> oneDimensional:</span>
+<span id="cb7-279"><a href="#cb7-279" aria-hidden="true" tabindex="-1"></a>            values_dE <span class="op">=</span> eigensolver.compile_dE_values1D(fdE, angle_range)</span>
+<span id="cb7-280"><a href="#cb7-280" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb7-281"><a href="#cb7-281" aria-hidden="true" tabindex="-1"></a>            values_dE <span class="op">=</span> eigensolver.compile_dE_values2D(fdE, angle_range)</span>
+<span id="cb7-282"><a href="#cb7-282" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-283"><a href="#cb7-283" aria-hidden="true" tabindex="-1"></a>        angles <span class="op">=</span> eigensolver.get_optimization_angles(result, eigenvalues)</span>
+<span id="cb7-284"><a href="#cb7-284" aria-hidden="true" tabindex="-1"></a>        energy_dots <span class="op">=</span> eigensolver.get_optimization_energies(result)</span>
+<span id="cb7-285"><a href="#cb7-285" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-286"><a href="#cb7-286" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> oneDimensional:</span>
+<span id="cb7-287"><a href="#cb7-287" aria-hidden="true" tabindex="-1"></a>            angles_np <span class="op">=</span> []</span>
+<span id="cb7-288"><a href="#cb7-288" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> xs <span class="kw">in</span> angles:</span>
+<span id="cb7-289"><a href="#cb7-289" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> x <span class="kw">in</span> xs:</span>
+<span id="cb7-290"><a href="#cb7-290" aria-hidden="true" tabindex="-1"></a>                    angles_np.append(x)</span>
+<span id="cb7-291"><a href="#cb7-291" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb7-292"><a href="#cb7-292" aria-hidden="true" tabindex="-1"></a>            angles_np <span class="op">=</span> angles</span>
+<span id="cb7-293"><a href="#cb7-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-294"><a href="#cb7-294" aria-hidden="true" tabindex="-1"></a>        y_min <span class="op">=</span> eigensolver.min_max_y_value(E, values_E, values_dE, energy_dots)[<span class="dv">0</span>]</span>
+<span id="cb7-295"><a href="#cb7-295" aria-hidden="true" tabindex="-1"></a>        y_max <span class="op">=</span> eigensolver.min_max_y_value(E, values_E, values_dE, energy_dots)[<span class="dv">1</span>]</span>
+<span id="cb7-296"><a href="#cb7-296" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-297"><a href="#cb7-297" aria-hidden="true" tabindex="-1"></a>        start_dot_E <span class="op">=</span> energy_dots[<span class="dv">0</span>]</span>
+<span id="cb7-298"><a href="#cb7-298" aria-hidden="true" tabindex="-1"></a>        end_dot_E <span class="op">=</span> energy_dots[<span class="bu">len</span>(energy_dots)<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb7-299"><a href="#cb7-299" aria-hidden="true" tabindex="-1"></a>        start_dot_angle <span class="op">=</span> angles_np[<span class="dv">0</span>]</span>
+<span id="cb7-300"><a href="#cb7-300" aria-hidden="true" tabindex="-1"></a>        end_dot_angle <span class="op">=</span> angles_np[<span class="bu">len</span>(energy_dots)<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb7-301"><a href="#cb7-301" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-302"><a href="#cb7-302" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> oneDimensional:</span>
+<span id="cb7-303"><a href="#cb7-303" aria-hidden="true" tabindex="-1"></a>            eigensolver.plotting1D(aprox_name, angle_range, angles_np, values_E, values_dE, fE, energy_dots, start_dot_E, end_dot_E, start_dot_angle, end_dot_angle, angles_of_eigenvalues, y_min, y_max)</span>
+<span id="cb7-304"><a href="#cb7-304" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb7-305"><a href="#cb7-305" aria-hidden="true" tabindex="-1"></a>            eigensolver.plotting2D(aprox_name, start_dot_E, end_dot_E, start_dot_angle, end_dot_angle, fE, angles_of_eigenvalues)</span>
+<span id="cb7-306"><a href="#cb7-306" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-307"><a href="#cb7-307" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-308"><a href="#cb7-308" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> min_max_energy_and_angle(fE,values_E, angle_range):</span>
+<span id="cb7-309"><a href="#cb7-309" aria-hidden="true" tabindex="-1"></a>        min_E <span class="op">=</span> <span class="bu">min</span>(np.array(values_E))</span>
+<span id="cb7-310"><a href="#cb7-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-311"><a href="#cb7-311" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> a <span class="kw">in</span> angle_range:</span>
+<span id="cb7-312"><a href="#cb7-312" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (fE({<span class="st">"a"</span>:a}) <span class="op">==</span> min_E):</span>
+<span id="cb7-313"><a href="#cb7-313" aria-hidden="true" tabindex="-1"></a>                min_angle <span class="op">=</span> a</span>
+<span id="cb7-314"><a href="#cb7-314" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span></span>
+<span id="cb7-315"><a href="#cb7-315" aria-hidden="true" tabindex="-1"></a>        max_E <span class="op">=</span> <span class="bu">max</span>(np.array(values_E))</span>
+<span id="cb7-316"><a href="#cb7-316" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> a <span class="kw">in</span> angle_range:</span>
+<span id="cb7-317"><a href="#cb7-317" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (fE({<span class="st">"a"</span>:a}) <span class="op">==</span> max_E):</span>
+<span id="cb7-318"><a href="#cb7-318" aria-hidden="true" tabindex="-1"></a>                max_angle <span class="op">=</span> a</span>
+<span id="cb7-319"><a href="#cb7-319" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span></span>
+<span id="cb7-320"><a href="#cb7-320" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> min_E, max_E, min_angle, max_angle</span>
+<span id="cb7-321"><a href="#cb7-321" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-322"><a href="#cb7-322" aria-hidden="true" tabindex="-1"></a><span class="co"># Given Hamiltonian H</span></span>
+<span id="cb7-323"><a href="#cb7-323" aria-hidden="true" tabindex="-1"></a>H <span class="op">=</span> <span class="fl">1.5</span><span class="op">-</span><span class="fl">0.5</span><span class="op">*</span>(tq.paulis.Z(<span class="dv">1</span>)<span class="op">-</span>tq.paulis.Z(<span class="dv">0</span>)<span class="op">+</span>tq.paulis.Z(<span class="dv">0</span>)<span class="op">*</span>tq.paulis.Z(<span class="dv">1</span>)<span class="op">+</span>tq.paulis.X(<span class="dv">1</span>)<span class="op">-</span>tq.paulis.Z(<span class="dv">0</span>)<span class="op">*</span>tq.paulis.X(<span class="dv">1</span>))</span>
+<span id="cb7-324"><a href="#cb7-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-325"><a href="#cb7-325" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------1D model--------------</span></span>
+<span id="cb7-326"><a href="#cb7-326" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> tq.Variable(<span class="st">"a"</span>)</span>
+<span id="cb7-327"><a href="#cb7-327" aria-hidden="true" tabindex="-1"></a>variables <span class="op">=</span> {<span class="st">"a"</span>: <span class="op">-</span><span class="dv">1</span>}</span>
+<span id="cb7-328"><a href="#cb7-328" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> tq.gates.Ry(angle<span class="op">=</span>(a)<span class="op">*</span>np.pi,target<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb7-329"><a href="#cb7-329" aria-hidden="true" tabindex="-1"></a>U<span class="op">+=</span> tq.gates.CNOT(<span class="dv">0</span>,<span class="dv">1</span>)</span>
+<span id="cb7-330"><a href="#cb7-330" aria-hidden="true" tabindex="-1"></a>U<span class="op">+=</span> tq.gates.Ry(angle<span class="op">=</span>(a<span class="op">/</span><span class="dv">2</span>)<span class="op">*</span>np.pi, target<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb7-331"><a href="#cb7-331" aria-hidden="true" tabindex="-1"></a>main(H, U, variables, variance_threshold<span class="op">=</span><span class="fl">1.e-8</span>, <span class="bu">list</span><span class="op">=</span>[<span class="st">"A"</span>, <span class="st">"F"</span>, <span class="st">"P"</span>, <span class="st">"F"</span>])</span>
+<span id="cb7-332"><a href="#cb7-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-333"><a href="#cb7-333" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------2D model--------------</span></span>
+<span id="cb7-334"><a href="#cb7-334" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> tq.Variable(<span class="st">"a"</span>)</span>
+<span id="cb7-335"><a href="#cb7-335" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> tq.Variable(<span class="st">"b"</span>)</span>
+<span id="cb7-336"><a href="#cb7-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-337"><a href="#cb7-337" aria-hidden="true" tabindex="-1"></a>variables <span class="op">=</span> {<span class="st">"a"</span>:<span class="fl">1.0</span>, <span class="st">"b"</span>:<span class="fl">0.7</span>}</span>
+<span id="cb7-338"><a href="#cb7-338" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> tq.gates.Ry(angle<span class="op">=</span>(a)<span class="op">*</span>np.pi,target<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb7-339"><a href="#cb7-339" aria-hidden="true" tabindex="-1"></a>U<span class="op">+=</span> tq.gates.CNOT(<span class="dv">0</span>,<span class="dv">1</span>)</span>
+<span id="cb7-340"><a href="#cb7-340" aria-hidden="true" tabindex="-1"></a>U<span class="op">+=</span> tq.gates.Ry(angle<span class="op">=</span>(b)<span class="op">*</span>np.pi, target<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb7-341"><a href="#cb7-341" aria-hidden="true" tabindex="-1"></a>main(H, U, variables, variance_threshold<span class="op">=</span><span class="fl">1.e-8</span>, <span class="bu">list</span><span class="op">=</span>[<span class="st">"A"</span>, <span class="st">"F"</span>, <span class="st">"P"</span>, <span class="st">"F"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Let´s take a look at an exemplary 1D optimization using the approximation and subsequent folded spectrum method.</p>
+<div id="fOptimization_Approximation" class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-surus" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Optimization_Approximation.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Energy graph</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-hanno" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Optimization_Approximation_process.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;2: Optimization process</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p>Optimization with the Approximation method</p>
+</div>
+</div>
+</div>
+<p>First, we start our optimization at Angle 2.15. The blue graph shows us the energy curve after applying the approximation method, the orange one the corresponding gradient. Analyzing this, there is a decline in energy at the starting point, as the orange graph is below the 0 energy level. According to the optimization procedure, we now the curve until we reach a local minimum (obervable along the blue dots). In our case, we reach the local minimum after 7 steps at angle 3.7.</p>
+<div id="Optimization_Folded_Spectrum" class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-surus" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Optimization_Folded_Spectrum.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;3: Energy graph</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-hanno" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Optimization_Folded_Spectrum_process.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;4: Optimization process</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p>Optimization with the Folded Spectrum method</p>
+</div>
+</div>
+</div>
+<p>This is now the starting point of the Folded Spectrum method. The graph has changed here: We can see that the gradient at the start is much lower than the one of the approximation curve at this angle. This means that there is a point that is even lower than the one previously assumed. Therefore, we carry out the same procedure as before: we continue until we arrive at a local minimum again. Since our optimization steps run in the right direction and in this case we always consider the angles modulo 4, we end up on the left side again. The apparent minimum at 0.0 is initially skipped in step 2 and since then we have been oscillating around the local minimum. In the last step, however, we return there and remain there. Now we have found an actual Eigenstate at angle 0.0.</p>
+<div id="2D-models" class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<div id="fig-surus" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Approximation_2D.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;5: Approximation</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<div id="fig-hanno" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Projection_2D.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;6: Projection</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<div id="fig-hanno" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Folded_spectrum_2D.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;7: Folded Spectrum</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p>Optimization with 2D models</p>
+</div>
+</div>
+</div>
+<p>The same procedure was carried out in these 2D models. First with the approximation method, then the projection method and at the end the folded spectrum method. It is not initially clear that the end point of the first method is the starting point of the second method. In fact, this is the case, only the curves have changed accordingly when the projection method has been applied. In the second diagram it is already clear that we have reached a possible Eigenvalue. This is evident in the last excited state method, since the optimization point does not move, but stagnates at the minimum.</p>
+</section>
+<section id="chemistry-example" class="level1">
+<h1>Chemistry example</h1>
+<p>Since we have now familiarized ourselves with the excited state methods, we can apply them to a Hamiltonian and circuit from a real chemistry model. In the following code, this model is defined based on two angles and its circuit is similar to the one from this <a href="https://arxiv.org/pdf/2207.12421" target="_blank">paper</a> (appendix). We then are able to apply our known methods and plot them using 2D models.</p>
+<div class="cell" data-execution_count="55">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="annotated-cell-8"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-8-1"><a href="#annotated-cell-8-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-8-2"><a href="#annotated-cell-8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-8-3"><a href="#annotated-cell-8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="annotated-cell-8-4"><a href="#annotated-cell-8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#| output: false</span></span>
+<span id="annotated-cell-8-5"><a href="#annotated-cell-8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-8-6"><a href="#annotated-cell-8-6" aria-hidden="true" tabindex="-1"></a>geometry1 <span class="op">=</span> <span class="st">"H 1.5 0.0 0.0</span><span class="ch">\n</span><span class="st">H 0.0 0.0 0.0</span><span class="ch">\n</span><span class="st">H 1.5 0.0 1.5</span><span class="ch">\n</span><span class="st">H 0.0 0.0 1.5"</span></span>
+<span id="annotated-cell-8-7"><a href="#annotated-cell-8-7" aria-hidden="true" tabindex="-1"></a>mol <span class="op">=</span> tq.Molecule(geometry<span class="op">=</span>geometry1, basis_set<span class="op">=</span><span class="st">"sto-3g"</span>).use_native_orbitals()</span>
+<span id="annotated-cell-8-8"><a href="#annotated-cell-8-8" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> tq.gates.X([<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>])</span>
+<span id="annotated-cell-8-9"><a href="#annotated-cell-8-9" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> tq.Variable(<span class="st">"a"</span>)<span class="co">#*pi</span></span>
+<span id="annotated-cell-8-10"><a href="#annotated-cell-8-10" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> tq.Variable(<span class="st">"b"</span>)<span class="co">#*pi</span></span>
+<span id="annotated-cell-8-11"><a href="#annotated-cell-8-11" aria-hidden="true" tabindex="-1"></a>UC1 <span class="op">=</span> mol.UC(<span class="dv">0</span>,<span class="dv">2</span>, a) <span class="op">+</span> mol.UC(<span class="dv">1</span>,<span class="dv">3</span>, a)</span>
+<span id="annotated-cell-8-12"><a href="#annotated-cell-8-12" aria-hidden="true" tabindex="-1"></a>UR1 <span class="op">=</span> mol.UR(<span class="dv">0</span>,<span class="dv">2</span>,pi<span class="op">/</span><span class="dv">2</span>) <span class="op">+</span> mol.UR(<span class="dv">1</span>,<span class="dv">3</span>,pi<span class="op">/</span><span class="dv">2</span>)</span>
+<span id="annotated-cell-8-13"><a href="#annotated-cell-8-13" aria-hidden="true" tabindex="-1"></a>UR2 <span class="op">=</span> mol.UR(<span class="dv">0</span>,<span class="dv">1</span>,pi<span class="op">/</span><span class="dv">2</span>) <span class="op">+</span> mol.UR(<span class="dv">2</span>,<span class="dv">3</span>,pi<span class="op">/</span><span class="dv">2</span>)</span>
+<span id="annotated-cell-8-14"><a href="#annotated-cell-8-14" aria-hidden="true" tabindex="-1"></a>UC2 <span class="op">=</span> mol.UC(<span class="dv">0</span>,<span class="dv">1</span>, b) <span class="op">+</span> mol.UC(<span class="dv">2</span>,<span class="dv">3</span>, b)</span>
+<span id="annotated-cell-8-15"><a href="#annotated-cell-8-15" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="1">1</button><span id="annotated-cell-8-16" class="code-annotation-target"><a href="#annotated-cell-8-16" aria-hidden="true" tabindex="-1"></a>circuit_chemistry <span class="op">=</span> U <span class="op">+</span> UC1 <span class="op">+</span> UR1.dagger() <span class="op">+</span> UR2 <span class="op">+</span> UC2 <span class="op">+</span> UR2.dagger()</span>
+<span id="annotated-cell-8-17"><a href="#annotated-cell-8-17" aria-hidden="true" tabindex="-1"></a>H <span class="op">=</span> mol.make_hamiltonian()</span>
+<span id="annotated-cell-8-18"><a href="#annotated-cell-8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-8-19"><a href="#annotated-cell-8-19" aria-hidden="true" tabindex="-1"></a>f_E<span class="op">=</span> tq.<span class="bu">compile</span>(tq.ExpectationValue(H<span class="op">=</span>H, U<span class="op">=</span>circuit_chemistry))</span>
+<span id="annotated-cell-8-20"><a href="#annotated-cell-8-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-8-21"><a href="#annotated-cell-8-21" aria-hidden="true" tabindex="-1"></a>eigensolver.plotting2D_chemistry(<span class="st">"Original Hamiltonian"</span>, f_E)</span>
+<span id="annotated-cell-8-22"><a href="#annotated-cell-8-22" aria-hidden="true" tabindex="-1"></a>```</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-annotation="1" data-code-lines="16">This is the given circuit, which consists of two rotations and two correlations. Thus, we are particularly able to analize the correlators and study their behaviour.</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-error">
+<pre><code>SyntaxError: invalid syntax (1782063315.py, line 20)</code></pre>
+</div>
+</div>
+<center>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="chemistry_circuit.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption class="figure-caption">Circuit of chemistry model</figcaption>
+</figure>
+</div>
+</center>
+<center>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="original_hamiltonian_chemistry.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption class="figure-caption">Hamiltonian of chemistry model</figcaption>
+</figure>
+</div>
+</center>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>In summary, this tutorial has provided an overview of quantum Eigensolvers, a powerful tool for finding the Eigenvalues of quantum systems. We have discussed the key concepts, such as Hamiltonians, expectation values, and excited state methods. The Tequila library was used to implement these concepts and demonstrate their application. Building on this, we have gained some direct optimization protocols by testing different concatenations of our excited state methods, including the optimization after each of them.</p>
+<p>Despite this, we need to take some potential errors, such as hardware errors, which can cause noise, computational errors or Ansatz errors into consideration. Moreover the accuracy and efficiency of our Eigensolver depends highly on the choice of our given excited state methods. Of course, there are also other possibilities of concatenations, since we have a lot of freedom in selecting the suitable parameters and order of our introduced techniques.</p>
+<p>Overall, by addressing these challenges and leveraging future advancements, quantum Eigensolvers have the potential to become a valuable tool for solving complex problems in quantum computing and beyond.</p>
+<section id="further-reading" class="level3">
+<h3 class="anchored" data-anchor-id="further-reading">Further Reading</h3>
+<ul>
+<li><a href="https://pubs.acs.org/doi/epdf/10.1021/acs.jctc.3c01378?ref=article_openPDF" target="_blank">https://pubs.acs.org/doi/epdf/10.1021/acs.jctc.3c01378?ref=article_openPDF</a></li>
+<li><a href="https://www.sciencedirect.com/science/article/pii/S0370157322003118?ref=pdf_download&amp;fr=RR-2&amp;rr=8d2f7feaefd39247" target="_blank">https://www.sciencedirect.com/science/article/pii/S0370157322003118?ref=pdf_download&amp;fr=RR-2&amp;rr=8d2f7feaefd39247</a></li>
+<li><a href="https://arxiv.org/pdf/1805.08138" target="_blank">https://arxiv.org/pdf/1805.08138</a></li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Handle positioning of the toggle
+      window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+      const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+      for (let i=0; i<annoteTargets.length; i++) {
+        const annoteTarget = annoteTargets[i];
+        const targetCell = annoteTarget.getAttribute("data-target-cell");
+        const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+        const contentFn = () => {
+          const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          if (content) {
+            const tipContent = content.cloneNode(true);
+            tipContent.classList.add("code-annotation-tip-content");
+            return tipContent.outerHTML;
+          }
+        }
+        const config = {
+          allowHTML: true,
+          content: contentFn,
+          onShow: (instance) => {
+            selectCodeLines(instance.reference);
+            instance.reference.classList.add('code-annotation-active');
+            window.tippy.hideAll();
+          },
+          onHide: (instance) => {
+            unselectCodeLines();
+            instance.reference.classList.remove('code-annotation-active');
+          },
+          maxWidth: 300,
+          delay: [50, 0],
+          duration: [200, 0],
+          offset: [5, 10],
+          arrow: true,
+          appendTo: function(el) {
+            return el.parentElement.parentElement.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'quarto',
+          placement: 'right',
+          popperOptions: {
+            modifiers: [
+            {
+              name: 'flip',
+              options: {
+                flipVariations: false, // true by default
+                allowedAutoPlacements: ['right'],
+                fallbackPlacements: ['right', 'top', 'top-start', 'top-end'],
+              },
+            },
+            {
+              name: 'preventOverflow',
+              options: {
+                mainAxis: false,
+                altAxis: false
+              }
+            }
+            ]        
+          }      
+        };
+        window.tippy(annoteTarget, config); 
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="tequilahub/tequila-tutorials" issue-term="pathname" theme="preferred-color-scheme" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center"><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+</body></html>

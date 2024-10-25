@@ -6,7 +6,6 @@ dependencies:
   - ipykernel
   - psi4
   - pip
-  - texlive
   - pip:
       - tequila-basic
       - pyyaml
@@ -17,4 +16,5 @@ dependencies:
       - matplotlib
       - qulacs
       - pyscf
+      - texlive
       

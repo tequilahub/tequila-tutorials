@@ -249,7 +249,7 @@ cookieconsent.run({
 <h1>Introduction and Ansatz</h1>
 <p>In this work we discuss an Eigensolver, which aims to find the ground state of a given Electronic Hamiltonian. To briefly recap: A Hamiltonian itself describes the possible energies of a physical system, including both the kinetic and potential energy of that system and is represented by a matrix. If we know the Hamiltonian, we can gain information about the physical states of the system. In the covered example, the Hamiltonian takes the following form</p>
 <p><span class="math display">\[ 1.5  - 0.5 \cdot (Z_1 - Z_0 + Z_0 \cdot Z_1 + X_1 - Z_0 \cdot X_1)\]</span></p>
-<div class="cell" data-execution_count="49">
+<div class="cell" data-execution_count="56">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
@@ -265,7 +265,7 @@ cookieconsent.run({
 </div>
 </div>
 <p>An Ansatz is the parameterized quantum circuit, which, in our case, we are going to define as follows:</p>
-<div class="cell">
+<div class="cell" data-execution_count="60">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> tq.Variable(<span class="st">"a"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> tq.gates.Ry(angle<span class="op">=</span>(a)<span class="op">*</span>np.pi,target<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>U<span class="op">+=</span> tq.gates.CNOT(<span class="dv">0</span>,<span class="dv">1</span>)</span>
@@ -302,7 +302,7 @@ cookieconsent.run({
 <h3 class="anchored" data-anchor-id="folded-spectrum-method">Folded Spectrum Method</h3>
 <p>First we discuss the popular Folded Spectrum method. In general, it is formulated like this: <span class="math inline">\(\langle (H-\mu)^2\rangle_{U(\phi)}\)</span> with <span class="math inline">\(\mu\)</span> being the estimated value. Here it is initially assigned to 1, since this is the first excited state in our case.<br>
 </p>
-<div class="cell" data-execution_count="54">
+<div class="cell" data-execution_count="57">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> expectation_value_folded_spectrum(H,U, constant):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> tq.ExpectationValue(H<span class="op">=</span>(H<span class="op">-</span>constant)<span class="op">**</span><span class="dv">2</span>, U<span class="op">=</span>U)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -321,7 +321,7 @@ cookieconsent.run({
 <p>The next method is the approximation method, which differs in the way of applying the expectation value. This looks as follows: <span class="math inline">\((\langle H\rangle_{U(\phi)}-\mu)^2\)</span>.<br>
 </p>
 <p>At first we compute the expectation value of our Hamiltonian. As next step we approximate the difference to the constant <span class="math inline">\(\mu\)</span>. This constant is an assumption of what we think might be the target Eigenstate. Therefore we are minimizing the difference between the output energy of our Hamiltonian and the target energy <span class="math inline">\(\mu\)</span>.</p>
-<div class="cell" data-execution_count="50">
+<div class="cell" data-execution_count="63">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> expectation_value_approximation(H,U, constant):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (tq.ExpectationValue(H<span class="op">=</span>H, U<span class="op">=</span>U)<span class="op">-</span>constant)<span class="op">**</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -366,7 +366,7 @@ Referring to this <a href="https://arxiv.org/pdf/2011.05938" target="_blank">pap
 </p>
 <p><span class="math inline">\(\langle H\rangle_{U(\phi)} + \sum_{i=0}^{k-1} \lambda_{i} \langle P_0\rangle_{U_{i}^{\textdagger} U(\phi)}\)</span>.</p>
 <p>Thereby we create a sequential strategy in which the ground state is first being calculated and then projected outwards. Therefore, a new possible ground state is able to emerge from the projection.</p>
-<div class="cell" data-execution_count="51">
+<div class="cell" data-execution_count="58">
 <div class="sourceCode cell-code" id="annotated-cell-5"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-5-1"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> expectation_value_orthogonality_constraint(H,U, circuit_list, constant_list):</span>
 <span id="annotated-cell-5-2"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a>    E <span class="op">=</span> tq.ExpectationValue(H<span class="op">=</span>H, U<span class="op">=</span>U)</span>
 <span id="annotated-cell-5-3"><a href="#annotated-cell-5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="bu">len</span>(circuit_list) <span class="op">!=</span> <span class="bu">len</span>(constant_list)):</span>
@@ -388,11 +388,11 @@ Referring to this <a href="https://arxiv.org/pdf/2011.05938" target="_blank">pap
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-5" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-5" data-code-annotation="1" data-code-lines="11">The circuit list consists of the circuits preparing the i-th state. The addition is not an actual addition, but the concatenation operator for quantum circuits.</span>
+<span data-code-annotation="1" data-code-lines="11" data-code-cell="annotated-cell-5">The circuit list consists of the circuits preparing the i-th state. The addition is not an actual addition, but the concatenation operator for quantum circuits.</span>
 </dd>
 <dt data-target-cell="annotated-cell-5" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-5" data-code-annotation="2" data-code-lines="14">This is the 0-projector.</span>
+<span data-code-annotation="2" data-code-lines="14" data-code-cell="annotated-cell-5">This is the 0-projector.</span>
 </dd>
 </dl>
 </div>
@@ -412,7 +412,7 @@ Referring to this <a href="https://arxiv.org/pdf/2011.05938" target="_blank">pap
 <section id="optimization-process" class="level1">
 <h1>Optimization process</h1>
 <p>Now, having discussed all possible methods, we´re going to test different ways of concatenating those to find the ground state energy with regard to the optimal Eigenstates and the corresponding Eigenvalues. The whole process of finding the ground state energy functions similarly to the popular gradient descent, since we work stepwise through our generated graph and create a new minimum at each iteration. For this purpose Tequila provides its own method for the entire optimization process, the minimize-function. This method takes the expectation value as well as a dictionary of additional parameters, such as the initial values, as input.</p>
-<div class="cell" data-execution_count="52">
+<div class="cell" data-execution_count="62">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
@@ -429,7 +429,7 @@ Referring to this <a href="https://arxiv.org/pdf/2011.05938" target="_blank">pap
 </div>
 <p>Below you can first see all neccessary functions, including the excited state methods, for the minimization as well as for plotting. Here, when calling the main function, we pass the following input parameters: Hamiltonian H, curcuit U, variables/angles as dictionary, a variance threshold (optional) and list of ordered excited state methods (optional) eg. [“A”,“P”,“F”] for Approximation, Projection, Folded Spectrum. In this implementation, the final minimum, found after applying the optimization on a certain excited state method, will become the starting point of the minimization of the next method. Also, we use the previous result energy as expectation value for the input of the current minimization.</p>
 <p>After the optimization process was completed successfully, you are able to trace the derivation process of the ground state energies in the corresponding 1D or 2D diagrams.</p>
-<div class="cell" data-execution_count="53">
+<div class="cell" data-execution_count="59">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tequila <span class="im">as</span> tq</span>
@@ -866,7 +866,7 @@ Referring to this <a href="https://arxiv.org/pdf/2011.05938" target="_blank">pap
 <section id="chemistry-example" class="level1">
 <h1>Chemistry example</h1>
 <p>Since we have now familiarized ourselves with the excited state methods, we can apply them to a Hamiltonian and circuit from a real chemistry model. In the following code, this model is defined based on two angles and its circuit is similar to the one from this <a href="https://arxiv.org/pdf/2207.12421" target="_blank">paper</a> (appendix). We then are able to apply our known methods and plot them using 2D models.</p>
-<div class="cell" data-execution_count="55">
+<div class="cell" data-execution_count="61">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="annotated-cell-8"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-8-1"><a href="#annotated-cell-8-1" aria-hidden="true" tabindex="-1"></a></span>
@@ -889,19 +889,22 @@ Referring to this <a href="https://arxiv.org/pdf/2011.05938" target="_blank">pap
 <span id="annotated-cell-8-18"><a href="#annotated-cell-8-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-8-19"><a href="#annotated-cell-8-19" aria-hidden="true" tabindex="-1"></a>f_E<span class="op">=</span> tq.<span class="bu">compile</span>(tq.ExpectationValue(H<span class="op">=</span>H, U<span class="op">=</span>circuit_chemistry))</span>
 <span id="annotated-cell-8-20"><a href="#annotated-cell-8-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-8-21"><a href="#annotated-cell-8-21" aria-hidden="true" tabindex="-1"></a>eigensolver.plotting2D_chemistry(<span class="st">"Original Hamiltonian"</span>, f_E)</span>
-<span id="annotated-cell-8-22"><a href="#annotated-cell-8-22" aria-hidden="true" tabindex="-1"></a>```</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="annotated-cell-8-21"><a href="#annotated-cell-8-21" aria-hidden="true" tabindex="-1"></a>eigensolver.plotting2D_chemistry(<span class="st">"Original Hamiltonian"</span>, f_E)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-annotation="1" data-code-lines="16">This is the given circuit, which consists of two rotations and two correlations. Thus, we are particularly able to analize the correlators and study their behaviour.</span>
+<span data-code-annotation="1" data-code-lines="16" data-code-cell="annotated-cell-8">This is the given circuit, which consists of two rotations and two correlations. Thus, we are particularly able to analize the correlators and study their behaviour.</span>
 </dd>
 </dl>
 </div>
-<div class="cell-output cell-output-error">
-<pre><code>SyntaxError: invalid syntax (1782063315.py, line 20)</code></pre>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/pw/yjpw_zz56nv7wh1drxkrky_40000gn/T/ipykernel_84822/888881687.py:263: UserWarning: No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
+  ax.legend()</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Eigensolver_files/figure-html/cell-9-output-2.png" class="img-fluid"></p>
 </div>
 </div>
 <center>

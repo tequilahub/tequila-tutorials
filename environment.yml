@@ -17,6 +17,5 @@ dependencies:
       - qulacs
       - pyscf
       - sphinx
-      - sphinxcontrib
       - sphinxcontrib-programoutput
       - sphinx-rtd-theme

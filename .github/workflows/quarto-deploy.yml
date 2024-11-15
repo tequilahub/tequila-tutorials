@@ -25,6 +25,12 @@ jobs:
           auto-update-conda: true
           activate-environment: blogqa
 
+      # Initialize Conda
+      - name: Initialize Conda
+        run: |
+          conda init bash
+          source ~/.bashrc
+
       # Install the ipykernel package
       - name: Install ipykernel
         run: |

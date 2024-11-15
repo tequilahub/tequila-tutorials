@@ -16,4 +16,7 @@ dependencies:
       - matplotlib
       - qulacs
       - pyscf
-      
+      - sphinx
+      - sphinxcontrib
+      - sphinxcontrib-programoutput
+      - sphinx-rtd-theme

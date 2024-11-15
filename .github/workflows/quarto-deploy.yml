@@ -47,7 +47,7 @@ jobs:
       - name: Build Sphinx documentation
         run: |
           cd docs
-          make html
+          conda run -n blogqa make html
 
       # Commit changes to gh-pages branch
       - name: Switch to gh-pages branch

@@ -18,6 +18,8 @@ website:
         file: FAQ/FAQ.ipynb
       - text: "Contribution"
         file: Contribution/Contribution.ipynb
+      - text: "Docs"
+        file: docs/sphinx/index.html
 
   favicon: favicon.ico
   open-graph: true

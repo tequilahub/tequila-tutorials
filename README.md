@@ -40,6 +40,13 @@ pip install qulacs
 conda install psi4
 pip install pyscf
 ```
+Also, these packages are required for the Sphinx documentation:
+```
+pip install sphinx
+pip install sphinxcontrib
+pip install sphinxcontrib-programoutput
+pip install sphinx-rtd-theme 
+```
 
 # Quarto and LaTeX and the Markdown language - for Tutorials
 

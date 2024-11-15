@@ -25,11 +25,12 @@ jobs:
           auto-update-conda: true
           activate-environment: blogqa
 
-      # Install the ipykernel package
+      # Install the ipykernel package and the sphinxcontrib package for documentation
       - name: Install ipykernel
         run: |
           conda run -n blogqa conda install -y ipykernel
           conda run -n blogqa python -m ipykernel install --user --name blogqa
+          conda run -n blogqa conda install sphinxcontrib
 
       # Set up Quarto
       - name: Setup Quarto
@@ -41,6 +42,12 @@ jobs:
       - name: Install TinyTeX
         run: |
           conda run -n blogqa quarto install tinytex
+
+      # Build Sphinx documentation
+      - name: Build Sphinx documentation
+        run: |
+          cd docs
+          conda run -n blogqa make html
 
       # Commit changes to gh-pages branch
       - name: Switch to gh-pages branch

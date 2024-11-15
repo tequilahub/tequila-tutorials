@@ -25,6 +25,8 @@ html:
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
+    # Create the _site/docs/sphinx directory if it doesn't exist
+	mkdir -p ../_site/docs/sphinx
 
 # this line to automatically copies the contents after building
 	cp -r $(BUILDDIR)/html/* ../_site/docs/sphinx

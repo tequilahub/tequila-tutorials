@@ -25,9 +25,7 @@ jobs:
 
       # Initialize Conda
       - name: Initialize Conda
-        run: |
-          conda init bash
-          source ~/.bashrc
+        run: conda init bash
 
       # Install the ipykernel package
       - name: Install ipykernel

@@ -36,12 +36,6 @@ jobs:
         with:
           version: '1.3.450'
 
-      # Install sphinxcontrib
-      - name: Install sphinxcontrib
-        run: |
-          conda activate blogqa
-          pip install sphinxcontrib
-      
       # Install TinyTeX
       - name: Install TinyTeX
         run: |

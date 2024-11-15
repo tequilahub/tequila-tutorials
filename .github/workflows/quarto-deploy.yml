@@ -25,27 +25,18 @@ jobs:
           auto-update-conda: true
           activate-environment: blogqa
 
-      # Initialize Conda
-      - name: Initialize Conda
-        run: conda init bash
-
-      # Install the ipykernel package
+      # Install the ipykernel package and the sphinxcontrib package for documentation
       - name: Install ipykernel
         run: |
           conda run -n blogqa conda install -y ipykernel
           conda run -n blogqa python -m ipykernel install --user --name blogqa
+          conda run -n blogqa pip install sphinxcontrib
 
       # Set up Quarto
       - name: Setup Quarto
         uses: quarto-dev/quarto-actions/setup@v2
         with:
           version: '1.3.450'
-
-      # Install sphinxcontrib
-      - name: Install sphinxcontrib
-        run: |
-          conda activate blogqa
-          pip install sphinxcontrib
       
       # Install TinyTeX
       - name: Install TinyTeX

@@ -1,0 +1,393 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hamiltonian &mdash; Tequila Documentation 13.9.2024 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7dcc51c3"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Circuit" href="circuit.html" />
+    <link rel="prev" title="Tequila Library Reference" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Tequila Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Tequila Library Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Hamiltonian</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tequila_code.hamiltonian.paulis">paulis module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.hamiltonian.paulis.I"><code class="docutils literal notranslate"><span class="pre">I()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.hamiltonian.paulis.KetBra"><code class="docutils literal notranslate"><span class="pre">KetBra()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.hamiltonian.paulis.Projector"><code class="docutils literal notranslate"><span class="pre">Projector()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.hamiltonian.paulis.Qm"><code class="docutils literal notranslate"><span class="pre">Qm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.hamiltonian.paulis.Qp"><code class="docutils literal notranslate"><span class="pre">Qp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.hamiltonian.paulis.Sm"><code class="docutils literal notranslate"><span class="pre">Sm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.hamiltonian.paulis.Sp"><code class="docutils literal notranslate"><span class="pre">Sp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.hamiltonian.paulis.X"><code class="docutils literal notranslate"><span class="pre">X()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.hamiltonian.paulis.Y"><code class="docutils literal notranslate"><span class="pre">Y()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.hamiltonian.paulis.Z"><code class="docutils literal notranslate"><span class="pre">Z()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.hamiltonian.paulis.Zero"><code class="docutils literal notranslate"><span class="pre">Zero()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.hamiltonian.paulis.decompose_transfer_operator"><code class="docutils literal notranslate"><span class="pre">decompose_transfer_operator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.hamiltonian.paulis.from_string"><code class="docutils literal notranslate"><span class="pre">from_string()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.hamiltonian.paulis.pauli"><code class="docutils literal notranslate"><span class="pre">pauli()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tequila_code.hamiltonian.paulistring">paulistring module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#qubit-hamiltonian-module">qubit-hamiltonian module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tequila_code.hamiltonian">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="circuit.html">Circuit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimizers.html">Optimizers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulators.html">Simulators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantumchemistry.html">Quantum Chemistry</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Tequila Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Tequila Library Reference</a></li>
+      <li class="breadcrumb-item active">Hamiltonian</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/hamiltonian.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="hamiltonian">
+<h1>Hamiltonian<a class="headerlink" href="#hamiltonian" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-tequila_code.hamiltonian.paulis">
+<span id="paulis-module"></span><h2>paulis module<a class="headerlink" href="#module-tequila_code.hamiltonian.paulis" title="Link to this heading"></a></h2>
+<p>Convenience initialization
+of Pauli Operators. Resulting structures can be added and multiplied together.
+Currently uses OpenFermion as backend (QubitOperators)</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.hamiltonian.paulis.I">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.hamiltonian.paulis.</span></span><span class="sig-name descname"><span class="pre">I</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitHamiltonian</span></span></span><a class="reference internal" href="_modules/tequila_code/hamiltonian/paulis.html#I"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.hamiltonian.paulis.I" title="Link to this definition"></a></dt>
+<dd><p>Initialize unit Operator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>QubitHamiltonian</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.hamiltonian.paulis.KetBra">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.hamiltonian.paulis.</span></span><span class="sig-name descname"><span class="pre">KetBra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QubitWaveFunction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bra</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QubitWaveFunction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hermitian</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_qubits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/hamiltonian/paulis.html#KetBra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.hamiltonian.paulis.KetBra" title="Link to this definition"></a></dt>
+<dd><p class="rubric">Notes</p>
+<p>Initialize the general KetBra operator
+.. math:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">H</span> <span class="o">=</span> \<span class="n">lvert</span> <span class="n">ket</span> \<span class="n">rangle</span> \<span class="n">langle</span> <span class="n">bra</span> \<span class="n">rvert</span>
+</pre></div>
+</div>
+<p>e.g.
+wfn1 = tq.QubitWaveFunction.from_string(“1.0*|00&gt; + 1.0*|11&gt;”).normalize()
+wfn2 = tq.QubitWaveFunction.from_string(“1.0*|00&gt;”)
+operator = tq.paulis.KetBra(ket=wfn1, bra=wfn1)
+initializes the transfer operator from the all-zero state to a Bell state</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ket</strong> (<em>QubitWaveFunction:</em>) – QubitWaveFunction which defines the ket element
+can also be given as string or array or integer</p></li>
+<li><p><strong>bra</strong> (<em>QubitWaveFunction:</em>) – QubitWaveFunction which defines the bra element
+can also be given as string or array or integer</p></li>
+<li><p><strong>hermitian</strong> (<em>bool:</em><em> (</em><em>Default False</em><em>)</em>) – if True the hermitian version H + H^dagger is returned</p></li>
+<li><p><strong>threshold</strong> (<em>float:</em><em> (</em><em>Default 1.e-6</em><em>)</em>) – elements smaller than the threshold will be ignored</p></li>
+<li><p><strong>n_qubits</strong> (<em>only needed if ket and/or bra are passed down as integers</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a tequila QubitHamiltonian (not necessarily hermitian) representing the KetBra operator desired.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>QubitHamiltonian</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.hamiltonian.paulis.Projector">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.hamiltonian.paulis.</span></span><span class="sig-name descname"><span class="pre">Projector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wfn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_qubits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitHamiltonian</span></span></span><a class="reference internal" href="_modules/tequila_code/hamiltonian/paulis.html#Projector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.hamiltonian.paulis.Projector" title="Link to this definition"></a></dt>
+<dd><p class="rubric">Notes</p>
+<p>Initialize a projector given by</p>
+<div class="math notranslate nohighlight">
+\[H = \lvert \Psi \rangle \langle \Psi \rvert\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>wfn</strong> (<em>QubitWaveFunction</em><em> or </em><em>int</em><em>, or </em><em>string</em><em>, or </em><em>array :</em>) – The wavefunction onto which the projector projects
+Needs to be passed down as tequilas QubitWaveFunction type
+See the documentation on how to initialize a QubitWaveFunction from
+integer, string or array (can also be passed down diretly as one of those types)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>threshold: float: (Default value = 0.0)</dt><dd><p>neglect small parts of the operator</p>
+</dd>
+</dl>
+<p>n_qubits: only needed when an integer is given as wavefunction</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.hamiltonian.paulis.Qm">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.hamiltonian.paulis.</span></span><span class="sig-name descname"><span class="pre">Qm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitHamiltonian</span></span></span><a class="reference internal" href="_modules/tequila_code/hamiltonian/paulis.html#Qm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.hamiltonian.paulis.Qm" title="Link to this definition"></a></dt>
+<dd><p class="rubric">Notes</p>
+<p>Initialize</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{2} \left( 1 + \sigma_z \right)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>qubit</strong> (<em>int</em><em> or </em><em>list</em><em> of </em><em>ints</em>) – qubit(s) on which the operator should act</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>QubitHamiltonian</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.hamiltonian.paulis.Qp">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.hamiltonian.paulis.</span></span><span class="sig-name descname"><span class="pre">Qp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitHamiltonian</span></span></span><a class="reference internal" href="_modules/tequila_code/hamiltonian/paulis.html#Qp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.hamiltonian.paulis.Qp" title="Link to this definition"></a></dt>
+<dd><p class="rubric">Notes</p>
+<p>Initialize</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{2} \left( 1 - \sigma_z \right)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>qubit</strong> (<em>int</em><em> or </em><em>list</em><em> of </em><em>ints</em>) – qubit(s) on which the operator should act</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>QubitHamiltonian</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.hamiltonian.paulis.Sm">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.hamiltonian.paulis.</span></span><span class="sig-name descname"><span class="pre">Sm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitHamiltonian</span></span></span><a class="reference internal" href="_modules/tequila_code/hamiltonian/paulis.html#Sm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.hamiltonian.paulis.Sm" title="Link to this definition"></a></dt>
+<dd><p class="rubric">Notes</p>
+<p>Initialize</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{2} \left( \sigma_x - i \sigma_y \right)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>qubit</strong> (<em>int</em><em> or </em><em>list</em><em> of </em><em>ints</em>) – qubit(s) on which the operator should act</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>QubitHamiltonian</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.hamiltonian.paulis.Sp">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.hamiltonian.paulis.</span></span><span class="sig-name descname"><span class="pre">Sp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitHamiltonian</span></span></span><a class="reference internal" href="_modules/tequila_code/hamiltonian/paulis.html#Sp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.hamiltonian.paulis.Sp" title="Link to this definition"></a></dt>
+<dd><p class="rubric">Notes</p>
+<p>Initialize</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{2} \left( \sigma_x + i\sigma_y \right)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>qubit</strong> (<em>int</em><em> or </em><em>list</em><em> of </em><em>ints</em>) – qubit(s) on which the operator should act</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>QubitHamiltonian</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.hamiltonian.paulis.X">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.hamiltonian.paulis.</span></span><span class="sig-name descname"><span class="pre">X</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitHamiltonian</span></span></span><a class="reference internal" href="_modules/tequila_code/hamiltonian/paulis.html#X"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.hamiltonian.paulis.X" title="Link to this definition"></a></dt>
+<dd><p>Initialize a single Pauli X Operator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>qubit</strong> (<em>int</em><em> or </em><em>list</em><em> of </em><em>ints</em>) – qubit(s) on which the operator should act</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>QubitHamiltonian</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.hamiltonian.paulis.Y">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.hamiltonian.paulis.</span></span><span class="sig-name descname"><span class="pre">Y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitHamiltonian</span></span></span><a class="reference internal" href="_modules/tequila_code/hamiltonian/paulis.html#Y"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.hamiltonian.paulis.Y" title="Link to this definition"></a></dt>
+<dd><p>Initialize a single Pauli Y Operator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>qubit</strong> (<em>int</em><em> or </em><em>list</em><em> of </em><em>ints</em>) – qubit(s) on which the operator should act</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>QubitHamiltonian</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.hamiltonian.paulis.Z">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.hamiltonian.paulis.</span></span><span class="sig-name descname"><span class="pre">Z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitHamiltonian</span></span></span><a class="reference internal" href="_modules/tequila_code/hamiltonian/paulis.html#Z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.hamiltonian.paulis.Z" title="Link to this definition"></a></dt>
+<dd><p>Initialize a single Pauli Z Operator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>qubit</strong> (<em>int</em><em> or </em><em>list</em><em> of </em><em>ints</em>) – qubit(s) on which the operator should act</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>QubitHamiltonian</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.hamiltonian.paulis.Zero">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.hamiltonian.paulis.</span></span><span class="sig-name descname"><span class="pre">Zero</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitHamiltonian</span></span></span><a class="reference internal" href="_modules/tequila_code/hamiltonian/paulis.html#Zero"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.hamiltonian.paulis.Zero" title="Link to this definition"></a></dt>
+<dd><p>Initialize 0 Operator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>QubitHamiltonian</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.hamiltonian.paulis.decompose_transfer_operator">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.hamiltonian.paulis.</span></span><span class="sig-name descname"><span class="pre">decompose_transfer_operator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BitString</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bra</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BitString</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qubits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitHamiltonian</span></span></span><a class="reference internal" href="_modules/tequila_code/hamiltonian/paulis.html#decompose_transfer_operator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.hamiltonian.paulis.decompose_transfer_operator" title="Link to this definition"></a></dt>
+<dd><p class="rubric">Notes</p>
+<p>Create the operator</p>
+<p>Note that this is operator is not necessarily hermitian
+So be careful when using it as a generator for gates</p>
+<p>e.g.
+decompose_transfer_operator(ket=”01”, bra=”10”, qubits=[2,3])
+gives the operator</p>
+<div class="math notranslate nohighlight">
+\[\lvert 01 \rangle \langle 10 \rvert_{2,3}\]</div>
+<p>acting on qubits 2 and 3</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ket</strong> (<em>pass an integer</em><em>, </em><em>string</em><em>, or </em><em>tequila BitString</em>)</p></li>
+<li><p><strong>bra</strong> (<em>pass an integer</em><em>, </em><em>string</em><em>, or </em><em>tequila BitString</em>)</p></li>
+<li><p><strong>qubits</strong> (<em>pass the qubits onto which the operator acts</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.hamiltonian.paulis.from_string">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.hamiltonian.paulis.</span></span><span class="sig-name descname"><span class="pre">from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">openfermion_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/hamiltonian/paulis.html#from_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.hamiltonian.paulis.from_string" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.hamiltonian.paulis.pauli">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.hamiltonian.paulis.</span></span><span class="sig-name descname"><span class="pre">pauli</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitHamiltonian</span></span></span><a class="reference internal" href="_modules/tequila_code/hamiltonian/paulis.html#pauli"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.hamiltonian.paulis.pauli" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>qubit</strong> (<em>int</em><em> or </em><em>list</em><em> of </em><em>ints</em>)</p></li>
+<li><p><strong>type</strong> (<em>str</em><em> or </em><em>int</em><em> or </em><em>list</em><em> of </em><em>strquaing</em><em> or </em><em>int:</em>) – define if X, Y or Z (0,1,2)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>QubitHamiltonian</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-tequila_code.hamiltonian.paulistring">
+<span id="paulistring-module"></span><h2>paulistring module<a class="headerlink" href="#module-tequila_code.hamiltonian.paulistring" title="Link to this heading"></a></h2>
+</section>
+<section id="qubit-hamiltonian-module">
+<h2>qubit-hamiltonian module<a class="headerlink" href="#qubit-hamiltonian-module" title="Link to this heading"></a></h2>
+</section>
+<section id="module-tequila_code.hamiltonian">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tequila_code.hamiltonian" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="Tequila Library Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="circuit.html" class="btn btn-neutral float-right" title="Circuit" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ram Mosco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

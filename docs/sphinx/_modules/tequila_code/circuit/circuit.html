@@ -1,0 +1,1191 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tequila_code.circuit.circuit &mdash; Tequila Documentation 13.9.2024 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=7dcc51c3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Tequila Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Tequila Library Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tequila Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../circuit.html">tequila_code.circuit</a></li>
+      <li class="breadcrumb-item active">tequila_code.circuit.circuit</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tequila_code.circuit.circuit</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">tequila.circuit._gates_impl</span> <span class="kn">import</span> <span class="n">QGateImpl</span><span class="p">,</span> <span class="n">assign_variable</span><span class="p">,</span> <span class="n">list_assignment</span>
+<span class="kn">from</span> <span class="nn">tequila.utils.exceptions</span> <span class="kn">import</span> <span class="n">TequilaException</span><span class="p">,</span> <span class="n">TequilaWarning</span>
+<span class="kn">from</span> <span class="nn">tequila.utils.bitstrings</span> <span class="kn">import</span> <span class="n">BitNumbering</span>
+<span class="kn">import</span> <span class="nn">typing</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">from</span> <span class="nn">.qpic</span> <span class="kn">import</span> <span class="n">export_to</span>
+
+<div class="viewcode-block" id="QCircuit">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.QCircuit">[docs]</a>
+<span class="k">class</span> <span class="nc">QCircuit</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fundamental class representing an abstract circuit.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    canonical_depth:</span>
+<span class="sd">        the depth of the circuit, if converted to alternating parametrized and unparametrized layers.</span>
+<span class="sd">    canonical_moments:</span>
+<span class="sd">        returns the circuit as a list of Moment objects alternating between parametrized and unparametrized layers.</span>
+<span class="sd">    depth:</span>
+<span class="sd">        returns the gate depth of the circuit.</span>
+<span class="sd">    gates:</span>
+<span class="sd">        returns the gates in the circuit, as a list.</span>
+<span class="sd">    moments:</span>
+<span class="sd">        returns the circuit as a list of Moment objects.</span>
+<span class="sd">    n_qubits:</span>
+<span class="sd">        the number of qubits on which the circuit operates.</span>
+<span class="sd">    numbering:</span>
+<span class="sd">        returns the numbering convention use by tequila circuits.</span>
+<span class="sd">    qubits:</span>
+<span class="sd">        returns a list of qubits acted upon by the circuit.</span>
+
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    make_parameter_map:</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="QCircuit.export_to">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.QCircuit.export_to">[docs]</a>
+    <span class="k">def</span> <span class="nf">export_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export to png, pdf, qpic, tex with qpic backend</span>
+<span class="sd">        Convenience: see src/tequila/circuit/qpic.py - export_to for more</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">export_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">moments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Divide self into subcircuits representing layers of simultaneous gates. Attempts to minimize gate depth.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list:</span>
+<span class="sd">            list of Moment objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qubits</span><span class="p">}</span>
+        <span class="n">moms</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">moms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Moment</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+            <span class="n">qus</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">qubits</span>
+            <span class="n">spots</span> <span class="o">=</span> <span class="p">[</span><span class="n">table</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">qus</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">spots</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">moms</span><span class="p">):</span>
+
+                <span class="n">moms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Moment</span><span class="p">([</span><span class="n">g</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">moms</span><span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">spots</span><span class="p">)]</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">qus</span><span class="p">:</span>
+                <span class="n">table</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">spots</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">mom</span> <span class="ow">in</span> <span class="n">moms</span><span class="p">:</span>
+            <span class="n">mom</span><span class="o">.</span><span class="n">sort_gates</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">moms</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">canonical_moments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Divide self into subcircuits of alternating unparametrized and parametrized layers.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list of Moment objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">table_u</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qubits</span><span class="p">}</span>
+        <span class="n">table_p</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qubits</span><span class="p">}</span>
+        <span class="n">moms</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">moms</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">Moment</span><span class="p">(),</span> <span class="n">Moment</span><span class="p">()))</span>
+
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">qus</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">qubits</span>
+            <span class="k">if</span> <span class="n">g</span><span class="o">.</span><span class="n">is_parametrized</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">parameter</span><span class="p">,</span> <span class="s1">&#39;extract_variables&#39;</span><span class="p">):</span>
+                    <span class="n">p</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">spots</span> <span class="o">=</span> <span class="p">[</span><span class="n">table_u</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">qus</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">table_p</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">qus</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">spots</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">moms</span><span class="p">):</span>
+                    <span class="n">moms</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">Moment</span><span class="p">([</span><span class="n">g</span><span class="p">]),</span> <span class="n">Moment</span><span class="p">()))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">moms</span><span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">spots</span><span class="p">)][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">qus</span><span class="p">:</span>
+                    <span class="n">table_u</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">spots</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="n">table_p</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">spots</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">spots</span> <span class="o">=</span> <span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">table_p</span><span class="p">[</span><span class="n">q</span><span class="p">],</span> <span class="n">table_u</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">qus</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">spots</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">moms</span><span class="p">):</span>
+                    <span class="n">moms</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">Moment</span><span class="p">(),</span> <span class="n">Moment</span><span class="p">([</span><span class="n">g</span><span class="p">])))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">moms</span><span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">spots</span><span class="p">)][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">qus</span><span class="p">:</span>
+                    <span class="n">table_u</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">table_p</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">spots</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">noms</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">moms</span><span class="p">:</span>
+            <span class="n">noms</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+
+        <span class="k">for</span> <span class="n">nom</span> <span class="ow">in</span> <span class="n">noms</span><span class="p">:</span>
+            <span class="n">nom</span><span class="o">.</span><span class="n">sort_gates</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">noms</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">depth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        gate depth of the abstract circuit.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int: the depth.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">moments</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">canonical_depth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        gate depth of the abstract circuit in alternating layer form.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int: depth of the alternating layer form.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canonical_moments</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">gates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gates</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gates</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">numbering</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BitNumbering</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">BitNumbering</span><span class="o">.</span><span class="n">LSB</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">qubits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">accumulate</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+            <span class="n">accumulate</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">accumulate</span><span class="p">)))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_qubits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_qubit</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_n_qubits</span><span class="p">)</span>
+
+    <span class="nd">@n_qubits</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">n_qubits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_n_qubits</span> <span class="o">=</span> <span class="n">other</span>
+        <span class="k">if</span> <span class="n">other</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_qubit</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span>
+                <span class="s2">&quot;You are trying to set n_qubits to &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+                    <span class="n">other</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; but your circuit needs at least: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">max_qubit</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parameter_map</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        init</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gates:</span>
+<span class="sd">            (Default value = None)</span>
+<span class="sd">            the gates to include in the circuit.</span>
+<span class="sd">        parameter_map:</span>
+<span class="sd">            (Default value = None)</span>
+<span class="sd">            mapping to indicate where in the circuit certain parameters appear.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_qubits</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_n_qubits</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">gates</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gates</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gates</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">gates</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">parameter_map</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_parameter_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_parameter_map</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_parameter_map</span> <span class="o">=</span> <span class="n">parameter_map</span>
+
+<div class="viewcode-block" id="QCircuit.make_parameter_map">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.QCircuit.make_parameter_map">[docs]</a>
+    <span class="k">def</span> <span class="nf">make_parameter_map</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            ParameterMap of the circuit: A dictionary with</span>
+<span class="sd">            keys: variables in the circuit</span>
+<span class="sd">            values: list of all gates and their positions in the circuit</span>
+<span class="sd">            e.g. result[Variable(&quot;a&quot;)] = [(3, Rx), (5, Ry), ...]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">parameter_map</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">gate</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">is_parametrized</span><span class="p">():</span>
+                <span class="n">variables</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">extract_variables</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
+                    <span class="n">parameter_map</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">idx</span><span class="p">,</span> <span class="n">gate</span><span class="p">)]</span>
+
+        <span class="k">return</span> <span class="n">parameter_map</span></div>
+
+
+<div class="viewcode-block" id="QCircuit.is_primitive">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.QCircuit.is_primitive">[docs]</a>
+    <span class="k">def</span> <span class="nf">is_primitive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if this is a single gate wrapped in this structure</span>
+<span class="sd">        :return: True if the circuit is just a single gate</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="QCircuit.sort_gates">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.QCircuit.sort_gates">[docs]</a>
+    <span class="k">def</span> <span class="nf">sort_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        sort self into subcircuits corresponding to all simultaneous operations, greedily; then reinitialize gates.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sl</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">moments</span><span class="p">:</span>
+            <span class="n">sd</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+                <span class="n">q</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span>
+                <span class="n">sd</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">gate</span>
+            <span class="n">sl</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">sd</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">sd</span><span class="o">.</span><span class="n">keys</span><span class="p">())])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gates</span> <span class="o">=</span> <span class="n">sl</span></div>
+
+
+<div class="viewcode-block" id="QCircuit.replace_gates">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.QCircuit.replace_gates">[docs]</a>
+    <span class="k">def</span> <span class="nf">replace_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">positions</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">circuits</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">replace</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Notes</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Replace or insert gates at specific positions into the circuit</span>
+<span class="sd">        at different positions (faster than multiple calls to replace_gate)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        positions: list of int:</span>
+<span class="sd">            the positions at which the gates should be added. Always refer to the positions in the original circuit</span>
+<span class="sd">        circuits: list or QCircuit:</span>
+<span class="sd">            the gates to add at the corresponding positions</span>
+<span class="sd">        replace: list of bool: (Default value: None)</span>
+<span class="sd">            Default is None which corresponds to all true</span>
+<span class="sd">            decide if gates shall be replaces or if the new parts shall be inserted without replacement</span>
+<span class="sd">            if replace[i] = true: gate at position [i] will be replaces by gates[i]</span>
+<span class="sd">            if replace[i] = false: gates[i] circuit will be inserted at position [i] (beaming before gate previously at position [i])</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            new circuit with inserted gates</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">circuits</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">replace</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">replace</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">circuits</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">circuits</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">replace</span><span class="p">)</span>
+
+        <span class="n">dataset</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="n">circuits</span><span class="p">,</span> <span class="n">replace</span><span class="p">)</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">new_gatelist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gates</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">do_replace</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">:</span>
+
+            <span class="c1"># failsafe</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="s2">&quot;gates&quot;</span><span class="p">):</span>
+                <span class="n">gatelist</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">gates</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Iterable</span><span class="p">):</span>
+                <span class="n">gatelist</span> <span class="o">=</span> <span class="n">circuit</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">gatelist</span> <span class="o">=</span> <span class="p">[</span><span class="n">circuit</span><span class="p">]</span>
+
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">+</span> <span class="n">offset</span>
+            <span class="k">if</span> <span class="n">do_replace</span><span class="p">:</span>
+                <span class="n">new_gatelist</span> <span class="o">=</span> <span class="n">new_gatelist</span><span class="p">[:</span><span class="n">pos</span><span class="p">]</span> <span class="o">+</span> <span class="n">gatelist</span> <span class="o">+</span> <span class="n">new_gatelist</span><span class="p">[</span><span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>
+                <span class="n">offset</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gatelist</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_gatelist</span> <span class="o">=</span> <span class="n">new_gatelist</span><span class="p">[:</span><span class="n">pos</span><span class="p">]</span> <span class="o">+</span> <span class="n">gatelist</span> <span class="o">+</span> <span class="n">new_gatelist</span><span class="p">[</span><span class="n">pos</span><span class="p">:]</span>
+                <span class="n">offset</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gatelist</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">(</span><span class="n">gates</span><span class="o">=</span><span class="n">new_gatelist</span><span class="p">)</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">n_qubits</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="QCircuit.insert_gates">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.QCircuit.insert_gates">[docs]</a>
+    <span class="k">def</span> <span class="nf">insert_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">positions</span><span class="p">,</span> <span class="n">gates</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        See replace_gates</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">replace_gates</span><span class="p">(</span><span class="n">positions</span><span class="o">=</span><span class="n">positions</span><span class="p">,</span> <span class="n">circuits</span><span class="o">=</span><span class="n">gates</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">gates</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="QCircuit.dagger">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.QCircuit.dagger">[docs]</a>
+    <span class="k">def</span> <span class="nf">dagger</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        ------</span>
+<span class="sd">        QCircuit:</span>
+<span class="sd">            The adjoint of the circuit</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">g</span><span class="o">.</span><span class="n">dagger</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="QCircuit.extract_variables">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.QCircuit.extract_variables">[docs]</a>
+    <span class="k">def</span> <span class="nf">extract_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        return a list containing all the variable objects contained in any of the gates within the unitary</span>
+<span class="sd">        including those nested within gates themselves.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list:</span>
+<span class="sd">            the variables of the circuit</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parameter_map</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="QCircuit.max_qubit">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.QCircuit.max_qubit">[docs]</a>
+    <span class="k">def</span> <span class="nf">max_qubit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">        int:</span>
+<span class="sd">             Highest index of qubits in the circuit</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">qmax</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+            <span class="n">qmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">qmax</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">max_qubit</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">qmax</span></div>
+
+
+<div class="viewcode-block" id="QCircuit.is_fully_parametrized">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.QCircuit.is_fully_parametrized">[docs]</a>
+    <span class="k">def</span> <span class="nf">is_fully_parametrized</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool:</span>
+<span class="sd">            whether or not all gates in the circuit are paremtrized</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">gate</span><span class="o">.</span><span class="n">is_parametrized</span><span class="p">():</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="s1">&#39;parameter&#39;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">parameter</span><span class="p">,</span> <span class="s1">&#39;wrap&#39;</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="kc">False</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">continue</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="QCircuit.is_fully_unparametrized">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.QCircuit.is_fully_unparametrized">[docs]</a>
+    <span class="k">def</span> <span class="nf">is_fully_unparametrized</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool:</span>
+<span class="sd">            whether or not all gates in the circuit are unparametrized</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">gate</span><span class="o">.</span><span class="n">is_parametrized</span><span class="p">():</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="s1">&#39;parameter&#39;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">parameter</span><span class="p">,</span> <span class="s1">&#39;wrap&#39;</span><span class="p">):</span>
+                        <span class="k">continue</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="kc">False</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="QCircuit.is_mixed">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.QCircuit.is_mixed">[docs]</a>
+    <span class="k">def</span> <span class="nf">is_mixed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_fully_parametrized</span><span class="p">()</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_fully_unparametrized</span><span class="p">())</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">other</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">other</span><span class="p">)</span>
+
+        <span class="n">offset</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">_parameter_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_parameter_map</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">v</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gates</span> <span class="o">+=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">gates</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_n_qubits</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_min_n_qubits</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">_min_n_qubits</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">other</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="n">gates</span> <span class="o">=</span> <span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gates</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">gates</span><span class="p">)]</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">(</span><span class="n">gates</span><span class="o">=</span><span class="n">gates</span><span class="p">)</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">_min_n_qubits</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_min_n_qubits</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">_min_n_qubits</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;circuit: </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">gates</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sort_gates</span><span class="p">()</span>
+        <span class="n">other</span><span class="o">.</span><span class="n">sort_gates</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">g</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">gates</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
+
+<div class="viewcode-block" id="QCircuit.wrap_gate">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.QCircuit.wrap_gate">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">:</span> <span class="n">QGateImpl</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        take a gate and return a qcircuit containing only that gate.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gate: QGateImpl</span>
+<span class="sd">            the gate to wrap in a circuit.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QCircuit:</span>
+<span class="sd">            a one gate circuit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">QCircuit</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">gate</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">QCircuit</span><span class="p">(</span><span class="n">gates</span><span class="o">=</span><span class="n">gate</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QCircuit</span><span class="p">(</span><span class="n">gates</span><span class="o">=</span><span class="p">[</span><span class="n">gate</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="QCircuit.to_networkx">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.QCircuit.to_networkx">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_networkx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Turn a given quantum circuit from tequila into graph form via NetworkX</span>
+<span class="sd">        :param self: tq.gates.QCircuit</span>
+<span class="sd">        :return: G, a graph in NetworkX with qubits as nodes and gate connections as edges</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># avoiding dependcies (only used here so far)</span>
+        <span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qubits</span><span class="p">:</span>
+            <span class="n">G</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+        <span class="n">Gdict</span> <span class="o">=</span> <span class="p">{</span><span class="n">s</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qubits</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">control</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">control</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">:</span>
+                        <span class="n">tstr</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+                        <span class="n">tstr</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+                        <span class="n">target</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tstr</span><span class="p">)</span>
+                        <span class="n">Gdict</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>  <span class="c1"># add target to key of correlated controls</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">control</span><span class="p">:</span>
+                        <span class="n">cstr</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+                        <span class="n">cstr</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+                        <span class="n">control</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">cstr</span><span class="p">)</span>
+                        <span class="n">Gdict</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">control</span><span class="p">)</span>  <span class="c1"># add control to key of correlated targets</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">:</span>
+                        <span class="n">tstr2</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+                        <span class="n">tstr2</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+                        <span class="n">target2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tstr2</span><span class="p">)</span>
+                        <span class="n">Gdict</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target2</span><span class="p">)</span>
+        <span class="n">lConn</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># List of connections between qubits</span>
+        <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">Gdict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">b</span><span class="p">:</span>
+                <span class="n">lConn</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">a</span><span class="p">,</span> <span class="n">q</span><span class="p">))</span>
+        <span class="n">G</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">lConn</span><span class="p">)</span>
+        <span class="n">GPaths</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">connected_components</span><span class="p">(</span>
+            <span class="n">G</span><span class="p">))</span>  <span class="c1"># connections of various qubits, excluding repetitions (ex- (1,3) instead of (1,3) and (3,1))</span>
+        <span class="n">GIso</span> <span class="o">=</span> <span class="p">[</span><span class="n">g</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">GPaths</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># list of Isolated qubits</span>
+        <span class="k">return</span> <span class="n">G</span></div>
+
+
+<div class="viewcode-block" id="QCircuit.from_moments">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.QCircuit.from_moments">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_moments</span><span class="p">(</span><span class="n">moments</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        build a circuit from Moment objects.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        moments: list:</span>
+<span class="sd">            a list of Moment objects.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">moments</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">+=</span> <span class="n">m</span><span class="o">.</span><span class="n">as_circuit</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">c</span></div>
+
+
+<div class="viewcode-block" id="QCircuit.verify">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.QCircuit.verify">[docs]</a>
+    <span class="k">def</span> <span class="nf">verify</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        make sure self is built properly and of the correct types.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool:</span>
+<span class="sd">            whether or not the circuit is properly constructed.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameter_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">test</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">v</span><span class="p">]</span>
+            <span class="n">test</span> <span class="o">+=</span> <span class="p">[</span><span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gates</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">extract_variables</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">v</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">test</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="QCircuit.map_qubits">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.QCircuit.map_qubits">[docs]</a>
+    <span class="k">def</span> <span class="nf">map_qubits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qubit_map</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        E.G.  Rx(1)Ry(2) --&gt; Rx(3)Ry(1) with qubit_map = {1:3, 2:1}</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        qubit_map</span>
+<span class="sd">            a dictionary which maps old to new qubits</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        A new circuit with mapped qubits</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">new_gates</span> <span class="o">=</span> <span class="p">[</span><span class="n">gate</span><span class="o">.</span><span class="n">map_qubits</span><span class="p">(</span><span class="n">qubit_map</span><span class="p">)</span> <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">]</span>
+        <span class="c1"># could speed up by applying qubit_map to parameter_map here</span>
+        <span class="c1"># currently its recreated in the init function</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="p">(</span><span class="n">gates</span><span class="o">=</span><span class="n">new_gates</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="QCircuit.add_controls">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.QCircuit.add_controls">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_controls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">control</span><span class="p">,</span> <span class="n">inpl</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> \
+            <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">QCircuit</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Depending on the truth value of inpl:</span>
+<span class="sd">            - return controlled version of self with control as the control qubits if inpl;</span>
+<span class="sd">            - mutate self so that the qubits in control are added as the control qubits if not inpl.</span>
+
+<span class="sd">        Raise ValueError if there any qubits in common between self and control.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">inpl</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_inpl_control_circ</span><span class="p">(</span><span class="n">control</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># return self._return_control_circ(control)</span>
+            <span class="n">circ</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">circ</span><span class="o">.</span><span class="n">add_controls</span><span class="p">(</span><span class="n">control</span><span class="p">,</span> <span class="n">inpl</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_return_control_circ</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">control</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return controlled version of self with control as the control qubits.</span>
+
+<span class="sd">        This is not an in-place method, so it DOES NOT mutates self, and only returns a circuit.</span>
+
+<span class="sd">        Raise TequilaWarning if there any qubits in common between self and control.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">control</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">list_assignment</span><span class="p">(</span><span class="n">control</span><span class="p">)))</span>
+
+        <span class="n">gates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gates</span>
+        <span class="n">cgates</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">gates</span><span class="p">:</span>
+            <span class="n">cgate</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">cgate</span><span class="o">.</span><span class="n">is_controlled</span><span class="p">():</span>
+                <span class="n">control_lst</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cgate</span><span class="o">.</span><span class="n">control</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">control</span><span class="p">)))</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">control_lst</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">control</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">control</span><span class="p">):</span>
+                    <span class="c1"># warnings.warn(&quot;Some of the controls {} were already included in the control &quot;</span>
+                    <span class="c1">#               &quot;of a gate {}.&quot;.format(control, gate), TequilaWarning)</span>
+                    <span class="k">raise</span> <span class="n">TequilaWarning</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Some of the controls </span><span class="si">{</span><span class="n">control</span><span class="si">}</span><span class="s1"> were already included &#39;</span>
+                                         <span class="sa">f</span><span class="s1">&#39;in the control of a gate </span><span class="si">{</span><span class="n">gate</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">control_lst</span><span class="p">,</span> <span class="n">not_control</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">control</span><span class="p">),</span> <span class="nb">list</span><span class="p">()</span>
+
+            <span class="c1"># Raise TequilaWarning if target and control are the same qubit</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">qubit</span> <span class="ow">in</span> <span class="n">control</span> <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="n">not_control</span><span class="p">):</span>
+                <span class="c1"># warnings.warn(&quot;The target and control {} were the same qubit for a gate {}.&quot;</span>
+                <span class="c1">#               .format(control, gate), TequilaWarning)</span>
+                <span class="k">raise</span> <span class="n">TequilaWarning</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The target for a gate </span><span class="si">{</span><span class="n">gate</span><span class="si">}</span><span class="s1"> &#39;</span>
+                                     <span class="sa">f</span><span class="s1">&#39;and the control list </span><span class="si">{</span><span class="n">control_lst</span><span class="si">}</span><span class="s1"> had a common qubit.&#39;</span><span class="p">)</span>
+
+            <span class="n">cgate</span><span class="o">.</span><span class="n">_control</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">control_lst</span><span class="p">)</span>
+            <span class="n">cgate</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
+            <span class="n">cgates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cgate</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="p">(</span><span class="n">gates</span><span class="o">=</span><span class="n">cgates</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_inpl_control_circ</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">control</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Mutate self such that the qubits in control are added as the control qubits</span>
+
+<span class="sd">        This is an in-place method, so it mutates self and doesn&#39;t return any value.</span>
+
+<span class="sd">        Raise TequilaWarning if there any qubits in common between self and control.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">gates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gates</span>
+        <span class="n">control</span> <span class="o">=</span> <span class="n">list_assignment</span><span class="p">(</span><span class="n">control</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">gates</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">is_controlled</span><span class="p">():</span>
+                <span class="n">control_lst</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">control</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">control</span><span class="p">)))</span>
+
+                <span class="c1"># Need to check duplicates</span>
+                <span class="n">not_control</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">qubit</span> <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span>
+                                       <span class="k">if</span> <span class="n">qubit</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">control</span><span class="p">)))</span>
+
+                <span class="c1"># Raise TequilaWarning if control qubit is duplicated</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">control_lst</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">control</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">control</span><span class="p">):</span>
+                    <span class="c1"># warnings.warn(&quot;Some of the controls {} were already included in the control &quot;</span>
+                    <span class="c1">#               &quot;of a gate {}.&quot;.format(control, gate), TequilaWarning)</span>
+                    <span class="k">raise</span> <span class="n">TequilaWarning</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Some of the controls </span><span class="si">{</span><span class="n">control</span><span class="si">}</span><span class="s1"> were already included &#39;</span>
+                                         <span class="sa">f</span><span class="s1">&#39;in the control of a gate </span><span class="si">{</span><span class="n">gate</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">control_lst</span><span class="p">,</span> <span class="n">not_control</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">control</span><span class="p">),</span> <span class="nb">list</span><span class="p">()</span>
+
+            <span class="c1"># Raise TequilaWarning if target and control are the same qubit</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">qubit</span> <span class="ow">in</span> <span class="n">control</span> <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="n">not_control</span><span class="p">):</span>
+                <span class="c1"># warnings.warn(&quot;The target and control {} were the same qubit for a gate {}.&quot;</span>
+                <span class="c1">#               .format(control, gate), TequilaWarning)</span>
+                <span class="k">raise</span> <span class="n">TequilaWarning</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The target for a gate </span><span class="si">{</span><span class="n">gate</span><span class="si">}</span><span class="s1"> &#39;</span>
+                                     <span class="sa">f</span><span class="s1">&#39;and the control list </span><span class="si">{</span><span class="n">control</span><span class="si">}</span><span class="s1"> had a common qubit.&#39;</span><span class="p">)</span>
+
+            <span class="n">gate</span><span class="o">.</span><span class="n">_control</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">control_lst</span><span class="p">)</span>
+            <span class="n">gate</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
+
+<div class="viewcode-block" id="QCircuit.map_variables">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.QCircuit.map_variables">[docs]</a>
+    <span class="k">def</span> <span class="nf">map_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        variables</span>
+<span class="sd">            dictionary with old variable names as keys and new variable names or values as values</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Circuit with changed variables</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">variables</span> <span class="o">=</span> <span class="p">{</span><span class="n">assign_variable</span><span class="p">(</span><span class="n">k</span><span class="p">):</span> <span class="n">assign_variable</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+        <span class="c1"># failsafe</span>
+        <span class="n">my_variables</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_variables</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">my_variables</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;map_variables: variable </span><span class="si">{}</span><span class="s2"> is not part of circuit with variables </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span>
+                                                                                                 <span class="n">my_variables</span><span class="p">),</span>
+                    <span class="n">TequilaWarning</span><span class="p">)</span>
+
+        <span class="n">new_gates</span> <span class="o">=</span> <span class="p">[</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span><span class="o">.</span><span class="n">map_variables</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span> <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="p">(</span><span class="n">gates</span><span class="o">=</span><span class="n">new_gates</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Moment">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.Moment">[docs]</a>
+<span class="k">class</span> <span class="nc">Moment</span><span class="p">(</span><span class="n">QCircuit</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    the class which represents a set of simultaneously applicable gates.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    with_gate:</span>
+<span class="sd">        attempt to add a gate to the moment, replacing any gate it may conflict with.</span>
+<span class="sd">    with_gates:</span>
+<span class="sd">        attempt to add multiple gates to the moment, replacing any gates they may conflict with.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">moments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">canonical_moments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Break self up into parametrized and unparametrized layers.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list:</span>
+<span class="sd">            list of 2 Moments, one of which may be empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">mp</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">gate</span><span class="o">.</span><span class="n">is_parametrized</span><span class="p">():</span>
+                <span class="n">mu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="s1">&#39;parameter&#39;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">parameter</span><span class="p">,</span> <span class="s1">&#39;wrap&#39;</span><span class="p">):</span>
+                        <span class="n">mu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">mp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">mp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Moment</span><span class="p">(</span><span class="n">mu</span><span class="p">),</span> <span class="n">Moment</span><span class="p">(</span><span class="n">mp</span><span class="p">)]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">depth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">canonical_depth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">2</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gates</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">QGateImpl</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        initialize a moment from gates.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gates: list:</span>
+<span class="sd">            a list of gates. Can be None.</span>
+<span class="sd">        sort:</span>
+<span class="sd">            whether or not to sort the gates into order from lowest to highest qubit designate.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">gates</span><span class="o">=</span><span class="n">gates</span><span class="p">)</span>
+        <span class="n">occ</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">gates</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">gates</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">qubits</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">occ</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span>
+                            <span class="s1">&#39;cannot have doubly occupied qubits, which occurred at qubit </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                <span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">)))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">occ</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sort</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sort_gates</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Moment.with_gate">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.Moment.with_gate">[docs]</a>
+    <span class="k">def</span> <span class="nf">with_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="n">QCircuit</span><span class="p">,</span> <span class="n">QGateImpl</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a gate, or else replace some gate with it.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gate:</span>
+<span class="sd">            the gate to insert into the moment.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Moment:</span>
+<span class="sd">            a New moment with the proper gates.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">prev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qubits</span>
+        <span class="n">newq</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">qubits</span>
+        <span class="n">overlap</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">newq</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">prev</span><span class="p">:</span>
+                <span class="n">overlap</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+        <span class="n">gates</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">overlap</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">gates</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="n">q</span> <span class="ow">in</span> <span class="n">overlap</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">qubits</span><span class="p">]):</span>
+                    <span class="k">del</span> <span class="n">g</span>
+            <span class="n">gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Moment</span><span class="p">(</span><span class="n">gates</span><span class="o">=</span><span class="n">gates</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Moment.with_gates">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.Moment.with_gates">[docs]</a>
+    <span class="k">def</span> <span class="nf">with_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gates</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        with gate, but on multiple gates.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gates:</span>
+<span class="sd">            list of QGates</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Moment:</span>
+<span class="sd">            a new Moment, with the desired gates insert into self.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">gl</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">gates</span><span class="p">)</span>
+        <span class="n">first_overlap</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">gl</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">qubits</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">q</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">first_overlap</span><span class="p">:</span>
+                    <span class="n">first_overlap</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span>
+                        <span class="s1">&#39;cannot have a moment with multiple operations acting on the same qubit!&#39;</span><span class="p">)</span>
+
+        <span class="n">new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_gate</span><span class="p">(</span><span class="n">gl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">gl</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">new</span> <span class="o">=</span> <span class="n">new</span><span class="o">.</span><span class="n">with_gate</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">sort_gates</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">new</span></div>
+
+
+<div class="viewcode-block" id="Moment.add_gate">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.Moment.add_gate">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="n">QCircuit</span><span class="p">,</span> <span class="n">QGateImpl</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        add a gate to the moment.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gate:</span>
+<span class="sd">            the desired gate.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Moment</span>
+<span class="sd">            a new moment, of self + a new gate</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">prev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qubits</span>
+        <span class="n">newq</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">qubits</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">newq</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">prev</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span>
+                    <span class="s1">&#39;cannot add gate </span><span class="si">{}</span><span class="s1"> to moment; qubit </span><span class="si">{}</span><span class="s1"> already occupied.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">gate</span><span class="p">),</span>
+                                                                                      <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sort_gates</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="Moment.replace_gate">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.Moment.replace_gate">[docs]</a>
+    <span class="k">def</span> <span class="nf">replace_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">gates</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        substitute a gate at a given position with other gates.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        position:</span>
+<span class="sd">            where in the list of gates the gate to be replaced occurs.</span>
+<span class="sd">        gates:</span>
+<span class="sd">            the gates to replace the unwanted gate with.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QCircuit or Moment:</span>
+<span class="sd">            self, with unwanted gate removed and new gates inserted. May not be a moment.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gates</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
+            <span class="n">gs</span> <span class="o">=</span> <span class="n">gates</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">gs</span> <span class="o">=</span> <span class="p">[</span><span class="n">gates</span><span class="p">]</span>
+
+        <span class="n">new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">[:</span><span class="n">position</span><span class="p">]</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">gs</span><span class="p">)</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">[(</span><span class="n">position</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):])</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Moment</span><span class="p">(</span><span class="n">gates</span><span class="o">=</span><span class="n">new</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QCircuit</span><span class="p">(</span><span class="n">gates</span><span class="o">=</span><span class="n">new</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Moment.as_circuit">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.Moment.as_circuit">[docs]</a>
+    <span class="k">def</span> <span class="nf">as_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        convert back into the unrestricted QCircuit.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QCircuit:</span>
+<span class="sd">            a circuit with the same gates as self.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="p">(</span><span class="n">gates</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Moment.fully_parametrized">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.Moment.fully_parametrized">[docs]</a>
+    <span class="k">def</span> <span class="nf">fully_parametrized</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Todo: Why not just inherit from base?</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool:</span>
+<span class="sd">            whether or not EVERY gate in self.gates is parameterized.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">gate</span><span class="o">.</span><span class="n">is_parametrized</span><span class="p">():</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="s1">&#39;parameter&#39;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">parameter</span><span class="p">,</span> <span class="s1">&#39;wrap&#39;</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="kc">False</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">continue</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;Moment: &quot;</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="fm">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+
+        <span class="n">new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_circuit</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">QGateImpl</span><span class="p">):</span>
+            <span class="n">other</span> <span class="o">=</span> <span class="n">new</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">QGateImpl</span><span class="p">):</span>
+            <span class="n">new</span><span class="o">.</span><span class="n">_gates</span> <span class="o">+=</span> <span class="n">other</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">QCircuit</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">other</span><span class="p">:</span>
+                <span class="n">new</span><span class="o">.</span><span class="n">_gates</span> <span class="o">+=</span> <span class="n">o</span><span class="o">.</span><span class="n">gates</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new</span><span class="o">.</span><span class="n">_gates</span> <span class="o">+=</span> <span class="n">other</span><span class="o">.</span><span class="n">gates</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">_min_n_qubits</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_min_n_qubits</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">_min_n_qubits</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">new</span><span class="o">.</span><span class="n">depth</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">new</span> <span class="o">=</span> <span class="n">Moment</span><span class="p">(</span><span class="n">new</span><span class="o">.</span><span class="n">gates</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new</span>
+
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Moment</span><span class="p">):</span>
+            <span class="n">gates</span> <span class="o">=</span> <span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gates</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">gates</span><span class="p">)]</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">(</span><span class="n">gates</span><span class="o">=</span><span class="n">gates</span><span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">_min_n_qubits</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_circuit</span><span class="p">()</span><span class="o">.</span><span class="n">_min_n_qubits</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">_min_n_qubits</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">depth</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">Moment</span><span class="p">(</span><span class="n">gates</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">gates</span><span class="p">)</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">_min_n_qubits</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_circuit</span><span class="p">()</span><span class="o">.</span><span class="n">_min_n_qubits</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">_min_n_qubits</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">QCircuit</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Moment</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">other</span><span class="o">.</span><span class="n">is_primitive</span><span class="p">():</span>
+                <span class="n">gates</span> <span class="o">=</span> <span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gates</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">gates</span><span class="p">)]</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">(</span><span class="n">gates</span><span class="o">=</span><span class="n">gates</span><span class="p">)</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">_min_n_qubits</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_circuit</span><span class="p">()</span><span class="o">.</span><span class="n">_min_n_qubits</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">_min_n_qubits</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">gates</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">_min_n_qubits</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_circuit</span><span class="p">()</span> <span class="o">+</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">_min_n_qubits</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_circuit</span><span class="p">()</span><span class="o">.</span><span class="n">_min_n_qubits</span><span class="p">,</span>
+                                               <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="n">_min_n_qubits</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">QGateImpl</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">_min_n_qubits</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_circuit</span><span class="p">()</span> <span class="o">+</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">_min_n_qubits</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_circuit</span><span class="p">()</span><span class="o">.</span><span class="n">_min_n_qubits</span><span class="p">,</span>
+                                               <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="n">_min_n_qubits</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span>
+                    <span class="s1">&#39;cannot add moments to types other than QCircuit,Moment,or Gate; recieved summand of type </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">))))</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+<div class="viewcode-block" id="Moment.wrap_gate">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.Moment.wrap_gate">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">:</span> <span class="n">QGateImpl</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gate: QGateImpl:</span>
+<span class="sd">            the gate, to wrap as a moment</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Moment:</span>
+<span class="sd">            a moment with one gate in it.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">QCircuit</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">gate</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Moment</span><span class="p">(</span><span class="n">gates</span><span class="o">=</span><span class="p">[</span><span class="n">gate</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="Moment.from_moments">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.Moment.from_moments">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_moments</span><span class="p">(</span><span class="n">moments</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TequilaException</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span>
+            <span class="s1">&#39;this method should never be called from Moment. Call from the QCircuit class itself instead.&#39;</span><span class="p">)</span></div>
+</div>
+
+
+
+
+<div class="viewcode-block" id="find_unused_qubit">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.circuit.find_unused_qubit">[docs]</a>
+<span class="k">def</span> <span class="nf">find_unused_qubit</span><span class="p">(</span><span class="n">U0</span><span class="p">:</span> <span class="n">QCircuit</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">U1</span><span class="p">:</span> <span class="n">QCircuit</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Function that checks which are the active qubits of two circuits and </span>
+<span class="sd">    provides an unused qubit that is not among them. If all qubits are used</span>
+<span class="sd">    it adds a new one.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    U0 : QCircuit, corresponding to the first state.</span>
+<span class="sd">        </span>
+<span class="sd">    U1 : QCircuit, corresponding to the second state.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    control_qubit : int</span>
+<span class="sd">        </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="n">active_qubits</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">U0</span><span class="o">.</span><span class="n">qubits</span><span class="o">+</span><span class="n">U1</span><span class="o">.</span><span class="n">qubits</span><span class="p">))</span>
+    <span class="c1"># default</span>
+    <span class="n">free_qubit</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">active_qubits</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="c1"># see if we can use another one</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">active_qubits</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">active_qubits</span><span class="p">:</span>
+            <span class="n">free_qubit</span> <span class="o">=</span> <span class="n">n</span>
+            <span class="k">break</span>
+    <span class="k">assert</span> <span class="n">free_qubit</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">active_qubits</span>
+    
+    <span class="k">return</span> <span class="n">free_qubit</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ram Mosco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

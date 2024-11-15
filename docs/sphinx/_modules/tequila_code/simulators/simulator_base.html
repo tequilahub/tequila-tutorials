@@ -1,0 +1,1096 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tequila_code.simulators.simulator_base &mdash; Tequila Documentation 13.9.2024 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=7dcc51c3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Tequila Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Tequila Library Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tequila Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tequila_code.simulators.simulator_base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tequila_code.simulators.simulator_base</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">tequila.utils</span> <span class="kn">import</span> <span class="n">TequilaException</span><span class="p">,</span> <span class="n">to_float</span><span class="p">,</span> <span class="n">TequilaWarning</span>
+<span class="kn">from</span> <span class="nn">tequila.circuit.circuit</span> <span class="kn">import</span> <span class="n">QCircuit</span>
+<span class="kn">from</span> <span class="nn">tequila.utils.keymap</span> <span class="kn">import</span> <span class="n">KeyMapSubregisterToRegister</span>
+<span class="kn">from</span> <span class="nn">tequila.utils.misc</span> <span class="kn">import</span> <span class="n">to_float</span>
+<span class="kn">from</span> <span class="nn">tequila.wavefunction.qubit_wavefunction</span> <span class="kn">import</span> <span class="n">QubitWaveFunction</span>
+<span class="kn">from</span> <span class="nn">tequila.circuit.compiler</span> <span class="kn">import</span> <span class="n">change_basis</span>
+<span class="kn">from</span> <span class="nn">tequila</span> <span class="kn">import</span> <span class="n">BitString</span>
+<span class="kn">from</span> <span class="nn">tequila.objective.objective</span> <span class="kn">import</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">format_variable_dictionary</span>
+<span class="kn">from</span> <span class="nn">tequila.circuit</span> <span class="kn">import</span> <span class="n">compiler</span>
+
+<span class="kn">import</span> <span class="nn">numbers</span><span class="o">,</span> <span class="nn">typing</span><span class="o">,</span> <span class="nn">numpy</span><span class="o">,</span> <span class="nn">copy</span><span class="o">,</span> <span class="nn">warnings</span>
+
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Todo: Classes are now immutable: </span>
+<span class="sd">       - Add additional features from Skylars project</span>
+<span class="sd">       - Maybe only keep paulistrings and not full hamiltonian types</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="BackendCircuit">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit">[docs]</a>
+<span class="k">class</span> <span class="nc">BackendCircuit</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class for circuits compiled to run on specific backends.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    no_translation:</span>
+<span class="sd">        set this attribute in the derived __init__ to prevent translation of abstract_circuits</span>
+<span class="sd">        needed for simulators that use native tequila types.</span>
+<span class="sd">        Default is false</span>
+<span class="sd">    abstract_circuit:</span>
+<span class="sd">        the tequila circuit from which the backend circuit is built.</span>
+<span class="sd">    circuit:</span>
+<span class="sd">        the compiled circuit in the backend language.</span>
+<span class="sd">    compiler_arguments:</span>
+<span class="sd">        dictionary of arguments for compilation needed for chosen backend. Overwritten by inheritors.</span>
+<span class="sd">    device:</span>
+<span class="sd">        instantiated device (or None) for executing circuits.</span>
+<span class="sd">    n_qubits:</span>
+<span class="sd">        the number of qubits this circuit operates on.</span>
+<span class="sd">    noise:</span>
+<span class="sd">        the NoiseModel applied to this circuit when sampled.</span>
+<span class="sd">    qubit_map:</span>
+<span class="sd">        the mapping from tequila qubits to the qubits of the backend circuit.</span>
+<span class="sd">        Dicationary with keys being integers that enumerate the abstract qubits of the abstract_circuit</span>
+<span class="sd">        and values being data-structures holding `number` and `instance` where number enumerates the</span>
+<span class="sd">        backend qubits and instance is the instance of a backend qubit</span>
+<span class="sd">    qubits:</span>
+<span class="sd">        a list of the qubits operated on by the circuit.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    create_circuit</span>
+<span class="sd">        generate a backend circuit from an abstract tequila circuit</span>
+<span class="sd">    check_device:</span>
+<span class="sd">        see if a given device is valid for the backend.</span>
+<span class="sd">    retrieve_device:</span>
+<span class="sd">        get an instance of or necessary informaton about a device, for emulation or use.</span>
+<span class="sd">    add_parametrized_gate</span>
+<span class="sd">        add a parametrized gate to a backend circuit.</span>
+<span class="sd">    add_basic_gate</span>
+<span class="sd">        add an unparametrized gate to a backend circuit.</span>
+<span class="sd">    add_measurement</span>
+<span class="sd">        add a measurement gate to a backend circuit.</span>
+<span class="sd">    initialize_circuit:</span>
+<span class="sd">        generate an empty circuit object for the backend.</span>
+<span class="sd">    update_variables:</span>
+<span class="sd">        overwrite the saved values of variables for backend execution.</span>
+<span class="sd">    simulate:</span>
+<span class="sd">        perform simulation, simulated sampling, or execute the circuit, e.g. with some hamiltonian for measurement.</span>
+<span class="sd">    sample_paulistring:</span>
+<span class="sd">        sample a circuit with one paulistring of a larger hamiltonian</span>
+<span class="sd">    sample:</span>
+<span class="sd">        sample a circuit, measuring an entire hamiltonian.</span>
+<span class="sd">    do_sample:</span>
+<span class="sd">        subroutine for sampling. must be overwritten by inheritors.</span>
+<span class="sd">    do_simulate:</span>
+<span class="sd">        subroutine for wavefunction simulation. must be overwritten by inheritors.</span>
+<span class="sd">    convert_measurements:</span>
+<span class="sd">        transform the result of simulation from the backend return type.</span>
+<span class="sd">    make_qubit_map:</span>
+<span class="sd">        create a dictionary to map the tequila qubit ordering to the backend qubits.</span>
+<span class="sd">    optimize_circuit:</span>
+<span class="sd">        use backend features to improve circuit depth.</span>
+<span class="sd">    extract_variables:</span>
+<span class="sd">        return a list of the variables in the abstract tequila circuit this backend circuit corresponds to.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># compiler instructions, override in backends</span>
+    <span class="c1"># try to reduce True statements as much as possible for new backends</span>
+    <span class="n">compiler_arguments</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;trotterized&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;swap&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;multitarget&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;controlled_rotation&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;generalized_rotation&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;exponential_pauli&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;controlled_exponential_pauli&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;phase&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;power&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;hadamard_power&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;controlled_power&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;controlled_phase&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;toffoli&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;phase_to_z&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;cc_max&quot;</span><span class="p">:</span> <span class="kc">True</span>
+    <span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_qubits</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qubit_map</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">abstract_qubits</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qubit_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+
+<div class="viewcode-block" id="BackendCircuit.qubit">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.qubit">[docs]</a>
+    <span class="k">def</span> <span class="nf">qubit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abstract_qubit</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convenience. Gives back a qubit instance of the corresponding backend</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        abstract_qubit</span>
+<span class="sd">            the abstract tequila qubit</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            instance of backend qubit</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">qubit_map</span><span class="p">[</span><span class="n">abstract_qubit</span><span class="p">]</span><span class="o">.</span><span class="n">instance</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abstract_circuit</span><span class="p">:</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">qubit_map</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">optimize_circuit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        abstract_circuit: QCircuit:</span>
+<span class="sd">            the circuit which is to be rendered in the backend language.</span>
+<span class="sd">        variables:</span>
+<span class="sd">            values for the variables of abstract_circuit</span>
+<span class="sd">        noise: optional:</span>
+<span class="sd">            noise to apply to abstract circuit.</span>
+<span class="sd">        device: optional:</span>
+<span class="sd">            device on which to sample (or emulate sampling) abstract circuit.</span>
+<span class="sd">        qubit_map: dictionary:</span>
+<span class="sd">            a qubit map which maps the abstract qubits in the abstract_circuit to the qubits on the backend</span>
+<span class="sd">            there is no need to initialize the corresponding backend types</span>
+<span class="sd">            the dictionary should simply be {int:int} (preferred) or {int:name}</span>
+<span class="sd">            if None the default will map to qubits 0 ... n_qubits -1 in the backend</span>
+<span class="sd">        optimize_circuit: bool:</span>
+<span class="sd">            whether or not to attempt backend depth optimization. Defaults to true.</span>
+<span class="sd">        args</span>
+<span class="sd">        kwargs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_input_args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;abstract_circuit&quot;</span><span class="p">:</span> <span class="n">abstract_circuit</span><span class="p">,</span> <span class="s2">&quot;variables&quot;</span><span class="p">:</span> <span class="n">variables</span><span class="p">,</span> <span class="s2">&quot;noise&quot;</span><span class="p">:</span> <span class="n">noise</span><span class="p">,</span>
+                            <span class="s2">&quot;qubit_map&quot;</span><span class="p">:</span> <span class="n">qubit_map</span><span class="p">,</span> <span class="s2">&quot;optimize_circuits&quot;</span><span class="p">:</span> <span class="n">optimize_circuit</span><span class="p">,</span> <span class="s2">&quot;device&quot;</span><span class="p">:</span> <span class="n">device</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">no_translation</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">abstract_circuit</span><span class="o">.</span><span class="n">extract_variables</span><span class="p">())</span>
+
+        <span class="n">compiler_arguments</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compiler_arguments</span>
+        <span class="k">if</span> <span class="n">noise</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">compiler_arguments</span><span class="p">[</span><span class="s2">&quot;cc_max&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">compiler_arguments</span><span class="p">[</span><span class="s2">&quot;controlled_phase&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">compiler_arguments</span><span class="p">[</span><span class="s2">&quot;controlled_rotation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">compiler_arguments</span><span class="p">[</span><span class="s2">&quot;hadamard_power&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># compile the abstract_circuit</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">compiler</span><span class="o">.</span><span class="n">CircuitCompiler</span><span class="p">(</span><span class="o">**</span><span class="n">compiler_arguments</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">qubit_map</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">qubit_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">q</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">abstract_circuit</span><span class="o">.</span><span class="n">qubits</span><span class="p">)}</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">qubit_map</span> <span class="o">==</span> <span class="p">{</span><span class="n">q</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">abstract_circuit</span><span class="o">.</span><span class="n">qubits</span><span class="p">)}:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;reveived custom qubit_map = </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                        <span class="s2">&quot;This is not fully integrated and might result in unexpected behaviour!&quot;</span>
+                          <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">qubit_map</span><span class="p">),</span> <span class="n">TequilaWarning</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">qubit_map</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">abstract_circuit</span><span class="o">.</span><span class="n">max_qubit</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Custom qubit_map has too many qubits </span><span class="si">{}</span><span class="s2"> vs </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qubit_map</span><span class="p">),</span> <span class="n">abstract_circuit</span><span class="o">.</span><span class="n">max_qubit</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">qubit_map</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">&gt;</span> <span class="n">abstract_circuit</span><span class="o">.</span><span class="n">max_qubit</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Custom qubit_map tries to assign qubit </span><span class="si">{}</span><span class="s2"> but we only have </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">qubit_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">abstract_circuit</span><span class="o">.</span><span class="n">max_qubit</span><span class="p">()))</span>
+
+        <span class="c1"># qubit map is initialized to have BackendQubits as values (they carry number and instance attributes)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qubit_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_qubit_map</span><span class="p">(</span><span class="n">qubit_map</span><span class="p">)</span>
+
+        <span class="c1"># pre-compilation (still an abstract ciruit, but with gates decomposed depending on backend requirements)</span>
+        <span class="n">compiled</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="n">abstract_circuit</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">abstract_circuit</span> <span class="o">=</span> <span class="n">compiled</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">noise</span> <span class="o">=</span> <span class="n">noise</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_device</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve_device</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="c1"># translate into the backend object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_circuit</span><span class="p">(</span><span class="n">abstract_circuit</span><span class="o">=</span><span class="n">compiled</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">optimize_circuit</span> <span class="ow">and</span> <span class="n">noise</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimize_circuit</span><span class="p">(</span><span class="n">circuit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">variables</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="n">Variable</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Real</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Simulate or sample the backend circuit.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        variables: dict:</span>
+<span class="sd">            dictionary assigning values to the variables of the circuit.</span>
+<span class="sd">        samples: int, optional:</span>
+<span class="sd">            how many shots to sample with. If None, perform full wavefunction simulation.</span>
+<span class="sd">        args</span>
+<span class="sd">        kwargs</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Float:</span>
+<span class="sd">            the result of simulating or sampling the circuit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">variables</span> <span class="o">=</span> <span class="n">format_variable_dictionary</span><span class="p">(</span><span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">variables</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">set</span><span class="p">(</span><span class="n">variables</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span>
+                    <span class="s2">&quot;BackendCircuit received not all variables. Circuit depends on variables </span><span class="si">{}</span><span class="s2">, you gave </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">,</span> <span class="n">variables</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_variables</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">samples</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">noise</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="n">samples</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">noise</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BackendCircuit.create_circuit">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.create_circuit">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abstract_circuit</span><span class="p">:</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">circuit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        build the backend specific circuit from the abstract tequila circuit.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        abstract_circuit: QCircuit:</span>
+<span class="sd">            the circuit to build in the backend</span>
+<span class="sd">        circuit: BackendCircuitType (optional):</span>
+<span class="sd">            Add to this already initialized circuit (not all backends support + operation)</span>
+<span class="sd">        args</span>
+<span class="sd">        kwargs</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        type varies</span>
+<span class="sd">            The circuit, compiled to the backend.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Backend uses native tequila structures</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_translation</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">abstract_circuit</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">circuit</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_circuit</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">abstract_circuit</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">g</span><span class="o">.</span><span class="n">is_parametrized</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_parametrized_gate</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_basic_gate</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="BackendCircuit.check_device">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.check_device">[docs]</a>
+    <span class="k">def</span> <span class="nf">check_device</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Verify if a device can be used in the selected backend. Overwritten by inheritors.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        device:</span>
+<span class="sd">            the device to verify.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TequilaException</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s1">&#39;Devices not enabled for </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">))))</span></div>
+
+
+<div class="viewcode-block" id="BackendCircuit.retrieve_device">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.retrieve_device">[docs]</a>
+    <span class="k">def</span> <span class="nf">retrieve_device</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get the instantiated backend device object, from user provided object (e.g, a string).</span>
+
+<span class="sd">        Must be overwritten by inheritors, to use devices.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        device:</span>
+<span class="sd">            object which points to the device in question, to be returned.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Type:</span>
+<span class="sd">            varies by backend.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">device</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s1">&#39;Devices not enabled for </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">))))</span></div>
+
+
+<div class="viewcode-block" id="BackendCircuit.add_parametrized_gate">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.add_parametrized_gate">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_parametrized_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Backend Handler needs to be overwritten for supported simulators&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BackendCircuit.add_basic_gate">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.add_basic_gate">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_basic_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Backend Handler needs to be overwritten for supported simulators&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BackendCircuit.add_measurement">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.add_measurement">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_measurement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">target_qubits</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Backend Handler needs to be overwritten for supported simulators&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BackendCircuit.initialize_circuit">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.initialize_circuit">[docs]</a>
+    <span class="k">def</span> <span class="nf">initialize_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Backend Handler needs to be overwritten for supported simulators&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BackendCircuit.update_variables">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.update_variables">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This is the default, which just translates the circuit again.</span>
+<span class="sd">        Overwrite in inheritors if parametrized circuits are supported.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_circuit</span><span class="p">(</span><span class="n">abstract_circuit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">abstract_circuit</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BackendCircuit.simulate">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.simulate">[docs]</a>
+    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitWaveFunction</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        simulate the circuit via the backend.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        variables:</span>
+<span class="sd">            the parameters with which to simulate the circuit.</span>
+<span class="sd">        initial_state: Default = 0:</span>
+<span class="sd">            one of several types; determines the base state onto which the circuit is applied.</span>
+<span class="sd">            Default: the circuit is applied to the all-zero state.</span>
+<span class="sd">        args</span>
+<span class="sd">        kwargs</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QubitWaveFunction:</span>
+<span class="sd">            the wavefunction of the system produced by the action of the circuit on the initial state.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_variables</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">BitString</span><span class="p">):</span>
+            <span class="n">initial_state</span> <span class="o">=</span> <span class="n">initial_state</span><span class="o">.</span><span class="n">integer</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">QubitWaveFunction</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">initial_state</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;only product states as initial states accepted&quot;</span><span class="p">)</span>
+            <span class="n">initial_state</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">initial_state</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">integer</span>
+
+        <span class="n">all_qubits</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">abstract_circuit</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">))</span>
+        <span class="n">active_qubits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qubit_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+        <span class="c1"># Keymap is only necessary if not all qubits are active</span>
+        <span class="n">keymap_required</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">active_qubits</span><span class="p">)</span> <span class="o">!=</span> <span class="n">all_qubits</span>
+
+        <span class="k">if</span> <span class="n">keymap_required</span><span class="p">:</span>
+            <span class="c1"># maps from reduced register to full register</span>
+            <span class="n">keymap</span> <span class="o">=</span> <span class="n">KeyMapSubregisterToRegister</span><span class="p">(</span><span class="n">subregister</span><span class="o">=</span><span class="n">active_qubits</span><span class="p">,</span> <span class="n">register</span><span class="o">=</span><span class="n">all_qubits</span><span class="p">)</span>
+
+        <span class="n">mapped_initial_state</span> <span class="o">=</span> <span class="n">keymap</span><span class="o">.</span><span class="n">inverted</span><span class="p">(</span><span class="n">initial_state</span><span class="p">)</span><span class="o">.</span><span class="n">integer</span> <span class="k">if</span> <span class="n">keymap_required</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="n">initial_state</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_simulate</span><span class="p">(</span><span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="n">mapped_initial_state</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+                                  <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">keymap_required</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">apply_keymap</span><span class="p">(</span><span class="n">keymap</span><span class="o">=</span><span class="n">keymap</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="BackendCircuit.sample">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.sample">[docs]</a>
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">samples</span><span class="p">,</span> <span class="n">read_out_qubits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">circuit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sample the circuit. If circuit natively equips paulistrings, sample therefrom.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        variables:</span>
+<span class="sd">            the variables with which to sample the circuit.</span>
+<span class="sd">        samples: int:</span>
+<span class="sd">            the number of samples to take.</span>
+<span class="sd">        read_out_qubits: int:</span>
+<span class="sd">            target qubits to measure (default is all)</span>
+<span class="sd">        args</span>
+<span class="sd">        kwargs</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QubitWaveFunction</span>
+<span class="sd">            The result of sampling, a recreated QubitWaveFunction in the sampled basis.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_variables</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">read_out_qubits</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">read_out_qubits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">abstract_qubits</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">read_out_qubits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;read_out_qubits are empty&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">circuit</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">circuit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_measurement</span><span class="p">(</span><span class="n">circuit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="p">,</span> <span class="n">target_qubits</span><span class="o">=</span><span class="n">read_out_qubits</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">circuit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_measurement</span><span class="p">(</span><span class="n">circuit</span><span class="o">=</span><span class="n">circuit</span><span class="p">,</span> <span class="n">target_qubits</span><span class="o">=</span><span class="n">read_out_qubits</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_sample</span><span class="p">(</span><span class="n">samples</span><span class="o">=</span><span class="n">samples</span><span class="p">,</span> <span class="n">circuit</span><span class="o">=</span><span class="n">circuit</span><span class="p">,</span> <span class="n">read_out_qubits</span><span class="o">=</span><span class="n">read_out_qubits</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BackendCircuit.sample_all_z_hamiltonian">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.sample_all_z_hamiltonian">[docs]</a>
+    <span class="k">def</span> <span class="nf">sample_all_z_hamiltonian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">hamiltonian</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sample from a Hamiltonian which only consists of Pauli-Z and unit operators</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        samples</span>
+<span class="sd">            number of samples to take</span>
+<span class="sd">        hamiltonian</span>
+<span class="sd">            the tequila hamiltonian</span>
+<span class="sd">        args</span>
+<span class="sd">            arguments for do_sample</span>
+<span class="sd">        kwargs</span>
+<span class="sd">            keyword arguments for do_sample</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            samples, evaluated and summed Hamiltonian expectationvalue</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># make measurement instruction (measure all qubits in the Hamiltonian that are also in the circuit)</span>
+        <span class="n">abstract_qubits_H</span> <span class="o">=</span> <span class="n">hamiltonian</span><span class="o">.</span><span class="n">qubits</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">abstract_qubits_H</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span>  <span class="c1"># this case should be filtered out before</span>
+        <span class="c1"># assert that the Hamiltonian was mapped before</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">q</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">qubit_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">abstract_qubits_H</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span>
+                <span class="s2">&quot;Qubits in </span><span class="si">{}</span><span class="s2">-qubit Hamiltonian were not traced out for </span><span class="si">{}</span><span class="s2">-qubit circuit&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">hamiltonian</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">,</span>
+                                                                                                 <span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">))</span>
+
+        <span class="c1"># run simulators</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">samples</span><span class="o">=</span><span class="n">samples</span><span class="p">,</span> <span class="n">read_out_qubits</span><span class="o">=</span><span class="n">abstract_qubits_H</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">read_out_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">q</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">abstract_qubits_H</span><span class="p">)}</span>
+
+        <span class="c1"># compute energy</span>
+        <span class="n">E</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">for</span> <span class="n">paulistring</span> <span class="ow">in</span> <span class="n">hamiltonian</span><span class="o">.</span><span class="n">paulistrings</span><span class="p">:</span>
+            <span class="n">n_samples</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">Etmp</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="c1"># get all the non-trivial qubits of the current PauliString (meaning all Z operators)</span>
+                <span class="c1"># and mapp them to the backend qubits</span>
+                <span class="n">mapped_ps_support</span> <span class="o">=</span> <span class="p">[</span><span class="n">read_out_map</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">paulistring</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+                <span class="c1"># count all measurements that resulted in |1&gt; for those qubits</span>
+                <span class="n">parity</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">mapped_ps_support</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># evaluate the PauliString</span>
+                <span class="n">sign</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">parity</span>
+                <span class="n">Etmp</span> <span class="o">+=</span> <span class="n">sign</span> <span class="o">*</span> <span class="n">count</span>
+                <span class="n">n_samples</span> <span class="o">+=</span> <span class="n">count</span>
+            <span class="n">E</span> <span class="o">+=</span> <span class="p">(</span><span class="n">Etmp</span> <span class="o">/</span> <span class="n">samples</span><span class="p">)</span> <span class="o">*</span> <span class="n">paulistring</span><span class="o">.</span><span class="n">coeff</span>
+            <span class="c1"># small failsafe</span>
+            <span class="k">assert</span> <span class="n">n_samples</span> <span class="o">==</span> <span class="n">samples</span>
+        <span class="k">return</span> <span class="n">E</span></div>
+
+
+<div class="viewcode-block" id="BackendCircuit.sample_paulistring">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.sample_paulistring">[docs]</a>
+    <span class="k">def</span> <span class="nf">sample_paulistring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">paulistring</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+                           <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Real</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sample an individual pauli word (pauli string) and return the average result thereof.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        samples: int:</span>
+<span class="sd">            how many samples to evaluate.</span>
+<span class="sd">        paulistring:</span>
+<span class="sd">            the paulistring to be sampled.</span>
+<span class="sd">        args</span>
+<span class="sd">        kwargs</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float:</span>
+<span class="sd">            the average result of sampling the chosen paulistring</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">not_in_u</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">paulistring</span><span class="o">.</span><span class="n">qubits</span> <span class="k">if</span> <span class="n">q</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">abstract_qubits</span><span class="p">]</span>
+        <span class="n">reduced_ps</span> <span class="o">=</span> <span class="n">paulistring</span><span class="o">.</span><span class="n">trace_out_qubits</span><span class="p">(</span><span class="n">qubits</span><span class="o">=</span><span class="n">not_in_u</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">reduced_ps</span><span class="o">.</span><span class="n">coeff</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">reduced_ps</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">reduced_ps</span><span class="o">.</span><span class="n">coeff</span>
+
+        <span class="c1"># make basis change and translate to backend</span>
+        <span class="n">basis_change</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+        <span class="n">qubits</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">reduced_ps</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">qubits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+            <span class="n">basis_change</span> <span class="o">+=</span> <span class="n">change_basis</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+
+        <span class="c1"># add basis change to the circuit</span>
+        <span class="c1"># deepcopy is necessary to avoid changing the circuits</span>
+        <span class="c1"># can be circumvented by optimizing the measurements</span>
+        <span class="c1"># on construction: tq.ExpectationValue(H=H, U=U, optimize_measurements=True)</span>
+        <span class="n">circuit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_circuit</span><span class="p">(</span><span class="n">circuit</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="p">),</span> <span class="n">abstract_circuit</span><span class="o">=</span><span class="n">basis_change</span><span class="p">)</span>
+        <span class="c1"># run simulators</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">samples</span><span class="o">=</span><span class="n">samples</span><span class="p">,</span> <span class="n">circuit</span><span class="o">=</span><span class="n">circuit</span><span class="p">,</span> <span class="n">read_out_qubits</span><span class="o">=</span><span class="n">qubits</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+                             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># compute energy</span>
+        <span class="n">E</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">n_samples</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">parity</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">array</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">sign</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">parity</span>
+            <span class="n">E</span> <span class="o">+=</span> <span class="n">sign</span> <span class="o">*</span> <span class="n">count</span>
+            <span class="n">n_samples</span> <span class="o">+=</span> <span class="n">count</span>
+        <span class="k">assert</span> <span class="n">n_samples</span> <span class="o">==</span> <span class="n">samples</span>
+        <span class="n">E</span> <span class="o">=</span> <span class="n">E</span> <span class="o">/</span> <span class="n">samples</span> <span class="o">*</span> <span class="n">paulistring</span><span class="o">.</span><span class="n">coeff</span>
+        <span class="k">return</span> <span class="n">E</span></div>
+
+
+<div class="viewcode-block" id="BackendCircuit.do_sample">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.do_sample">[docs]</a>
+    <span class="k">def</span> <span class="nf">do_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">noise</span><span class="p">,</span> <span class="n">abstract_qubits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitWaveFunction</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        helper function for sampling. MUST be overwritten by inheritors.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        samples: int:</span>
+<span class="sd">            the number of samples to take</span>
+<span class="sd">        circuit:</span>
+<span class="sd">            the circuit to sample from.</span>
+<span class="sd">            Note:</span>
+<span class="sd">            Not necessarily self.circuit!</span>
+<span class="sd">        noise:</span>
+<span class="sd">            the noise to apply to the sampled circuit.</span>
+<span class="sd">        abstract_qubits:</span>
+<span class="sd">            specify which qubits to measure. Default is all</span>
+<span class="sd">        args</span>
+<span class="sd">        kwargs</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QubitWaveFunction:</span>
+<span class="sd">            the result of sampling.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Backend Handler needs to be overwritten for supported simulators&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BackendCircuit.do_simulate">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.do_simulate">[docs]</a>
+    <span class="k">def</span> <span class="nf">do_simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitWaveFunction</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        helper for simulation. MUST be overwritten by inheritors.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        variables:</span>
+<span class="sd">            the variables with which the circuit may be simulated.</span>
+<span class="sd">        initial_state:</span>
+<span class="sd">            the initial state in which the system is in prior to the application of the circuit.</span>
+<span class="sd">        args</span>
+<span class="sd">        kwargs</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QubitWaveFunction</span>
+<span class="sd">            the result of simulating the circuit.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Backend Handler needs to be overwritten for supported simulators&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BackendCircuit.convert_measurements">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.convert_measurements">[docs]</a>
+    <span class="k">def</span> <span class="nf">convert_measurements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend_result</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitWaveFunction</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Backend Handler needs to be overwritten for supported simulators&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BackendCircuit.initialize_qubit">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.initialize_qubit">[docs]</a>
+    <span class="k">def</span> <span class="nf">initialize_qubit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        In case the backend has its own Qubit Types,</span>
+<span class="sd">        this function should be overwritten by inheritors.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        number</span>
+<span class="sd">            the qubit number</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            Initialized backend qubit type</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">number</span></div>
+
+
+<div class="viewcode-block" id="BackendCircuit.make_qubit_map">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.make_qubit_map">[docs]</a>
+    <span class="k">def</span> <span class="nf">make_qubit_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qubits</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build the mapping between abstract qubits.</span>
+
+<span class="sd">        Must be overwritten by inheritors to do anything other than check the validity of the map.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        qubits:</span>
+<span class="sd">            the qubits to map onto.</span>
+<span class="sd">            If given as a dictionary, the map is already defined</span>
+<span class="sd">            If given as a list the map will be those qubits mapped to 0 .... n_qubit-1 of the backend</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict</span>
+<span class="sd">            the dictionary that maps the qubits of the abstract circuits to an ordered sequence of integers.</span>
+<span class="sd">            keys are the abstract qubit integers</span>
+<span class="sd">            values are the backend qubits</span>
+<span class="sd">            those are data structures which contain name and instance</span>
+<span class="sd">            where number is the qubit identifier and instance the instance of the backend qubit</span>
+<span class="sd">            if the backend does not require a special object for qubits the instance should be the same as number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@dataclass</span>
+        <span class="k">class</span> <span class="nc">BackendQubit</span><span class="p">:</span>
+            <span class="n">number</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">instance</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">qubits</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">qubits</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">abstract_circuit</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">)</span>
+
+        <span class="n">abstract_map</span> <span class="o">=</span> <span class="n">qubits</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">qubits</span><span class="p">,</span> <span class="s2">&quot;keys&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">qubits</span><span class="p">,</span> <span class="s2">&quot;values&quot;</span><span class="p">):</span>
+            <span class="n">abstract_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">q</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">qubits</span><span class="p">)}</span>
+
+        <span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s2">&quot;instance&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">abstract_map</span><span class="o">.</span><span class="n">values</span><span class="p">()]):</span>
+            <span class="c1"># qubit_map already initialized backend_types</span>
+            <span class="k">return</span> <span class="n">qubits</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">BackendQubit</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initialize_qubit</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">abstract_map</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></div>
+
+
+<div class="viewcode-block" id="BackendCircuit.optimize_circuit">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.optimize_circuit">[docs]</a>
+    <span class="k">def</span> <span class="nf">optimize_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Optimize a circuit using backend tools. Should be overwritten by inheritors.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        circuit:</span>
+<span class="sd">            the circuit to optimize</span>
+<span class="sd">        args</span>
+<span class="sd">        kwargs</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Type</span>
+<span class="sd">            Optimized version of the circuit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">circuit</span></div>
+
+
+<div class="viewcode-block" id="BackendCircuit.extract_variables">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.extract_variables">[docs]</a>
+    <span class="k">def</span> <span class="nf">extract_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Real</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        extract the tequila variables from the circuit.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict:</span>
+<span class="sd">            the variables of the circuit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">abstract_circuit</span><span class="o">.</span><span class="n">extract_variables</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_name_variable_objective</span><span class="p">(</span><span class="n">objective</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Name variables in backend consistently for easier readout</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">variables</span> <span class="o">=</span> <span class="n">objective</span><span class="o">.</span><span class="n">extract_variables</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;transformation&quot;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;f(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">variables</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s2">&quot;f(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__deepcopy__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memodict</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_args</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="BackendExpectationValue">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue">[docs]</a>
+<span class="k">class</span> <span class="nc">BackendExpectationValue</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class representing an ExpectationValue for evaluation by some backend.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    H:</span>
+<span class="sd">        the reduced tequila Hamiltonian(s) of the expectationvalue</span>
+<span class="sd">        reduction procedure is tracing out all qubits that are not part of the unitary U</span>
+<span class="sd">        stored as a tuple to evaluate multiple Hamiltonians over the same circuit faster in pure simulations</span>
+<span class="sd">    abstract_H:</span>
+<span class="sd">        the original (non-reduced) Hamiltonian(s)</span>
+<span class="sd">    n_qubits:</span>
+<span class="sd">        how many qubits appear in the expectationvalue.</span>
+<span class="sd">    U:</span>
+<span class="sd">        the underlying BackendCircuit of the expectationvalue.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    extract_variables:</span>
+<span class="sd">        return the underlying tequila variables of the circuit</span>
+<span class="sd">    initialize_hamiltonian</span>
+<span class="sd">        prepare the hamiltonian for iteration over as a tuple</span>
+<span class="sd">    initialize_unitary</span>
+<span class="sd">        compile the abstract circuit to a backend circuit.</span>
+<span class="sd">    simulate:</span>
+<span class="sd">        simulate the unitary to measure H</span>
+<span class="sd">    sample:</span>
+<span class="sd">        sample the unitary to measure H</span>
+<span class="sd">    sample_paulistring</span>
+<span class="sd">        sample a single term from H</span>
+<span class="sd">    update_variables</span>
+<span class="sd">        wrapper over the update_variables of BackendCircuit.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">BackendCircuitType</span> <span class="o">=</span> <span class="n">BackendCircuit</span>
+
+    <span class="c1"># map to smaller subsystem if there are qubits which are not touched by the circuits,</span>
+    <span class="c1"># should be deactivated if expectationvalues are computed by the backend since the hamiltonians are currently not mapped</span>
+    <span class="n">use_mapping</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_qubits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="o">.</span><span class="n">n_qubits</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">H</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_H</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">U</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_U</span>
+
+<div class="viewcode-block" id="BackendExpectationValue.count_measurements">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.count_measurements">[docs]</a>
+    <span class="k">def</span> <span class="nf">count_measurements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">abstract_expectationvalue</span><span class="o">.</span><span class="n">count_measurements</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="BackendExpectationValue.extract_variables">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.extract_variables">[docs]</a>
+    <span class="k">def</span> <span class="nf">extract_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Real</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        wrapper over circuit extract variables</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict</span>
+<span class="sd">            Todo: is it really a dict?</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">U</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="o">.</span><span class="n">extract_variables</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">noise</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        E:</span>
+<span class="sd">            the uncompiled expectationvalue</span>
+<span class="sd">        variables:</span>
+<span class="sd">            variables for compilation of circuit</span>
+<span class="sd">        noise:</span>
+<span class="sd">            noisemodel for compilation of circuit</span>
+<span class="sd">        device:</span>
+<span class="sd">            device for compilation of circuit</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">abstract_expectationvalue</span> <span class="o">=</span> <span class="n">E</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_input_args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;variables&quot;</span><span class="p">:</span> <span class="n">variables</span><span class="p">,</span> <span class="s2">&quot;device&quot;</span><span class="p">:</span> <span class="n">device</span><span class="p">,</span> <span class="s2">&quot;noise&quot;</span><span class="p">:</span> <span class="n">noise</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_unitary</span><span class="p">(</span><span class="n">E</span><span class="o">.</span><span class="n">U</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="n">noise</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reduced_hamiltonians</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reduce_hamiltonians</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">abstract_expectationvalue</span><span class="o">.</span><span class="n">H</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_hamiltonian</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_reduced_hamiltonians</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">extract_variables</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_contraction</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">_contraction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">_shape</span>
+
+    <span class="k">def</span> <span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__deepcopy__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memodict</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">abstract_expectationvalue</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_args</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="n">variables</span> <span class="o">=</span> <span class="n">format_variable_dictionary</span><span class="p">(</span><span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">variables</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">set</span><span class="p">(</span><span class="n">variables</span><span class="o">.</span><span class="n">keys</span><span class="p">())):</span>
+                <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span>
+                    <span class="s2">&quot;BackendExpectationValue received not all variables. Circuit depends on variables </span><span class="si">{}</span><span class="s2">, you gave </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">,</span> <span class="n">variables</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="n">samples</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="n">samples</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contraction</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># this is the default</span>
+            <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contraction</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contraction</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BackendExpectationValue.reduce_hamiltonians">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.reduce_hamiltonians">[docs]</a>
+    <span class="k">def</span> <span class="nf">reduce_hamiltonians</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abstract_hamiltonians</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        abstract_hamiltonians</span>
+<span class="sd">            tuple of abstract tequila Hamiltonians</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            reduces Hamiltonians where the qubits that are not defined in self.U are traced out</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">abstract_qubits_of_u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="o">.</span><span class="n">qubit_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="n">reduced</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">H</span> <span class="ow">in</span> <span class="n">abstract_hamiltonians</span><span class="p">:</span>
+            <span class="n">abstract_qubits_of_h</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">qubits</span>
+            <span class="n">not_in_u</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">abstract_qubits_of_h</span> <span class="k">if</span> <span class="n">q</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">abstract_qubits_of_u</span><span class="p">]</span>
+            <span class="n">reduced</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">trace_out_qubits</span><span class="p">(</span><span class="n">qubits</span><span class="o">=</span><span class="n">not_in_u</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">reduced</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BackendExpectationValue.initialize_hamiltonian">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.initialize_hamiltonian">[docs]</a>
+    <span class="k">def</span> <span class="nf">initialize_hamiltonian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hamiltonians</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">hamiltonians</span></div>
+
+
+<div class="viewcode-block" id="BackendExpectationValue.initialize_unitary">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.initialize_unitary">[docs]</a>
+    <span class="k">def</span> <span class="nf">initialize_unitary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">noise</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;return a compiled unitary&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">BackendCircuitType</span><span class="p">(</span><span class="n">abstract_circuit</span><span class="o">=</span><span class="n">U</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
+                                       <span class="n">use_mapping</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_mapping</span><span class="p">,</span>
+                                       <span class="n">noise</span><span class="o">=</span><span class="n">noise</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BackendExpectationValue.update_variables">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.update_variables">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;wrapper over circuit update_variables&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_U</span><span class="o">.</span><span class="n">update_variables</span><span class="p">(</span><span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BackendExpectationValue.sample">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.sample">[docs]</a>
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">samples</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        sample the expectationvalue.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        variables: dict:</span>
+<span class="sd">            variables to supply to the unitary.</span>
+<span class="sd">        samples: int:</span>
+<span class="sd">            number of samples to perform.</span>
+<span class="sd">        args</span>
+<span class="sd">        kwargs</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray:</span>
+<span class="sd">            a numpy array, the result of sampling.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">suggested</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="s2">&quot;lower&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">samples</span><span class="o">.</span><span class="n">lower</span><span class="p">()[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">abstract_expectationvalue</span><span class="o">.</span><span class="n">samples</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;samples=&#39;auto&#39; requested but no samples where set in individual expectation values&quot;</span><span class="p">)</span>
+            <span class="n">total_samples</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="mi">5</span><span class="p">:])</span>
+            <span class="n">samples</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">abstract_expectationvalue</span><span class="o">.</span><span class="n">samples</span> <span class="o">*</span> <span class="n">total_samples</span><span class="p">))</span>
+            <span class="n">suggested</span> <span class="o">=</span> <span class="n">samples</span>
+            <span class="c1"># samples are not necessarily set (either the user has to set it or some functions like optimize_measurements)</span>
+ 
+        <span class="k">if</span> <span class="n">suggested</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">suggested</span> <span class="o">!=</span> <span class="n">samples</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;simulating with samples=</span><span class="si">{}</span><span class="s2">, but expectationvalue carries suggested samples=</span><span class="si">{}</span><span class="se">\n</span><span class="s2">Try calling with samples=&#39;auto-total#ofsamples&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">suggested</span><span class="p">),</span> <span class="n">TequilaWarning</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_variables</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">H</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reduced_hamiltonians</span><span class="p">:</span>
+            <span class="n">E</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">E</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">ps</span><span class="o">.</span><span class="n">coeff</span> <span class="k">for</span> <span class="n">ps</span> <span class="ow">in</span> <span class="n">H</span><span class="o">.</span><span class="n">paulistrings</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">H</span><span class="o">.</span><span class="n">is_all_z</span><span class="p">():</span>
+                <span class="n">E</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="o">.</span><span class="n">sample_all_z_hamiltonian</span><span class="p">(</span><span class="n">samples</span><span class="o">=</span><span class="n">samples</span><span class="p">,</span> <span class="n">hamiltonian</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+                                                    <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">ps</span> <span class="ow">in</span> <span class="n">H</span><span class="o">.</span><span class="n">paulistrings</span><span class="p">:</span>
+                    <span class="n">E</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="o">.</span><span class="n">sample_paulistring</span><span class="p">(</span><span class="n">samples</span><span class="o">=</span><span class="n">samples</span><span class="p">,</span> <span class="n">paulistring</span><span class="o">=</span><span class="n">ps</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+                                                   <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">to_float</span><span class="p">(</span><span class="n">E</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BackendExpectationValue.simulate">
+<a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.simulate">[docs]</a>
+    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Simulate the expectationvalue.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        variables:</span>
+<span class="sd">            variables to supply to the unitary.</span>
+<span class="sd">        args</span>
+<span class="sd">        kwargs</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy array:</span>
+<span class="sd">            the result of simulation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_variables</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">H</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">:</span>
+            <span class="n">final_E</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="c1"># TODO inefficient,</span>
+            <span class="c1"># Always better to overwrite this function</span>
+            <span class="n">wfn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">final_E</span> <span class="o">+=</span> <span class="n">wfn</span><span class="o">.</span><span class="n">compute_expectationvalue</span><span class="p">(</span><span class="n">operator</span><span class="o">=</span><span class="n">H</span><span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">to_float</span><span class="p">(</span><span class="n">final_E</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ram Mosco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

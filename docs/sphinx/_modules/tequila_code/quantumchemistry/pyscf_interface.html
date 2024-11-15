@@ -1,0 +1,298 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tequila_code.quantumchemistry.pyscf_interface &mdash; Tequila Documentation 13.9.2024 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=7dcc51c3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Tequila Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Tequila Library Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tequila Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../quantumchemistry.html">tequila_code.quantumchemistry</a></li>
+      <li class="breadcrumb-item active">tequila_code.quantumchemistry.pyscf_interface</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tequila_code.quantumchemistry.pyscf_interface</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">tequila</span> <span class="kn">import</span> <span class="n">TequilaException</span>
+<span class="kn">from</span> <span class="nn">tequila.quantumchemistry.qc_base</span> <span class="kn">import</span> <span class="n">QuantumChemistryBase</span>
+<span class="kn">from</span> <span class="nn">tequila.quantumchemistry</span> <span class="kn">import</span> <span class="n">ParametersQC</span><span class="p">,</span> <span class="n">NBodyTensor</span>
+<span class="kn">import</span> <span class="nn">pyscf</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span><span class="o">,</span> <span class="nn">typing</span>
+
+
+<div class="viewcode-block" id="OpenVQEEPySCFException">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.pyscf_interface.OpenVQEEPySCFException">[docs]</a>
+<span class="k">class</span> <span class="nc">OpenVQEEPySCFException</span><span class="p">(</span><span class="n">TequilaException</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="QuantumChemistryPySCF">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.pyscf_interface.QuantumChemistryPySCF">[docs]</a>
+<span class="k">class</span> <span class="nc">QuantumChemistryPySCF</span><span class="p">(</span><span class="n">QuantumChemistryBase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">ParametersQC</span><span class="p">,</span>
+                 <span class="n">transformation</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="s2">&quot;one_body_integrals&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+
+            <span class="n">geometry</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">get_geometry</span><span class="p">()</span>
+            <span class="n">pyscf_geomstring</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">geometry</span><span class="p">:</span>
+                <span class="n">pyscf_geomstring</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">atom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">atom</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">atom</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">atom</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="s2">&quot;point_group&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">point_group</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;point_group&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">point_group</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="n">mol</span> <span class="o">=</span> <span class="n">pyscf</span><span class="o">.</span><span class="n">gto</span><span class="o">.</span><span class="n">Mole</span><span class="p">()</span>
+            <span class="n">mol</span><span class="o">.</span><span class="n">atom</span> <span class="o">=</span> <span class="n">pyscf_geomstring</span>
+            <span class="n">mol</span><span class="o">.</span><span class="n">basis</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">basis_set</span>
+            <span class="n">mol</span><span class="o">.</span><span class="n">charge</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">charge</span>
+
+            <span class="k">if</span> <span class="n">point_group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">point_group</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;c1&quot;</span><span class="p">:</span>
+                    <span class="n">mol</span><span class="o">.</span><span class="n">symmetry</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">mol</span><span class="o">.</span><span class="n">symmetry_subgroup</span> <span class="o">=</span> <span class="n">point_group</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">mol</span><span class="o">.</span><span class="n">symmetry</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mol</span><span class="o">.</span><span class="n">symmetry</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="n">mol</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">parse_arg</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="c1"># solve restricted HF</span>
+            <span class="n">mf</span> <span class="o">=</span> <span class="n">pyscf</span><span class="o">.</span><span class="n">scf</span><span class="o">.</span><span class="n">RHF</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+            <span class="n">mf</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="s2">&quot;verbose&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">mf</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;verbose&quot;</span><span class="p">]</span>
+
+            <span class="n">mf</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+
+            <span class="c1"># only works if point_group is not C1</span>
+            <span class="c1"># otherwise PySCF uses a different SCF object</span>
+            <span class="c1"># irrep information is however not critical to tequila</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="s2">&quot;get_irrep_nelec&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">irreps</span> <span class="o">=</span> <span class="n">mf</span><span class="o">.</span><span class="n">get_irrep_nelec</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">irreps</span> <span class="o">=</span> <span class="kc">None</span>
+                
+            <span class="n">orbital_energies</span> <span class="o">=</span> <span class="n">mf</span><span class="o">.</span><span class="n">mo_energy</span>
+
+            <span class="c1"># compute mo integrals</span>
+            <span class="n">mo_coeff</span> <span class="o">=</span> <span class="n">mf</span><span class="o">.</span><span class="n">mo_coeff</span>
+            <span class="n">h_ao</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">intor</span><span class="p">(</span><span class="s1">&#39;int1e_kin&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">mol</span><span class="o">.</span><span class="n">intor</span><span class="p">(</span><span class="s1">&#39;int1e_nuc&#39;</span><span class="p">)</span>
+            <span class="n">g_ao</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">intor</span><span class="p">(</span><span class="s1">&#39;int2e&#39;</span><span class="p">,</span> <span class="n">aosym</span><span class="o">=</span><span class="s1">&#39;s1&#39;</span><span class="p">)</span>
+            <span class="n">S</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">intor_symmetric</span><span class="p">(</span><span class="s2">&quot;int1e_ovlp&quot;</span><span class="p">)</span>
+            <span class="n">g_ao</span> <span class="o">=</span> <span class="n">NBodyTensor</span><span class="p">(</span><span class="n">elems</span><span class="o">=</span><span class="n">g_ao</span><span class="p">,</span> <span class="n">ordering</span><span class="o">=</span><span class="s2">&quot;mulliken&quot;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">pyscf_molecule</span> <span class="o">=</span> <span class="n">mol</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">point_group</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">symmetry_subgroup</span>
+
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;overlap_integrals&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">S</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;two_body_integrals&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">g_ao</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;one_body_integrals&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">h_ao</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;orbital_coefficients&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mo_coeff</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;orbital_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;hf&quot;</span>
+
+            <span class="k">if</span> <span class="s2">&quot;nuclear_repulsion&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;nuclear_repulsion&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">energy_nuc</span><span class="p">()</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">transformation</span><span class="o">=</span><span class="n">transformation</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="QuantumChemistryPySCF.compute_fci">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.pyscf_interface.QuantumChemistryPySCF.compute_fci">[docs]</a>
+    <span class="k">def</span> <span class="nf">compute_fci</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">fci</span>
+        <span class="n">c</span><span class="p">,</span> <span class="n">h1</span><span class="p">,</span> <span class="n">h2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_integrals</span><span class="p">(</span><span class="n">ordering</span><span class="o">=</span><span class="s2">&quot;chem&quot;</span><span class="p">)</span>
+        <span class="n">norb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span>
+        <span class="n">nelec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_electrons</span>
+        <span class="n">e</span><span class="p">,</span> <span class="n">fcivec</span> <span class="o">=</span> <span class="n">fci</span><span class="o">.</span><span class="n">direct_spin1</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="o">.</span><span class="n">elems</span><span class="p">,</span> <span class="n">norb</span><span class="p">,</span> <span class="n">nelec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">e</span> <span class="o">+</span> <span class="n">c</span></div>
+
+
+<div class="viewcode-block" id="QuantumChemistryPySCF.compute_energy">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.pyscf_interface.QuantumChemistryPySCF.compute_energy">[docs]</a>
+    <span class="k">def</span> <span class="nf">compute_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;hf&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_hf</span><span class="p">(</span><span class="n">do_not_solve</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">e_tot</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;mp2&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_mp2</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">e_tot</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;cisd&quot;</span><span class="p">:</span>
+            <span class="n">hf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_hf</span><span class="p">(</span><span class="n">do_not_solve</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_cisd</span><span class="p">(</span><span class="n">hf</span><span class="o">=</span><span class="n">hf</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">e_tot</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;ccsd&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ccsd</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">e_tot</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;ccsd(t)&quot;</span><span class="p">:</span>
+            <span class="n">ccsd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ccsd</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ccsd</span><span class="o">.</span><span class="n">e_tot</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_perturbative_triples_correction</span><span class="p">(</span><span class="n">ccsd</span><span class="o">=</span><span class="n">ccsd</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;fci&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_fci</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;unknown method: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">))</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_get_hf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">do_not_solve</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">c</span><span class="p">,</span> <span class="n">h1</span><span class="p">,</span> <span class="n">h2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_integrals</span><span class="p">(</span><span class="n">ordering</span><span class="o">=</span><span class="s2">&quot;mulliken&quot;</span><span class="p">)</span>
+        <span class="n">norb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span>
+        <span class="n">nelec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_electrons</span>
+
+        <span class="n">mo_coeff</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">norb</span><span class="p">)</span>
+        <span class="n">mo_occ</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">norb</span><span class="p">)</span>
+        <span class="n">mo_occ</span><span class="p">[:</span><span class="n">nelec</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+
+        <span class="n">pyscf_mol</span> <span class="o">=</span> <span class="n">pyscf</span><span class="o">.</span><span class="n">gto</span><span class="o">.</span><span class="n">M</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parse_arg</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">pyscf_mol</span><span class="o">.</span><span class="n">nelectron</span> <span class="o">=</span> <span class="n">nelec</span>
+        <span class="n">pyscf_mol</span><span class="o">.</span><span class="n">incore_anyway</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># ensure that custom integrals are used</span>
+        <span class="n">pyscf_mol</span><span class="o">.</span><span class="n">energy_nuc</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">c</span>
+
+        <span class="n">hf</span> <span class="o">=</span> <span class="n">pyscf</span><span class="o">.</span><span class="n">scf</span><span class="o">.</span><span class="n">RHF</span><span class="p">(</span><span class="n">pyscf_mol</span><span class="p">)</span>
+        <span class="n">hf</span><span class="o">.</span><span class="n">get_hcore</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">h1</span>
+        <span class="n">hf</span><span class="o">.</span><span class="n">get_ovlp</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">norb</span><span class="p">)</span>
+        <span class="n">hf</span><span class="o">.</span><span class="n">_eri</span> <span class="o">=</span> <span class="n">pyscf</span><span class="o">.</span><span class="n">ao2mo</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">h2</span><span class="o">.</span><span class="n">elems</span><span class="p">,</span> <span class="n">norb</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">do_not_solve</span><span class="p">:</span>
+            <span class="n">hf</span><span class="o">.</span><span class="n">mo_coeff</span> <span class="o">=</span> <span class="n">mo_coeff</span>
+            <span class="n">hf</span><span class="o">.</span><span class="n">mo_occ</span> <span class="o">=</span> <span class="n">mo_occ</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">hf</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">mo_occ</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">hf</span>
+
+    <span class="k">def</span> <span class="nf">_run_ccsd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">cc</span>
+        <span class="k">if</span> <span class="n">hf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">hf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_hf</span><span class="p">()</span>
+        <span class="n">ccsd</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">RCCSD</span><span class="p">(</span><span class="n">hf</span><span class="p">)</span>
+        <span class="n">ccsd</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">ccsd</span>
+
+    <span class="k">def</span> <span class="nf">_compute_perturbative_triples_correction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ccsd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ccsd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ccsd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ccsd</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">ecorr</span> <span class="o">=</span> <span class="n">ccsd</span><span class="o">.</span><span class="n">ccsd_t</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">ecorr</span>
+
+    <span class="k">def</span> <span class="nf">_run_cisd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">ci</span>
+        <span class="k">if</span> <span class="n">hf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">hf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_hf</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">cisd</span> <span class="o">=</span> <span class="n">ci</span><span class="o">.</span><span class="n">RCISD</span><span class="p">(</span><span class="n">hf</span><span class="p">)</span>
+        <span class="n">cisd</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">cisd</span>
+
+    <span class="k">def</span> <span class="nf">_run_mp2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">mp</span>
+        <span class="k">if</span> <span class="n">hf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">hf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_hf</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">mp2</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">MP2</span><span class="p">(</span><span class="n">hf</span><span class="p">)</span>
+        <span class="n">mp2</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">mp2</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;pyscf_molecule&quot;</span><span class="p">):</span>
+                <span class="n">base</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{:15}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;point_group&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyscf_molecule</span><span class="o">.</span><span class="n">groupname</span><span class="p">,</span>
+                                                   <span class="bp">self</span><span class="o">.</span><span class="n">pyscf_molecule</span><span class="o">.</span><span class="n">topgroup</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;irreps&quot;</span><span class="p">):</span>
+                <span class="n">base</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{:15}</span><span class="s2"> : </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;irreps&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">irreps</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">base</span>
+        <span class="k">return</span> <span class="n">base</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ram Mosco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,244 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documenting Code in reStructuredText for Sphinx &mdash; Tequila Documentation 13.9.2024 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7dcc51c3"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Tequila Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Tequila Library Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Tequila Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Documenting Code in reStructuredText for Sphinx</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/docu_instruction.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="documenting-code-in-restructuredtext-for-sphinx">
+<h1>Documenting Code in reStructuredText for Sphinx<a class="headerlink" href="#documenting-code-in-restructuredtext-for-sphinx" title="Link to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>Sphinx supports automatic code documentation using the <code class="docutils literal notranslate"><span class="pre">autodoc</span></code> extension, which extracts docstrings from your code and integrates them into your documentation. This guide explains how to structure your code comments using reStructuredText to ensure your documentation is well-formatted and informative.</p>
+</section>
+<section id="setting-up-the-documentation">
+<h2>1. Setting Up the Documentation<a class="headerlink" href="#setting-up-the-documentation" title="Link to this heading"></a></h2>
+<p>Before you start documenting, make sure you have the Sphinx project and <code class="docutils literal notranslate"><span class="pre">autodoc</span></code> enabled in your <code class="docutils literal notranslate"><span class="pre">conf.py</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># In conf.py, ensure these extensions are present</span>
+<span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;sphinx.ext.autodoc&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;sphinx.ext.napoleon&#39;</span><span class="p">,</span>  <span class="c1"># Optional: For Google/NumPy style docstrings</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="writing-docstrings-with-restructuredtext">
+<h2>2. Writing Docstrings with reStructuredText<a class="headerlink" href="#writing-docstrings-with-restructuredtext" title="Link to this heading"></a></h2>
+<p>reStructuredText is a lightweight markup language used in docstrings. Here’s how to write effective docstrings for different parts of your code.</p>
+<p><strong>2.1 Module-Level Docstring</strong></p>
+<p>At the top of your module (<code class="docutils literal notranslate"><span class="pre">mymodule.py</span></code>), include a general description:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">mymodule.py</span>
+<span class="sd">===========</span>
+
+<span class="sd">This module contains functions and classes for data processing.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p><strong>2.2 Documenting Functions</strong></p>
+<p>Describe the function’s purpose, parameters, and return values. Use the following format:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">add_numbers</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds two numbers together.</span>
+
+<span class="sd">    :param int a: The first number.</span>
+<span class="sd">    :param int b: The second number.</span>
+<span class="sd">    :returns: The sum of `a` and `b`.</span>
+<span class="sd">    :rtype: int</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</pre></div>
+</div>
+<p><strong>2.3 Documenting Classes</strong></p>
+<p>For classes, include a class-level docstring and document each method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Calculator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A simple calculator class to perform basic arithmetic operations.</span>
+
+<span class="sd">    :param str name: The name of the calculator instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the calculator with a given name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Multiplies two numbers.</span>
+
+<span class="sd">        :param int x: The first factor.</span>
+<span class="sd">        :param int y: The second factor.</span>
+<span class="sd">        :returns: The product of `x` and `y`.</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
+</pre></div>
+</div>
+<p><strong>2.4 Documenting Class Attributes</strong></p>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">:ivar</span></code> directive to describe class attributes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Rectangle</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents a geometric rectangle.</span>
+
+<span class="sd">    :ivar float length: The length of the rectangle.</span>
+<span class="sd">    :ivar float width: The width of the rectangle.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="n">length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+</pre></div>
+</div>
+</section>
+<section id="formatting-docstrings">
+<h2>3. Formatting Docstrings<a class="headerlink" href="#formatting-docstrings" title="Link to this heading"></a></h2>
+<p><strong>3.1 Sections</strong></p>
+<p>Use specific section headers (optional but recommended):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Parameters</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Returns</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Raises</span></code> (for exceptions)</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">divide</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Divides `x` by `y`.</span>
+
+<span class="sd">    **Parameters:**</span>
+
+<span class="sd">    - `x (float)`: Numerator.</span>
+<span class="sd">    - `y (float)`: Denominator.</span>
+
+<span class="sd">    **Returns:**</span>
+
+<span class="sd">    - `float`: The result of division.</span>
+
+<span class="sd">    **Raises:**</span>
+
+<span class="sd">    - `ZeroDivisionError`: If `y` is zero.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ZeroDivisionError</span><span class="p">(</span><span class="s2">&quot;Cannot divide by zero.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">/</span> <span class="n">y</span>
+</pre></div>
+</div>
+<p><strong>3.2 Cross-referencing</strong></p>
+<p>To reference other parts of the code, use the <code class="docutils literal notranslate"><span class="pre">:class:</span></code>, <code class="docutils literal notranslate"><span class="pre">:func:</span></code> and similar directives:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">See also :class:`Calculator` for more operations.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="building-the-documentation">
+<h2>4. Building the Documentation<a class="headerlink" href="#building-the-documentation" title="Link to this heading"></a></h2>
+<p>Once your code is documented, build the documentation to see the results:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">html</span>
+</pre></div>
+</div>
+<p>This will generate the HTML files in the <code class="docutils literal notranslate"><span class="pre">_build</span></code> directory, integrating your code comments into the documentation.</p>
+</section>
+<section id="cleaning-the-build-directory">
+<h2>5. Cleaning the Build Directory<a class="headerlink" href="#cleaning-the-build-directory" title="Link to this heading"></a></h2>
+<p>If you need to rebuild the documentation from scratch, use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">clean</span>
+</pre></div>
+</div>
+<p>This removes all previously built files.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ram Mosco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

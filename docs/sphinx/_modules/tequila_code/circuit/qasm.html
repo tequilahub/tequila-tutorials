@@ -1,0 +1,573 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tequila_code.circuit.qasm &mdash; Tequila Documentation 13.9.2024 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=7dcc51c3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Tequila Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Tequila Library Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tequila Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../circuit.html">tequila_code.circuit</a></li>
+      <li class="breadcrumb-item active">tequila_code.circuit.qasm</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tequila_code.circuit.qasm</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Export QCircuits as qasm code</span>
+
+<span class="sd">OPENQASM version 2.0 specification from:</span>
+<span class="sd">A. W. Cross, L. S. Bishop, J. A. Smolin, and J. M. Gambetta, e-print arXiv:1707.03429v2 [quant-ph] (2017).</span>
+<span class="sd">https://arxiv.org/pdf/1707.03429v2.pdf</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">tequila</span> <span class="kn">import</span> <span class="n">TequilaException</span>
+<span class="kn">from</span> <span class="nn">tequila.circuit</span> <span class="kn">import</span> <span class="n">QCircuit</span>
+<span class="kn">from</span> <span class="nn">tequila.circuit.compiler</span> <span class="kn">import</span> <span class="n">CircuitCompiler</span>
+<span class="kn">import</span> <span class="nn">tequila.circuit.gates</span> <span class="k">as</span> <span class="nn">gates</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">pi</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
+<span class="kn">import</span> <span class="nn">typing</span>
+
+
+<div class="viewcode-block" id="export_open_qasm">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.export_open_qasm">[docs]</a>
+<span class="k">def</span> <span class="nf">export_open_qasm</span><span class="p">(</span><span class="n">circuit</span><span class="p">:</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;2.0&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">zx_calculus</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Allow export to different versions of OpenQASM</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        circuit: to be exported to OpenQASM</span>
+<span class="sd">        variables: optional dictionary with values for variables</span>
+<span class="sd">        version: of the OpenQASM specification, optional</span>
+<span class="sd">        filename: optional file name to save the generated OpenQASM code</span>
+<span class="sd">        zx_calculus: indicate if y-gates must be transformed to xz equivalents</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: OpenQASM string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">version</span> <span class="o">==</span> <span class="s2">&quot;2.0&quot;</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">convert_to_open_qasm_2</span><span class="p">(</span><span class="n">circuit</span><span class="o">=</span><span class="n">circuit</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="n">zx_calculus</span><span class="o">=</span><span class="n">zx_calculus</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Unsupported OpenQASM version : &quot;</span> <span class="o">+</span> <span class="n">version</span>
+    <span class="c1"># TODO: export to version 3</span>
+
+    <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<div class="viewcode-block" id="import_open_qasm">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.import_open_qasm">[docs]</a>
+<span class="k">def</span> <span class="nf">import_open_qasm</span><span class="p">(</span><span class="n">qasm_code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;2.0&quot;</span><span class="p">,</span> <span class="n">rigorous</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Allow import from different versions of OpenQASM</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        qasm_code: string with the OpenQASM code</span>
+<span class="sd">        version: of the OpenQASM specification, optional</span>
+<span class="sd">        rigorous: indicates whether the QASM code should be read rigorously</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        QCircuit: equivalent to the OpenQASM code received</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">version</span> <span class="o">==</span> <span class="s2">&quot;2.0&quot;</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">parse_from_open_qasm_2</span><span class="p">(</span><span class="n">qasm_code</span><span class="o">=</span><span class="n">qasm_code</span><span class="p">,</span> <span class="n">rigorous</span><span class="o">=</span><span class="n">rigorous</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Unsupported OpenQASM version : &quot;</span> <span class="o">+</span> <span class="n">version</span>
+    <span class="c1"># TODO: export to version 3</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<div class="viewcode-block" id="import_open_qasm_from_file">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.import_open_qasm_from_file">[docs]</a>
+<span class="k">def</span> <span class="nf">import_open_qasm_from_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;2.0&quot;</span><span class="p">,</span> <span class="n">rigorous</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Allow import from different versions of OpenQASM from a file</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename: string with the file name with the OpenQASM code</span>
+<span class="sd">        variables: optional dictionary with values for variables</span>
+<span class="sd">        version: of the OpenQASM specification, optional</span>
+<span class="sd">        rigorous: indicates whether the QASM code should be read rigorously</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        QCircuit: equivalent to the OpenQASM code received</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">qasm_code</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">import_open_qasm</span><span class="p">(</span><span class="n">qasm_code</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span> <span class="n">rigorous</span><span class="o">=</span><span class="n">rigorous</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="convert_to_open_qasm_2">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.convert_to_open_qasm_2">[docs]</a>
+<span class="k">def</span> <span class="nf">convert_to_open_qasm_2</span><span class="p">(</span><span class="n">circuit</span><span class="p">:</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zx_calculus</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Allow export to OpenQASM version 2.0</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        circuit: to be exported to OpenQASM</span>
+<span class="sd">        variables: optional dictionary with values for variables</span>
+<span class="sd">        zx_calculus: indicate if y-gates must be transformed to xz equivalents</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: OpenQASM string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">variables</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">circuit</span><span class="o">.</span><span class="n">extract_variables</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span>
+            <span class="s2">&quot;You called export_open_qasm for a parametrized type but forgot to pass down the variables: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">circuit</span><span class="o">.</span><span class="n">extract_variables</span><span class="p">()))</span>
+
+    <span class="n">compiler</span> <span class="o">=</span> <span class="n">CircuitCompiler</span><span class="p">(</span><span class="n">multitarget</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">multicontrol</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                               <span class="n">trotterized</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">generalized_rotation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">exponential_pauli</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">controlled_exponential_pauli</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">hadamard_power</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">controlled_power</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">power</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">toffoli</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">controlled_phase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">phase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">phase_to_z</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">controlled_rotation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">swap</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">cc_max</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">gradient_mode</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                               <span class="n">ry_gate</span><span class="o">=</span><span class="n">zx_calculus</span><span class="p">,</span>
+                               <span class="n">y_gate</span><span class="o">=</span><span class="n">zx_calculus</span><span class="p">,</span>
+                               <span class="n">ch_gate</span><span class="o">=</span><span class="n">zx_calculus</span><span class="p">)</span>
+
+    <span class="n">compiled</span> <span class="o">=</span> <span class="n">compiler</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;OPENQASM 2.0;</span><span class="se">\n</span><span class="s2">include </span><span class="se">\&quot;</span><span class="s2">qelib1.inc</span><span class="se">\&quot;</span><span class="s2">;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="n">qubits_names</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">compiled</span><span class="o">.</span><span class="n">qubits</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;q[&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+        <span class="n">qubits_names</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+
+    <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;qreg q[&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">compiled</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;];</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;creg c[&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">compiled</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;];</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">compiled</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+
+        <span class="n">control_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">g</span><span class="o">.</span><span class="n">is_controlled</span><span class="p">():</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">control</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span>
+                    <span class="s2">&quot;Multi-controls beyond 2 not yet supported for OpenQASM 2.0. Gate was:</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>
+
+            <span class="n">controls</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">qubits_names</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">g</span><span class="o">.</span><span class="n">control</span><span class="p">))</span>
+            <span class="n">control_str</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">controls</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span>
+
+        <span class="n">gate_name</span> <span class="o">=</span> <span class="n">name_and_params</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">variables</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">target</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">gate_name</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">control_str</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">qubits_names</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<div class="viewcode-block" id="name_and_params">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.name_and_params">[docs]</a>
+<span class="k">def</span> <span class="nf">name_and_params</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">variables</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determines the quantum gate name and its parameters if applicable</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        g: gate to get its name</span>
+<span class="sd">        variables: dictionary with values for variables</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: name (and parameter) to the gate specified</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">control</span><span class="p">)):</span>
+        <span class="n">res</span> <span class="o">+=</span> <span class="s2">&quot;c&quot;</span>
+
+    <span class="n">res</span> <span class="o">+=</span> <span class="n">g</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="s2">&quot;parameter&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">g</span><span class="o">.</span><span class="n">parameter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">+=</span> <span class="s2">&quot;(&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span><span class="n">variables</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span>
+
+    <span class="n">res</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span>
+
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+
+<div class="viewcode-block" id="parse_from_open_qasm_2">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.parse_from_open_qasm_2">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_from_open_qasm_2</span><span class="p">(</span><span class="n">qasm_code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rigorous</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">qasm_code</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+    <span class="n">clean_code</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># ignore comments</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;//&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">clean_line</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;//&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">clean_line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">clean_line</span><span class="p">:</span>
+            <span class="n">clean_code</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">clean_line</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">clean_code</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;OPENQASM&quot;</span><span class="p">):</span>
+        <span class="n">clean_code</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">rigorous</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;File must start with the &#39;OPENQASM&#39; directive&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">clean_code</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;include &quot;qelib1.inc&quot;;&#39;</span><span class="p">):</span>
+        <span class="n">clean_code</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">rigorous</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;File must import standard library (qelib1.inc)&quot;</span><span class="p">)</span>
+
+    <span class="n">code_circuit</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">clean_code</span><span class="p">)</span>
+    <span class="c1"># separate the custom command definitions from the normal commands</span>
+    <span class="n">custom_gates_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">QCircuit</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">code_circuit</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;gate &quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">code_circuit</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+        <span class="n">custom_name</span><span class="p">,</span> <span class="n">custom_circuit</span> <span class="o">=</span> <span class="n">parse_custom_gate</span><span class="p">(</span><span class="n">code_circuit</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">custom_gates_map</span><span class="o">=</span><span class="n">custom_gates_map</span><span class="p">)</span>
+        <span class="n">custom_gates_map</span><span class="p">[</span><span class="n">custom_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">custom_circuit</span>
+        <span class="n">code_circuit</span> <span class="o">=</span> <span class="n">code_circuit</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">code_circuit</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>
+
+    <span class="c1"># parse regular commands</span>
+    <span class="n">commands</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">code_circuit</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
+    <span class="n">qregisters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">circuit</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">:</span>
+        <span class="n">partial_circuit</span> <span class="o">=</span> <span class="n">parse_command</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">custom_gates_map</span><span class="o">=</span><span class="n">custom_gates_map</span><span class="p">,</span> <span class="n">qregisters</span><span class="o">=</span><span class="n">qregisters</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">partial_circuit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">circuit</span> <span class="o">+=</span> <span class="n">partial_circuit</span>
+
+    <span class="k">return</span> <span class="n">circuit</span></div>
+
+
+
+<div class="viewcode-block" id="parse_custom_gate">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.parse_custom_gate">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_custom_gate</span><span class="p">(</span><span class="n">gate_custom</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">custom_gates_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">QCircuit</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">QCircuit</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse custom gates code</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        gate_custom: code with custom gates</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">gate_custom</span> <span class="o">=</span> <span class="n">gate_custom</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span>
+    <span class="n">spec</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="n">gate_custom</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;{&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s2">&quot;(&quot;</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">:</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">spec</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Parameters for custom gates not supported: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">spec</span><span class="p">))</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">spec</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">spec</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>
+
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="s2">&quot; &quot;</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">:</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">qargs</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">qargs</span> <span class="o">=</span> <span class="n">qargs</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Custom gate specification doesn&#39;t have any arguments: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">spec</span><span class="p">))</span>
+
+    <span class="n">custom_qregisters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">qarg</span> <span class="ow">in</span> <span class="n">qargs</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">):</span>
+        <span class="n">custom_qregisters</span><span class="p">[</span><span class="n">qarg</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">custom_qregisters</span><span class="p">)</span>
+
+    <span class="n">body</span> <span class="o">=</span> <span class="n">body</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">commands</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">body</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
+
+    <span class="n">custom_circuit</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">:</span>
+        <span class="n">partial_circuit</span> <span class="o">=</span> <span class="n">parse_command</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">custom_gates_map</span><span class="o">=</span><span class="n">custom_gates_map</span><span class="p">,</span> <span class="n">qregisters</span><span class="o">=</span><span class="n">custom_qregisters</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">partial_circuit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">custom_circuit</span> <span class="o">+=</span> <span class="n">partial_circuit</span>
+
+    <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="n">custom_circuit</span></div>
+
+
+
+<div class="viewcode-block" id="parse_command">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.parse_command">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_command</span><span class="p">(</span><span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">custom_gates_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">QCircuit</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse qasm code command</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        command: open qasm code to be parsed</span>
+<span class="sd">        custom_gates_map: map with custom gates</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">,</span> <span class="n">rest</span> <span class="o">=</span> <span class="n">command</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;barrier&quot;</span><span class="p">,</span> <span class="s2">&quot;creg&quot;</span><span class="p">,</span> <span class="s2">&quot;measure&quot;</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;opaque&quot;</span><span class="p">,</span> <span class="s2">&quot;if&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Unsupported operation </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">command</span><span class="p">))</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">rest</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
+
+    <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;qreg&quot;</span><span class="p">:</span>
+        <span class="n">regname</span><span class="p">,</span> <span class="n">sizep</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sizep</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
+            <span class="n">qregisters</span><span class="p">[</span><span class="n">regname</span> <span class="o">+</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">qregisters</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">arg</span> <span class="ow">in</span> <span class="n">qregisters</span> <span class="ow">or</span> <span class="n">arg</span> <span class="ow">in</span> <span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">qregisters</span><span class="o">.</span><span class="n">keys</span><span class="p">()]):</span>
+            <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Invalid register </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arg</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">custom_gates_map</span><span class="p">:</span>
+        <span class="n">custom_circuit</span> <span class="o">=</span> <span class="n">custom_gates_map</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="n">qregisters_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="n">qregisters_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_qregister</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">qregisters</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">apply_custom_gate</span><span class="p">(</span><span class="n">custom_circuit</span><span class="o">=</span><span class="n">custom_circuit</span><span class="p">,</span> <span class="n">qregisters_values</span><span class="o">=</span><span class="n">qregisters_values</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="s2">&quot;cx&quot;</span><span class="p">,</span> <span class="s2">&quot;cy&quot;</span><span class="p">,</span> <span class="s2">&quot;cz&quot;</span><span class="p">,</span> <span class="s2">&quot;ch&quot;</span><span class="p">):</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">get_qregister</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">)</span>
+        <span class="n">control</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span>
+            <span class="n">control</span> <span class="o">=</span> <span class="n">get_qregister</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">get_qregister</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">gates</span><span class="p">,</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">G</span><span class="p">(</span><span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;ccx&quot;</span><span class="p">,</span> <span class="s2">&quot;ccy&quot;</span><span class="p">,</span> <span class="s2">&quot;ccz&quot;</span><span class="p">):</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">gates</span><span class="p">,</span> <span class="n">name</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+        <span class="n">control</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_qregister</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">),</span> <span class="n">get_qregister</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">)]</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">get_qregister</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">G</span><span class="p">(</span><span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;rx(&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;ry(&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;rz(&quot;</span><span class="p">)</span> <span class="ow">or</span> \
+        <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;crx(&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;cry(&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;crz(&quot;</span><span class="p">):</span>
+        <span class="n">angle</span> <span class="o">=</span> <span class="n">get_angle</span><span class="p">(</span><span class="n">name</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">name</span><span class="p">]</span>
+        <span class="n">name</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">gates</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">G</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="n">angle</span><span class="p">,</span><span class="n">control</span><span class="o">=</span><span class="n">get_qregister</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">)</span> <span class="k">if</span> <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="n">get_qregister</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span> <span class="k">if</span> <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span> <span class="k">else</span> <span class="mi">0</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">))</span>
+            
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;U(&quot;</span><span class="p">):</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="n">get_angle</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gates</span><span class="o">.</span><span class="n">U</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="n">angles</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">phi</span><span class="o">=</span><span class="n">angles</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">lambd</span><span class="o">=</span><span class="n">angles</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                 <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">target</span><span class="o">=</span><span class="n">get_qregister</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;u1(&quot;</span><span class="p">):</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="n">get_angle</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gates</span><span class="o">.</span><span class="n">u1</span><span class="p">(</span><span class="n">lambd</span><span class="o">=</span><span class="n">angles</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                  <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">target</span><span class="o">=</span><span class="n">get_qregister</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;u2(&quot;</span><span class="p">):</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="n">get_angle</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gates</span><span class="o">.</span><span class="n">u2</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">angles</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lambd</span><span class="o">=</span><span class="n">angles</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                  <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">target</span><span class="o">=</span><span class="n">get_qregister</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;u3(&quot;</span><span class="p">):</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="n">get_angle</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gates</span><span class="o">.</span><span class="n">u3</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="n">angles</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">phi</span><span class="o">=</span><span class="n">angles</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">lambd</span><span class="o">=</span><span class="n">angles</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                  <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">target</span><span class="o">=</span><span class="n">get_qregister</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;cu1(&quot;</span><span class="p">):</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="n">get_angle</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gates</span><span class="o">.</span><span class="n">u1</span><span class="p">(</span><span class="n">lambd</span><span class="o">=</span><span class="n">angles</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                  <span class="n">control</span><span class="o">=</span><span class="n">get_qregister</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">),</span>
+                  <span class="n">target</span><span class="o">=</span><span class="n">get_qregister</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;cu2(&quot;</span><span class="p">):</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="n">get_angle</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gates</span><span class="o">.</span><span class="n">u2</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">angles</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lambd</span><span class="o">=</span><span class="n">angles</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                  <span class="n">control</span><span class="o">=</span><span class="n">get_qregister</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">),</span>
+                  <span class="n">target</span><span class="o">=</span><span class="n">get_qregister</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;cu3(&quot;</span><span class="p">):</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="n">get_angle</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gates</span><span class="o">.</span><span class="n">u3</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="n">angles</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">phi</span><span class="o">=</span><span class="n">angles</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">lambd</span><span class="o">=</span><span class="n">angles</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                  <span class="n">control</span><span class="o">=</span><span class="n">get_qregister</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">),</span>
+                  <span class="n">target</span><span class="o">=</span><span class="n">get_qregister</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="s2">&quot;t&quot;</span><span class="p">,</span> <span class="s2">&quot;sdg&quot;</span><span class="p">,</span> <span class="s2">&quot;tdg&quot;</span><span class="p">):</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">gates</span><span class="o">.</span><span class="n">Phase</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="n">pi</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">4</span><span class="p">),</span>
+                     <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">target</span><span class="o">=</span><span class="n">get_qregister</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;dg&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">dagger</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">g</span></div>
+
+
+
+<div class="viewcode-block" id="apply_custom_gate">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.apply_custom_gate">[docs]</a>
+<span class="k">def</span> <span class="nf">apply_custom_gate</span><span class="p">(</span><span class="n">custom_circuit</span><span class="p">:</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">qregisters_values</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+    <span class="n">applied_custom_circuit</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">custom_circuit</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">_target</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">qregisters_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">_target</span><span class="p">])</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">_control</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">qregisters_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">_control</span><span class="p">])</span> <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">is_controlled</span><span class="p">()</span> <span class="k">else</span> <span class="n">gate</span><span class="o">.</span><span class="n">_control</span>
+        <span class="n">applied_custom_circuit</span> <span class="o">+=</span> <span class="n">g</span>
+    <span class="k">return</span> <span class="n">applied_custom_circuit</span></div>
+
+
+
+<div class="viewcode-block" id="get_qregister">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.get_qregister">[docs]</a>
+<span class="k">def</span> <span class="nf">get_qregister</span><span class="p">(</span><span class="n">qreg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">qregisters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">qreg</span> <span class="o">==</span> <span class="n">qreg</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="n">qreg_tequila</span> <span class="o">=</span> <span class="p">[</span><span class="n">qregisters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">qregisters</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">qreg</span> <span class="o">==</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">qreg_tequila</span> <span class="o">=</span> <span class="n">qregisters</span><span class="p">[</span><span class="n">qreg</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">qreg_tequila</span></div>
+
+
+<div class="viewcode-block" id="get_angle">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.get_angle">[docs]</a>
+<span class="k">def</span> <span class="nf">get_angle</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">)</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;)&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Invalid specification </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+    <span class="n">angles_str</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+    <span class="n">angles</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">angle</span> <span class="ow">in</span> <span class="n">angles_str</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">phase</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">angle</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;pi&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Invalid specification </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+            <span class="n">angle</span> <span class="o">=</span> <span class="n">angle</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;pi&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">sign</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">div</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">angle</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">angle</span> <span class="o">=</span> <span class="n">angle</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                    <span class="n">sign</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="k">if</span> <span class="n">angle</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">div</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">angle</span><span class="p">[</span><span class="n">angle</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:])</span>
+                    <span class="n">angle</span> <span class="o">=</span> <span class="n">angle</span><span class="p">[:</span><span class="n">angle</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)]</span>
+                <span class="k">if</span> <span class="n">angle</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">angle</span> <span class="o">=</span> <span class="n">angle</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                    <span class="n">phase</span> <span class="o">=</span> <span class="n">sign</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span class="n">div</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">phase</span> <span class="o">=</span> <span class="n">sign</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span class="n">div</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">phase</span> <span class="o">=</span> <span class="n">sign</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">/</span> <span class="n">div</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Invalid specification </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="n">angles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">phase</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">angles</span></div>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ram Mosco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

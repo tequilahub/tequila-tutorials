@@ -1,0 +1,1215 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tequila_code.circuit.compiler &mdash; Tequila Documentation 13.9.2024 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=7dcc51c3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Tequila Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Tequila Library Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tequila Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../circuit.html">tequila_code.circuit</a></li>
+      <li class="breadcrumb-item active">tequila_code.circuit.compiler</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tequila_code.circuit.compiler</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">tequila</span> <span class="kn">import</span> <span class="n">TequilaException</span>
+<span class="kn">from</span> <span class="nn">tequila.circuit.circuit</span> <span class="kn">import</span> <span class="n">QCircuit</span>
+<span class="kn">from</span> <span class="nn">tequila.circuit.gates</span> <span class="kn">import</span> <span class="n">Rx</span><span class="p">,</span> <span class="n">Ry</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Rz</span><span class="p">,</span> <span class="n">ExpPauli</span><span class="p">,</span> <span class="n">CNOT</span><span class="p">,</span> <span class="n">Phase</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span>
+<span class="kn">from</span> <span class="nn">tequila.circuit._gates_impl</span> <span class="kn">import</span> <span class="n">RotationGateImpl</span><span class="p">,</span> <span class="n">PhaseGateImpl</span><span class="p">,</span> <span class="n">QGateImpl</span><span class="p">,</span> \
+    <span class="n">ExponentialPauliGateImpl</span><span class="p">,</span> <span class="n">TrotterizedGateImpl</span><span class="p">,</span> <span class="n">PowerGateImpl</span>
+<span class="kn">from</span> <span class="nn">tequila.utils</span> <span class="kn">import</span> <span class="n">to_float</span>
+<span class="kn">from</span> <span class="nn">tequila.objective.objective</span> <span class="kn">import</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">FixedVariable</span>
+<span class="kn">from</span> <span class="nn">tequila.objective.objective</span> <span class="kn">import</span> <span class="n">Objective</span>
+<span class="kn">from</span> <span class="nn">tequila.objective.objective</span> <span class="kn">import</span> <span class="n">ExpectationValueImpl</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">pi</span> <span class="k">as</span> <span class="n">pi</span>
+
+<span class="kn">import</span> <span class="nn">copy</span><span class="o">,</span> <span class="nn">typing</span>
+
+
+<div class="viewcode-block" id="TequilaCompilerException">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.TequilaCompilerException">[docs]</a>
+<span class="k">class</span> <span class="nc">TequilaCompilerException</span><span class="p">(</span><span class="n">TequilaException</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="CircuitCompiler">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.CircuitCompiler">[docs]</a>
+<span class="k">class</span> <span class="nc">CircuitCompiler</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    an object that performs abstract compilation of QCircuits and Objectives.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">        see init for attributes, since all are specified there</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    compile_objective</span>
+<span class="sd">        perform compilation on an entire objective</span>
+<span class="sd">    compile_objective_argument</span>
+<span class="sd">        perform compilation on a single arg of objective</span>
+<span class="sd">    compile_circuit:</span>
+<span class="sd">        perform compilation on a circuit.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CircuitCompiler.all_flags_true">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.CircuitCompiler.all_flags_true">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">all_flags_true</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># convenience: Initialize with all flags set to true</span>
+        <span class="c1"># set exceptions in kwargs</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">c</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="kc">True</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+                <span class="n">c</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">v</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">gradient_mode</span><span class="o">=</span><span class="kc">False</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">c</span><span class="o">.</span><span class="n">multicontrol</span><span class="p">:</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">cc_max</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">c</span></div>
+
+
+<div class="viewcode-block" id="CircuitCompiler.standard_gate_set">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.CircuitCompiler.standard_gate_set">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">standard_gate_set</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># convenience: Initialize with all flags set to true</span>
+        <span class="c1"># but not for standard gates like ry</span>
+        <span class="c1"># set exceptions in kwargs</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">all_flags_true</span><span class="p">()</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">gradient_mode</span><span class="o">=</span><span class="kc">False</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">y_gate</span><span class="o">=</span><span class="kc">False</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">ry_gate</span><span class="o">=</span><span class="kc">False</span>
+
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+                <span class="n">c</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">v</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">c</span><span class="o">.</span><span class="n">multicontrol</span><span class="p">:</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">cc_max</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">c</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">multitarget</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">multicontrol</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">trotterized</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">generalized_rotation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">exponential_pauli</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">controlled_exponential_pauli</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">hadamard_power</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">controlled_power</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">power</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">toffoli</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">controlled_phase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">phase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">phase_to_z</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">controlled_rotation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">swap</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">cc_max</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">gradient_mode</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">ry_gate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">y_gate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">ch_gate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">hadamard</span><span class="o">=</span><span class="kc">False</span>
+                 <span class="p">):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        all parameters are booleans.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        multitarget:</span>
+<span class="sd">            whether or not to split multitarget gates into single target (if gate isn&#39;t inherently multitarget)</span>
+<span class="sd">        multicontrol:</span>
+<span class="sd">            whether or not to split gates into single controlled gates.</span>
+<span class="sd">        trotterized:</span>
+<span class="sd">            whether or not to break down TrotterizedGateImpl into other types</span>
+<span class="sd">        generalized_rotation:</span>
+<span class="sd">            whether or not to break down GeneralizedRotationGateImpl into other types</span>
+<span class="sd">        exponential_pauli:</span>
+<span class="sd">            whether or not to break down ExponentialPauliGateImpl into other types</span>
+<span class="sd">        controlled_exponential_pauli</span>
+<span class="sd">            whether or not to break down controlled exponential pauli gates.</span>
+<span class="sd">        hadamard_power:</span>
+<span class="sd">            whether or not to break down Hadamard gates, raised to a power, into other rotation gates.</span>
+<span class="sd">        controlled_power:</span>
+<span class="sd">            whether or not to break down controlled power gates into CNOT and other gates.</span>
+<span class="sd">        power:</span>
+<span class="sd">            whether or not to break down parametrized power gates into rotation gates</span>
+<span class="sd">        toffoli:</span>
+<span class="sd">            whether or not to break down the toffoli gate into CNOTs and other single qubit gates.</span>
+<span class="sd">        controlled_phase:</span>
+<span class="sd">            whether or not to break down controlled phase gates into CNOTs and phase gates.</span>
+<span class="sd">        phase:</span>
+<span class="sd">            whether to replace phase gates</span>
+<span class="sd">        phase_to_z:</span>
+<span class="sd">            specifically, whether to replace phase gates with the z gate</span>
+<span class="sd">        controlled_rotation:</span>
+<span class="sd">            whether or not to break down controlled rotation gates into CNot and single qubit gates</span>
+<span class="sd">        swap:</span>
+<span class="sd">            whether or not to break down swap gates into CNOT gates.</span>
+<span class="sd">        cc_max:</span>
+<span class="sd">            whether or not to break down all controlled gates with 2 or more controls.</span>
+<span class="sd">        ry_gate:</span>
+<span class="sd">            whether or not to break down all rotational y gates</span>
+<span class="sd">        y_gate:</span>
+<span class="sd">            whether or not to break down all y gates</span>
+<span class="sd">        ch_gate:</span>
+<span class="sd">            whether or not to break down all controlled-H gates</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multitarget</span> <span class="o">=</span> <span class="n">multitarget</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multicontrol</span> <span class="o">=</span> <span class="n">multicontrol</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generalized_rotation</span> <span class="o">=</span> <span class="n">generalized_rotation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trotterized</span> <span class="o">=</span> <span class="n">trotterized</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exponential_pauli</span> <span class="o">=</span> <span class="n">exponential_pauli</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlled_exponential_pauli</span> <span class="o">=</span> <span class="n">controlled_exponential_pauli</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hadamard_power</span> <span class="o">=</span> <span class="n">hadamard_power</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hadamard</span> <span class="o">=</span> <span class="n">hadamard</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlled_power</span> <span class="o">=</span> <span class="n">controlled_power</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power</span> <span class="o">=</span> <span class="n">power</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toffoli</span> <span class="o">=</span> <span class="n">toffoli</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlled_phase</span> <span class="o">=</span> <span class="n">controlled_phase</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phase</span> <span class="o">=</span> <span class="n">phase</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phase_to_z</span> <span class="o">=</span> <span class="n">phase_to_z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlled_rotation</span> <span class="o">=</span> <span class="n">controlled_rotation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">swap</span> <span class="o">=</span> <span class="n">swap</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cc_max</span> <span class="o">=</span> <span class="n">cc_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient_mode</span> <span class="o">=</span> <span class="n">gradient_mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ry_gate</span> <span class="o">=</span> <span class="n">ry_gate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_gate</span> <span class="o">=</span> <span class="n">y_gate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ch_gate</span> <span class="o">=</span> <span class="n">ch_gate</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="n">Objective</span><span class="p">,</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">ExpectationValueImpl</span><span class="p">],</span> <span class="n">variables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform compilation</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        objective:</span>
+<span class="sd">            the object (not necessarily an objective) to compile.</span>
+<span class="sd">        variables: optional:</span>
+<span class="sd">            Todo: Jakob, what is this for?</span>
+<span class="sd">        args</span>
+<span class="sd">        kwargs</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        a compiled version of objective</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">Objective</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compile_objective</span><span class="p">(</span><span class="n">objective</span><span class="o">=</span><span class="n">objective</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">QCircuit</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="s2">&quot;gates&quot;</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compile_circuit</span><span class="p">(</span><span class="n">abstract_circuit</span><span class="o">=</span><span class="n">objective</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">ExpectationValueImpl</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="s2">&quot;U&quot;</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compile_objective_argument</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="n">objective</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TequilaCompilerException</span><span class="p">(</span><span class="s2">&quot;Tequila compiler can&#39;t process type </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">objective</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+<div class="viewcode-block" id="CircuitCompiler.compile_objective">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.CircuitCompiler.compile_objective">[docs]</a>
+    <span class="k">def</span> <span class="nf">compile_objective</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compile an objective.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        objective: Objective:</span>
+<span class="sd">            the objective.</span>
+<span class="sd">        args</span>
+<span class="sd">        kwargs</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        the objective, compiled</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">argsets</span><span class="o">=</span><span class="n">objective</span><span class="o">.</span><span class="n">argsets</span>
+        <span class="n">compiled_sets</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">argset</span> <span class="ow">in</span> <span class="n">argsets</span><span class="p">:</span>
+            <span class="n">compiled_args</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">already_processed</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">argset</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">ExpectationValueImpl</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s2">&quot;U&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">already_processed</span><span class="p">:</span>
+                        <span class="n">compiled_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">already_processed</span><span class="p">[</span><span class="n">arg</span><span class="p">])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">compiled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compile_objective_argument</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                        <span class="n">compiled_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">compiled</span><span class="p">)</span>
+                        <span class="n">already_processed</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span> <span class="o">=</span> <span class="n">compiled</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># nothing to process for non-expectation-value types, but acts as sanity check</span>
+                    <span class="n">compiled_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">compile_objective_argument</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+            <span class="n">compiled_sets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">compiled_args</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span><span class="n">Objective</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">objective</span><span class="p">)(</span><span class="n">args</span><span class="o">=</span><span class="n">compiled_sets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">transformation</span><span class="o">=</span><span class="n">objective</span><span class="o">.</span><span class="n">transformation</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="CircuitCompiler.compile_objective_argument">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.CircuitCompiler.compile_objective_argument">[docs]</a>
+    <span class="k">def</span> <span class="nf">compile_objective_argument</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compile an argument of an objective.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        arg:</span>
+<span class="sd">            the term to compile</span>
+<span class="sd">        args</span>
+<span class="sd">        kwargs</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        the arg, compiled</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">ExpectationValueImpl</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s2">&quot;U&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">ExpectationValueImpl</span><span class="p">(</span><span class="n">H</span><span class="o">=</span><span class="n">arg</span><span class="o">.</span><span class="n">H</span><span class="p">,</span>
+                                        <span class="n">U</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">compile_circuit</span><span class="p">(</span><span class="n">abstract_circuit</span><span class="o">=</span><span class="n">arg</span><span class="o">.</span><span class="n">U</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+                                                               <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s2">&quot;abstract_expectationvalue&quot;</span><span class="p">):</span>
+            <span class="n">E</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">abstract_expectationvalue</span>
+            <span class="n">E</span><span class="o">.</span><span class="n">_U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compile_circuit</span><span class="p">(</span><span class="n">abstract_circuit</span><span class="o">=</span><span class="n">E</span><span class="o">.</span><span class="n">U</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">arg</span><span class="p">)(</span><span class="n">E</span><span class="p">,</span> <span class="o">**</span><span class="n">arg</span><span class="o">.</span><span class="n">_input_args</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">Variable</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">FixedVariable</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">arg</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TequilaCompilerException</span><span class="p">(</span>
+                <span class="s2">&quot;Unknown argument type for objectives: </span><span class="si">{arg}</span><span class="s2"> or type </span><span class="si">{type}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="n">arg</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">type</span><span class="p">(</span><span class="n">arg</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="CircuitCompiler.compile_circuit">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.CircuitCompiler.compile_circuit">[docs]</a>
+    <span class="k">def</span> <span class="nf">compile_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abstract_circuit</span><span class="p">:</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        compile a circuit.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        abstract_circuit: QCircuit</span>
+<span class="sd">            the circuit to compile.</span>
+<span class="sd">        variables:</span>
+<span class="sd">            (Default value = None):</span>
+<span class="sd">            list of the variables whose gates, specifically, must compile.</span>
+<span class="sd">            Used to prevent excess compilation in gates whose parameters are fixed.</span>
+<span class="sd">            Default: compile every single gate.</span>
+<span class="sd">        args</span>
+<span class="sd">        kwargs</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            QCircuit; a compiled circuit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">n_qubits</span> <span class="o">=</span> <span class="n">abstract_circuit</span><span class="o">.</span><span class="n">n_qubits</span>
+        <span class="n">compiled</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">(</span><span class="n">abstract_circuit</span><span class="o">.</span><span class="n">gates</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">variables</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># check &amp; compile all gates</span>
+            <span class="n">gatelist</span> <span class="o">=</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">abstract_circuit</span><span class="o">.</span><span class="n">gates</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># check &amp; compile only gates which depend on variables</span>
+            <span class="n">gatelist</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
+                <span class="n">gatelist</span> <span class="o">+=</span> <span class="n">abstract_circuit</span><span class="o">.</span><span class="n">_parameter_map</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span>
+
+        <span class="n">compiled_gates</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">gatelist</span><span class="p">:</span>
+
+            <span class="n">cg</span> <span class="o">=</span> <span class="n">gate</span>
+            <span class="n">controlled</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">is_controlled</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gradient_mode</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">cg</span><span class="p">,</span> <span class="s2">&quot;eigenvalues_magnitude&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">cg</span><span class="p">,</span> <span class="s2">&quot;shifted_gates&quot;</span><span class="p">)):</span>
+                <span class="n">compiled_gates</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">idx</span><span class="p">,</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">cg</span><span class="p">)))</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">cg</span><span class="p">,</span> <span class="s2">&quot;compile&quot;</span><span class="p">):</span>
+                    <span class="n">cg</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">cg</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">))</span>
+                    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">cg</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">g</span><span class="o">.</span><span class="n">is_controlled</span><span class="p">():</span>
+                            <span class="n">controlled</span> <span class="o">=</span> <span class="kc">True</span>
+
+
+            <span class="c1"># order matters</span>
+            <span class="c1"># first the real multi-target gates</span>
+            <span class="k">if</span> <span class="n">controlled</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">trotterized</span><span class="p">:</span>
+                <span class="n">cg</span> <span class="o">=</span> <span class="n">compile_trotterized_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">cg</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">controlled</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">generalized_rotation</span><span class="p">:</span>
+                <span class="n">cg</span> <span class="o">=</span> <span class="n">compile_generalized_rotation_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">cg</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">controlled</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">exponential_pauli</span><span class="p">:</span>
+                <span class="n">cg</span> <span class="o">=</span> <span class="n">compile_exponential_pauli_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">cg</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">swap</span><span class="p">:</span>
+                <span class="n">cg</span> <span class="o">=</span> <span class="n">compile_swap</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">cg</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase_to_z</span><span class="p">:</span>
+                <span class="n">cg</span> <span class="o">=</span> <span class="n">compile_phase_to_z</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">cg</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">power</span><span class="p">:</span>
+                <span class="n">cg</span> <span class="o">=</span> <span class="n">compile_power_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">cg</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase</span><span class="p">:</span>
+                <span class="n">cg</span> <span class="o">=</span> <span class="n">compile_phase</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">cg</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch_gate</span><span class="p">:</span>
+                <span class="n">cg</span> <span class="o">=</span> <span class="n">compile_ch</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">cg</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_gate</span><span class="p">:</span>
+                <span class="n">cg</span> <span class="o">=</span> <span class="n">compile_y</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">cg</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ry_gate</span><span class="p">:</span>
+                <span class="n">cg</span> <span class="o">=</span> <span class="n">compile_ry</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">cg</span><span class="p">,</span> <span class="n">controlled_rotation</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">controlled_rotation</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">controlled</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_max</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">multicontrol</span><span class="p">:</span>
+                    <span class="n">cg</span> <span class="o">=</span> <span class="n">compile_to_single_control</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">cg</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">controlled_exponential_pauli</span><span class="p">:</span>
+                    <span class="n">cg</span> <span class="o">=</span> <span class="n">compile_exponential_pauli_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">cg</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">controlled_power</span><span class="p">:</span>
+                    <span class="n">cg</span> <span class="o">=</span> <span class="n">compile_controlled_power</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">cg</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">controlled_phase</span><span class="p">:</span>
+                    <span class="n">cg</span> <span class="o">=</span> <span class="n">compile_controlled_phase</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">cg</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase</span><span class="p">:</span>
+                        <span class="n">cg</span> <span class="o">=</span> <span class="n">compile_phase</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">cg</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">toffoli</span><span class="p">:</span>
+                    <span class="n">cg</span> <span class="o">=</span> <span class="n">compile_toffoli</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">cg</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase</span><span class="p">:</span>
+                        <span class="n">cg</span> <span class="o">=</span> <span class="n">compile_phase</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">cg</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">controlled_rotation</span><span class="p">:</span>
+                    <span class="n">cg</span> <span class="o">=</span> <span class="n">compile_controlled_rotation</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">cg</span><span class="p">)</span>
+
+            <span class="n">compiled_gates</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">idx</span><span class="p">,</span> <span class="n">cg</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">compiled_gates</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">abstract_circuit</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pos</span><span class="p">,</span> <span class="n">cgs</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">compiled_gates</span><span class="p">)</span>
+            <span class="n">compiled</span> <span class="o">=</span> <span class="n">abstract_circuit</span><span class="o">.</span><span class="n">replace_gates</span><span class="p">(</span><span class="n">positions</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">circuits</span><span class="o">=</span><span class="n">cgs</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">compiled</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="compiler">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.compiler">[docs]</a>
+<span class="k">def</span> <span class="nf">compiler</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Decorator for compile functions.</span>
+
+<span class="sd">    Make them applicable for single gates as well as for whole circuits</span>
+<span class="sd">    Note that all arguments need to be passed as keyword arguments</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="s2">&quot;gates&quot;</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="n">f</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">g</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="s1">&#39;U&#39;</span><span class="p">):</span>
+            <span class="n">cU</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">U</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+                <span class="n">cU</span> <span class="o">+=</span> <span class="n">f</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">g</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">gate</span><span class="p">)(</span><span class="n">U</span><span class="o">=</span><span class="n">cU</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">H</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="s1">&#39;transformations&#39;</span><span class="p">):</span>
+            <span class="n">outer</span><span class="o">=</span><span class="p">[]</span>
+            <span class="k">for</span> <span class="n">args</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">argsets</span><span class="p">:</span>
+                <span class="n">compiled</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">E</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">):</span>
+                        <span class="n">compiled</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">E</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">cU</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+                        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">E</span><span class="o">.</span><span class="n">U</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
+                            <span class="n">cU</span> <span class="o">+=</span> <span class="n">f</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">g</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                        <span class="n">compiled</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">E</span><span class="p">)(</span><span class="n">U</span><span class="o">=</span><span class="n">cU</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="n">E</span><span class="o">.</span><span class="n">H</span><span class="p">))</span>
+                <span class="n">outer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">compiled</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">Objective</span><span class="p">):</span>
+                <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">gate</span><span class="p">)(</span><span class="n">args</span><span class="o">=</span><span class="n">outer</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">transformation</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">_transformation</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">gate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span></div>
+
+
+
+<div class="viewcode-block" id="change_basis">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.change_basis">[docs]</a>
+<span class="k">def</span> <span class="nf">change_basis</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">daggered</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    helper function; returns circuit that performs change of basis.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    target:</span>
+<span class="sd">        the qubit having its basis changed</span>
+<span class="sd">    axis:</span>
+<span class="sd">        The axis of rotation to shift into.</span>
+<span class="sd">    daggered: bool:</span>
+<span class="sd">        adjusts the sign of the gate if axis = 1, I.E, change of basis about Y axis.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    QCircuit that performs change of basis on target qubit onto desired axis</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">axis</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s1">&#39;axis or name must be given.&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="s1">&#39;hadamard&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">daggered</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Ry</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="s1">&#39;hadamard&#39;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="n">Ry</span><span class="p">(</span><span class="n">angle</span><span class="o">=-</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">name_to_axis</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;rx&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;ry&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;rz&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+            <span class="n">axis</span> <span class="o">=</span> <span class="n">name_to_axis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">axis</span> <span class="o">=</span> <span class="n">RotationGateImpl</span><span class="o">.</span><span class="n">string_to_axis</span><span class="p">[</span><span class="n">axis</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+
+    <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">daggered</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Ry</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Ry</span><span class="p">(</span><span class="n">angle</span><span class="o">=-</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">daggered</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Rx</span><span class="p">(</span><span class="n">angle</span><span class="o">=-</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Rx</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="compile_multitarget">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.compile_multitarget">[docs]</a>
+<span class="nd">@compiler</span>
+<span class="k">def</span> <span class="nf">compile_multitarget</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    If a gate is &#39;trivially&#39; multitarget, split it into single target gates.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gate:</span>
+<span class="sd">        the gate in question</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    QCircuit, the result of compilation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">target</span>
+
+    <span class="c1"># don&#39;t compile real multitarget gates</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="s2">&quot;generator&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="s2">&quot;generators&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="s2">&quot;paulistring&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">ExponentialPauliGateImpl</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">TrotterizedGateImpl</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;swap&quot;</span><span class="p">,</span> <span class="s2">&quot;iswap&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+        <span class="n">gx</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+        <span class="n">gx</span><span class="o">.</span><span class="n">_target</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span><span class="p">,)</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">gx</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<span class="c1"># return index of control qubits in Gray Code order.</span>
+<span class="k">def</span> <span class="nf">_pattern</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">pn</span> <span class="o">=</span> <span class="n">_pattern</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pn</span> <span class="o">+</span> <span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">pn</span>
+
+
+<div class="viewcode-block" id="compile_controlled_rotation">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.compile_controlled_rotation">[docs]</a>
+<span class="nd">@compiler</span>
+<span class="k">def</span> <span class="nf">compile_controlled_rotation</span><span class="p">(</span><span class="n">gate</span><span class="p">:</span> <span class="n">RotationGateImpl</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Recompilation of a controlled-rotation gate</span>
+<span class="sd">    Basis change into Rz then recompilation of controled Rz, then change basis back</span>
+<span class="sd">    :param gate: The rotational gate</span>
+<span class="sd">    :return: set of gates wrapped in QCircuit class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">gate</span><span class="o">.</span><span class="n">is_controlled</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">RotationGateImpl</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">compile_controlled_rotation</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">compile_multitarget</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">gate</span><span class="p">))</span>
+
+    <span class="n">target</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">target</span>
+    <span class="n">control</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">control</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">control</span><span class="p">)</span>
+    <span class="n">cind</span> <span class="o">=</span> <span class="n">_pattern</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">change_basis</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">_axis</span><span class="p">)</span>
+    <span class="n">coeff</span> <span class="o">=</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ci</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cind</span><span class="p">):</span>
+        <span class="n">coeff</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">Rz</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="n">coeff</span> <span class="o">*</span> <span class="n">gate</span><span class="o">.</span><span class="n">parameter</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">CNOT</span><span class="p">(</span><span class="n">control</span><span class="p">[</span><span class="n">ci</span><span class="p">],</span> <span class="n">target</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">change_basis</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">_axis</span><span class="p">,</span> <span class="n">daggered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">result</span><span class="o">.</span><span class="n">n_qubits</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">max_qubit</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<div class="viewcode-block" id="compile_to_single_control">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.compile_to_single_control">[docs]</a>
+<span class="nd">@compiler</span>
+<span class="k">def</span> <span class="nf">compile_to_single_control</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    break down a gate into a sequence with no more than single-controlled gates.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gate:</span>
+<span class="sd">        the gate.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        A QCircuit; the result of compilation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">gate</span><span class="o">.</span><span class="n">is_controlled</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+    <span class="n">cl</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">control</span><span class="p">)</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">target</span>
+    <span class="n">control</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">control</span>
+    <span class="k">if</span> <span class="n">cl</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">back</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">PowerGateImpl</span><span class="p">):</span>
+            <span class="n">power</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">parameter</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">power</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">PowerGateImpl</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="n">power</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">,</span> <span class="n">generator</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">make_generator</span><span class="p">())</span>
+        <span class="n">partial</span> <span class="o">=</span> <span class="n">compile_power_gate</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">new</span><span class="p">)</span>
+        <span class="n">back</span> <span class="o">+=</span> <span class="n">compile_to_single_control</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">partial</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">RotationGateImpl</span><span class="p">):</span>
+        <span class="n">partial</span> <span class="o">=</span> <span class="n">compile_controlled_rotation</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">gate</span><span class="p">)</span>
+        <span class="n">back</span> <span class="o">+=</span> <span class="n">compile_to_single_control</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">partial</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">PhaseGateImpl</span><span class="p">):</span>
+        <span class="n">partial</span> <span class="o">=</span> <span class="n">compile_controlled_phase</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">gate</span><span class="p">)</span>
+        <span class="n">back</span> <span class="o">+=</span> <span class="n">compile_to_single_control</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">partial</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s1">&#39;frankly, what the fuck is this gate?&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">back</span></div>
+
+
+
+<div class="viewcode-block" id="compile_toffoli">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.compile_toffoli">[docs]</a>
+<span class="nd">@compiler</span>
+<span class="k">def</span> <span class="nf">compile_toffoli</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    break down a toffoli gate into a sequence of CNOT and single qubit gates.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gate:</span>
+<span class="sd">        the gate.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        A QCircuit; the result of compilation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span> <span class="o">!=</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+    <span class="n">control</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">control</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="n">control</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">c0</span> <span class="o">=</span> <span class="n">control</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">target</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">H</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">CNOT</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">T</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="n">dagger</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">CNOT</span><span class="p">(</span><span class="n">c0</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">T</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">CNOT</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">T</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="n">dagger</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">CNOT</span><span class="p">(</span><span class="n">c0</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">T</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">T</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">CNOT</span><span class="p">(</span><span class="n">c0</span><span class="p">,</span> <span class="n">c1</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">H</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">T</span><span class="p">(</span><span class="n">c0</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">T</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span><span class="o">.</span><span class="n">dagger</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">CNOT</span><span class="p">(</span><span class="n">c0</span><span class="p">,</span> <span class="n">c1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="compile_power_gate">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.compile_power_gate">[docs]</a>
+<span class="nd">@compiler</span>
+<span class="k">def</span> <span class="nf">compile_power_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    break down power gates into the rotation gates.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gate:</span>
+<span class="sd">        the gate.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        A QCircuit; the result of compilation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">PowerGateImpl</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">gate</span><span class="o">.</span><span class="n">is_controlled</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">compile_power_base</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">gate</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">compile_controlled_power</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">gate</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="compile_power_base">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.compile_power_base">[docs]</a>
+<span class="nd">@compiler</span>
+<span class="k">def</span> <span class="nf">compile_power_base</span><span class="p">(</span><span class="n">gate</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base case of compile_power_gate: convert a 1-qubit parametrized power gate into rotation gates.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gate:</span>
+<span class="sd">        the gate.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        A QCircuit; the result of compilation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">PowerGateImpl</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">is_controlled</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+    <span class="n">power</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">power</span>
+    <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="s1">&#39;hadamard&#39;</span><span class="p">]:</span>
+        <span class="c1">### off by global phase of Exp[ pi power /2]</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">power</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">Ry</span><span class="p">(</span><span class="n">angle</span><span class="o">=-</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">Rz</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">Ry</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;X&#39;</span><span class="p">:</span>
+        <span class="c1">### off by global phase of Exp[ pi power /2]</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        if we wanted to do it formally we would use the following</span>
+<span class="sd">        a=-numpy.pi/2</span>
+<span class="sd">        b=numpy.pi/2</span>
+<span class="sd">        theta = power*numpy.pi</span>
+
+<span class="sd">        result = QCircuit()</span>
+<span class="sd">        result+= Rz(angle=b,target=gate.target)</span>
+<span class="sd">        result+= Ry(angle=theta,target=gate.target)</span>
+<span class="sd">        result+= Rz(angle=a,target=gate.target)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">Rx</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="n">power</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;Y&#39;</span><span class="p">:</span>
+        <span class="c1">### off by global phase of Exp[ pi power /2]</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">power</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">Ry</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;Z&#39;</span><span class="p">:</span>
+        <span class="c1">### off by global phase of Exp[ pi power /2]</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">power</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">Rz</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s1">&#39;passed a gate with name &#39;</span> <span class="o">+</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;, which cannot be handled!&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<div class="viewcode-block" id="compile_controlled_power">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.compile_controlled_power">[docs]</a>
+<span class="nd">@compiler</span>
+<span class="k">def</span> <span class="nf">compile_controlled_power</span><span class="p">(</span><span class="n">gate</span><span class="p">:</span> <span class="n">PowerGateImpl</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Recompilation of a controlled-power gate</span>
+<span class="sd">    Basis change into Z then recompilation of controled Z, then change basis back</span>
+<span class="sd">    :param gate: The power gate</span>
+<span class="sd">    :return: set of gates wrapped in QCircuit class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">gate</span><span class="o">.</span><span class="n">is_controlled</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">PowerGateImpl</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">compile_controlled_power</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">compile_multitarget</span><span class="p">(</span><span class="n">gate</span><span class="o">=</span><span class="n">gate</span><span class="p">))</span>
+
+    <span class="n">power</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">power</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">target</span>
+    <span class="n">control</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">control</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">Phase</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">control</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">phi</span><span class="o">=</span><span class="n">power</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">change_basis</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">Rz</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="n">power</span> <span class="o">*</span> <span class="n">pi</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">change_basis</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">daggered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">result</span><span class="o">.</span><span class="n">n_qubits</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">max_qubit</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<div class="viewcode-block" id="compile_phase">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.compile_phase">[docs]</a>
+<span class="nd">@compiler</span>
+<span class="k">def</span> <span class="nf">compile_phase</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compile phase gates into Rz gates and cnots, if controlled</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gate:</span>
+<span class="sd">        the gate</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    QCircuit, the result of compilation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">PhaseGateImpl</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+    <span class="n">phase</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">parameter</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">control</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Rz</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="n">phase</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">compile_controlled_phase</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">compile_phase</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<div class="viewcode-block" id="compile_controlled_phase">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.compile_controlled_phase">[docs]</a>
+<span class="nd">@compiler</span>
+<span class="k">def</span> <span class="nf">compile_controlled_phase</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compile multi-controlled phase gates to 1q - phase gate and multi-controlled Rz gates.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gate:</span>
+<span class="sd">        the gate.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    QCircuit, the result of compilation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">PhaseGateImpl</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">control</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+    <span class="n">phase</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">parameter</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">Phase</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">control</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">control</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">control</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">phi</span><span class="o">=</span><span class="n">phase</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">Rz</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">control</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="n">phase</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">compile_controlled_phase</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="compile_phase_to_z">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.compile_phase_to_z">[docs]</a>
+<span class="nd">@compiler</span>
+<span class="k">def</span> <span class="nf">compile_phase_to_z</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compile phase gate to parametrized Z gate.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gate:</span>
+<span class="sd">        the gate.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    QCircuit, the result of compilation.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">PhaseGateImpl</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+    <span class="n">phase</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">parameter</span>
+    <span class="k">return</span> <span class="n">Z</span><span class="p">(</span><span class="n">power</span><span class="o">=</span><span class="n">phase</span> <span class="o">/</span> <span class="n">pi</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">control</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="compile_swap">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.compile_swap">[docs]</a>
+<span class="nd">@compiler</span>
+<span class="k">def</span> <span class="nf">compile_swap</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compile swap gates into CNOT.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gate:</span>
+<span class="sd">        the gate.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    QCircuit, the result of compilation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;swap&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TequilaCompilerException</span><span class="p">(</span><span class="s2">&quot;SWAP gates needs two targets&quot;</span><span class="p">)</span>
+        <span class="n">power</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="s2">&quot;power&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">power</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">power</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]:</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TequilaCompilerException</span><span class="p">(</span><span class="s2">&quot;Parametrized SWAPs should be decomposed on top level! Something went wrong&quot;</span><span class="p">)</span>
+
+        <span class="n">c</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">control</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">control</span>
+        <span class="k">return</span> <span class="n">X</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">control</span><span class="o">=</span><span class="p">[</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span> \
+               <span class="o">+</span> <span class="n">X</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">control</span><span class="o">=</span><span class="p">[</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">c</span><span class="p">),</span> <span class="n">power</span><span class="o">=</span><span class="n">power</span><span class="p">)</span> \
+               <span class="o">+</span> <span class="n">X</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">control</span><span class="o">=</span><span class="p">[</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="compile_exponential_pauli_gate">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.compile_exponential_pauli_gate">[docs]</a>
+<span class="nd">@compiler</span>
+<span class="k">def</span> <span class="nf">compile_exponential_pauli_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the circuit: exp(i*angle*paulistring)</span>
+<span class="sd">    primitively compiled into X,Y Basis Changes and CNOTs and Z Rotations</span>
+<span class="sd">    :param paulistring: The paulistring in given as tuple of tuples (openfermion format)</span>
+<span class="sd">    like e.g  ( (0, &#39;Y&#39;), (1, &#39;X&#39;), (5, &#39;Z&#39;) )</span>
+<span class="sd">    :param angle: The angle which parametrizes the gate -&gt; should be real</span>
+<span class="sd">    :returns: the above mentioned circuit as abstract structure</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="s2">&quot;paulistring&quot;</span><span class="p">):</span>
+
+        <span class="n">angle</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">paulistring</span><span class="o">.</span><span class="n">coeff</span> <span class="o">*</span> <span class="n">gate</span><span class="o">.</span><span class="n">parameter</span>
+
+        <span class="n">circuit</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+
+        <span class="c1"># the general circuit will look like:</span>
+        <span class="c1"># series which changes the basis if necessary</span>
+        <span class="c1"># series of CNOTS associated with basis changes</span>
+        <span class="c1"># Rz gate parametrized on the angle</span>
+        <span class="c1"># series of CNOT (inverted direction compared to before)</span>
+        <span class="c1"># series which changes the basis back</span>
+        <span class="n">ubasis</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+        <span class="n">ubasis_t</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+        <span class="n">cnot_cascade</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+
+        <span class="n">last_qubit</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">previous_qubit</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">paulistring</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">pauli</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="n">qubit</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="p">]</span>  <span class="c1"># wrap in list for targets= ...</span>
+
+            <span class="c1"># see if we need to change the basis</span>
+            <span class="n">axis</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="k">if</span> <span class="n">pauli</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span>
+                <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">elif</span> <span class="n">pauli</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Y&quot;</span><span class="p">:</span>
+                <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">ubasis</span> <span class="o">+=</span> <span class="n">change_basis</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">qubit</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+            <span class="n">ubasis_t</span> <span class="o">+=</span> <span class="n">change_basis</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">qubit</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">daggered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">previous_qubit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">cnot_cascade</span> <span class="o">+=</span> <span class="n">X</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">qubit</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">previous_qubit</span><span class="p">)</span>
+            <span class="n">previous_qubit</span> <span class="o">=</span> <span class="n">qubit</span>
+            <span class="n">last_qubit</span> <span class="o">=</span> <span class="n">qubit</span>
+
+        <span class="n">reversed_cnot</span> <span class="o">=</span> <span class="n">cnot_cascade</span><span class="o">.</span><span class="n">dagger</span><span class="p">()</span>
+
+        <span class="c1"># assemble the circuit</span>
+        <span class="n">circuit</span> <span class="o">+=</span> <span class="n">ubasis</span>
+        <span class="n">circuit</span> <span class="o">+=</span> <span class="n">cnot_cascade</span>
+        <span class="n">circuit</span> <span class="o">+=</span> <span class="n">Rz</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">last_qubit</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="n">angle</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">control</span><span class="p">)</span>
+        <span class="n">circuit</span> <span class="o">+=</span> <span class="n">reversed_cnot</span>
+        <span class="n">circuit</span> <span class="o">+=</span> <span class="n">ubasis_t</span>
+
+        <span class="k">return</span> <span class="n">circuit</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="do_compile_trotterized_gate">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.do_compile_trotterized_gate">[docs]</a>
+<span class="k">def</span> <span class="nf">do_compile_trotterized_gate</span><span class="p">(</span><span class="n">generator</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">factor</span><span class="p">,</span> <span class="n">randomize</span><span class="p">,</span> <span class="n">control</span><span class="p">):</span>
+
+    <span class="k">assert</span> <span class="p">(</span><span class="n">generator</span><span class="o">.</span><span class="n">is_hermitian</span><span class="p">())</span>
+    <span class="n">circuit</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+    <span class="n">factor</span> <span class="o">=</span> <span class="n">factor</span> <span class="o">/</span> <span class="n">steps</span>
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+        <span class="n">paulistrings</span> <span class="o">=</span> <span class="n">generator</span><span class="o">.</span><span class="n">paulistrings</span>
+        <span class="k">if</span> <span class="n">randomize</span><span class="p">:</span>
+            <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">paulistrings</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ps</span> <span class="ow">in</span> <span class="n">paulistrings</span><span class="p">:</span>
+            <span class="n">coeff</span> <span class="o">=</span> <span class="n">to_float</span><span class="p">(</span><span class="n">ps</span><span class="o">.</span><span class="n">coeff</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ps</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">control</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">circuit</span> <span class="o">+=</span> <span class="n">Phase</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">control</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">phi</span><span class="o">=-</span><span class="n">factor</span> <span class="o">*</span> <span class="n">coeff</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">ps</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">circuit</span> <span class="o">+=</span> <span class="n">ExpPauli</span><span class="p">(</span><span class="n">paulistring</span><span class="o">=</span><span class="n">ps</span><span class="o">.</span><span class="n">naked</span><span class="p">(),</span> <span class="n">angle</span><span class="o">=</span><span class="n">factor</span> <span class="o">*</span> <span class="n">coeff</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># ignore global phases</span>
+                <span class="k">pass</span>
+    <span class="k">return</span> <span class="n">circuit</span></div>
+
+
+
+<div class="viewcode-block" id="compile_generalized_rotation_gate">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.compile_generalized_rotation_gate">[docs]</a>
+<span class="nd">@compiler</span>
+<span class="k">def</span> <span class="nf">compile_generalized_rotation_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">compile_exponential_pauli</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gate</span>
+<span class="sd">    compile_exponential_pauli</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">generator</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;phase&#39;</span><span class="p">,</span> <span class="s1">&#39;rx&#39;</span><span class="p">,</span> <span class="s1">&#39;ry&#39;</span><span class="p">,</span> <span class="s1">&#39;rz&#39;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="s2">&quot;eigenvalues_magnitude&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+    <span class="n">steps</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="s2">&quot;steps&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">gate</span><span class="o">.</span><span class="n">steps</span>
+
+    <span class="k">return</span> <span class="n">do_compile_trotterized_gate</span><span class="p">(</span><span class="n">generator</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">generator</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">,</span> <span class="n">randomize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                       <span class="n">factor</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">parameter</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">control</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="compile_trotterized_gate">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.compile_trotterized_gate">[docs]</a>
+<span class="nd">@compiler</span>
+<span class="k">def</span> <span class="nf">compile_trotterized_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">compile_exponential_pauli</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gate</span>
+<span class="sd">    compile_exponential_pauli</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="s2">&quot;steps&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="s2">&quot;eigenvalues_magnitude&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+    <span class="n">randomize</span><span class="o">=</span><span class="kc">False</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="s2">&quot;randomize&quot;</span><span class="p">):</span>
+        <span class="n">randomize</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">randomize</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">do_compile_trotterized_gate</span><span class="p">(</span><span class="n">generator</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">generator</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">steps</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">parameter</span><span class="p">,</span> <span class="n">randomize</span><span class="o">=</span><span class="n">randomize</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">control</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">compile_exponential_pauli</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">compile_exponential_pauli_gate</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<div class="viewcode-block" id="compile_ry">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.compile_ry">[docs]</a>
+<span class="nd">@compiler</span>
+<span class="k">def</span> <span class="nf">compile_ry</span><span class="p">(</span><span class="n">gate</span><span class="p">:</span> <span class="n">RotationGateImpl</span><span class="p">,</span> <span class="n">controlled_rotation</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compile Ry gates into Rx and Rz.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gate:</span>
+<span class="sd">        the gate.</span>
+<span class="sd">    controlled_rotation:</span>
+<span class="sd">        determines if the decomposition of the controlled-Ry gate will be performed in compile_controlled_rotation,</span>
+<span class="sd">        if not, decomposition will be performed here</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    QCircuit, the result of compilation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;ry&quot;</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">is_controlled</span><span class="p">()</span> <span class="ow">and</span> <span class="n">controlled_rotation</span><span class="p">):</span>
+
+            <span class="k">return</span> <span class="n">Rz</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">angle</span><span class="o">=-</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> \
+                   <span class="o">+</span> <span class="n">Rx</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">control</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">parameter</span><span class="p">)</span> \
+                   <span class="o">+</span> <span class="n">Rz</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="compile_y">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.compile_y">[docs]</a>
+<span class="nd">@compiler</span>
+<span class="k">def</span> <span class="nf">compile_y</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compile Y gates into X and Rz.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gate:</span>
+<span class="sd">        the gate.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    QCircuit, the result of compilation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span>
+
+        <span class="k">return</span> <span class="n">Rz</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">angle</span><span class="o">=-</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> \
+               <span class="o">+</span> <span class="n">X</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">control</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">power</span> <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">is_parametrized</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span> \
+               <span class="o">+</span> <span class="n">Rz</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="compile_ch">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.compiler.compile_ch">[docs]</a>
+<span class="nd">@compiler</span>
+<span class="k">def</span> <span class="nf">compile_ch</span><span class="p">(</span><span class="n">gate</span><span class="p">:</span> <span class="n">QGateImpl</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compile CH gates into its equivalent:</span>
+<span class="sd">        CH = Ry(0.25pi) CZ Ry(-0.25pi)</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gate:</span>
+<span class="sd">        the gate.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    QCircuit, the result of compilation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;h&quot;</span> <span class="ow">and</span> <span class="n">gate</span><span class="o">.</span><span class="n">is_controlled</span><span class="p">():</span>
+
+        <span class="k">return</span> <span class="n">Ry</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">angle</span><span class="o">=-</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span> \
+               <span class="o">+</span> <span class="n">Z</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">control</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">power</span> <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">is_parametrized</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span> \
+               <span class="o">+</span> <span class="n">Ry</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="o">.</span><span class="n">wrap_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ram Mosco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

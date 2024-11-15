@@ -1,0 +1,531 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tequila_code.quantumchemistry.encodings &mdash; Tequila Documentation 13.9.2024 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=7dcc51c3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Tequila Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Tequila Library Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tequila Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../quantumchemistry.html">tequila_code.quantumchemistry</a></li>
+      <li class="breadcrumb-item active">tequila_code.quantumchemistry.encodings</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tequila_code.quantumchemistry.encodings</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Collections of Fermion-to-Qubit encodings known to tequila</span>
+<span class="sd">Most are Interfaces to OpenFermion</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">abc</span>
+
+<span class="kn">from</span> <span class="nn">tequila</span> <span class="kn">import</span> <span class="n">TequilaException</span>
+<span class="kn">from</span> <span class="nn">tequila.circuit.circuit</span> <span class="kn">import</span> <span class="n">QCircuit</span>
+<span class="kn">from</span> <span class="nn">tequila.circuit.gates</span> <span class="kn">import</span> <span class="n">X</span><span class="p">,</span> <span class="n">CNOT</span>
+<span class="kn">from</span> <span class="nn">tequila.hamiltonian.qubit_hamiltonian</span> <span class="kn">import</span> <span class="n">QubitHamiltonian</span>
+<span class="kn">import</span> <span class="nn">openfermion</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+
+<div class="viewcode-block" id="known_encodings">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.known_encodings">[docs]</a>
+<span class="k">def</span> <span class="nf">known_encodings</span><span class="p">():</span>
+    <span class="c1"># convenience for testing and I/O</span>
+    <span class="n">encodings</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;JordanWigner&quot;</span><span class="p">:</span> <span class="n">JordanWigner</span><span class="p">,</span>
+        <span class="s2">&quot;BravyiKitaev&quot;</span><span class="p">:</span> <span class="n">BravyiKitaev</span><span class="p">,</span>
+        <span class="s2">&quot;BravyiKitaevFast&quot;</span><span class="p">:</span> <span class="n">BravyiKitaevFast</span><span class="p">,</span>
+        <span class="s2">&quot;BravyiKitaevTree&quot;</span><span class="p">:</span> <span class="n">BravyiKitaevTree</span><span class="p">,</span>
+        <span class="s2">&quot;TaperedBravyiKitaev&quot;</span><span class="p">:</span> <span class="n">TaperedBravyKitaev</span>
+    <span class="p">}</span>
+    <span class="c1"># aliases</span>
+    <span class="n">encodings</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">encodings</span><span class="p">,</span>
+                 <span class="s2">&quot;ReorderedJordanWigner&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">JordanWigner</span><span class="p">(</span><span class="n">up_then_down</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
+                 <span class="s2">&quot;ReorderedBravyiKitaev&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">BravyiKitaev</span><span class="p">(</span><span class="n">up_then_down</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
+                 <span class="s2">&quot;ReorderedBravyiKitaevTree&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">BravyiKitaevTree</span><span class="p">(</span><span class="n">up_then_down</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
+                 <span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">():</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">encodings</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></div>
+
+
+
+<div class="viewcode-block" id="EncodingBase">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase">[docs]</a>
+<span class="k">class</span> <span class="nc">EncodingBase</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="c1"># true if the encoding is fully integrated</span>
+    <span class="c1"># false: can only do special things (like building the Hamiltionian)</span>
+    <span class="c1"># but is not consistent with UCC gate generation</span>
+    <span class="n">_ucc_support</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">supports_ucc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ucc_support</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">up_then_down</span><span class="p">:</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;Reordered&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_name&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">prefix</span> <span class="o">+</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_electrons</span><span class="p">,</span> <span class="n">n_orbitals</span><span class="p">,</span> <span class="n">up_then_down</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_electrons</span> <span class="o">=</span> <span class="n">n_electrons</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span> <span class="o">=</span> <span class="n">n_orbitals</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">up_then_down</span> <span class="o">=</span> <span class="n">up_then_down</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fermion_operator</span><span class="p">:</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">FermionOperator</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitHamiltonian</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param fermion_operator:</span>
+<span class="sd">            an openfermion FermionOperator</span>
+<span class="sd">        :return:</span>
+<span class="sd">            The openfermion QubitOperator of this class ecoding</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">up_then_down</span><span class="p">:</span>
+            <span class="n">op</span> <span class="o">=</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">reorder</span><span class="p">(</span><span class="n">operator</span><span class="o">=</span><span class="n">fermion_operator</span><span class="p">,</span> <span class="n">order_function</span><span class="o">=</span><span class="n">openfermion</span><span class="o">.</span><span class="n">up_then_down</span><span class="p">,</span>
+                                     <span class="n">num_modes</span><span class="o">=</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">op</span> <span class="o">=</span> <span class="n">fermion_operator</span>
+
+        <span class="n">fop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_transform</span><span class="p">(</span><span class="n">fermion_operator</span><span class="o">=</span><span class="n">op</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">fop</span><span class="o">.</span><span class="n">compress</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_processing</span><span class="p">(</span><span class="n">QubitHamiltonian</span><span class="o">.</span><span class="n">from_openfermion</span><span class="p">(</span><span class="n">fop</span><span class="p">))</span>
+
+<div class="viewcode-block" id="EncodingBase.post_processing">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.post_processing">[docs]</a>
+    <span class="k">def</span> <span class="nf">post_processing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">op</span></div>
+
+
+<div class="viewcode-block" id="EncodingBase.up">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.up">[docs]</a>
+    <span class="k">def</span> <span class="nf">up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">up_then_down</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">i</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span></div>
+
+
+<div class="viewcode-block" id="EncodingBase.down">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.down">[docs]</a>
+    <span class="k">def</span> <span class="nf">down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">up_then_down</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">i</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="EncodingBase.do_transform">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.do_transform">[docs]</a>
+    <span class="k">def</span> <span class="nf">do_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fermion_operator</span><span class="p">:</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">FermionOperator</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">QubitOperator</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">::do_transform: called base class&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="EncodingBase.map_state">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.map_state">[docs]</a>
+    <span class="k">def</span> <span class="nf">map_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Expects a state in spin-orbital ordering</span>
+<span class="sd">        Returns the corresponding qubit state in the class encoding</span>
+<span class="sd">        :param state:</span>
+<span class="sd">            basis-state as occupation number vector in spin orbitals</span>
+<span class="sd">            sorted as: [0_up, 0_down, 1_up, 1_down, ... N_up, N_down]</span>
+<span class="sd">            with N being the number of spatial orbitals</span>
+<span class="sd">        :return:</span>
+<span class="sd">            basis-state as qubit state in the corresponding mapping</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Does a really lazy workaround ... but it works</span>
+<span class="sd">        :return: Hartree-Fock Reference as binary-number</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        reference_orbitals: list:</span>
+<span class="sd">            give list of doubly occupied orbitals</span>
+<span class="sd">            default is None which leads to automatic list of the</span>
+<span class="sd">            first n_electron/2 orbitals</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># default is a lazy workaround, but it workds</span>
+        <span class="n">n_qubits</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span>
+
+        <span class="n">spin_orbitals</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;1.0 [&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">spin_orbitals</span><span class="p">:</span>
+            <span class="n">string</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;^ &quot;</span>
+        <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;]&quot;</span>
+
+        <span class="n">fop</span> <span class="o">=</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">FermionOperator</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">op</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">fop</span><span class="p">)</span>
+        <span class="kn">from</span> <span class="nn">tequila.wavefunction.qubit_wavefunction</span> <span class="kn">import</span> <span class="n">QubitWaveFunction</span>
+        <span class="n">wfn</span> <span class="o">=</span> <span class="n">QubitWaveFunction</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_qubits</span><span class="o">=</span><span class="n">n_qubits</span><span class="p">)</span>
+        <span class="n">wfn</span> <span class="o">=</span> <span class="n">wfn</span><span class="o">.</span><span class="n">apply_qubitoperator</span><span class="p">(</span><span class="n">operator</span><span class="o">=</span><span class="n">op</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">wfn</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">wfn</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">array</span>
+        <span class="k">return</span> <span class="n">key</span></div>
+
+
+<div class="viewcode-block" id="EncodingBase.me_to_jw">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.me_to_jw">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">me_to_jw</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method needs to be implemented to enable default conversions via Jordan-Wigner</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+    <span class="c1"># independent conversion methods, these are used for default conversions</span>
+    <span class="c1"># arXiv:1808.10402 IV. B. 2, Eq. 57</span>
+    <span class="c1"># original: https://doi.org/10.1063/1.4768229</span>
+    <span class="k">def</span> <span class="nf">_jw_to_bk</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>  <span class="c1"># Constructs empty circuit</span>
+
+        <span class="n">flipper</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span> <span class="o">*</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="c1"># even qubits only hold their own value</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># sum always includes the last qubit</span>
+            <span class="n">U</span> <span class="o">+=</span> <span class="n">CNOT</span><span class="p">(</span><span class="n">control</span><span class="o">=</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+
+            <span class="c1"># every second odd qubit ties together with the last odd qubit</span>
+            <span class="k">if</span> <span class="n">flipper</span><span class="p">:</span>
+                <span class="n">U</span> <span class="o">+=</span> <span class="n">CNOT</span><span class="p">(</span><span class="n">control</span><span class="o">=</span><span class="n">i</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+
+            <span class="n">flipper</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">flipper</span>
+
+            <span class="c1"># we have now created the 4x4 blocks on the diagonal of this operators matrix</span>
+
+            <span class="c1"># every power of 2 connects to the last power of 2</span>
+            <span class="c1"># this corresponds to the last row in the recursive definitions being all 1s</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">is_integer</span><span class="p">()</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                <span class="n">U</span> <span class="o">+=</span> <span class="n">CNOT</span><span class="p">(</span><span class="n">control</span><span class="o">=</span><span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">U</span>
+
+    <span class="k">def</span> <span class="nf">_hcb_to_jw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span><span class="p">):</span>
+            <span class="n">U</span> <span class="o">+=</span> <span class="n">X</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">down</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">control</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">up</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">U</span>
+
+    <span class="c1"># Convenience Methods</span>
+<div class="viewcode-block" id="EncodingBase.jw_to_me">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.jw_to_me">[docs]</a>
+    <span class="k">def</span> <span class="nf">jw_to_me</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">me_to_jw</span><span class="p">()</span><span class="o">.</span><span class="n">dagger</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="EncodingBase.me_to_bk">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.me_to_bk">[docs]</a>
+    <span class="k">def</span> <span class="nf">me_to_bk</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">me_to_jw</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jw_to_bk</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="EncodingBase.bk_to_me">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.bk_to_me">[docs]</a>
+    <span class="k">def</span> <span class="nf">bk_to_me</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">me_to_bk</span><span class="p">()</span><span class="o">.</span><span class="n">dagger</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="EncodingBase.hcb_to_me">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.hcb_to_me">[docs]</a>
+    <span class="k">def</span> <span class="nf">hcb_to_me</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hcb_to_jw</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">jw_to_me</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span></div>
+
+
+
+<div class="viewcode-block" id="JordanWigner">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.JordanWigner">[docs]</a>
+<span class="k">class</span> <span class="nc">JordanWigner</span><span class="p">(</span><span class="n">EncodingBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OpenFermion::jordan_wigner</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_ucc_support</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="JordanWigner.do_transform">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.JordanWigner.do_transform">[docs]</a>
+    <span class="k">def</span> <span class="nf">do_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fermion_operator</span><span class="p">:</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">FermionOperator</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">QubitOperator</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">jordan_wigner</span><span class="p">(</span><span class="n">fermion_operator</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="JordanWigner.map_state">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.JordanWigner.map_state">[docs]</a>
+    <span class="k">def</span> <span class="nf">map_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">state</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">up_then_down</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">state</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="n">state</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">state</span></div>
+
+
+<div class="viewcode-block" id="JordanWigner.hcb_to_me">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.JordanWigner.hcb_to_me">[docs]</a>
+    <span class="k">def</span> <span class="nf">hcb_to_me</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span><span class="p">):</span>
+            <span class="n">U</span> <span class="o">+=</span> <span class="n">X</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">down</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">control</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">up</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">U</span></div>
+
+
+<div class="viewcode-block" id="JordanWigner.me_to_jw">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.JordanWigner.me_to_jw">[docs]</a>
+    <span class="k">def</span> <span class="nf">me_to_jw</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="JordanWigner.jw_to_me">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.JordanWigner.jw_to_me">[docs]</a>
+    <span class="k">def</span> <span class="nf">jw_to_me</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="BravyiKitaev">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaev">[docs]</a>
+<span class="k">class</span> <span class="nc">BravyiKitaev</span><span class="p">(</span><span class="n">EncodingBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Uses OpenFermion::bravyi_kitaev</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_ucc_support</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="BravyiKitaev.do_transform">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaev.do_transform">[docs]</a>
+    <span class="k">def</span> <span class="nf">do_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fermion_operator</span><span class="p">:</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">FermionOperator</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">QubitOperator</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">bravyi_kitaev</span><span class="p">(</span><span class="n">fermion_operator</span><span class="p">,</span> <span class="n">n_qubits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BravyiKitaev.me_to_jw">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaev.me_to_jw">[docs]</a>
+    <span class="k">def</span> <span class="nf">me_to_jw</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jw_to_bk</span><span class="p">()</span><span class="o">.</span><span class="n">dagger</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="BravyiKitaev.jw_to_me">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaev.jw_to_me">[docs]</a>
+    <span class="k">def</span> <span class="nf">jw_to_me</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jw_to_bk</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="BravyiKitaev.bk_to_me">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaev.bk_to_me">[docs]</a>
+    <span class="k">def</span> <span class="nf">bk_to_me</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="BravyiKitaev.me_to_bk">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaev.me_to_bk">[docs]</a>
+    <span class="k">def</span> <span class="nf">me_to_bk</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">QCircuit</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="BravyiKitaevTree">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaevTree">[docs]</a>
+<span class="k">class</span> <span class="nc">BravyiKitaevTree</span><span class="p">(</span><span class="n">EncodingBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Uses OpenFermion::bravyi_kitaev_tree</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_ucc_support</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="BravyiKitaevTree.do_transform">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaevTree.do_transform">[docs]</a>
+    <span class="k">def</span> <span class="nf">do_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fermion_operator</span><span class="p">:</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">FermionOperator</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">QubitOperator</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">bravyi_kitaev_tree</span><span class="p">(</span><span class="n">fermion_operator</span><span class="p">,</span> <span class="n">n_qubits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BravyiKitaevTree.me_to_jw">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaevTree.me_to_jw">[docs]</a>
+    <span class="k">def</span> <span class="nf">me_to_jw</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">::me_to_jw: unimplemented&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="BravyiKitaevFast">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaevFast">[docs]</a>
+<span class="k">class</span> <span class="nc">BravyiKitaevFast</span><span class="p">(</span><span class="n">EncodingBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Uses OpenFermion::bravyi_kitaev_tree</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_ucc_support</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="BravyiKitaevFast.do_transform">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaevFast.do_transform">[docs]</a>
+    <span class="k">def</span> <span class="nf">do_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fermion_operator</span><span class="p">:</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">FermionOperator</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">QubitOperator</span><span class="p">:</span>
+        <span class="n">n_qubits</span> <span class="o">=</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">count_qubits</span><span class="p">(</span><span class="n">fermion_operator</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_qubits</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span> <span class="o">*</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s2">&quot;BravyiKitaevFast transformation currently only possible for full Hamiltonians (no UCC generators).</span><span class="se">\n</span><span class="s2">fermion_operator was </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">fermion_operator</span><span class="p">))</span>
+        <span class="n">op</span> <span class="o">=</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">get_interaction_operator</span><span class="p">(</span><span class="n">fermion_operator</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">bravyi_kitaev_fast</span><span class="p">(</span><span class="n">op</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BravyiKitaevFast.me_to_jw">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaevFast.me_to_jw">[docs]</a>
+    <span class="k">def</span> <span class="nf">me_to_jw</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">::me_to_jw: unimplemented&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TaperedBravyKitaev">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.TaperedBravyKitaev">[docs]</a>
+<span class="k">class</span> <span class="nc">TaperedBravyKitaev</span><span class="p">(</span><span class="n">EncodingBase</span><span class="p">):</span>
+    <span class="n">_ucc_support</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Uses OpenFermion::symmetry_conserving_bravyi_kitaev (tapered bravyi_kitaev_tree arxiv:1701.07072)</span>
+<span class="sd">    Reduces Hamiltonian by 2 qubits</span>
+<span class="sd">    See OpenFermion Documentation for more</span>
+<span class="sd">    Does not work for UCC generators yet</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_electrons</span><span class="p">,</span> <span class="n">n_orbitals</span><span class="p">,</span> <span class="n">active_fermions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">active_orbitals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">active_fermions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_fermions</span> <span class="o">=</span> <span class="n">n_electrons</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_fermions</span> <span class="o">=</span> <span class="n">active_fermions</span>
+
+        <span class="k">if</span> <span class="n">active_orbitals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_orbitals</span> <span class="o">=</span> <span class="n">n_orbitals</span> <span class="o">*</span> <span class="mi">2</span>  <span class="c1"># in openfermion those are spin-orbitals</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_orbitals</span> <span class="o">=</span> <span class="n">active_orbitals</span>
+
+        <span class="k">if</span> <span class="s2">&quot;up_then_down&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Don&#39;t pass up_then_down argument to </span><span class="si">{}</span><span class="s2">, it can&#39;t be changed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">n_orbitals</span><span class="o">=</span><span class="n">n_orbitals</span><span class="p">,</span> <span class="n">n_electrons</span><span class="o">=</span><span class="n">n_electrons</span><span class="p">,</span> <span class="n">up_then_down</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TaperedBravyKitaev.do_transform">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.TaperedBravyKitaev.do_transform">[docs]</a>
+    <span class="k">def</span> <span class="nf">do_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fermion_operator</span><span class="p">:</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">FermionOperator</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">QubitOperator</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">count_qubits</span><span class="p">(</span><span class="n">fermion_operator</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span> <span class="o">*</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;TaperedBravyiKitaev not ready for UCC generators yet&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">openfermion</span><span class="o">.</span><span class="n">symmetry_conserving_bravyi_kitaev</span><span class="p">(</span><span class="n">fermion_operator</span><span class="p">,</span> <span class="n">active_orbitals</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">active_orbitals</span><span class="p">,</span>
+                                                             <span class="n">active_fermions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">active_fermions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TaperedBravyKitaev.map_state">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.TaperedBravyKitaev.map_state">[docs]</a>
+    <span class="k">def</span> <span class="nf">map_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">non_tapered_trafo</span> <span class="o">=</span> <span class="n">BravyiKitaevTree</span><span class="p">(</span><span class="n">up_then_down</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_electrons</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_electrons</span><span class="p">,</span>
+                                             <span class="n">n_orbitals</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span><span class="p">)</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">non_tapered_trafo</span><span class="o">.</span><span class="n">map_state</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="n">state</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">n_qubits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span> <span class="o">*</span> <span class="mi">2</span>
+        <span class="n">active_qubits</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">n_qubits</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_qubits</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]]</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">active_qubits</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">key</span></div>
+
+
+<div class="viewcode-block" id="TaperedBravyKitaev.me_to_jw">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.encodings.TaperedBravyKitaev.me_to_jw">[docs]</a>
+    <span class="k">def</span> <span class="nf">me_to_jw</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">::me_to_jw: unimplemented&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ram Mosco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

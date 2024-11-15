@@ -1,0 +1,1083 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Optimizers &mdash; Tequila Documentation 13.9.2024 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7dcc51c3"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Simulators" href="simulators.html" />
+    <link rel="prev" title="Circuit" href="circuit.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Tequila Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Tequila Library Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="hamiltonian.html">Hamiltonian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="circuit.html">Circuit</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Optimizers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tequila_code.optimizers.optimizer_base">optimizer base module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.optimizers.optimizer_base.Optimizer"><code class="docutils literal notranslate"><span class="pre">Optimizer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.optimizers.optimizer_base.OptimizerHistory"><code class="docutils literal notranslate"><span class="pre">OptimizerHistory</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.optimizers.optimizer_base.OptimizerResults"><code class="docutils literal notranslate"><span class="pre">OptimizerResults</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.optimizers.optimizer_base.TequilaOptimizerException"><code class="docutils literal notranslate"><span class="pre">TequilaOptimizerException</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tequila_code.optimizers.optimizer_gd">optimizer gradient module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.optimizers.optimizer_gd.DIIS"><code class="docutils literal notranslate"><span class="pre">DIIS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.optimizers.optimizer_gd.GDResults"><code class="docutils literal notranslate"><span class="pre">GDResults</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD"><code class="docutils literal notranslate"><span class="pre">OptimizerGD</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.optimizers.optimizer_gd.minimize"><code class="docutils literal notranslate"><span class="pre">minimize()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#optimizer-gpyopt-module">optimizer gpyopt module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tequila_code.optimizers.optimizer_scipy">optimizer scipy module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy"><code class="docutils literal notranslate"><span class="pre">OptimizerSciPy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.optimizers.optimizer_scipy.SciPyResults"><code class="docutils literal notranslate"><span class="pre">SciPyResults</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.optimizers.optimizer_scipy.TequilaScipyException"><code class="docutils literal notranslate"><span class="pre">TequilaScipyException</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.optimizers.optimizer_scipy.available_methods"><code class="docutils literal notranslate"><span class="pre">available_methods()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.optimizers.optimizer_scipy.minimize"><code class="docutils literal notranslate"><span class="pre">minimize()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tequila_code.optimizers">Module contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.optimizers.minimize"><code class="docutils literal notranslate"><span class="pre">minimize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.optimizers.show_available_optimizers"><code class="docutils literal notranslate"><span class="pre">show_available_optimizers()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simulators.html">Simulators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantumchemistry.html">Quantum Chemistry</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Tequila Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Tequila Library Reference</a></li>
+      <li class="breadcrumb-item active">Optimizers</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/optimizers.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="optimizers">
+<h1>Optimizers<a class="headerlink" href="#optimizers" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-tequila_code.optimizers.optimizer_base">
+<span id="optimizer-base-module"></span><h2>optimizer base module<a class="headerlink" href="#module-tequila_code.optimizers.optimizer_base" title="Link to this heading"></a></h2>
+<p>Base class for Optimizers.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.Optimizer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.optimizers.optimizer_base.</span></span><span class="sig-name descname"><span class="pre">Optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_history</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">99</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_base.html#Optimizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.Optimizer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The base optimizer class, from which other optimizers inherit.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.Optimizer.backend">
+<span class="sig-name descname"><span class="pre">backend</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.Optimizer.backend" title="Link to this definition"></a></dt>
+<dd><p>The quantum backend to use (None means autopick)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.Optimizer.maxiter">
+<span class="sig-name descname"><span class="pre">maxiter</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.Optimizer.maxiter" title="Link to this definition"></a></dt>
+<dd><p>Maximum number of iterations to perform.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.Optimizer.silent">
+<span class="sig-name descname"><span class="pre">silent</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.Optimizer.silent" title="Link to this definition"></a></dt>
+<dd><p>whether or not to print during call or on init.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.Optimizer.samples">
+<span class="sig-name descname"><span class="pre">samples</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.Optimizer.samples" title="Link to this definition"></a></dt>
+<dd><p>number of samples to call objectives with during call.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.Optimizer.print_level">
+<span class="sig-name descname"><span class="pre">print_level</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.Optimizer.print_level" title="Link to this definition"></a></dt>
+<dd><p>Allow customization of printout in derived classes, is set to 0 if silent==True.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.Optimizer.save_history">
+<span class="sig-name descname"><span class="pre">save_history</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.Optimizer.save_history" title="Link to this definition"></a></dt>
+<dd><p>whether or not to save history.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.Optimizer.history">
+<span class="sig-name descname"><span class="pre">history</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.Optimizer.history" title="Link to this definition"></a></dt>
+<dd><p>a history object, saving information during optimization.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.Optimizer.noise">
+<span class="sig-name descname"><span class="pre">noise</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.Optimizer.noise" title="Link to this definition"></a></dt>
+<dd><p>what noise (e.g, a NoiseModel) to apply to simulations during optimization.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.Optimizer.device">
+<span class="sig-name descname"><span class="pre">device</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.Optimizer.device" title="Link to this definition"></a></dt>
+<dd><p>the device that sampling (real or emulated) should be performed on.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">reset_history:</span></span></dt>
+<dd><p>reset the optimizer history.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">initialize_variables:</span></span></dt>
+<dd><p>convenience: format variables of an objective and segregrate actives from passives.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">compile_objective:</span></span></dt>
+<dd><p>convenience: compile an objective.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">compile_gradient:</span></span></dt>
+<dd><p>convenience: build and compile (i.e render callable) the gradient of an objective.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">compile_hessian:</span></span></dt>
+<dd><p>convenience: build and compile (i.e render callable) the hessian of an objective.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.Optimizer.compile_gradient">
+<span class="sig-name descname"><span class="pre">compile_gradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Objective</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Variable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_base.html#Optimizer.compile_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.Optimizer.compile_gradient" title="Link to this definition"></a></dt>
+<dd><p>convenience function to compile gradient objects and relavant types. For use by inheritors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>objective</strong> (<em>Objective:</em>) – the objective whose gradient is to be calculated.</p></li>
+<li><p><strong>variables</strong> (<em>list:</em>) – the variables to take gradients with resepct to.</p></li>
+<li><p><strong>gradient</strong> – special argument to change what structure is used to calculate the gradient, like numerical, or QNG.
+Default: use regular, analytic gradients.</p></li>
+<li><p><strong>optional</strong> – special argument to change what structure is used to calculate the gradient, like numerical, or QNG.
+Default: use regular, analytic gradients.</p></li>
+<li><p><strong>args</strong></p></li>
+<li><p><strong>kwargs</strong></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>both the uncompiled and compiled gradients of objective, w.r.t variables.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.Optimizer.compile_hessian">
+<span class="sig-name descname"><span class="pre">compile_hessian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Variable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Variable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Objective</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp_grad_obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Variable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Objective</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hessian</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_base.html#Optimizer.compile_hessian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.Optimizer.compile_hessian" title="Link to this definition"></a></dt>
+<dd><p>convenience function to compile hessians for optimizers which require it.
+:param variables: the variables of the hessian.
+:param grad_obj: the gradient object, to be differentiated once more
+:param comp_grad_obj: the compiled gradient object, used for further compilation of the hessian.
+:param hessian: extra information to modulate compilation of the hessian.
+:type hessian: optional:
+:param args:
+:param kwargs:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>uncompiled and compiled hessian objects, in that order</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.Optimizer.compile_objective">
+<span class="sig-name descname"><span class="pre">compile_objective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Objective</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_base.html#Optimizer.compile_objective"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.Optimizer.compile_objective" title="Link to this definition"></a></dt>
+<dd><p>convenience function to wrap over compile; for use by inheritors.
+:param objective: an objective to compile.
+:type objective: Objective:
+:param args:
+:param kwargs:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a compiled Objective. Types vary.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Objective</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.Optimizer.initialize_variables">
+<span class="sig-name descname"><span class="pre">initialize_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_base.html#Optimizer.initialize_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.Optimizer.initialize_variables" title="Link to this definition"></a></dt>
+<dd><p>Convenience function to format the variables of some objective recieved in calls to optimzers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>objective</strong> (<em>Objective:</em>) – the objective being optimized.</p></li>
+<li><p><strong>initial_values</strong> (<em>dict</em><em> or </em><em>string:</em>) – initial values for the variables of objective, as a dictionary.
+if string: can be <cite>zero</cite> or <cite>random</cite>
+if callable: custom function that initializes when keys are passed
+if None: random initialization between 0 and 2pi (not recommended)</p></li>
+<li><p><strong>variables</strong> (<em>list:</em>) – the variables being optimized over.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>active_angles, a dict of those variables being optimized.
+passive_angles, a dict of those variables NOT being optimized.
+variables: formatted list of the variables being optimized.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.Optimizer.reset_history">
+<span class="sig-name descname"><span class="pre">reset_history</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_base.html#Optimizer.reset_history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.Optimizer.reset_history" title="Link to this definition"></a></dt>
+<dd><p>replace self.history with a blank history.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.OptimizerHistory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.optimizers.optimizer_base.</span></span><span class="sig-name descname"><span class="pre">OptimizerHistory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energies:</span> <span class="pre">~typing.List[~numbers.Real]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradients:</span> <span class="pre">~typing.List[~typing.Dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~numbers.Real]]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles:</span> <span class="pre">~typing.List[~typing.Dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~numbers.Number]]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy_calls:</span> <span class="pre">~typing.List[~numbers.Real]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient_calls:</span> <span class="pre">~typing.List[~typing.Dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~numbers.Real]]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles_calls:</span> <span class="pre">~typing.List[~typing.Dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~numbers.Number]]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_base.html#OptimizerHistory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.OptimizerHistory" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class representing the history of optimizers over time. Has a variety of convenience functions attached to it.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.OptimizerHistory.angles">
+<span class="sig-name descname"><span class="pre">angles</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Number</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.OptimizerHistory.angles" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.OptimizerHistory.angles_calls">
+<span class="sig-name descname"><span class="pre">angles_calls</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Number</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.OptimizerHistory.angles_calls" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.OptimizerHistory.energies">
+<span class="sig-name descname"><span class="pre">energies</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Real</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.OptimizerHistory.energies" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.OptimizerHistory.energies_calls">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">energies_calls</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.OptimizerHistory.energies_calls" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.OptimizerHistory.energies_evaluations">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">energies_evaluations</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.OptimizerHistory.energies_evaluations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.OptimizerHistory.energy_calls">
+<span class="sig-name descname"><span class="pre">energy_calls</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Real</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.OptimizerHistory.energy_calls" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.OptimizerHistory.extract_angles">
+<span class="sig-name descname"><span class="pre">extract_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Integral</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Real</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_base.html#OptimizerHistory.extract_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.OptimizerHistory.extract_angles" title="Link to this definition"></a></dt>
+<dd><p>convenience function to get the value of some variable out of the history.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> (<em>str:</em>) – name of the variable whose values are sought</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a dictionary, representing the value of variable ‘key’ over time.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.OptimizerHistory.extract_energies">
+<span class="sig-name descname"><span class="pre">extract_energies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Integral</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Real</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_base.html#OptimizerHistory.extract_energies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.OptimizerHistory.extract_energies" title="Link to this definition"></a></dt>
+<dd><p>convenience function to get the energies back as a dictionary.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.OptimizerHistory.extract_gradients">
+<span class="sig-name descname"><span class="pre">extract_gradients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Integral</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Real</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_base.html#OptimizerHistory.extract_gradients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.OptimizerHistory.extract_gradients" title="Link to this definition"></a></dt>
+<dd><p>convenience function to get the gradients of some variable out of the history.
+:param key: the name of the variable whose gradients are sought
+:type key: str:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a dictionary, representing the gradient of variable ‘key’ over time.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.OptimizerHistory.gradient_calls">
+<span class="sig-name descname"><span class="pre">gradient_calls</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Real</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.OptimizerHistory.gradient_calls" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.OptimizerHistory.gradients">
+<span class="sig-name descname"><span class="pre">gradients</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Real</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.OptimizerHistory.gradients" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.OptimizerHistory.iterations">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">iterations</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.OptimizerHistory.iterations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.OptimizerHistory.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">property</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'energies'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baselines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_base.html#OptimizerHistory.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.OptimizerHistory.plot" title="Link to this definition"></a></dt>
+<dd><p>Convenience function to plot the progress of the optimizer over time.
+:param property: which property (eg angles, energies, gradients) to plot.</p>
+<blockquote>
+<div><p>Default: plot energies over time.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>str</em><em>, </em><em>optional:</em>) – if property is ‘angles’ or ‘gradients’, key allows you to plot just an individual variables’ property.
+Default: plot everything</p></li>
+<li><p><strong>filename</strong> – if give, plot to this file; else, plot to terminal.
+Default: plot to terminal.</p></li>
+<li><p><strong>optional</strong> – if give, plot to this file; else, plot to terminal.
+Default: plot to terminal.</p></li>
+<li><p><strong>baselines</strong> (<em>dict</em><em>, </em><em>optional:</em>) – dictionary of plotting axis baseline information.
+Default: use whatever matplotlib auto-generates.</p></li>
+<li><p><strong>args</strong> – args.</p></li>
+<li><p><strong>kwargs</strong> – kwargs.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.OptimizerResults">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.optimizers.optimizer_base.</span></span><span class="sig-name descname"><span class="pre">OptimizerResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">history</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#tequila_code.optimizers.optimizer_base.OptimizerHistory" title="tequila_code.optimizers.optimizer_base.OptimizerHistory"><span class="pre">tequila_code.optimizers.optimizer_base.OptimizerHistory</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_base.html#OptimizerResults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.OptimizerResults" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.OptimizerResults.angles">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">angles</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.OptimizerResults.angles" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.OptimizerResults.energy">
+<span class="sig-name descname"><span class="pre">energy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.OptimizerResults.energy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.OptimizerResults.history">
+<span class="sig-name descname"><span class="pre">history</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#tequila_code.optimizers.optimizer_base.OptimizerHistory" title="tequila_code.optimizers.optimizer_base.OptimizerHistory"><span class="pre">OptimizerHistory</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.OptimizerResults.history" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.OptimizerResults.variables">
+<span class="sig-name descname"><span class="pre">variables</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.OptimizerResults.variables" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_base.TequilaOptimizerException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.optimizers.optimizer_base.</span></span><span class="sig-name descname"><span class="pre">TequilaOptimizerException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_base.html#TequilaOptimizerException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_base.TequilaOptimizerException" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TequilaException</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-tequila_code.optimizers.optimizer_gd">
+<span id="optimizer-gradient-module"></span><h2>optimizer gradient module<a class="headerlink" href="#module-tequila_code.optimizers.optimizer_gd" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.DIIS">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.optimizers.optimizer_gd.</span></span><span class="sig-name descname"><span class="pre">DIIS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndiis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_vectors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'error'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_gd.html#DIIS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.DIIS" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.DIIS.do_diis">
+<span class="sig-name descname"><span class="pre">do_diis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_gd.html#DIIS.do_diis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.DIIS.do_diis" title="Link to this definition"></a></dt>
+<dd><p>Return with DIIS should be performed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.DIIS.drop_error">
+<span class="sig-name descname"><span class="pre">drop_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_gd.html#DIIS.drop_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.DIIS.drop_error" title="Link to this definition"></a></dt>
+<dd><p>Return P,E with the largest magnitude error vector removed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.DIIS.drop_first">
+<span class="sig-name descname"><span class="pre">drop_first</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_gd.html#DIIS.drop_first"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.DIIS.drop_first" title="Link to this definition"></a></dt>
+<dd><p>Return P,E with the first element removed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.DIIS.push">
+<span class="sig-name descname"><span class="pre">push</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_vector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_vector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_gd.html#DIIS.push"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.DIIS.push" title="Link to this definition"></a></dt>
+<dd><p>Update DIIS calculator with parameter and error vectors.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.DIIS.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_gd.html#DIIS.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.DIIS.reset" title="Link to this definition"></a></dt>
+<dd><p>Reset containers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.DIIS.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_gd.html#DIIS.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.DIIS.update" title="Link to this definition"></a></dt>
+<dd><p>Get update parameter from DIIS iteration, or None if DIIS is not doable.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.GDResults">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.optimizers.optimizer_gd.</span></span><span class="sig-name descname"><span class="pre">GDResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">history</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#tequila_code.optimizers.optimizer_base.OptimizerHistory" title="tequila_code.optimizers.optimizer_base.OptimizerHistory"><span class="pre">tequila_code.optimizers.optimizer_base.OptimizerHistory</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">moments</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_gd.html#GDResults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.GDResults" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tequila_code.optimizers.optimizer_base.OptimizerResults" title="tequila_code.optimizers.optimizer_base.OptimizerResults"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptimizerResults</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.GDResults.moments">
+<span class="sig-name descname"><span class="pre">moments</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.GDResults.moments" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.GDResults.num_iteration">
+<span class="sig-name descname"><span class="pre">num_iteration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.GDResults.num_iteration" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.optimizers.optimizer_gd.</span></span><span class="sig-name descname"><span class="pre">OptimizerGD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sgd'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Real</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.999</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Real</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-07</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calibrate_lr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_gd.html#OptimizerGD"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tequila_code.optimizers.optimizer_base.Optimizer" title="tequila_code.optimizers.optimizer_base.Optimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Optimizer</span></code></a></p>
+<p>The gradient descent optimizer for tequila.</p>
+<p>OptimizerGD allows for two modalities: it can either function as a ‘stepper’, simply calculating updated
+parameter values for a given object; or it can be called to perform an entire optimization. The former
+is used to accomplish the latter, and can give users a more fine-grained control of the optimization.
+See Optimizer for details on inherited attributes or methods; there are several.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.f">
+<span class="sig-name descname"><span class="pre">f</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.f" title="Link to this definition"></a></dt>
+<dd><p>function which performs an optimization step.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.gradient_lookup">
+<span class="sig-name descname"><span class="pre">gradient_lookup</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.gradient_lookup" title="Link to this definition"></a></dt>
+<dd><p>dictionary mapping object ids as strings to said object’s callable gradient</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.active_key_lookup">
+<span class="sig-name descname"><span class="pre">active_key_lookup</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.active_key_lookup" title="Link to this definition"></a></dt>
+<dd><p>dictionary mapping object ids as strings to said object’s active keys, itself a dict, of variables to optimize.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.moments_lookup">
+<span class="sig-name descname"><span class="pre">moments_lookup</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.moments_lookup" title="Link to this definition"></a></dt>
+<dd><p>dictionary mapping object ids as strings to said object’s current stored moments; a pair of lists of floats,
+namely running tallies of gradient momenta. said momenta are used to SCALE or REDIRECT gradient descent steps.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.moments_trajectory">
+<span class="sig-name descname"><span class="pre">moments_trajectory</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.moments_trajectory" title="Link to this definition"></a></dt>
+<dd><p>dictionary mapping object ids as strings to said object’s momenta at ALL steps; that is, a list of all
+the moments of a given object, in order.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.step_lookup">
+<span class="sig-name descname"><span class="pre">step_lookup</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.step_lookup" title="Link to this definition"></a></dt>
+<dd><p>dictionary mapping object ids as strings to an int; how many optimization steps have been performed for
+a given object. Relevant only to the Adam optimizer.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.diis">
+<span class="sig-name descname"><span class="pre">diis</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.diis" title="Link to this definition"></a></dt>
+<dd><p>Dictionary of parameters for the DIIS accelerator.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.lr">
+<span class="sig-name descname"><span class="pre">lr</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.lr" title="Link to this definition"></a></dt>
+<dd><p>a float or list of floats. Hyperparameter: The learning rate (unscaled) to be used in each update;
+in some literature, called a step size.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.alpha" title="Link to this definition"></a></dt>
+<dd><p>a float. Hyperparameter: used to adjust the learning rate each iteration using the formula: lr := original_lr / (iteration ** alpha)
+Default: None. If not specify alpha or lr given as a list: lr will not be adjusted</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.gamma">
+<span class="sig-name descname"><span class="pre">gamma</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.gamma" title="Link to this definition"></a></dt>
+<dd><p>a float. Hyperparameter: used to adjust the step of the gradient for spsa method in each iteration
+following: c := original_c / (iteration ** gamma)
+Default value: None. If not specify gamma or c given as a list: c will not be adjusted</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.beta">
+<span class="sig-name descname"><span class="pre">beta</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.beta" title="Link to this definition"></a></dt>
+<dd><p>a float. Hyperparameter: scales (perhaps nonlinearly) all first moment terms in any relavant method.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.rho">
+<span class="sig-name descname"><span class="pre">rho</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.rho" title="Link to this definition"></a></dt>
+<dd><p>a float. Hyperparameter: scales (perhaps nonlinearly) all second moment terms in any relavant method.
+in some literature, may be referred to as ‘beta_2’.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.c">
+<span class="sig-name descname"><span class="pre">c</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.c" title="Link to this definition"></a></dt>
+<dd><p>a float or list of floats. Hyperparameter: The step rate used in the spsa gradient.
+If it is a list, the steprate will change each iteration until the last item of the list is reached.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.epsilon">
+<span class="sig-name descname"><span class="pre">epsilon</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.epsilon" title="Link to this definition"></a></dt>
+<dd><p>a float. Hyperparameter: used to prevent division by zero in some methods.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.tol">
+<span class="sig-name descname"><span class="pre">tol</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.tol" title="Link to this definition"></a></dt>
+<dd><p>a float. If specified, __call__ aborts when the difference in energies between two steps is smaller than tol.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.calibrate_lr">
+<span class="sig-name descname"><span class="pre">calibrate_lr</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.calibrate_lr" title="Link to this definition"></a></dt>
+<dd><p>a boolean. It specifies to calibrate lr value for spsa method.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.iteration">
+<span class="sig-name descname"><span class="pre">iteration</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.iteration" title="Link to this definition"></a></dt>
+<dd><p>a integer. It indicates the number of the iteration being runned.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">prepare:</span></span></dt>
+<dd><p>perform all necessary compilation and registration of a given objective. Must be called before step
+is used on the given optimizer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">step:</span></span></dt>
+<dd><p>perform a single optimization step on a compiled objective, starting from a given point.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">reset_stepper:</span></span></dt>
+<dd><p>wipe all stored information about all prepared objectives.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">reset_momenta:</span></span></dt>
+<dd><p>reset all moment information about all prepared objectives, but do not erase compiled gradients.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">reset_momenta_for:</span></span></dt>
+<dd><p>reset all moment information about a given objective, but do not erase compiled gradients.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.available_diis">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">available_diis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_gd.html#OptimizerGD.available_diis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.available_diis" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All tested methods that can be diis accelerated</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.available_methods">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">available_methods</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_gd.html#OptimizerGD.available_methods"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.available_methods" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All tested available methods</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.nextLearningRate">
+<span class="sig-name descname"><span class="pre">nextLearningRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_gd.html#OptimizerGD.nextLearningRate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.nextLearningRate" title="Link to this definition"></a></dt>
+<dd><p>Return the learning rate to use</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float representing the learning rate to use</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.prepare">
+<span class="sig-name descname"><span class="pre">prepare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Objective</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_gd.html#OptimizerGD.prepare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.prepare" title="Link to this definition"></a></dt>
+<dd><p>perform all initialization for an objective, register it with lookup tables, and return it compiled.
+MUST be called before step is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>objective</strong> (<em>Objective:</em>) – the objective to ready for optimization.</p></li>
+<li><p><strong>initial_values</strong> (<em>dict</em><em>, </em><em>optional:</em>) – the initial values of to prepare the optimizer with.
+Default: choose randomly.</p></li>
+<li><p><strong>variables</strong> (<em>list</em><em>, </em><em>optional:</em>) – which variables to optimize over, and hence prepare gradients for.
+Default value: optimize over all variables in objective.</p></li>
+<li><p><strong>gradient</strong> (<em>optional:</em>) – extra keyword; information used to compile alternate gradients.
+Default: prepare the standard, analytical gradient.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>compiled version of objective.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Objective</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.reset_momenta">
+<span class="sig-name descname"><span class="pre">reset_momenta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_gd.html#OptimizerGD.reset_momenta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.reset_momenta" title="Link to this definition"></a></dt>
+<dd><p>reset moment information about all prepared objectives.
+:rtype: None</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.reset_momenta_for">
+<span class="sig-name descname"><span class="pre">reset_momenta_for</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Objective</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_gd.html#OptimizerGD.reset_momenta_for"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.reset_momenta_for" title="Link to this definition"></a></dt>
+<dd><p>reset moment information about a specific objective.
+:param objective: the objective whose information should be reset.
+:type objective: Objective:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.reset_stepper">
+<span class="sig-name descname"><span class="pre">reset_stepper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_gd.html#OptimizerGD.reset_stepper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.reset_stepper" title="Link to this definition"></a></dt>
+<dd><p>reset all information about all prepared objectives.
+:rtype: None</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.OptimizerGD.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Objective</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Variable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Real</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Variable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Real</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_gd.html#OptimizerGD.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.OptimizerGD.step" title="Link to this definition"></a></dt>
+<dd><p>perform a single optimization step and return suggested parameters.
+:param objective: the compiled objective, to perform an optimization step for. MUST be one returned by prepare.
+:type objective: Objective:
+:param parameters: the parameters to use in performing the optimization step.
+:type parameters: dict:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict of new suggested parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_gd.minimize">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.optimizers.optimizer_gd.</span></span><span class="sig-name descname"><span class="pre">minimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Objective</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sgd'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Hashable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Real</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Hashable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NoiseModel</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_history</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.999</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-07</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calibrate_lr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#tequila_code.optimizers.optimizer_gd.GDResults" title="tequila_code.optimizers.optimizer_gd.GDResults"><span class="pre">GDResults</span></a></span></span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_gd.html#minimize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_gd.minimize" title="Link to this definition"></a></dt>
+<dd><p>Initialize and call the GD optimizer.
+:param objective: The tequila objective to optimize
+:type objective: Objective :
+:param lr: the learning rate. Default 0.1.
+:type lr: float or list of floats &gt;0:
+:param alpha: scaling factor to adjust learning rate each iteration. default None
+:type alpha: float &gt;0:
+:param gamma: scaling facto to adjust step for gradient in spsa method. default None
+:type gamma: float &gt;0:
+:param beta: scaling factor for first moments. default 0.9
+:type beta: float &gt;0:
+:param rho: scaling factor for second moments. default 0.999
+:type rho: float &gt;0:
+:param c: stepsize for the gradient of the spsa method
+:type c: float or list of floats:
+:param epsilon: small float for stability of division. default 10^-7
+:type epsilon: float&gt;0:
+:param method: which variation on Gradient Descent to use. Options include ‘sgd’,’adam’,’nesterov’,’adagrad’,’rmsprop’, etc.
+:type method: string: Default = ‘sgd’
+:param initial_values:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>Initial values as dictionary of Hashable types (variable keys) and floating point numbers. If given None,</dt><dd><p>they will all be set to zero</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variables</strong> (<em>List</em><em>[</em><em>Hashable</em><em>]</em><em>, </em><em>optional:</em>) – List of Variables to optimize</p></li>
+<li><p><strong>gradient</strong> (<em>optional:</em>) – the gradient to use. If None, calculated in the usual way. if str=’qng’, then the qng is calculated.
+If a dictionary of objectives, those objectives are used. If another dictionary,
+an attempt will be made to interpret that dictionary to get, say, numerical gradients.</p></li>
+<li><p><strong>samples</strong> (<em>int</em><em>, </em><em>optional:</em>) – samples/shots to take in every run of the quantum circuits (None activates full wavefunction simulation)</p></li>
+<li><p><strong>maxiter</strong> (<em>int : Default = 100:</em>) – the maximum number of iterations to run.</p></li>
+<li><p><strong>diis</strong> (<em>int</em><em>, </em><em>optional:</em>) – Number of iteration before starting DIIS acceleration.</p></li>
+<li><p><strong>backend</strong> (<em>str</em><em>, </em><em>optional:</em>) – Simulation backend which will be automatically chosen if set to None</p></li>
+<li><p><strong>noise</strong> (<a class="reference internal" href="circuit.html#tequila_code.circuit.noise.NoiseModel" title="tequila_code.circuit.noise.NoiseModel"><em>NoiseModel</em></a><em>, </em><em>optional:</em>) – a NoiseModel to apply to all expectation values in the objective.</p></li>
+<li><p><strong>device</strong> (<em>optional:</em>) – the device from which to (potentially, simulatedly) sample all quantum circuits employed in optimization.</p></li>
+<li><p><strong>tol</strong> (<em>float : Default = 10^-4</em>) – Convergence tolerance for optimization; if abs(delta f) smaller than tol, stop.</p></li>
+<li><p><strong>silent</strong> (<em>bool : Default = False:</em>) – No printout if True</p></li>
+<li><p><strong>save_history</strong> (<em>bool: Default = True:</em>) – Save the history throughout the optimization</p></li>
+<li><p><strong>calibrate_lr</strong> (<em>bool: Default = False:</em>) – Calibrates the value of the learning rate</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>optional kwargs may include beta, beta2, and rho, parameters which affect
+(but do not need to be altered) the various method algorithms.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the results of an optimization.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#tequila_code.optimizers.optimizer_gd.GDResults" title="tequila_code.optimizers.optimizer_gd.GDResults">GDResults</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="optimizer-gpyopt-module">
+<h2>optimizer gpyopt module<a class="headerlink" href="#optimizer-gpyopt-module" title="Link to this heading"></a></h2>
+</section>
+<section id="module-tequila_code.optimizers.optimizer_scipy">
+<span id="optimizer-scipy-module"></span><h2>optimizer scipy module<a class="headerlink" href="#module-tequila_code.optimizers.optimizer_scipy" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_scipy.OptimizerSciPy">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.optimizers.optimizer_scipy.</span></span><span class="sig-name descname"><span class="pre">OptimizerSciPy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'L-BFGS-B'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_constraints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_scipy.html#OptimizerSciPy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tequila_code.optimizers.optimizer_base.Optimizer" title="tequila_code.optimizers.optimizer_base.Optimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Optimizer</span></code></a></p>
+<p>Class wrapping over the scipy optimizer for use by Tequila.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.method">
+<span class="sig-name descname"><span class="pre">method</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.method" title="Link to this definition"></a></dt>
+<dd><p>The scipy optimization method passed as string.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.tol">
+<span class="sig-name descname"><span class="pre">tol</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.tol" title="Link to this definition"></a></dt>
+<dd><p>See scipy documentation for the method you picked</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.method_options">
+<span class="sig-name descname"><span class="pre">method_options</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.method_options" title="Link to this definition"></a></dt>
+<dd><p>See scipy documentation for the method you picked</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.method_bounds">
+<span class="sig-name descname"><span class="pre">method_bounds</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.method_bounds" title="Link to this definition"></a></dt>
+<dd><p>See scipy documentation for the method you picked</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.method_constraints">
+<span class="sig-name descname"><span class="pre">method_constraints</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.method_constraints" title="Link to this definition"></a></dt>
+<dd><p>See scipy documentation for the method you picked</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.silent">
+<span class="sig-name descname"><span class="pre">silent</span></span><a class="headerlink" href="#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.silent" title="Link to this definition"></a></dt>
+<dd><p>if False, the optimizer prints out all evaluated energies</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.available_methods">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">available_methods</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_scipy.html#OptimizerSciPy.available_methods"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.available_methods" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All tested available methods</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.gradient_based_methods">
+<span class="sig-name descname"><span class="pre">gradient_based_methods</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['L-BFGS-B',</span> <span class="pre">'BFGS',</span> <span class="pre">'CG',</span> <span class="pre">'TNC']</span></em><a class="headerlink" href="#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.gradient_based_methods" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.gradient_free_methods">
+<span class="sig-name descname"><span class="pre">gradient_free_methods</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['NELDER-MEAD',</span> <span class="pre">'COBYLA',</span> <span class="pre">'POWELL',</span> <span class="pre">'SLSQP']</span></em><a class="headerlink" href="#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.gradient_free_methods" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.hessian_based_methods">
+<span class="sig-name descname"><span class="pre">hessian_based_methods</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['TRUST-KRYLOV',</span> <span class="pre">'NEWTON-CG',</span> <span class="pre">'DOGLEG',</span> <span class="pre">'TRUST-NCG',</span> <span class="pre">'TRUST-EXACT',</span> <span class="pre">'TRUST-CONSTR']</span></em><a class="headerlink" href="#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.hessian_based_methods" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_scipy.SciPyResults">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.optimizers.optimizer_scipy.</span></span><span class="sig-name descname"><span class="pre">SciPyResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">history</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#tequila_code.optimizers.optimizer_base.OptimizerHistory" title="tequila_code.optimizers.optimizer_base.OptimizerHistory"><span class="pre">tequila_code.optimizers.optimizer_base.OptimizerHistory</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scipy_result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">scipy.optimize._optimize.OptimizeResult</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_scipy.html#SciPyResults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_scipy.SciPyResults" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tequila_code.optimizers.optimizer_base.OptimizerResults" title="tequila_code.optimizers.optimizer_base.OptimizerResults"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptimizerResults</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_scipy.SciPyResults.scipy_result">
+<span class="sig-name descname"><span class="pre">scipy_result</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">OptimizeResult</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#tequila_code.optimizers.optimizer_scipy.SciPyResults.scipy_result" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_scipy.TequilaScipyException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.optimizers.optimizer_scipy.</span></span><span class="sig-name descname"><span class="pre">TequilaScipyException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_scipy.html#TequilaScipyException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_scipy.TequilaScipyException" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TequilaException</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_scipy.available_methods">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.optimizers.optimizer_scipy.</span></span><span class="sig-name descname"><span class="pre">available_methods</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hessian</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_scipy.html#available_methods"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_scipy.available_methods" title="Link to this definition"></a></dt>
+<dd><p>Convenience
+:param energy: (Default value = True)
+:param gradient: (Default value = True)
+:param hessian: (Default value = True)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Available methods of the scipy optimizer, a list of strings.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.optimizers.optimizer_scipy.minimize">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.optimizers.optimizer_scipy.</span></span><span class="sig-name descname"><span class="pre">minimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Objective</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Variable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Objective</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hessian</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Variable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Variable</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Objective</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Hashable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Real</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Hashable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend_options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NoiseModel</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'BFGS'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_bounds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Hashable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Real</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_constraints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_history</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#tequila_code.optimizers.optimizer_scipy.SciPyResults" title="tequila_code.optimizers.optimizer_scipy.SciPyResults"><span class="pre">SciPyResults</span></a></span></span><a class="reference internal" href="_modules/tequila_code/optimizers/optimizer_scipy.html#minimize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.optimizer_scipy.minimize" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>objective</strong> (<em>Objective :</em>) – The tequila objective to optimize</p></li>
+<li><p><strong>gradient</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>Variable</em><em>, </em><em>Objective</em><em>]</em><em>, </em><em>None</em><em>] </em><em>: Default value = None</em><em>)</em><em>:</em>) – ‘2-point’, ‘cs’ or ‘3-point’ for numerical gradient evaluation (does not work in combination with all optimizers),
+dictionary of variables and tequila objective to define own gradient,
+None for automatic construction (default)
+Other options include ‘qng’ to use the quantum natural gradient.</p></li>
+<li><p><strong>hessian</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>Variable</em><em>, </em><em>Objective</em><em>]</em><em>, </em><em>None</em><em>]</em><em>, </em><em>optional:</em>) – ‘2-point’, ‘cs’ or ‘3-point’ for numerical gradient evaluation (does not work in combination with all optimizers),
+dictionary (keys:tuple of variables, values:tequila objective) to define own gradient,
+None for automatic construction (default)</p></li>
+<li><p><strong>initial_values</strong> (<em>Dict</em><em>[</em><em>Hashable</em><em>, </em><em>numbers.Real</em><em>]</em><em>, </em><em>optional:</em>) – Initial values as dictionary of Hashable types (variable keys) and floating point numbers. If given None they will all be set to zero</p></li>
+<li><p><strong>variables</strong> (<em>List</em><em>[</em><em>Hashable</em><em>]</em><em>, </em><em>optional:</em>) – List of Variables to optimize</p></li>
+<li><p><strong>samples</strong> (<em>int</em><em>, </em><em>optional:</em>) – samples/shots to take in every run of the quantum circuits (None activates full wavefunction simulation)</p></li>
+<li><p><strong>maxiter</strong> (<em>int :</em><em> (</em><em>Default value = 100</em><em>)</em><em>:</em>) – max iters to use.</p></li>
+<li><p><strong>backend</strong> (<em>str</em><em>, </em><em>optional:</em>) – Simulator backend, will be automatically chosen if set to None</p></li>
+<li><p><strong>backend_options</strong> (<em>dict</em><em>, </em><em>optional:</em>) – Additional options for the backend
+Will be unpacked and passed to the compiled objective in every call</p></li>
+<li><p><strong>noise</strong> (<a class="reference internal" href="circuit.html#tequila_code.circuit.noise.NoiseModel" title="tequila_code.circuit.noise.NoiseModel"><em>NoiseModel</em></a><em>, </em><em>optional:</em>) – a NoiseModel to apply to all expectation values in the objective.</p></li>
+<li><p><strong>method</strong> (<em>str :</em><em> (</em><em>Default = &quot;BFGS&quot;</em><em>)</em><em>:</em>) – Optimization method (see scipy documentation, or ‘available methods’)</p></li>
+<li><p><strong>tol</strong> (<em>float :</em><em> (</em><em>Default = 1.e-3</em><em>)</em><em>:</em>) – Convergence tolerance for optimization (see scipy documentation)</p></li>
+<li><p><strong>method_options</strong> (<em>dict</em><em>, </em><em>optional:</em>) – Dictionary of options
+(see scipy documentation)</p></li>
+<li><p><strong>method_bounds</strong> (<em>Dict</em><em>[</em><em>Hashable</em><em>, </em><em>Tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em><em>]</em><em>, </em><em>optional:</em>) – bounds for the variables (see scipy documentation)</p></li>
+<li><p><strong>method_constraints</strong> (<em>optional:</em>) – (see scipy documentation</p></li>
+<li><p><strong>silent</strong> (<em>bool :</em>) – No printout if True</p></li>
+<li><p><strong>save_history</strong> (<em>bool:</em>) – Save the history throughout the optimization</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the results of optimization</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>SciPyReturnType</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-tequila_code.optimizers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tequila_code.optimizers" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.optimizers.minimize">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.optimizers.</span></span><span class="sig-name descname"><span class="pre">minimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'bfgs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Callable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers.html#minimize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.minimize" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>method</strong> (<em>str:</em>) – The optimization method (e.g. bfgs, cobyla, nelder-mead, …)
+see ‘tq.optimizers.show_available_methods()’ for an overview</p></li>
+<li><p><strong>objective</strong> (<em>tq.Objective:</em>) – The abstract tequila objective to be optimized</p></li>
+<li><p><strong>variables</strong> (<em>list</em><em> of </em><em>names:</em>) – The variables which shall be optimized given as list
+Can be passed as list of names or list of tq variables</p></li>
+<li><p><strong>initial_values</strong> (<em>dict:</em>) – Initial values for the optimization, passed as dictionary
+with the variable names as keys.
+Alternatively <cite>zero</cite>, <cite>random</cite> or a single number are accepted</p></li>
+<li><p><strong>maxiter</strong> – maximum number of iterations</p></li>
+<li><p><strong>kwargs</strong> – <p>further keyword arguments for the actual minimization functions
+can also be called directly as tq.minimize_modulename
+e.g. tq.minimize_scipy
+See their documentation for more details</p>
+<p>example: gradient keyword:
+gradient (Default Value: None):
+instructions for gradient compilation
+can be a dictionary of tequila objectives representing the gradients
+or a string/dictionary giving instructions for numerical gradients
+examples are</p>
+<blockquote>
+<div><blockquote>
+<div><p>gradient = ‘2-point’
+gradient = {‘method’:’2-point’, ‘stepsize’: 1.e-4}
+gradient = {‘method’:Callable, ‘stepsize’: 1.e-4}
+see optimizer_base.py for method examples</p>
+</div></blockquote>
+<p>gradient = None: analytical gradients are compiled</p>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.optimizers.show_available_optimizers">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.optimizers.</span></span><span class="sig-name descname"><span class="pre">show_available_optimizers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/optimizers.html#show_available_optimizers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.optimizers.show_available_optimizers" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><em>A list of available optimization methods</em></p></li>
+<li><p><em>The list depends on optimization packages installed in your system</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="circuit.html" class="btn btn-neutral float-left" title="Circuit" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="simulators.html" class="btn btn-neutral float-right" title="Simulators" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ram Mosco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

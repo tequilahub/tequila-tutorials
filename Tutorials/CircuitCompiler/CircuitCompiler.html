@@ -275,19 +275,19 @@ cookieconsent.run({
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="1" data-code-annotation="1" data-code-cell="annotated-cell-2">create a circuit object</span>
+<span data-code-cell="annotated-cell-2" data-code-annotation="1" data-code-lines="1">create a circuit object</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-lines="2" data-code-annotation="2" data-code-cell="annotated-cell-2">add a rotation Z gate with an angle of 90 deg.</span>
+<span data-code-cell="annotated-cell-2" data-code-annotation="2" data-code-lines="2">add a rotation Z gate with an angle of 90 deg.</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-lines="3" data-code-annotation="3" data-code-cell="annotated-cell-2">add a Z gate with a power of 0.5</span>
+<span data-code-cell="annotated-cell-2" data-code-annotation="3" data-code-lines="3">add a Z gate with a power of 0.5</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-lines="8" data-code-annotation="4" data-code-cell="annotated-cell-2">print the gates with their names and generator values</span>
+<span data-code-cell="annotated-cell-2" data-code-annotation="4" data-code-lines="8">print the gates with their names and generator values</span>
 </dd>
 </dl>
 </div>
@@ -327,19 +327,19 @@ Gate: Z | Generator +1.0000Z(0)-1.0000</code></pre>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-3" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="1" data-code-annotation="1" data-code-cell="annotated-cell-3">add a conrtolled X rotation of 90 deg. with. Control qubit is the first and target the second</span>
+<span data-code-cell="annotated-cell-3" data-code-annotation="1" data-code-lines="1">add a conrtolled X rotation of 90 deg. with. Control qubit is the first and target the second</span>
 </dd>
 <dt data-target-cell="annotated-cell-3" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-lines="4" data-code-annotation="2" data-code-cell="annotated-cell-3">collect generators parameters of each generator in circuit qc</span>
+<span data-code-cell="annotated-cell-3" data-code-annotation="2" data-code-lines="4">collect generators parameters of each generator in circuit qc</span>
 </dd>
 <dt data-target-cell="annotated-cell-3" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-lines="5" data-code-annotation="3" data-code-cell="annotated-cell-3">collect parameters of full generators in qc</span>
+<span data-code-cell="annotated-cell-3" data-code-annotation="3" data-code-lines="5">collect parameters of full generators in qc</span>
 </dd>
 <dt data-target-cell="annotated-cell-3" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-lines="7" data-code-annotation="4" data-code-cell="annotated-cell-3">output the parameters of each gate in circuit qc</span>
+<span data-code-cell="annotated-cell-3" data-code-annotation="4" data-code-lines="7">output the parameters of each gate in circuit qc</span>
 </dd>
 </dl>
 </div>
@@ -367,11 +367,11 @@ Gate:  Rx
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-4" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="1" data-code-annotation="1" data-code-cell="annotated-cell-4">create a squared hadamard gate with a target qubit</span>
+<span data-code-cell="annotated-cell-4" data-code-annotation="1" data-code-lines="1">create a squared hadamard gate with a target qubit</span>
 </dd>
 <dt data-target-cell="annotated-cell-4" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-lines="3" data-code-annotation="2" data-code-cell="annotated-cell-4">compile the circuit <code>qc</code>, containing only one hadamard gate, - this will decompose the gate as shown above to rotations and paulis</span>
+<span data-code-cell="annotated-cell-4" data-code-annotation="2" data-code-lines="3">compile the circuit <code>qc</code>, containing only one hadamard gate, - this will decompose the gate as shown above to rotations and paulis</span>
 </dd>
 </dl>
 </div>
@@ -401,15 +401,15 @@ e^{i \frac{a/4}{2} I_0 Z_1 Z} \]</span></p>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-5" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="1" data-code-annotation="1" data-code-cell="annotated-cell-5">create a parametrized rotation <span class="math inline">\(Z\)</span> gate with two controls and an angle of 180 deg.</span>
+<span data-code-cell="annotated-cell-5" data-code-annotation="1" data-code-lines="1">create a parametrized rotation <span class="math inline">\(Z\)</span> gate with two controls and an angle of 180 deg.</span>
 </dd>
 <dt data-target-cell="annotated-cell-5" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-lines="2" data-code-annotation="2" data-code-cell="annotated-cell-5">compile the circuit - this will decompose it to a sequence of parametrized rotation <span class="math inline">\(Z\)</span> gates and <span class="math inline">\(CNOT\)</span> gates</span>
+<span data-code-cell="annotated-cell-5" data-code-annotation="2" data-code-lines="2">compile the circuit - this will decompose it to a sequence of parametrized rotation <span class="math inline">\(Z\)</span> gates and <span class="math inline">\(CNOT\)</span> gates</span>
 </dd>
 <dt data-target-cell="annotated-cell-5" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-lines="4" data-code-annotation="3" data-code-cell="annotated-cell-5">display the compiled circuit</span>
+<span data-code-cell="annotated-cell-5" data-code-annotation="3" data-code-lines="4">display the compiled circuit</span>
 </dd>
 </dl>
 </div>
@@ -438,11 +438,11 @@ c: 3/═════════════════════════
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-6" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="1" data-code-annotation="1" data-code-cell="annotated-cell-6">create a gate based of a given Pauli-String of <span class="math inline">\(Z\)</span> gates parameterized with an angle of 45 deg.</span>
+<span data-code-cell="annotated-cell-6" data-code-annotation="1" data-code-lines="1">create a gate based of a given Pauli-String of <span class="math inline">\(Z\)</span> gates parameterized with an angle of 45 deg.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-lines="3" data-code-annotation="2" data-code-cell="annotated-cell-6">compile this gate - this will decompose it to a combination of <span class="math inline">\(CNOT\)</span> gates and rotations</span>
+<span data-code-cell="annotated-cell-6" data-code-annotation="2" data-code-lines="3">compile this gate - this will decompose it to a combination of <span class="math inline">\(CNOT\)</span> gates and rotations</span>
 </dd>
 </dl>
 </div>
@@ -463,11 +463,11 @@ CP_{k-1}(\frac{a}{2}) \cdot CRz_k(a)\]</span></p>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-7" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="1" data-code-annotation="1" data-code-cell="annotated-cell-7">create a controlled gate in qubit 1. with control qubit in 0. and a phase of 180 deg.</span>
+<span data-code-cell="annotated-cell-7" data-code-annotation="1" data-code-lines="1">create a controlled gate in qubit 1. with control qubit in 0. and a phase of 180 deg.</span>
 </dd>
 <dt data-target-cell="annotated-cell-7" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-lines="3" data-code-annotation="2" data-code-cell="annotated-cell-7">compile this gate - thus decompose it to rotations and <span class="math inline">\(CNOT\)</span>s</span>
+<span data-code-cell="annotated-cell-7" data-code-annotation="2" data-code-lines="3">compile this gate - thus decompose it to rotations and <span class="math inline">\(CNOT\)</span>s</span>
 </dd>
 </dl>
 </div>
@@ -489,11 +489,11 @@ CP_{k-1}(\frac{a}{2}) \cdot CRz_k(a)\]</span></p>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="1" data-code-annotation="1" data-code-cell="annotated-cell-8">create a Toffoli gate with controls in qubits 1 and 2 and target in qubit 2</span>
+<span data-code-cell="annotated-cell-8" data-code-annotation="1" data-code-lines="1">create a Toffoli gate with controls in qubits 1 and 2 and target in qubit 2</span>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-lines="3" data-code-annotation="2" data-code-cell="annotated-cell-8">compile this gate - since this gate is recognized by the backend it won’t get decomposed to rotations and <span class="math inline">\(CNOT\)</span> gates</span>
+<span data-code-cell="annotated-cell-8" data-code-annotation="2" data-code-lines="3">compile this gate - since this gate is recognized by the backend it won’t get decomposed to rotations and <span class="math inline">\(CNOT\)</span> gates</span>
 </dd>
 </dl>
 </div>
@@ -510,11 +510,11 @@ CP_{k-1}(\frac{a}{2}) \cdot CRz_k(a)\]</span></p>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-9" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="1" data-code-annotation="1" data-code-cell="annotated-cell-9">create the same Toffoli gate as before</span>
+<span data-code-cell="annotated-cell-9" data-code-annotation="1" data-code-lines="1">create the same Toffoli gate as before</span>
 </dd>
 <dt data-target-cell="annotated-cell-9" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-lines="3" data-code-annotation="2" data-code-cell="annotated-cell-9">compile the gate with a different backend “qiskit”. Since this backend doesn’t recognize this gate it will decompose it to smaller gates</span>
+<span data-code-cell="annotated-cell-9" data-code-annotation="2" data-code-lines="3">compile the gate with a different backend “qiskit”. Since this backend doesn’t recognize this gate it will decompose it to smaller gates</span>
 </dd>
 </dl>
 </div>

@@ -1,0 +1,443 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tequila_code.circuit.noise &mdash; Tequila Documentation 13.9.2024 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=7dcc51c3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Tequila Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Tequila Library Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tequila Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../circuit.html">tequila_code.circuit</a></li>
+      <li class="breadcrumb-item active">tequila_code.circuit.noise</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tequila_code.circuit.noise</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">typing</span>
+<span class="kn">from</span> <span class="nn">tequila.tools</span> <span class="kn">import</span> <span class="n">list_assignment</span>
+<span class="kn">from</span> <span class="nn">tequila.utils</span> <span class="kn">import</span> <span class="n">TequilaException</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="n">names_dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;h&#39;</span><span class="p">:</span> <span class="s1">&#39;h&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;rx&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ry&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;rz&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;r&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;phase&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;single&#39;</span><span class="p">:</span> <span class="s1">&#39;single&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;swap&#39;</span><span class="p">:</span> <span class="s1">&#39;control&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;cx&#39;</span><span class="p">:</span> <span class="s1">&#39;control&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;cy&#39;</span><span class="p">:</span> <span class="s1">&#39;control&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;cz&#39;</span><span class="p">:</span> <span class="s1">&#39;control&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;crx&#39;</span><span class="p">:</span> <span class="s1">&#39;control&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;cry&#39;</span><span class="p">:</span> <span class="s1">&#39;control&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;crz&#39;</span><span class="p">:</span> <span class="s1">&#39;control&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;control&#39;</span><span class="p">:</span> <span class="s1">&#39;control&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;cnot&#39;</span><span class="p">:</span> <span class="s1">&#39;control&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ccnot&#39;</span><span class="p">:</span> <span class="s1">&#39;multicontrol&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;multicontrol&#39;</span><span class="p">:</span> <span class="s1">&#39;multicontrol&#39;</span>
+<span class="p">}</span>
+
+<span class="n">noises_available</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;bit flip&#39;</span><span class="p">,</span><span class="s1">&#39;phase flip&#39;</span><span class="p">,</span><span class="s1">&#39;phase damp&#39;</span><span class="p">,</span><span class="s1">&#39;amplitude damp&#39;</span><span class="p">,</span><span class="s1">&#39;phase-amplitude damp&#39;</span><span class="p">,</span><span class="s1">&#39;depolarizing&#39;</span><span class="p">]</span>
+<span class="n">krausses</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;bit flip&#39;</span><span class="p">,</span><span class="s1">&#39;phase flip&#39;</span><span class="p">,</span><span class="s1">&#39;phase damp&#39;</span><span class="p">,</span><span class="s1">&#39;amplitude damp&#39;</span><span class="p">,</span><span class="s1">&#39;phase-amplitude damp&#39;</span><span class="p">,</span><span class="s1">&#39;depolarizing&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="QuantumNoise">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.noise.QuantumNoise">[docs]</a>
+<span class="k">class</span> <span class="nc">QuantumNoise</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    class representing a specific quantum noise operation on gates of a certain number of qubits.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name:</span>
+<span class="sd">        what noise to apply</span>
+<span class="sd">    probs:</span>
+<span class="sd">        the probabilities with which to apply the noise</span>
+<span class="sd">    level:</span>
+<span class="sd">        the number of qubits in the gates this noise acts upon</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    from_dict:</span>
+<span class="sd">        initialize from a dictionary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prob_length</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">&#39;bit flip&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+        <span class="s1">&#39;phase flip&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+        <span class="s1">&#39;phase damp&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+        <span class="s1">&#39;amplitude damp&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+        <span class="s1">&#39;phase-amplitude damp&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span>
+        <span class="s1">&#39;depolarizing&#39;</span><span class="p">:</span><span class="mi">1</span>
+    <span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">level</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_level</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span><span class="n">probs</span><span class="p">:</span><span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span><span class="n">level</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name: str</span>
+<span class="sd">            what the name of the noise is. Determines how many probabilites are needed additionally.</span>
+<span class="sd">        probs: list:</span>
+<span class="sd">            a list of probabilities with which to apply the requested noise</span>
+<span class="sd">        level: int:</span>
+<span class="sd">            the number of qubits in the gates this noise acts upon.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">probs</span><span class="o">=</span><span class="n">list_assignment</span><span class="p">(</span><span class="n">probs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">noises_available</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s1">&#39;The name you asked for, </span><span class="si">{}</span><span class="s1">, is not recognized&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="o">=</span><span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_level</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">probs</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prob_length</span><span class="p">[</span><span class="n">name</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> noise requires </span><span class="si">{}</span><span class="s1"> probabilities; recieved </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prob_length</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">probs</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">krausses</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">sum</span><span class="p">(</span><span class="n">probs</span><span class="p">)</span><span class="o">&lt;=</span><span class="mf">1.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">probs</span><span class="o">=</span><span class="n">list_assignment</span><span class="p">(</span><span class="n">probs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">back</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">back</span><span class="o">+=</span><span class="s1">&#39; on &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_level</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; qubit gates&#39;</span>
+        <span class="n">back</span><span class="o">+=</span><span class="s1">&#39;, probs = &#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">probs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">back</span>
+
+<div class="viewcode-block" id="QuantumNoise.from_dict">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.noise.QuantumNoise.from_dict">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QuantumNoise</span><span class="p">(</span><span class="o">**</span><span class="n">d</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="ow">is</span> <span class="n">QuantumNoise</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">d</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s1">&#39;object provided is neither a dictionary nor a QuantumNoise.&#39;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="NoiseModel">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.noise.NoiseModel">[docs]</a>
+<span class="k">class</span> <span class="nc">NoiseModel</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    class representing noises to apply to a quantum circuit during simulation.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    noises:</span>
+<span class="sd">        a list of all the noises to apply.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    without_noise_on_level:</span>
+<span class="sd">        remove all noise affecting operations with &lt;level&gt; qubits.</span>
+<span class="sd">    without_noise_op:</span>
+<span class="sd">        remove all noise of a given type, I.E get rid of all bit flips.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">noises</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">QuantumNoise</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">noises</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">noises</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">noises</span><span class="o">=</span><span class="p">[</span><span class="n">QuantumNoise</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">list_assignment</span><span class="p">(</span><span class="n">noises</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">back</span><span class="o">=</span><span class="s1">&#39;NoiseModel with: </span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">for</span> <span class="n">noise</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">noises</span><span class="p">:</span>
+            <span class="n">back</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">noise</span><span class="p">)</span>
+            <span class="n">back</span> <span class="o">+=</span> <span class="s1">&#39;,</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">return</span> <span class="n">back</span>
+
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">new</span><span class="o">=</span><span class="n">NoiseModel</span><span class="p">()</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">noises</span><span class="o">+=</span><span class="bp">self</span><span class="o">.</span><span class="n">noises</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+            <span class="n">new</span><span class="o">.</span><span class="n">noises</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">QuantumNoise</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">other</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">is</span> <span class="n">QuantumNoise</span><span class="p">:</span>
+            <span class="n">new</span><span class="o">.</span><span class="n">noises</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span><span class="s1">&#39;noises&#39;</span><span class="p">):</span>
+            <span class="n">new</span><span class="o">.</span><span class="n">noises</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">noises</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">new</span>
+
+    <span class="k">def</span> <span class="fm">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">noises</span><span class="o">+=</span><span class="n">QuantumNoise</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span><span class="s1">&#39;noises&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">noises</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">noises</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+<div class="viewcode-block" id="NoiseModel.without_noise_on_level">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.noise.NoiseModel.without_noise_on_level">[docs]</a>
+    <span class="k">def</span> <span class="nf">without_noise_on_level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">NoiseModel</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">noise</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">noises</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">noise</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="n">level</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new</span><span class="o">.</span><span class="n">noises</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">noise</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new</span></div>
+
+
+<div class="viewcode-block" id="NoiseModel.without_noise_op">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.noise.NoiseModel.without_noise_op">[docs]</a>
+    <span class="k">def</span> <span class="nf">without_noise_op</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">NoiseModel</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">noise</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">noises</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">noise</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new</span><span class="o">.</span><span class="n">noises</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">noise</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new</span></div>
+
+
+<div class="viewcode-block" id="NoiseModel.wrap_noise">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.noise.NoiseModel.wrap_noise">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">wrap_noise</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">NoiseModel</span><span class="p">(</span><span class="n">noises</span><span class="o">=</span><span class="n">other</span><span class="p">)</span></div>
+</div>
+
+
+<div class="viewcode-block" id="BitFlip">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.noise.BitFlip">[docs]</a>
+<span class="k">def</span> <span class="nf">BitFlip</span><span class="p">(</span><span class="n">p</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span><span class="n">level</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a NoiseModel with one QuantumNoise, having  a kraus map corresponding to applying pauli X with likelihood p.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    p: float:</span>
+<span class="sd">        the probability with which the noise is applied.</span>
+<span class="sd">    level: int:</span>
+<span class="sd">        the # of qubits in operations to apply this noise to.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    NoiseModel</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">new</span><span class="o">=</span><span class="n">NoiseModel</span><span class="o">.</span><span class="n">wrap_noise</span><span class="p">(</span><span class="n">QuantumNoise</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;bit flip&#39;</span><span class="p">,</span> <span class="n">probs</span><span class="o">=</span><span class="n">list_assignment</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">new</span></div>
+
+
+<div class="viewcode-block" id="PhaseFlip">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.noise.PhaseFlip">[docs]</a>
+<span class="k">def</span> <span class="nf">PhaseFlip</span><span class="p">(</span><span class="n">p</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span><span class="n">level</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns a NoiseModel of one QuantumNoise, having a kraus map corresponding to applying  pauli Z with likelihood p.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    p: float:</span>
+<span class="sd">        the probability with which the noise is applied.</span>
+<span class="sd">    level: int:</span>
+<span class="sd">        the # of qubits in operations to apply this noise to.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    NoiseModel</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">new</span><span class="o">=</span><span class="n">NoiseModel</span><span class="o">.</span><span class="n">wrap_noise</span><span class="p">(</span><span class="n">QuantumNoise</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;phase flip&#39;</span><span class="p">,</span> <span class="n">probs</span><span class="o">=</span><span class="n">list_assignment</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">new</span></div>
+
+
+
+<div class="viewcode-block" id="PhaseDamp">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.noise.PhaseDamp">[docs]</a>
+<span class="k">def</span> <span class="nf">PhaseDamp</span><span class="p">(</span><span class="n">p</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span><span class="n">level</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns a NoiseModel of one QuantumNoise, having a kraus map corresponding to phase damping;</span>
+<span class="sd">    Krauss map is defined following Nielsen and Chuang;</span>
+<span class="sd">    E_0= [[1,0],</span>
+<span class="sd">          [0,sqrt(1-p)]]</span>
+<span class="sd">    E_1= [[0,0],</span>
+<span class="sd">          [0,sqrt(p)]]</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    p: float:</span>
+<span class="sd">        the probability with which the noise is applied.</span>
+<span class="sd">    level: int:</span>
+<span class="sd">        the # of qubits in operations to apply this noise to.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    NoiseModel</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">new</span><span class="o">=</span><span class="n">NoiseModel</span><span class="o">.</span><span class="n">wrap_noise</span><span class="p">(</span><span class="n">QuantumNoise</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;phase damp&#39;</span><span class="p">,</span> <span class="n">probs</span><span class="o">=</span><span class="n">list_assignment</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">new</span></div>
+
+
+
+<div class="viewcode-block" id="AmplitudeDamp">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.noise.AmplitudeDamp">[docs]</a>
+<span class="k">def</span> <span class="nf">AmplitudeDamp</span><span class="p">(</span><span class="n">p</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span><span class="n">level</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns a NoiseModel one QuantumNoise, corresponding to amplitude damping.</span>
+<span class="sd">    this channel takes 1 to 0, but leaves 0 unaffected.</span>
+<span class="sd">    kraus maps:</span>
+
+<span class="sd">    E_0= [[1,0],</span>
+<span class="sd">          [0,sqrt(1-p)]]</span>
+<span class="sd">    E_1= [[0,sqrt(p)],</span>
+<span class="sd">          [0,0]]</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    p: float:</span>
+<span class="sd">        the probability with which the noise is applied.</span>
+<span class="sd">    level: int:</span>
+<span class="sd">        the # of qubits in operations to apply this noise to.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    NoiseModel</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">new</span><span class="o">=</span><span class="n">NoiseModel</span><span class="o">.</span><span class="n">wrap_noise</span><span class="p">(</span><span class="n">QuantumNoise</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;amplitude damp&#39;</span><span class="p">,</span> <span class="n">probs</span><span class="o">=</span><span class="n">list_assignment</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">new</span></div>
+
+
+<div class="viewcode-block" id="PhaseAmplitudeDamp">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.noise.PhaseAmplitudeDamp">[docs]</a>
+<span class="k">def</span> <span class="nf">PhaseAmplitudeDamp</span><span class="p">(</span><span class="n">p1</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span><span class="n">p2</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span><span class="n">level</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns a NoiseModel with one QuantumNoise, having a kraus map corresponding to phase and amplitude damping.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    p1: float:</span>
+<span class="sd">        the probability with which phase is damped</span>
+<span class="sd">    p2: float:</span>
+<span class="sd">        the probability with which amplitude is damped</span>
+<span class="sd">    level: int:</span>
+<span class="sd">        the # of qubits in operations to apply this noise to.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    NoiseModel</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">new</span><span class="o">=</span><span class="n">NoiseModel</span><span class="o">.</span><span class="n">wrap_noise</span><span class="p">(</span><span class="n">QuantumNoise</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;phase-amplitude damp&#39;</span><span class="p">,</span> <span class="n">probs</span><span class="o">=</span><span class="n">list_assignment</span><span class="p">([</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">]),</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">new</span></div>
+
+
+<div class="viewcode-block" id="DepolarizingError">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.noise.DepolarizingError">[docs]</a>
+<span class="k">def</span> <span class="nf">DepolarizingError</span><span class="p">(</span><span class="n">p</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span><span class="n">level</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns a NoiseModel with one QuantumNoise, having a kraus map corresponding to equal</span>
+<span class="sd">    probabilities of each of the three pauli matrices being applied.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    p: float:</span>
+<span class="sd">        the probability with which the noise is applied.</span>
+<span class="sd">    level: int:</span>
+<span class="sd">        the # of qubits in operations to apply this noise to.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    NoiseModel</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">new</span> <span class="o">=</span> <span class="n">NoiseModel</span><span class="o">.</span><span class="n">wrap_noise</span><span class="p">(</span><span class="n">QuantumNoise</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;depolarizing&#39;</span><span class="p">,</span> <span class="n">probs</span><span class="o">=</span><span class="n">list_assignment</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">new</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ram Mosco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

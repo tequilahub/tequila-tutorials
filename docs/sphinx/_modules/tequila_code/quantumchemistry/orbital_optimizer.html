@@ -1,0 +1,381 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tequila_code.quantumchemistry.orbital_optimizer &mdash; Tequila Documentation 13.9.2024 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=7dcc51c3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Tequila Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Tequila Library Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tequila Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../quantumchemistry.html">tequila_code.quantumchemistry</a></li>
+      <li class="breadcrumb-item active">tequila_code.quantumchemistry.orbital_optimizer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tequila_code.quantumchemistry.orbital_optimizer</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">typing</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+
+<span class="kn">from</span> <span class="nn">tequila</span> <span class="kn">import</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">ExpectationValue</span><span class="p">,</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">TequilaWarning</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">QuantumChemistryBase</span><span class="p">,</span> <span class="n">ParametersQC</span><span class="p">,</span> <span class="n">NBodyTensor</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Small application that wraps a tequila VQE object and passes it to the PySCF CASSCF solver.</span>
+<span class="sd">This way we can conveniently optimize orbitals.</span>
+<span class="sd">This basically does what is described here in the context of orbital-optimized unitary coupled-cluster (oo-ucc): https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.2.033421</span>
+<span class="sd">Of course we don&#39;t have to use UCC circuits but can pass whatever we want as circuit, or pass a &quot;vqe_solver&quot; object.</span>
+
+<span class="sd">The Interface with the PySCF module follows the original PySCF article  https://arxiv.org/abs/2002.12531 (see Fig.3)</span>
+
+<span class="sd">Currently this is a beta version (not extensively used in real life), so be careful when using it and please report issues on github :-)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="OptimizeOrbitalsResult">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.OptimizeOrbitalsResult">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">OptimizeOrbitalsResult</span><span class="p">:</span>
+    
+    <span class="n">old_molecule</span><span class="p">:</span> <span class="n">QuantumChemistryBase</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># the old tequila molecule</span>
+    <span class="n">molecule</span><span class="p">:</span> <span class="n">QuantumChemistryBase</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># the new tequila molecule with transformed orbitals</span>
+    <span class="n">mcscf_object</span><span class="p">:</span><span class="nb">object</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># the pyscf mcscf object</span>
+    <span class="n">mcscf_local_data</span><span class="p">:</span><span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">mo_coeff</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># the optimized mo coefficients</span>
+    <span class="n">energy</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># the optimized energy</span>
+    <span class="n">iterations</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">local_data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># use as callback</span>
+        <span class="k">if</span> <span class="s2">&quot;u&quot;</span> <span class="ow">in</span> <span class="n">local_data</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rotation_matrix</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">local_data</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mcscf_local_data</span><span class="o">=</span><span class="n">local_data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iterations</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="optimize_orbitals">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.optimize_orbitals">[docs]</a>
+<span class="k">def</span> <span class="nf">optimize_orbitals</span><span class="p">(</span><span class="n">molecule</span><span class="p">,</span> <span class="n">circuit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vqe_solver</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pyscf_arguments</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                      <span class="n">vqe_solver_arguments</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">initial_guess</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_mcscf</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_hcb</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">molecule_factory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">molecule_arguments</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">restrict_to_active_space</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    molecule: The tequila molecule whose orbitals are to be optimized</span>
+<span class="sd">    circuit: The circuit that defines the ansatz to the wavefunction in the VQE</span>
+<span class="sd">             can be None, if a customized vqe_solver is passed that can construct a circuit</span>
+<span class="sd">    vqe_solver: The VQE solver (the default - vqe_solver=None - will take the given circuit and construct an expectationvalue out of molecule.make_hamiltonian and the given circuit)</span>
+<span class="sd">                A customized object can be passed that needs to be callable with the following signature: vqe_solver(H=H, circuit=self.circuit, molecule=molecule, **self.vqe_solver_arguments)</span>
+<span class="sd">    pyscf_arguments: Arguments for the MCSCF structure of PySCF, if None, the defaults are {&quot;max_cycle_macro&quot;:10, &quot;max_cycle_micro&quot;:3} (see here https://pyscf.org/pyscf_api_docs/pyscf.mcscf.html)</span>
+<span class="sd">    silent: silence printout</span>
+<span class="sd">    use_hcb: indicate if the circuit is in hardcore Boson encoding</span>
+<span class="sd">    vqe_solver_arguments: Optional arguments for a customized vqe_solver or the default solver</span>
+<span class="sd">                          for the default solver: vqe_solver_arguments={&quot;optimizer_arguments&quot;:A, &quot;restrict_to_hcb&quot;:False} where A holds the kwargs for tq.minimize</span>
+<span class="sd">                          restrict_to_hcb keyword controls if the standard (in whatever encoding the molecule structure has) Hamiltonian is constructed or the hardcore_boson hamiltonian</span>
+<span class="sd">    initial_guess: Initial guess for the MCSCF module of PySCF (Matrix of orbital rotation coefficients)</span>
+<span class="sd">                   The default (None) is a unit matrix</span>
+<span class="sd">                   predefined commands are</span>
+<span class="sd">                        initial_guess=&quot;random&quot;</span>
+<span class="sd">                        initial_guess=&quot;random_loc=X_scale=Y&quot; with X and Y being floats</span>
+<span class="sd">                        This initialized a random guess using numpy.random.normal(loc=X, scale=Y) with X=0.0 and Y=0.1 as defaults</span>
+<span class="sd">    return_mcscf: return the PySCF MCSCF structure after optimization</span>
+<span class="sd">    molecule_arguments: arguments to pass to molecule_factory or default molecule constructor | only change if you know what you are doing</span>
+<span class="sd">    args: just here for convenience</span>
+<span class="sd">    kwargs: just here for conveniece</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        Optimized Tequila Molecule</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">mcscf</span>
+        <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">QuantumChemistryPySCF</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="se">\n</span><span class="s2">optimize_orbitals: Need pyscf to run (pip install pyscf)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">exception</span><span class="p">)))</span>
+
+    <span class="k">if</span> <span class="n">pyscf_arguments</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">pyscf_arguments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;max_cycle_macro&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;max_cycle_micro&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+    <span class="n">no</span> <span class="o">=</span> <span class="n">molecule</span><span class="o">.</span><span class="n">n_orbitals</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">molecule</span><span class="p">,</span> <span class="n">QuantumChemistryPySCF</span><span class="p">):</span>
+        <span class="n">pyscf_molecule</span> <span class="o">=</span> <span class="n">QuantumChemistryPySCF</span><span class="o">.</span><span class="n">from_tequila</span><span class="p">(</span><span class="n">molecule</span><span class="o">=</span><span class="n">molecule</span><span class="p">,</span> <span class="n">transformation</span><span class="o">=</span><span class="n">molecule</span><span class="o">.</span><span class="n">transformation</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pyscf_molecule</span> <span class="o">=</span> <span class="n">molecule</span>
+
+    <span class="n">mf</span> <span class="o">=</span> <span class="n">pyscf_molecule</span><span class="o">.</span><span class="n">_get_hf</span><span class="p">()</span>
+    <span class="n">result</span><span class="o">=</span><span class="n">OptimizeOrbitalsResult</span><span class="p">()</span>
+    <span class="n">mc</span> <span class="o">=</span> <span class="n">mcscf</span><span class="o">.</span><span class="n">CASSCF</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">pyscf_molecule</span><span class="o">.</span><span class="n">n_orbitals</span><span class="p">,</span> <span class="n">pyscf_molecule</span><span class="o">.</span><span class="n">n_electrons</span><span class="p">)</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">callback</span><span class="o">=</span><span class="n">result</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">pyscf_molecule</span><span class="o">.</span><span class="n">compute_constant_part</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">circuit</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">vqe_solver</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;optimize_orbitals: Either provide a circuit or a callable vqe_solver&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">use_hcb</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">vqe_solver_arguments</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">vqe_solver_arguments</span><span class="o">=</span><span class="p">{}</span>
+        <span class="n">vqe_solver_arguments</span><span class="p">[</span><span class="s2">&quot;restrict_to_hcb&quot;</span><span class="p">]</span><span class="o">=</span><span class="kc">True</span>
+        <span class="c1"># consistency check</span>
+        <span class="n">n_qubits</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">circuit</span><span class="o">.</span><span class="n">qubits</span><span class="p">)</span>
+        <span class="n">n_orbitals</span> <span class="o">=</span> <span class="n">molecule</span><span class="o">.</span><span class="n">n_orbitals</span>
+        <span class="k">if</span> <span class="n">n_qubits</span> <span class="o">&gt;</span> <span class="n">n_orbitals</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Potential inconsistency in orbital optimization: use_hcb is switched on but we have</span><span class="se">\n</span><span class="s2"> n_qubits=</span><span class="si">{}</span><span class="s2"> in the circuit</span><span class="se">\n</span><span class="s2"> n_orbital=</span><span class="si">{}</span><span class="s2"> in the molecule</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">,</span><span class="n">n_orbitals</span><span class="p">),</span> <span class="n">TequilaWarning</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">molecule_arguments</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">molecule_arguments</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="n">pyscf_molecule</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">&quot;transformation&quot;</span><span class="p">:</span> <span class="n">molecule</span><span class="o">.</span><span class="n">transformation</span><span class="p">}</span>
+
+    <span class="n">wrapper</span> <span class="o">=</span> <span class="n">PySCFVQEWrapper</span><span class="p">(</span><span class="n">molecule_arguments</span><span class="o">=</span><span class="n">molecule_arguments</span><span class="p">,</span> <span class="n">n_electrons</span><span class="o">=</span><span class="n">pyscf_molecule</span><span class="o">.</span><span class="n">n_electrons</span><span class="p">,</span>
+                              <span class="n">const_part</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">circuit</span><span class="o">=</span><span class="n">circuit</span><span class="p">,</span> <span class="n">vqe_solver_arguments</span><span class="o">=</span><span class="n">vqe_solver_arguments</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">,</span>
+                              <span class="n">vqe_solver</span><span class="o">=</span><span class="n">vqe_solver</span><span class="p">,</span> <span class="n">molecule_factory</span><span class="o">=</span><span class="n">molecule_factory</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">fcisolver</span> <span class="o">=</span> <span class="n">wrapper</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">internal_rotation</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">pyscf_arguments</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">pyscf_arguments</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)):</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">v</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;unknown arguments: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">silent</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Optimizing Orbitals with PySCF and VQE Solver:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:25}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;pyscf_arguments&quot;</span><span class="p">,</span> <span class="n">pyscf_arguments</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">wrapper</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">initial_guess</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">initial_guess</span><span class="p">,</span> <span class="s2">&quot;lower&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s2">&quot;random&quot;</span> <span class="ow">or</span> <span class="s2">&quot;near_zero&quot;</span> <span class="ow">in</span> <span class="n">initial_guess</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.e-3</span>
+                <span class="k">if</span> <span class="s2">&quot;random&quot;</span> <span class="ow">in</span> <span class="n">initial_guess</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                    <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span>
+                <span class="n">loc</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="k">if</span> <span class="s2">&quot;scale&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                    <span class="n">scale</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">initial_guess</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;scale&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="s2">&quot;loc&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                    <span class="n">loc</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">initial_guess</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;loc&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">initial_guess</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">no</span><span class="p">)</span> <span class="o">+</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">loc</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">no</span> <span class="o">*</span> <span class="n">no</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">no</span><span class="p">,</span> <span class="n">no</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown initial_guess=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">initial_guess</span><span class="o">.</span><span class="n">lower</span><span class="p">()))</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">initial_guess</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">assert</span> <span class="n">initial_guess</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">no</span>
+        <span class="k">assert</span> <span class="n">initial_guess</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">no</span>
+        <span class="n">initial_guess</span> <span class="o">=</span> <span class="n">mcscf</span><span class="o">.</span><span class="n">project_init_guess</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">initial_guess</span><span class="p">)</span>
+        <span class="n">mc</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">mo_coeff</span><span class="o">=</span><span class="n">initial_guess</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">mc</span><span class="o">.</span><span class="n">kernel</span><span class="p">()</span>
+    <span class="c1"># make new molecule</span>
+
+    <span class="n">mo_coeff</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">mo_coeff</span>
+    <span class="n">transformed_molecule</span> <span class="o">=</span> <span class="n">pyscf_molecule</span><span class="o">.</span><span class="n">transform_orbitals</span><span class="p">(</span><span class="n">orbital_coefficients</span><span class="o">=</span><span class="n">mo_coeff</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;optimized&quot;</span><span class="p">)</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">molecule</span><span class="o">=</span><span class="n">transformed_molecule</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">old_molecule</span><span class="o">=</span><span class="n">molecule</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">mo_coeff</span><span class="o">=</span><span class="n">mo_coeff</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">energy</span><span class="o">=</span><span class="n">mc</span><span class="o">.</span><span class="n">e_tot</span>
+    
+    <span class="k">if</span> <span class="n">return_mcscf</span><span class="p">:</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">mcscf_object</span> <span class="o">=</span> <span class="n">mc</span>
+    
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="PySCFVQEWrapper">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">PySCFVQEWrapper</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper for tequila VQE&#39;s to be compatible with PySCF orbital optimization</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># needs initialization</span>
+    <span class="n">n_electrons</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">molecule_arguments</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># internal data</span>
+    <span class="n">rdm1</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">rdm2</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">one_body_integrals</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">two_body_integrals</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">history</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="c1"># optional</span>
+    <span class="n">const_part</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">silent</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">vqe_solver</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">circuit</span><span class="p">:</span> <span class="n">QCircuit</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">vqe_solver_arguments</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">molecule_factory</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="PySCFVQEWrapper.reorder">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.reorder">[docs]</a>
+    <span class="k">def</span> <span class="nf">reorder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">ordering</span><span class="p">,</span> <span class="n">to</span><span class="p">):</span>
+        <span class="c1"># convenience since we need to reorder</span>
+        <span class="c1"># all the time</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">NBodyTensor</span><span class="p">(</span><span class="n">elems</span><span class="o">=</span><span class="n">M</span><span class="p">,</span> <span class="n">ordering</span><span class="o">=</span><span class="n">ordering</span><span class="p">)</span>
+        <span class="n">M</span><span class="o">.</span><span class="n">reorder</span><span class="p">(</span><span class="n">to</span><span class="o">=</span><span class="n">to</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">M</span><span class="o">.</span><span class="n">elems</span></div>
+
+
+<div class="viewcode-block" id="PySCFVQEWrapper.kernel">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.kernel">[docs]</a>
+    <span class="k">def</span> <span class="nf">kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">h2of</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reorder</span><span class="p">(</span><span class="n">h2</span><span class="p">,</span> <span class="s2">&quot;mulliken&quot;</span><span class="p">,</span> <span class="s2">&quot;openfermion&quot;</span><span class="p">)</span>
+        <span class="n">restrict_to_hcb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vqe_solver_arguments</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;restrict_to_hcb&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vqe_solver_arguments</span> <span class="ow">and</span> \
+                          <span class="bp">self</span><span class="o">.</span><span class="n">vqe_solver_arguments</span><span class="p">[</span><span class="s2">&quot;restrict_to_hcb&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">molecule_factory</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">molecule</span> <span class="o">=</span> <span class="n">QuantumChemistryBase</span><span class="p">(</span><span class="n">one_body_integrals</span><span class="o">=</span><span class="n">h1</span><span class="p">,</span> <span class="n">two_body_integrals</span><span class="o">=</span><span class="n">h2of</span><span class="p">,</span>
+                                        <span class="n">nuclear_repulsion</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">const_part</span><span class="p">,</span> <span class="n">n_electrons</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_electrons</span><span class="p">,</span>
+                                        <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">molecule_arguments</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">molecule</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">molecule_factory</span><span class="p">(</span><span class="n">one_body_integrals</span><span class="o">=</span><span class="n">h1</span><span class="p">,</span> <span class="n">two_body_integrals</span><span class="o">=</span><span class="n">h2of</span><span class="p">,</span>
+                                        <span class="n">nuclear_repulsion</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">const_part</span><span class="p">,</span> <span class="n">n_electrons</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_electrons</span><span class="p">,</span>
+                                        <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">molecule_arguments</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">restrict_to_hcb</span><span class="p">:</span>
+            <span class="n">H</span> <span class="o">=</span> <span class="n">molecule</span><span class="o">.</span><span class="n">make_hardcore_boson_hamiltonian</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">H</span> <span class="o">=</span> <span class="n">molecule</span><span class="o">.</span><span class="n">make_hamiltonian</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vqe_solver</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">vqe_solver_arguments</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vqe_solver_arguments</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">vqe_solver_arguments</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vqe_solver_arguments</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vqe_solver</span><span class="p">(</span><span class="n">H</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> <span class="n">circuit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="p">,</span> <span class="n">molecule</span><span class="o">=</span><span class="n">molecule</span><span class="p">,</span> <span class="o">**</span><span class="n">vqe_solver_arguments</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Orbital Optimizer: Either provide a callable vqe_solver or a circuit&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span>
+            <span class="n">E</span> <span class="o">=</span> <span class="n">ExpectationValue</span><span class="p">(</span><span class="n">H</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> <span class="n">U</span><span class="o">=</span><span class="n">U</span><span class="p">)</span>
+            <span class="n">optimizer_arguments</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vqe_solver_arguments</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;optimizer_arguments&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vqe_solver_arguments</span><span class="p">:</span>
+                <span class="n">optimizer_arguments</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vqe_solver_arguments</span><span class="p">[</span><span class="s2">&quot;optimizer_arguments&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">silent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;silent&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">optimizer_arguments</span><span class="p">:</span>
+                <span class="n">optimizer_arguments</span><span class="p">[</span><span class="s2">&quot;silent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="o">**</span><span class="n">optimizer_arguments</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;circuit&quot;</span><span class="p">):</span>
+            <span class="c1"># potential adaptive ansatz</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">circuit</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span> <span class="o">=</span> <span class="n">U</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># static ansatz</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span>
+
+        <span class="n">rdm1</span><span class="p">,</span> <span class="n">rdm2</span> <span class="o">=</span> <span class="n">molecule</span><span class="o">.</span><span class="n">compute_rdms</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">U</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">variables</span><span class="p">,</span> <span class="n">spin_free</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">get_rdm1</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">get_rdm2</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_hcb</span><span class="o">=</span><span class="n">restrict_to_hcb</span><span class="p">)</span>
+        <span class="n">rdm2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reorder</span><span class="p">(</span><span class="n">rdm2</span><span class="p">,</span> <span class="s1">&#39;dirac&#39;</span><span class="p">,</span> <span class="s1">&#39;mulliken&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:20}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;energy&quot;</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">energy</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:20}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;deltaE&quot;</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">energy</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">energy</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:20}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;||delta RDM1||&quot;</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rdm1</span> <span class="o">-</span> <span class="n">rdm1</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rdm1</span> <span class="o">=</span> <span class="n">rdm1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rdm2</span> <span class="o">=</span> <span class="n">rdm2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">one_body_integrals</span> <span class="o">=</span> <span class="n">h1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">two_body_integrals</span> <span class="o">=</span> <span class="n">h2</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">energy</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="PySCFVQEWrapper.make_rdm12">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.make_rdm12">[docs]</a>
+    <span class="k">def</span> <span class="nf">make_rdm12</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdm1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdm2</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;circuit&quot;</span> <span class="ow">and</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{:30}</span><span class="s2"> : </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> gates, </span><span class="si">{}</span><span class="s2"> parameters&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">gates</span><span class="p">),</span>
+                                                                                    <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">extract_variables</span><span class="p">())))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{:30}</span><span class="s2"> : </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ram Mosco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

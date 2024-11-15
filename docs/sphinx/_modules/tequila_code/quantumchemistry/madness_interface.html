@@ -1,0 +1,973 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tequila_code.quantumchemistry.madness_interface &mdash; Tequila Documentation 13.9.2024 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=7dcc51c3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Tequila Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Tequila Library Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tequila Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../quantumchemistry.html">tequila_code.quantumchemistry</a></li>
+      <li class="breadcrumb-item active">tequila_code.quantumchemistry.madness_interface</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tequila_code.quantumchemistry.madness_interface</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">tequila.quantumchemistry.qc_base</span> <span class="kn">import</span> <span class="n">QuantumChemistryBase</span><span class="p">,</span> <span class="n">TequilaException</span><span class="p">,</span> <span class="n">TequilaWarning</span><span class="p">,</span> \
+    <span class="n">QCircuit</span><span class="p">,</span> <span class="n">gates</span>
+<span class="kn">from</span> <span class="nn">tequila.quantumchemistry</span> <span class="kn">import</span> <span class="n">ParametersQC</span><span class="p">,</span> <span class="n">NBodyTensor</span>
+<span class="kn">from</span> <span class="nn">tequila</span> <span class="kn">import</span> <span class="n">ExpectationValue</span>
+<span class="kn">from</span> <span class="nn">.chemistry_tools</span> <span class="kn">import</span> <span class="n">OrbitalData</span>
+<span class="kn">import</span> <span class="nn">typing</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+
+<span class="c1"># Examples how to initialize the madness backend</span>
+<span class="c1"># tq.Molecule(geometry=&quot;...&quot;) will initialize a molecule with n_qubits=n_electrons (n_electrons//2 HF orbitals + n_electrons//2 PNOs)</span>
+<span class="c1"># tq.Molecule(geometry=&quot;...&quot;, n_pno=&quot;read&quot;) will read in files (name is auto-generated from geometry)</span>
+<span class="c1"># tq.Molecule(geometry=&quot;...&quot;, name=&quot;X&quot;, n_pno=&quot;read&quot;) will read in files X_htensor.npy, X_gtensor.npy, X_pnoinfo.txt</span>
+<span class="c1"># tq.Molecule(geometry=&quot;...&quot;, name=&quot;X&quot;, datadir=&quot;asd/Y/&quot;, n_pno=&quot;read&quot;) reads in files from directory asd/Y/</span>
+<span class="c1"># control madness input sections with dictionaries</span>
+<span class="c1"># tq.Molecule(geometry=&quot;...&quot;, pno={&quot;maxrank&quot;:10, &quot;freeze&quot;:0}, dft={&quot;k&quot;:9, &quot;L&quot;:25.0})</span>
+<span class="c1"># compute more orbitals</span>
+<span class="c1"># tq.Molecule(geometry=&quot;...&quot;, n_pno=10) # computes 10 PNOs additional to the occupied HF orbitals</span>
+
+
+<div class="viewcode-block" id="TequilaMadnessException">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.TequilaMadnessException">[docs]</a>
+<span class="k">class</span> <span class="nc">TequilaMadnessException</span><span class="p">(</span><span class="n">TequilaException</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Error in madness backend:&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span></div>
+
+
+
+<div class="viewcode-block" id="QuantumChemistryMadness">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness">[docs]</a>
+<span class="k">class</span> <span class="nc">QuantumChemistryMadness</span><span class="p">(</span><span class="n">QuantumChemistryBase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="QuantumChemistryMadness.find_executable">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.find_executable">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">find_executable</span><span class="p">(</span><span class="n">madness_root_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">executable</span> <span class="o">=</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;pno_integrals&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">madness_root_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">madness_root_dir</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MAD_ROOT_DIR&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">executable</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">madness_root_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">executable</span> <span class="o">=</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">/src/apps/pno/pno_integrals&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">madness_root_dir</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">executable</span></div>
+
+
+<div class="viewcode-block" id="QuantumChemistryMadness.plot2cube">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.plot2cube">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot2cube</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">orbital</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        plot orbitals to cube file (needs madtequila backend installed)</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        method: orbital, the orbital index (starting from 0 on the active orbitals)</span>
+<span class="sd">                if you want to plot frozen orbitals you can hand in a Tequila Orbital structure with idx_total defined</span>
+<span class="sd">        filename: name of the cubefile (default: mra_orbital_X.cube where X is the total index of the active orbital)</span>
+<span class="sd">        args: further arguments for plot2cube</span>
+<span class="sd">        kwargs further keyword arguments for plot2cube</span>
+
+<span class="sd">        see here for more https://github.com/kottmanj/madness/tree/tequila/src/apps/plot</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">plot2cube</span> <span class="o">=</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;plot2cube&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">plot2cube</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TequilaMadnessException</span><span class="p">(</span>
+                <span class="s2">&quot;can&#39;t plot to cube file. Couldn&#39;t find plot2cube executable.</span><span class="se">\n\n</span><span class="s2">Try installing</span><span class="se">\n\t</span><span class="s2"> conda install madtequila -c kottmann</span><span class="se">\n</span><span class="s2">and assure the version is &gt;2.3&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">orbital</span><span class="p">,</span><span class="s2">&quot;idx&quot;</span><span class="p">):</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">orbital</span><span class="o">.</span><span class="n">idx</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbitals</span><span class="p">[</span><span class="n">orbital</span><span class="p">]</span><span class="o">.</span><span class="n">idx_total</span>
+
+        <span class="n">callist</span> <span class="o">=</span> <span class="p">[</span><span class="n">plot2cube</span><span class="p">,</span> <span class="s2">&quot;file=mra_orbital_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">idx</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">callist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;outfile=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">callist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="n">callist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+
+        <span class="kn">import</span> <span class="nn">subprocess</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;plot2cube_</span><span class="si">{}</span><span class="s2">.log&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">orbital</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">logfile</span><span class="p">:</span>
+                <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">callist</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">logfile</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;plotting failed ....&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;see plot2cube_</span><span class="si">{}</span><span class="s2">.log&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">orbital</span><span class="p">))</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">ParametersQC</span><span class="p">,</span>
+                 <span class="n">transformation</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">active_orbitals</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+                 <span class="n">executable</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">n_pno</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">n_virt</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                 <span class="n">keep_mad_files</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">datadir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">datadir</span> <span class="o">=</span> <span class="n">datadir</span>
+
+        <span class="c1"># see if MAD_ROOT_DIR is defined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">madness_root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MAD_ROOT_DIR&quot;</span><span class="p">)</span>
+        <span class="c1"># see if the pno_integrals executable can be found</span>
+        <span class="k">if</span> <span class="n">executable</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">executable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_executable</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">executable</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">madness_root_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;MAD_ROOT_DIR=</span><span class="si">{}</span><span class="s2"> found</span><span class="se">\n</span><span class="s2">but couldn&#39;t find executable&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">madness_root_dir</span><span class="p">),</span>
+                              <span class="n">TequilaWarning</span><span class="p">)</span>
+
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">executable</span> <span class="o">=</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="n">executable</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">executable</span> <span class="o">=</span> <span class="n">executable</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_pno</span> <span class="o">=</span> <span class="n">n_pno</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_virt</span> <span class="o">=</span> <span class="n">n_virt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+
+        <span class="c1"># if no n_pno is given, look for MRA data (default)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="c1"># try to read in data in the following cases</span>
+        <span class="c1"># - no executable found</span>
+        <span class="c1"># - executable found but read in explicitly demanded through n_pno=&quot;read&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">n_pno</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">executable</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">n_pno</span><span class="p">,</span> <span class="s2">&quot;lower&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">n_pno</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;read&quot;</span><span class="p">):</span>
+            <span class="n">h</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_tensors</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">datadir</span><span class="o">=</span><span class="n">datadir</span><span class="p">)</span>
+            <span class="n">n_pno</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;failed&quot;</span> <span class="ow">in</span> <span class="n">h</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;failed&quot;</span> <span class="ow">in</span> <span class="n">g</span><span class="p">):</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;found </span><span class="si">{}</span><span class="s2">_htensor.npy=</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;failed&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">h</span><span class="p">)</span>
+            <span class="n">status</span> <span class="o">+=</span> <span class="s2">&quot;found </span><span class="si">{}</span><span class="s2">_gtensor.npy=</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;failed&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">g</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># try to run madness</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">parameters</span>
+                <span class="n">status</span> <span class="o">+=</span> <span class="s2">&quot;madness=&quot;</span>
+                <span class="n">madness_status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_madness</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">madness_status</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;MADNESS did not terminate as expected! status = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">status</span><span class="p">),</span> <span class="n">TequilaWarning</span><span class="p">)</span>
+                <span class="n">status</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">madness_status</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">E</span><span class="p">:</span>
+                <span class="n">status</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">E</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+            <span class="c1"># will read the binary files, convert them and save them with the right name</span>
+            <span class="n">h</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">pinfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_madness_output_from_bin_to_npy</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">datadir</span><span class="o">=</span><span class="n">datadir</span><span class="p">)</span>
+            <span class="n">status</span> <span class="o">+=</span> <span class="s2">&quot;found </span><span class="si">{}</span><span class="s2">_htensor.npy=</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;failed&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">h</span><span class="p">)</span>
+            <span class="n">status</span> <span class="o">+=</span> <span class="s2">&quot;found </span><span class="si">{}</span><span class="s2">_gtensor.npy=</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;failed&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">g</span><span class="p">)</span>
+            <span class="n">status</span> <span class="o">+=</span> <span class="s2">&quot;found </span><span class="si">{}</span><span class="s2">_pnoinfo.txt=</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;failed&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pinfo</span><span class="p">)</span>
+            <span class="n">status</span> <span class="o">+=</span> <span class="s2">&quot;h_tensor report:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">status</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+            <span class="n">status</span> <span class="o">+=</span> <span class="s2">&quot;g_tensor report:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">status</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+            <span class="n">status</span> <span class="o">+=</span> <span class="s2">&quot;pnoinfo report:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">status</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pinfo</span><span class="p">)</span>
+
+            <span class="n">solution</span> <span class="o">=</span> <span class="s2">&quot;Solution 1: Assuming precomputed files are available:</span><span class="se">\n</span><span class="s2">    provide </span><span class="si">{name}</span><span class="s2">_gtensor.npy, </span><span class="si">{name}</span><span class="s2">_htensor.npy and </span><span class="si">{name}</span><span class="s2">_pnoinfo.txt</span><span class="se">\n</span><span class="s2">    and call the Molecule constructor with n_pno=&#39;read&#39; keyword </span><span class="se">\n\n</span><span class="s2">Solution 2: Try installing with conda</span><span class="se">\n</span><span class="s2">    conda install madtequila -c kottmann</span><span class="se">\n\n</span><span class="s2">Solution 3: Install from source</span><span class="se">\n</span><span class="s2">    follow instructions on github.com/kottmanj/madness&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">executable</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">solution</span> <span class="o">=</span> <span class="s2">&quot;madness executable was found, but calculation did not succeed, check </span><span class="si">{name}</span><span class="s2">_pno_integrals.out for clues&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="s2">&quot;failed&quot;</span> <span class="ow">in</span> <span class="n">h</span> <span class="ow">or</span> <span class="s2">&quot;failed&quot;</span> <span class="ow">in</span> <span class="n">g</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TequilaMadnessException</span><span class="p">(</span><span class="s2">&quot;Could not initialize the madness interface</span><span class="se">\n</span><span class="s2">&quot;</span>
+                                              <span class="s2">&quot;Status report is</span><span class="se">\n</span><span class="s2">&quot;</span>
+                                              <span class="s2">&quot;</span><span class="si">{status}</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">)</span> <span class="o">+</span> <span class="n">solution</span><span class="p">)</span>
+        <span class="c1"># get additional information from madness file</span>
+        <span class="n">nuclear_repulsion</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">pairinfo</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">occinfo</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">if</span> <span class="n">datadir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datadir</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;_pnoinfo.txt&quot;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_pnoinfo.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;pnoinfo.txt&quot;</span><span class="p">]:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="s2">&quot;nuclear_repulsion&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                            <span class="n">nuclear_repulsion</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+                        <span class="k">elif</span> <span class="s2">&quot;pairinfo&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                            <span class="n">pairinfo</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+                            <span class="n">pairinfo</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">pairinfo</span><span class="p">]</span>
+                        <span class="k">elif</span> <span class="s2">&quot;occinfo&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                            <span class="n">occinfo</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+                            <span class="n">occinfo</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">occinfo</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">pairinfo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="n">pairinfo</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TequilaMadnessException</span><span class="p">(</span><span class="s2">&quot;Pairinfo from madness calculation not found</span><span class="se">\n</span><span class="s2">Please provide pnoinfo.txt&quot;</span><span class="p">)</span>
+
+        <span class="n">n_orbitals_total</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;n_orbitals&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="c1"># this would be the active orbitals</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;n_orbitals&quot;</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">h</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">n_orbitals_total</span>
+        <span class="k">assert</span> <span class="nb">sum</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">n_orbitals_total</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+
+        <span class="n">g</span> <span class="o">=</span> <span class="n">NBodyTensor</span><span class="p">(</span><span class="n">elems</span><span class="o">=</span><span class="n">g</span><span class="p">,</span> <span class="n">ordering</span><span class="o">=</span><span class="s1">&#39;mulliken&#39;</span><span class="p">)</span>
+
+        <span class="n">orbitals</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">pairinfo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">orbitals</span> <span class="o">=</span> <span class="p">[</span><span class="n">OrbitalData</span><span class="p">(</span><span class="n">idx_total</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">pair</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">occ</span><span class="o">=</span><span class="n">occinfo</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span>
+                        <span class="nb">enumerate</span><span class="p">(</span><span class="n">pairinfo</span><span class="p">)]</span>
+            <span class="n">reference_orbitals</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">orbitals</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">occ</span> <span class="o">==</span> <span class="mf">2.0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">active_orbitals</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
+                <span class="n">not_active</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">reference_orbitals</span> <span class="k">if</span>
+                              <span class="nb">sum</span><span class="p">([</span><span class="mi">1</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">orbitals</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">idx_total</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">pair</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">]</span>
+                <span class="n">active_orbitals</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">idx_total</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">orbitals</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">not_active</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">active_orbitals</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">orbitals</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">idx_total</span> <span class="ow">in</span> <span class="n">active_orbitals</span><span class="p">:</span>
+                        <span class="n">orbitals</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">idx_total</span><span class="p">]</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="n">i</span>
+                        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">orbitals</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">idx_total</span><span class="p">]</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TequilaMadnessException</span><span class="p">(</span><span class="s2">&quot;No pairinfo given: madness interface needs a file moleculename_pnoinfo.txt&quot;</span><span class="p">)</span>
+
+        <span class="c1"># convert to indices only</span>
+        <span class="c1"># active space data will be set in baseclass constructor</span>
+        <span class="n">reference_orbitals</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">idx_total</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">reference_orbitals</span><span class="p">]</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
+                         <span class="n">transformation</span><span class="o">=</span><span class="n">transformation</span><span class="p">,</span>
+                         <span class="n">active_orbitals</span><span class="o">=</span><span class="n">active_orbitals</span><span class="p">,</span>
+                         <span class="n">one_body_integrals</span><span class="o">=</span><span class="n">h</span><span class="p">,</span>
+                         <span class="n">two_body_integrals</span><span class="o">=</span><span class="n">g</span><span class="p">,</span>
+                         <span class="n">nuclear_repulsion</span><span class="o">=</span><span class="n">nuclear_repulsion</span><span class="p">,</span>
+                         <span class="n">n_orbitals</span><span class="o">=</span><span class="n">n_orbitals_total</span><span class="p">,</span>
+                         <span class="n">orbitals</span><span class="o">=</span><span class="n">orbitals</span><span class="p">,</span>
+                         <span class="n">reference_orbitals</span><span class="o">=</span><span class="n">reference_orbitals</span><span class="p">,</span>
+                         <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+                         <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># print warning if read data does not match expectations</span>
+        <span class="k">if</span> <span class="n">n_pno</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nrefs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_orbitals</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">n_pno</span> <span class="o">+</span> <span class="n">nrefs</span> <span class="o">+</span> <span class="n">n_virt</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;read in data has </span><span class="si">{}</span><span class="s2"> pnos/virtuals, but n_pno and n_virt where set to </span><span class="si">{}</span><span class="s2"> and </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span> <span class="o">-</span> <span class="n">nrefs</span><span class="p">,</span> <span class="n">n_pno</span><span class="p">,</span> <span class="n">n_virt</span><span class="p">),</span> <span class="n">TequilaWarning</span><span class="p">)</span>
+
+        <span class="c1"># delete *.bin files and pnoinfo.txt form madness calculation</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">keep_mad_files</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cleanup</span><span class="p">(</span><span class="n">warn</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">delete_all_files</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<div class="viewcode-block" id="QuantumChemistryMadness.cleanup">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.cleanup">[docs]</a>
+    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">warn</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">delete_all_files</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+        <span class="n">filenames</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;pnoinfo.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;molecule_htensor.bin&quot;</span><span class="p">,</span> <span class="s2">&quot;molecule.gtensor.bin&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">delete_all_files</span><span class="p">:</span>
+            <span class="n">filenames</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_htensor.npy&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_gtensor.npy&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                         <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_pnoinfo.txt&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                         <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_pno_integrals.out&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">warn</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Found file </span><span class="si">{}</span><span class="s2"> from previous calculation ... deleting it&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span>
+                                  <span class="n">TequilaWarning</span><span class="p">)</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="QuantumChemistryMadness.run_madness">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.run_madness">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_madness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">executable</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">----&gt; pno_integrals executable not found &lt;----</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_madness_input</span><span class="p">(</span><span class="n">n_pno</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_pno</span><span class="p">,</span> <span class="n">n_virt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_virt</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># prevent reading in old files</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cleanup</span><span class="p">(</span><span class="n">warn</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">delete_all_files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="kn">import</span> <span class="nn">subprocess</span>
+        <span class="kn">import</span> <span class="nn">time</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_pno_integrals.out&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Starting madness calculation with executable: &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">executable</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;output redirected to </span><span class="si">{}</span><span class="s2"> logfile&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">logfile</span><span class="p">:</span>
+            <span class="n">madout</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">executable</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">logfile</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;finished after </span><span class="si">{}</span><span class="s2">s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">))</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">&quot;pnoinfo.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_pnoinfo.txt&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">madout</span></div>
+
+
+<div class="viewcode-block" id="QuantumChemistryMadness.read_tensors">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.read_tensors">[docs]</a>
+    <span class="k">def</span> <span class="nf">read_tensors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;molecule&quot;</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="s2">&quot;npy&quot;</span><span class="p">,</span> <span class="n">datadir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Try to read files &quot;name_htensor.npy&quot; and &quot;name_gtensor.npy&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="n">datadir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datadir</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_htensor.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filetype</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_gtensor.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filetype</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span>
+
+        <span class="k">return</span> <span class="n">h</span><span class="p">,</span> <span class="n">g</span></div>
+
+
+<div class="viewcode-block" id="QuantumChemistryMadness.get_pair_orbitals">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.get_pair_orbitals">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_pair_orbitals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="n">OrbitalData</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span> <span class="n">OrbitalData</span><span class="p">,</span>
+                          <span class="n">exclude</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">OrbitalData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbitals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbitals</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exclude</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">exclude</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">orbitals</span><span class="p">[</span><span class="n">exclude</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="n">exclude</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exclude</span><span class="p">,</span> <span class="n">OrbitalData</span><span class="p">):</span>
+            <span class="n">exclude</span> <span class="o">=</span> <span class="p">[</span><span class="n">exclude</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbitals</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">idx_total</span><span class="p">,</span> <span class="n">j</span><span class="o">.</span><span class="n">idx_total</span><span class="p">)</span> <span class="o">==</span> <span class="n">x</span><span class="o">.</span><span class="n">pair</span> <span class="ow">and</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="QuantumChemistryMadness.get_virtual_orbitals">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.get_virtual_orbitals">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_virtual_orbitals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbitals</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">pair</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="QuantumChemistryMadness.compute_energy">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.compute_energy">[docs]</a>
+    <span class="k">def</span> <span class="nf">compute_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Call classical methods over PySCF (needs to be installed) or</span>
+<span class="sd">        use as a shortcut to calculate quantum energies (see make_upccgsd_ansatz)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        method: method name</span>
+<span class="sd">                classical: HF, MP2, CCSD, CCSD(T), FCI</span>
+<span class="sd">                quantum: SPA-GASD (SPA can be dropped as well as letters in GASD)</span>
+<span class="sd">                examples: GSD is the same as UpCCGSD, SPA alone is equivalent to SPA-D</span>
+<span class="sd">                see make_upccgsd_ansatz of the this class for more information</span>
+<span class="sd">        args</span>
+<span class="sd">        kwargs</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="n">x</span> <span class="ow">in</span> <span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;U&quot;</span><span class="p">,</span> <span class="s2">&quot;SPA&quot;</span><span class="p">,</span> <span class="s2">&quot;PNO&quot;</span><span class="p">,</span> <span class="s2">&quot;HCB&quot;</span><span class="p">]]):</span>
+            <span class="c1"># simulate entirely in HCB representation if no singles are involved</span>
+            <span class="k">if</span> <span class="s2">&quot;S&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="s2">&quot;HCB&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">():</span>
+                <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;HCB-&quot;</span> <span class="o">+</span> <span class="n">method</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_upccgsd_ansatz</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;hcb&quot;</span> <span class="ow">in</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                <span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_hardcore_boson_hamiltonian</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_hamiltonian</span><span class="p">()</span>
+            <span class="n">E</span> <span class="o">=</span> <span class="n">ExpectationValue</span><span class="p">(</span><span class="n">H</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> <span class="n">U</span><span class="o">=</span><span class="n">U</span><span class="p">)</span>
+            <span class="kn">from</span> <span class="nn">tequila</span> <span class="kn">import</span> <span class="n">minimize</span>
+            <span class="k">return</span> <span class="n">minimize</span><span class="p">(</span><span class="n">objective</span><span class="o">=</span><span class="n">E</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">energy</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">compute_energy</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="QuantumChemistryMadness.local_qubit_map">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.local_qubit_map">[docs]</a>
+    <span class="k">def</span> <span class="nf">local_qubit_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hcb</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">up_then_down</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="c1"># re-arrange orbitals to result in more local circuits</span>
+        <span class="c1"># does not make the circuit more local, but rather will show locality better in pictures</span>
+        <span class="c1"># transform circuits and Hamiltonians with this map</span>
+        <span class="c1"># H = H.map_qubits(qubit_map), U = U.map_qubits(qubit_map)</span>
+        <span class="c1"># hcb: same for the harcore_boson representation</span>
+        <span class="n">ordered_qubits</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">pairs</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_electrons</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">:</span>
+            <span class="n">pnos</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">idx</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pair_orbitals</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">i</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="n">hcb</span><span class="p">:</span>
+                <span class="n">up</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pnos</span><span class="p">]</span>
+                <span class="n">ordered_qubits</span> <span class="o">+=</span> <span class="n">up</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">up_then_down</span><span class="p">:</span>
+                    <span class="n">up</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">transformation</span><span class="o">.</span><span class="n">up</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pnos</span><span class="p">]</span>
+                    <span class="n">down</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">transformation</span><span class="o">.</span><span class="n">down</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pnos</span><span class="p">]</span>
+                    <span class="n">ordered_qubits</span> <span class="o">+=</span> <span class="n">up</span> <span class="o">+</span> <span class="n">down</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pnos</span><span class="p">:</span>
+                        <span class="n">ordered_qubits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transformation</span><span class="o">.</span><span class="n">up</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+                        <span class="n">ordered_qubits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transformation</span><span class="o">.</span><span class="n">down</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+
+        <span class="n">qubit_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ordered_qubits</span><span class="p">)}</span>
+        <span class="k">return</span> <span class="n">qubit_map</span></div>
+
+
+<div class="viewcode-block" id="QuantumChemistryMadness.make_spa_ansatz">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.make_spa_ansatz">[docs]</a>
+    <span class="k">def</span> <span class="nf">make_spa_ansatz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hcb</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Shortcut for convenience</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label:</span>
+<span class="sd">           label for the angles</span>
+<span class="sd">        hcb:</span>
+<span class="sd">           if True the circuit will not map from HCB to JW (or other encodings that might be supported in the future)</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Default SPA ansatz (equivalent to PNO-UpCCD with madness PNOs)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;SPA-UpCCD&quot;</span>
+        <span class="k">if</span> <span class="n">hcb</span> <span class="ow">and</span> <span class="s2">&quot;HCB&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">():</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;HCB-&quot;</span> <span class="o">+</span> <span class="n">name</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_upccgsd_ansatz</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="QuantumChemistryMadness.make_upccgsd_ansatz">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.make_upccgsd_ansatz">[docs]</a>
+    <span class="k">def</span> <span class="nf">make_upccgsd_ansatz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;UpCCGSD&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direct_compiling</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">neglect_z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="n">hcb_optimization</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include_reference</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Overwriting baseclass to allow names like : PNO-UpCCD etc</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label: label the variables of the ansatz ( variables will be labelled (indices, X, (label, layer) witch X=D/S)</span>
+<span class="sd">        direct_compiling: Directly compile the first layer (works only for transformation that implement the hcb_to_me function)</span>
+<span class="sd">        name: ansatz name (SPA-UpCCD or SPA-D, SPA-UpCCGD or SPA-GD, SPA-UpCCGSD or SPA-GSD, UpCCGSD or GSD ..., in general {HCB}-{SPA}-{Excitations}</span>
+<span class="sd">              if HCB is included in name: do not map from hard-core Boson to qubit encoding of this molecule</span>
+<span class="sd">              if SPA is included in name: Use the separable pair ansatz (excitations will be restricted to the PNO structure of the surrogate model)</span>
+<span class="sd">              Excitations: can be &quot;S&quot; (use only singles), &quot;D&quot; (use only doubles), &quot;GSD&quot; (generalized singles and doubles), &quot;GASD&quot; (approximate singles, neglecting Z terms in JW)</span>
+<span class="sd">        neglect_z: neglect all Z terms in singles excitations generators</span>
+<span class="sd">        order: repetition of layers, can be given over the name as well, the order needs to be the first in the name then (i.e. 2-UpCCGSD, 2-SPA-GSD, etc)</span>
+<span class="sd">        args</span>
+<span class="sd">        kwargs</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check if the used qubit encoding has a hcb transformation</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">have_hcb_trafo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformation</span><span class="o">.</span><span class="n">hcb_to_me</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">have_hcb_trafo</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+        <span class="c1"># Default Method</span>
+        <span class="k">if</span> <span class="s2">&quot;SPA&quot;</span> <span class="ow">in</span> <span class="n">name</span> <span class="ow">and</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;SPA&quot;</span><span class="p">,</span> <span class="s2">&quot;HCB&quot;</span><span class="p">]:</span>
+            <span class="n">name</span> <span class="o">+=</span> <span class="s2">&quot;-D&quot;</span>
+
+        <span class="n">excitations</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s2">&quot;HCB&quot;</span> <span class="ow">in</span> <span class="n">name</span> <span class="ow">and</span> <span class="s2">&quot;S&quot;</span> <span class="ow">in</span> <span class="n">excitations</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TequilaMadnessException</span><span class="p">(</span><span class="s2">&quot;name=</span><span class="si">{}</span><span class="s2">, HCB + Singles can&#39;t be realized&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="s2">&quot;HCB&quot;</span> <span class="ow">in</span> <span class="n">name</span> <span class="ow">and</span> <span class="s2">&quot;D&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">excitations</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;name=</span><span class="si">{}</span><span class="s2">, HCB without Doubles has no result &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">TequilaWarning</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;S&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">excitations</span> <span class="ow">and</span> <span class="s2">&quot;D&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">excitations</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;name=</span><span class="si">{}</span><span class="s2">, neither singles nor doubles requested&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">TequilaWarning</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;T&quot;</span> <span class="ow">in</span> <span class="n">excitations</span> <span class="ow">or</span> <span class="s2">&quot;Q&quot;</span> <span class="ow">in</span> <span class="n">excitations</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;name=</span><span class="si">{}</span><span class="s2">, only singles and doubles supported&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">TequilaWarning</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">have_hcb_trafo</span> <span class="ow">and</span> <span class="s2">&quot;D&quot;</span> <span class="ow">in</span> <span class="n">excitations</span> <span class="ow">or</span> <span class="s2">&quot;HCB&quot;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">)</span> <span class="ow">and</span> <span class="n">include_reference</span> <span class="ow">and</span> <span class="n">hcb_optimization</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">hcb_optimization</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="n">hcb_optimization</span> <span class="ow">and</span> <span class="n">direct_compiling</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">direct_compiling</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;A&quot;</span> <span class="ow">in</span> <span class="n">excitations</span><span class="p">)</span> <span class="ow">and</span> <span class="n">neglect_z</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">neglect_z</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="c1"># spin adaption does not work with z neglected</span>
+            <span class="k">if</span> <span class="s2">&quot;spin_adapt_singles&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;spin_adapt_singles&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">neglect_z</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="c1"># switch on by default</span>
+            <span class="k">if</span> <span class="s2">&quot;spin_adapt_singles&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;spin_adapt_singles&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="n">direct_compiling</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">have_hcb_trafo</span> <span class="ow">and</span> <span class="ow">not</span> <span class="s2">&quot;HCB&quot;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TequilaMadnessException</span><span class="p">(</span>
+                <span class="s2">&quot;direct_compiling=</span><span class="si">{}</span><span class="s2"> demanded but no hcb_to_me in transformation=</span><span class="si">{}</span><span class="se">\n</span><span class="s2">try transformation=</span><span class="se">\&#39;</span><span class="s2">ReorderedJordanWigner</span><span class="se">\&#39;</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">direct_compiling</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformation</span><span class="p">))</span>
+
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">order</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;-&quot;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+                    <span class="n">order</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">order</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">order</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># first layer</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">hcb_optimization</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;D&quot;</span> <span class="ow">in</span> <span class="n">excitations</span><span class="p">:</span>
+                <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_hardcore_boson_pno_upccd_ansatz</span><span class="p">(</span><span class="n">include_reference</span><span class="o">=</span><span class="n">include_reference</span><span class="p">,</span>
+                                                              <span class="n">direct_compiling</span><span class="o">=</span><span class="n">direct_compiling</span><span class="p">,</span>
+                                                              <span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">include_reference</span><span class="p">:</span>
+                <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_hardcore_boson_reference</span><span class="p">()</span>
+
+            <span class="n">indices0</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">U</span><span class="o">.</span><span class="n">extract_variables</span><span class="p">()]</span>
+            <span class="n">indices1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_upccgsd_indices</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">indices0</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;D&quot;</span> <span class="ow">in</span> <span class="n">excitations</span><span class="p">:</span>
+                <span class="n">U</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_hardcore_boson_upccgd_layer</span><span class="p">(</span><span class="n">indices</span><span class="o">=</span><span class="n">indices1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="n">indices0</span> <span class="o">+</span> <span class="n">indices1</span>
+            <span class="k">if</span> <span class="s2">&quot;HCB&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">name</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">U</span><span class="o">.</span><span class="n">gates</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hcb_to_me</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">U</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="s2">&quot;S&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">excitations</span>
+            <span class="k">if</span> <span class="s2">&quot;S&quot;</span> <span class="ow">in</span> <span class="n">excitations</span><span class="p">:</span>
+                <span class="n">U</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_upccgsd_singles</span><span class="p">(</span><span class="n">indices</span><span class="o">=</span><span class="n">indices</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">neglect_z</span><span class="o">=</span><span class="n">neglect_z</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_upccgsd_indices</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">include_reference</span><span class="p">:</span>
+                <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_reference</span><span class="p">()</span>
+            <span class="n">U</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_upccgsd_layer</span><span class="p">(</span><span class="n">indices</span><span class="o">=</span><span class="n">indices</span><span class="p">,</span> <span class="n">include_singles</span><span class="o">=</span><span class="s2">&quot;S&quot;</span> <span class="ow">in</span> <span class="n">excitations</span><span class="p">,</span>
+                                         <span class="n">include_doubles</span><span class="o">=</span><span class="s2">&quot;D&quot;</span> <span class="ow">in</span> <span class="n">excitations</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">neglect_z</span><span class="o">=</span><span class="n">neglect_z</span><span class="p">,</span>
+                                         <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">order</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="p">):</span>
+                <span class="n">indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_upccgsd_indices</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">layer</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="k">if</span> <span class="s2">&quot;HCB&quot;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+                    <span class="n">U</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_hardcore_boson_upccgd_layer</span><span class="p">(</span><span class="n">indices</span><span class="o">=</span><span class="n">indices</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">layer</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">U</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_upccgsd_layer</span><span class="p">(</span><span class="n">indices</span><span class="o">=</span><span class="n">indices</span><span class="p">,</span> <span class="n">include_singles</span><span class="o">=</span><span class="s2">&quot;S&quot;</span> <span class="ow">in</span> <span class="n">excitations</span><span class="p">,</span>
+                                                 <span class="n">include_doubles</span><span class="o">=</span><span class="s2">&quot;D&quot;</span> <span class="ow">in</span> <span class="n">excitations</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">layer</span><span class="p">),</span>
+                                                 <span class="n">neglect_z</span><span class="o">=</span><span class="n">neglect_z</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">U</span></div>
+
+
+<div class="viewcode-block" id="QuantumChemistryMadness.make_hardcore_boson_pno_upccd_ansatz">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.make_hardcore_boson_pno_upccd_ansatz">[docs]</a>
+    <span class="k">def</span> <span class="nf">make_hardcore_boson_pno_upccd_ansatz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pairs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include_reference</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                             <span class="n">direct_compiling</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">pairs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pairs</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_orbitals</span><span class="p">]</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">direct_compiling</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_reference</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;HCB_PNO_UPCCD: Direct compiling needs reference included&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">:</span>
+                <span class="n">U</span> <span class="o">+=</span> <span class="n">gates</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pair_orbitals</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">x</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="n">x</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_excitation_indices</span><span class="p">([(</span><span class="n">x</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">idx</span><span class="p">)])</span>
+                    <span class="n">U</span> <span class="o">+=</span> <span class="n">gates</span><span class="o">.</span><span class="n">Ry</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="n">label</span><span class="p">),</span> <span class="n">target</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">U</span> <span class="o">+=</span> <span class="n">gates</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">control</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">direct_compiling</span><span class="p">,</span> <span class="s2">&quot;lower&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">direct_compiling</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;ladder&quot;</span><span class="p">:</span>
+                        <span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span>
+
+            <span class="n">alpha_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="o">.</span><span class="n">idx</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformation</span><span class="o">.</span><span class="n">up</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbitals</span><span class="p">}</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">map_qubits</span><span class="p">(</span><span class="n">alpha_map</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">include_reference</span><span class="p">:</span>
+                    <span class="n">U</span> <span class="o">+=</span> <span class="n">gates</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transformation</span><span class="o">.</span><span class="n">up</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">idx</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pair_orbitals</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">x</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">a</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_excitation_indices</span><span class="p">([(</span><span class="n">x</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">idx</span><span class="p">)])</span>
+                    <span class="n">U</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_hardcore_boson_excitation_gate</span><span class="p">(</span><span class="n">indices</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="n">label</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">U</span></div>
+
+
+<div class="viewcode-block" id="QuantumChemistryMadness.make_upccgsd_indices">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.make_upccgsd_indices">[docs]</a>
+    <span class="k">def</span> <span class="nf">make_upccgsd_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;UpCCGD&quot;</span><span class="p">,</span> <span class="n">exclude</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param label: label the angles</span>
+<span class="sd">        :param generalized: if true the complement to UpCCGD is created (otherwise UpCCD)</span>
+<span class="sd">        :param exclude: list of indices to exclude</span>
+<span class="sd">        :return: All gates missing between PNO-UpCCD and UpCC(G)D</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">exclude</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">exclude</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+        <span class="n">indices</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># HF-X -- PNO-XX indices</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_orbitals</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pair_orbitals</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">i</span><span class="p">):</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_excitation_indices</span><span class="p">([(</span><span class="n">i</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">idx</span><span class="p">)])</span>
+                <span class="k">if</span> <span class="n">idx</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span> <span class="ow">and</span> <span class="n">idx</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+                    <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;G&quot;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_orbitals</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pair_orbitals</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">i</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pair_orbitals</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">i</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">idx</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="o">.</span><span class="n">idx</span><span class="p">:</span>
+                            <span class="k">continue</span>
+
+                        <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_excitation_indices</span><span class="p">([(</span><span class="n">a</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">idx</span><span class="p">)])</span>
+                        <span class="k">if</span> <span class="n">idx</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span> <span class="ow">and</span> <span class="n">idx</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+                            <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;PNO&quot;</span> <span class="ow">in</span> <span class="n">name</span> <span class="ow">or</span> <span class="s2">&quot;SPA&quot;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">indices</span>
+
+        <span class="n">virtuals</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbitals</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">pair</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">i</span><span class="o">.</span><span class="n">occ</span> <span class="o">!=</span> <span class="mf">2.0</span><span class="p">]</span>
+        <span class="n">virtuals</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_virtual_orbitals</span><span class="p">()</span>  <span class="c1"># this is usually empty</span>
+        <span class="c1"># HF-X -- PNO-XY/PNO-YY indices</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_orbitals</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">virtuals</span><span class="p">:</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_excitation_indices</span><span class="p">([(</span><span class="n">i</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">idx</span><span class="p">)])</span>
+                <span class="k">if</span> <span class="n">idx</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span> <span class="ow">and</span> <span class="n">idx</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+                    <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+        <span class="c1"># HF-HF and PNO-PNO indices</span>
+        <span class="k">if</span> <span class="s2">&quot;G&quot;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_orbitals</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_orbitals</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">idx</span> <span class="o">&lt;=</span> <span class="n">j</span><span class="o">.</span><span class="n">idx</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_excitation_indices</span><span class="p">([(</span><span class="n">i</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">j</span><span class="o">.</span><span class="n">idx</span><span class="p">)])</span>
+                    <span class="k">if</span> <span class="n">idx</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span> <span class="ow">and</span> <span class="n">idx</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+                        <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">virtuals</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">virtuals</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">idx_total</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="o">.</span><span class="n">idx_total</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_excitation_indices</span><span class="p">([(</span><span class="n">a</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">idx</span><span class="p">)])</span>
+                    <span class="k">if</span> <span class="n">idx</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span> <span class="ow">and</span> <span class="n">idx</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+                        <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">indices</span></div>
+
+
+<div class="viewcode-block" id="QuantumChemistryMadness.make_pno_upccgsd_ansatz">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.make_pno_upccgsd_ansatz">[docs]</a>
+    <span class="k">def</span> <span class="nf">make_pno_upccgsd_ansatz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">generalized</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_offdiagonals</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">refs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_orbitals</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_orbitals</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pair_orbitals</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">i</span><span class="p">):</span>
+                <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">idx</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">generalized</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pair_orbitals</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">i</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pair_orbitals</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">i</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">idx_total</span> <span class="o">&lt;=</span> <span class="n">a</span><span class="o">.</span><span class="n">idx_total</span><span class="p">:</span>
+                            <span class="k">continue</span>
+                        <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">idx</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">include_offdiagonals</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_orbitals</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_orbitals</span><span class="p">:</span>
+                    <span class="n">pairs_ij</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pair_orbitals</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">j</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">idx</span> <span class="o">&lt;=</span> <span class="n">j</span><span class="o">.</span><span class="n">idx</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">pairs_ij</span><span class="p">:</span>
+                        <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">j</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">idx</span><span class="p">))</span>
+
+                    <span class="k">if</span> <span class="n">generalized</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">pairs_ij</span><span class="p">:</span>
+                            <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">pairs_ij</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">idx</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="o">.</span><span class="n">idx</span><span class="p">:</span>
+                                    <span class="k">continue</span>
+                                <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">a</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">idx</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_upccgsd_ansatz</span><span class="p">(</span><span class="n">indices</span><span class="o">=</span><span class="n">indices</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="QuantumChemistryMadness.write_madness_input">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.write_madness_input">[docs]</a>
+    <span class="k">def</span> <span class="nf">write_madness_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_pno</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_virt</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="n">maxrank</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="n">n_orbitals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">n_pno</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">n_orbitals</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TequilaMadnessException</span><span class="p">(</span>
+                <span class="s2">&quot;n_pno=</span><span class="si">{}</span><span class="s2"> and n_orbitals=</span><span class="si">{}</span><span class="s2"> given ... please pick one&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n_pno</span><span class="p">,</span> <span class="n">n_orbitals</span><span class="p">))</span>
+
+        <span class="n">n_electrons</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">n_electrons</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">frozen_core</span><span class="p">:</span>
+            <span class="c1"># only count active electrons (will not compute pnos for frozen pairs)</span>
+            <span class="n">n_core_electrons</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">get_number_of_core_electrons</span><span class="p">()</span>
+            <span class="n">n_electrons</span> <span class="o">-=</span> <span class="n">n_core_electrons</span>
+
+        <span class="n">n_pairs</span> <span class="o">=</span> <span class="n">n_electrons</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="n">n_orbitals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">n_orbitals</span> <span class="o">=</span> <span class="n">n_electrons</span>  <span class="c1"># minimal correlated (each active pair will have one virtual)</span>
+
+        <span class="k">if</span> <span class="n">n_pno</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">n_pno</span> <span class="o">=</span> <span class="n">n_orbitals</span> <span class="o">-</span> <span class="n">n_pairs</span>
+
+        <span class="k">if</span> <span class="n">maxrank</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># need at least maxrank=1, otherwise no PNOs are computed</span>
+            <span class="c1"># this was a bug in &lt;=v1.8.5 </span>
+            <span class="n">maxrank</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">n_pno</span> <span class="o">//</span> <span class="n">n_pairs</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="n">maxrank</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;maxrank=</span><span class="si">{}</span><span class="s2"> in tequila madness backend! No PNOs will be computed. Set the value when initializing the Molecule as tq.Molecule(..., pno={</span><span class="se">\&quot;</span><span class="s2">maxrank</span><span class="se">\&quot;</span><span class="s2">:1, ...})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">maxrank</span><span class="p">),</span> <span class="n">TequilaWarning</span><span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">multiplicity</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TequilaMadnessException</span><span class="p">(</span>
+                <span class="s2">&quot;Currently only closed shell supported for MRA-PNO-MP2, you demanded multiplicity=</span><span class="si">{}</span><span class="s2"> for the surrogate&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">multiplicity</span><span class="p">))</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;dft&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;charge&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">charge</span><span class="p">,</span> <span class="s2">&quot;xc&quot;</span><span class="p">:</span> <span class="s2">&quot;hf&quot;</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s2">&quot;econv&quot;</span><span class="p">:</span> <span class="mf">1.e-4</span><span class="p">,</span> <span class="s2">&quot;dconv&quot;</span><span class="p">:</span> <span class="mf">5.e-4</span><span class="p">,</span>
+                       <span class="s2">&quot;localize&quot;</span><span class="p">:</span> <span class="s2">&quot;boys&quot;</span><span class="p">,</span>
+                       <span class="s2">&quot;ncf&quot;</span><span class="p">:</span> <span class="s2">&quot;( none , 1.0 )&quot;</span><span class="p">}</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;pno&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;maxrank&quot;</span><span class="p">:</span> <span class="n">maxrank</span><span class="p">,</span> <span class="s2">&quot;f12&quot;</span><span class="p">:</span> <span class="s2">&quot;false&quot;</span><span class="p">,</span> <span class="s2">&quot;thresh&quot;</span><span class="p">:</span> <span class="mf">1.e-4</span><span class="p">,</span> <span class="s2">&quot;diagonal&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">frozen_core</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;pno&quot;</span><span class="p">][</span><span class="s2">&quot;freeze&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;pnoint&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;n_pno&quot;</span><span class="p">:</span> <span class="n">n_pno</span><span class="p">,</span> <span class="s2">&quot;n_virt&quot;</span><span class="p">:</span> <span class="n">n_virt</span><span class="p">,</span> <span class="s2">&quot;orthog&quot;</span><span class="p">:</span> <span class="s2">&quot;symmetric&quot;</span><span class="p">}</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;plot&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;f12&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]}</span>
+
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">k1</span><span class="p">,</span> <span class="n">v1</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">k1</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">k2</span><span class="p">,</span> <span class="n">v2</span> <span class="ow">in</span> <span class="n">v1</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k2</span><span class="p">,</span> <span class="n">v2</span><span class="p">),</span> <span class="n">file</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;end</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;geometry&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;units angstrom&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;eprec 1.e-6&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">get_geometry_string</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;end&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="QuantumChemistryMadness.convert_madness_output_from_bin_to_npy">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.convert_madness_output_from_bin_to_npy">[docs]</a>
+    <span class="k">def</span> <span class="nf">convert_madness_output_from_bin_to_npy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">datadir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="n">datadir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># if the datadir does not exist then tequila will crash</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="kn">import</span> <span class="nn">os</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">datadir</span><span class="p">):</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">datadir</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">E</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;tried to create datadir=</span><span class="si">{}</span><span class="s2"> and caught</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datadir</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">E</span><span class="p">)),</span> <span class="n">TequilaWarning</span><span class="p">)</span>
+
+            <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datadir</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">g_data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span><span class="s2">&quot;molecule_gtensor.bin&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">())</span>
+            <span class="n">sd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">g_data</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">))</span>
+            <span class="k">assert</span> <span class="p">(</span><span class="n">sd</span> <span class="o">**</span> <span class="mi">4</span> <span class="o">==</span> <span class="n">g_data</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+            <span class="n">sds</span> <span class="o">=</span> <span class="p">[</span><span class="n">sd</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">g_data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sds</span><span class="p">)</span>
+            <span class="n">numpy</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_gtensor.npy&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">arr</span><span class="o">=</span><span class="n">g</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">E</span><span class="p">:</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="s2">&quot;failed</span><span class="se">\n</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">E</span><span class="p">))</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">h_data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span><span class="s2">&quot;molecule_htensor.bin&quot;</span><span class="p">)</span>
+            <span class="n">sd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">h_data</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+            <span class="k">assert</span> <span class="p">(</span><span class="n">sd</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">==</span> <span class="n">h_data</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+            <span class="n">sds</span> <span class="o">=</span> <span class="p">[</span><span class="n">sd</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">h_data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sds</span><span class="p">)</span>
+            <span class="n">numpy</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_htensor.npy&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">arr</span><span class="o">=</span><span class="n">h</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">E</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="s2">&quot;failed</span><span class="se">\n</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">E</span><span class="p">))</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_pnoinfo.txt&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f1</span><span class="p">:</span>
+                <span class="n">pnoinfo</span> <span class="o">=</span> <span class="n">f1</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">E</span><span class="p">:</span>
+            <span class="n">pnoinfo</span> <span class="o">=</span> <span class="s2">&quot;failed</span><span class="se">\n</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">E</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">datadir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_pnoinfo.txt&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f1</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_pnoinfo.txt&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f2</span><span class="p">:</span>
+                    <span class="n">f2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f1</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">E</span><span class="p">:</span>
+                <span class="n">pnoinfo</span> <span class="o">=</span> <span class="s2">&quot;failed</span><span class="se">\n</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">E</span><span class="p">))</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_pno_integrals.out&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f1</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_pno_integrals.out&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">),</span>
+                                                                                <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f2</span><span class="p">:</span>
+                    <span class="n">f2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f1</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">E</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="n">h</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">pnoinfo</span></div>
+
+
+<div class="viewcode-block" id="QuantumChemistryMadness.perturbative_f12_correction">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.perturbative_f12_correction">[docs]</a>
+    <span class="k">def</span> <span class="nf">perturbative_f12_correction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdm1</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rdm2</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">n_ri</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                                    <span class="n">f12_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;molecule_f12tensor.bin&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the spin-free [2]_R12 correction, needing only the 1- and 2-RDM of a reference method</span>
+<span class="sd">        Requires either 1-RDM, 2-RDM or information to compute them in kwargs</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rdm1 :</span>
+<span class="sd">            1-electron reduced density matrix</span>
+<span class="sd">        rdm2 :</span>
+<span class="sd">            2-electron reduced density matrix</span>
+<span class="sd">        gamma :</span>
+<span class="sd">            f12-exponent, for a correlation factor f_12 = -1/gamma * exp[-gamma*r_12]</span>
+<span class="sd">        n_ri :</span>
+<span class="sd">            dimensionality of RI-basis; if None, then the maximum available via tensors / basis-set is used</span>
+<span class="sd">        f12_filename :</span>
+<span class="sd">            when using madness_interface, &lt;q|h|p&gt; and &lt;rs|1/r_12|pq&gt; already available;</span>
+<span class="sd">            need to provide f12-tensor &lt;rs|f_12|pq&gt; as &quot;.bin&quot; from madness or &quot;.npy&quot;, assuming Mulliken ordering</span>
+<span class="sd">        kwargs :</span>
+<span class="sd">            e.g. RDM-information via {&quot;U&quot;: QCircuit, &quot;variables&quot;: optimal angles}, needs to be passed if rdm1,rdm2 not</span>
+<span class="sd">            yet computed</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            the f12 correction for the energy</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">.f12_corrections._f12_correction_madness</span> <span class="kn">import</span> <span class="n">ExplicitCorrelationCorrectionMadness</span>
+        <span class="n">correction</span> <span class="o">=</span> <span class="n">ExplicitCorrelationCorrectionMadness</span><span class="p">(</span><span class="n">mol</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdm1</span><span class="o">=</span><span class="n">rdm1</span><span class="p">,</span> <span class="n">rdm2</span><span class="o">=</span><span class="n">rdm2</span><span class="p">,</span> <span class="n">n_ri</span><span class="o">=</span><span class="n">n_ri</span><span class="p">,</span>
+                                                          <span class="n">f12_filename</span><span class="o">=</span><span class="n">f12_filename</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">correction</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;datadir&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">datadir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datadir</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
+        <span class="n">info</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">info</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{:15}</span><span class="s2"> : </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;executable&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">executable</span><span class="p">)</span>
+        <span class="n">info</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{:15}</span><span class="s2"> : </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;htensor&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_htensor.npy&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+        <span class="n">info</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{:15}</span><span class="s2"> : </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;gtensor&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_gtensor.npy&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">info</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ram Mosco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

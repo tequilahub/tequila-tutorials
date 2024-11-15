@@ -1,0 +1,1513 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulators &mdash; Tequila Documentation 13.9.2024 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7dcc51c3"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quantum Chemistry" href="quantumchemistry.html" />
+    <link rel="prev" title="Optimizers" href="optimizers.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Tequila Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Tequila Library Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="hamiltonian.html">Hamiltonian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="circuit.html">Circuit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimizers.html">Optimizers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Simulators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tequila_code.simulators.simulator_api">simulator api module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.simulators.simulator_api.BackendTypes"><code class="docutils literal notranslate"><span class="pre">BackendTypes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.simulators.simulator_api.compile"><code class="docutils literal notranslate"><span class="pre">compile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.simulators.simulator_api.compile_circuit"><code class="docutils literal notranslate"><span class="pre">compile_circuit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.simulators.simulator_api.compile_objective"><code class="docutils literal notranslate"><span class="pre">compile_objective()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.simulators.simulator_api.compile_to_function"><code class="docutils literal notranslate"><span class="pre">compile_to_function()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.simulators.simulator_api.draw"><code class="docutils literal notranslate"><span class="pre">draw()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.simulators.simulator_api.pick_backend"><code class="docutils literal notranslate"><span class="pre">pick_backend()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.simulators.simulator_api.show_available_simulators"><code class="docutils literal notranslate"><span class="pre">show_available_simulators()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.simulators.simulator_api.simulate"><code class="docutils literal notranslate"><span class="pre">simulate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tequila_code.simulators.simulator_base">simulator base module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.simulators.simulator_base.BackendCircuit"><code class="docutils literal notranslate"><span class="pre">BackendCircuit</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.simulators.simulator_base.BackendExpectationValue"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#simulator-cirq-module">simulator cirq module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#simulator-pyquil-module">simulator pyquil module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#simulator-qibo-module">simulator qibo module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#simulator-qiskit-module">simulator qiskit module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#simulator-qlm-module">simulator qlm module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tequila_code.simulators.simulator_qulacs">simulator qulacs module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValueQulacs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.simulators.simulator_qulacs.TequilaQulacsException"><code class="docutils literal notranslate"><span class="pre">TequilaQulacsException</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tequila_code.simulators.simulator_qulacs_gpu">simulator qulacs gpu module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.simulators.simulator_qulacs_gpu.BackendCircuitQulacsGpu"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacsGpu</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.simulators.simulator_qulacs_gpu.BackendExpectationValueQulacsGpu"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValueQulacsGpu</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.simulators.simulator_qulacs_gpu.TequilaQulacsGpuException"><code class="docutils literal notranslate"><span class="pre">TequilaQulacsGpuException</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tequila_code.simulators.simulator_symbolic">simulator symbolic module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic"><code class="docutils literal notranslate"><span class="pre">BackendCircuitSymbolic</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tequila_code.simulators.simulator_symbolic.BackendExpectationValueSymbolic"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValueSymbolic</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tequila_code.simulators">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quantumchemistry.html">Quantum Chemistry</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Tequila Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Tequila Library Reference</a></li>
+      <li class="breadcrumb-item active">Simulators</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/simulators.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="simulators">
+<h1>Simulators<a class="headerlink" href="#simulators" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-tequila_code.simulators.simulator_api">
+<span id="simulator-api-module"></span><h2>simulator api module<a class="headerlink" href="#module-tequila_code.simulators.simulator_api" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_api.BackendTypes">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.simulators.simulator_api.</span></span><span class="sig-name descname"><span class="pre">BackendTypes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">CircType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ExpValueType</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tequila_code.simulators.simulator_api.BackendTypes" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_api.BackendTypes.CircType">
+<span class="sig-name descname"><span class="pre">CircType</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_api.BackendTypes.CircType" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_api.BackendTypes.ExpValueType">
+<span class="sig-name descname"><span class="pre">ExpValueType</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_api.BackendTypes.ExpValueType" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_api.compile">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.simulators.simulator_api.</span></span><span class="sig-name descname"><span class="pre">compile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Objective</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit" title="tequila_code.circuit.circuit.QCircuit"><span class="pre">QCircuit</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">QTensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Variable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Hashable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Real</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NoiseModel</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#tequila_code.simulators.simulator_base.BackendCircuit" title="tequila_code.simulators.simulator_base.BackendCircuit"><span class="pre">BackendCircuit</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Objective</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_api.html#compile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_api.compile" title="Link to this definition"></a></dt>
+<dd><p>Compile a tequila objective or circuit to a backend</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>objective</strong> (<em>Objective:</em>) – tequila objective or circuit</p></li>
+<li><p><strong>variables</strong> (<em>dict</em><em>, </em><em>optional:</em>) – The variables of the objective given as dictionary
+with keys as tequila Variables and values the corresponding real numbers</p></li>
+<li><p><strong>samples</strong> (<em>int</em><em>, </em><em>optional:</em>) – if None a full wavefunction simulation is performed, otherwise a fixed number of samples is simulated</p></li>
+<li><p><strong>backend</strong> (<em>str</em><em>, </em><em>optional:</em>) – specify the backend or give None for automatic assignment</p></li>
+<li><p><strong>noise</strong> (<a class="reference internal" href="circuit.html#tequila_code.circuit.noise.NoiseModel" title="tequila_code.circuit.noise.NoiseModel"><em>NoiseModel</em></a><em>, </em><em>optional:</em>) – the noise model to apply to the objective or QCircuit.</p></li>
+<li><p><strong>device</strong> (<em>optional:</em>) – a device on which (or in emulation of which) to sample the circuit.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the compiled object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>simulators.BackendCircuit or Objective</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_api.compile_circuit">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.simulators.simulator_api.</span></span><span class="sig-name descname"><span class="pre">compile_circuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abstract_circuit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit" title="tequila_code.circuit.circuit.QCircuit"><span class="pre">QCircuit</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Variable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">RealNumber</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NoiseModel</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">BackendCircuit</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_api.html#compile_circuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_api.compile_circuit" title="Link to this definition"></a></dt>
+<dd><p>compile a circuit to render it callable and return it.
+:param abstract_circuit: the circuit to compile
+:type abstract_circuit: QCircuit:
+:param variables: the variables to compile the circuit with.
+:type variables: dict, optional:
+:param backend: the backend to compile the circuit to.
+:type backend: str, optional:
+:param samples: only matters if not None; compile the circuit for sampling/verify backend can do so
+:type samples: int, optional:
+:param device: the device on which the circuit should (perhaps emulatedly) sample.
+:type device: optional:
+:param noise: the noise to apply to the circuit
+:type noise: str or NoiseModel, optional:
+:param args:
+:param kwargs:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the compiled circuit.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#tequila_code.simulators.simulator_base.BackendCircuit" title="tequila_code.simulators.simulator_base.BackendCircuit">BackendCircuit</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_api.compile_objective">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.simulators.simulator_api.</span></span><span class="sig-name descname"><span class="pre">compile_objective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Objective</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Variable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Real</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NoiseModel</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Objective</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_api.html#compile_objective"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_api.compile_objective" title="Link to this definition"></a></dt>
+<dd><p>compile an objective to render it callable and return it.
+:param objective: the objective to compile
+:type objective: Objective:
+:param variables: the variables to compile the objective with. Will autogenerate zeros for all variables if not supplied.
+:type variables: dict, optional:
+:param backend: the backend to compile the objective to.
+:type backend: str, optional:
+:param samples: only matters if not None; compile the objective for sampling/verify backend can do so
+:type samples: int, optional:
+:param device: the device on which the objective should (perhaps emulatedly) sample.
+:type device: optional:
+:param noise: the noise to apply to all circuits in the objective.
+:type noise: str or NoiseModel, optional:
+:param args:
+:param kwargs:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the compiled objective.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Objective</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_api.compile_to_function">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.simulators.simulator_api.</span></span><span class="sig-name descname"><span class="pre">compile_to_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Objective</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit" title="tequila_code.circuit.circuit.QCircuit"><span class="pre">QCircuit</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#tequila_code.simulators.simulator_base.BackendCircuit" title="tequila_code.simulators.simulator_base.BackendCircuit"><span class="pre">BackendCircuit</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Objective</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_api.html#compile_to_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_api.compile_to_function" title="Link to this definition"></a></dt>
+<dd><p class="rubric">Notes</p>
+<p>Same as compile but gives back callable wrapper
+where parameters are passed down as arguments instead of dictionaries
+the order of those arguments is the order of the parameter dictionary
+given here. If not given it is the order returned by objective.extract_variables()</p>
+<p>See compile for more information on the parameters of this function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>wrapper over a compiled objective/circuit
+can be called like: function(0.0,1.0,…,samples=None)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#tequila_code.simulators.simulator_base.BackendCircuit" title="tequila_code.simulators.simulator_base.BackendCircuit">BackendCircuit</a> or Objective</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_api.draw">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.simulators.simulator_api.</span></span><span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_api.html#draw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_api.draw" title="Link to this definition"></a></dt>
+<dd><p>Pretty output (depends on installed backends) for jupyter notebooks
+or similar HTML environments</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>objective</strong> – the tequila objective to print out</p></li>
+<li><p><strong>variables</strong> (<em>optional:</em>) – Give variables if the objective is parametrized (not necesarry for displaying)</p></li>
+<li><p><strong>name</strong> (<em>optional:</em>) – Name the objective (changes circuit filenames for qpic backend)</p></li>
+<li><p><strong>backend</strong> (<em>str</em><em>, </em><em>optional:</em>) – chose preferred backend (of None or not found it will be automatically picked)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_api.pick_backend">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.simulators.simulator_api.</span></span><span class="sig-name descname"><span class="pre">pick_backend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NoiseModel</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_symbolic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_api.html#pick_backend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_api.pick_backend" title="Link to this definition"></a></dt>
+<dd><p>choose, or verify, a backend for the user.
+:param backend: what backend to choose or verify. if None: choose for the user.
+:type backend: str, optional:
+:param samples: if int and not None, choose (verify) a simulator which supports sampling.
+:type samples: int, optional:
+:param noise: if not None, choose (verify) a simulator supports the specified noise.
+:type noise: str or NoiseModel, optional:
+:param device: verify that a given backend supports the specified device. MUST specify backend, if not None.</p>
+<blockquote>
+<div><p>if None: do not emulate or use real device.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>exclude_symbolic</strong> (<em>bool</em><em>, </em><em>optional:</em>) – whether or not to exclude the tequila debugging simulator from the available simulators, when choosing.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the name of the chosen (or verified) backend.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_api.show_available_simulators">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.simulators.simulator_api.</span></span><span class="sig-name descname"><span class="pre">show_available_simulators</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_api.html#show_available_simulators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_api.show_available_simulators" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_api.simulate">
+<span class="sig-prename descclassname"><span class="pre">tequila_code.simulators.simulator_api.</span></span><span class="sig-name descname"><span class="pre">simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Objective</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit" title="tequila_code.circuit.circuit.QCircuit"><span class="pre">QCircuit</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">QTensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Variable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Hashable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Real</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NoiseModel</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Real</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">QubitWaveFunction</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_api.html#simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_api.simulate" title="Link to this definition"></a></dt>
+<dd><p>Simulate a tequila objective or circuit</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>objective</strong> (<em>Objective:</em>) – tequila objective or circuit</p></li>
+<li><p><strong>variables</strong> (<em>Dict:</em>) – The variables of the objective given as dictionary
+with keys as tequila Variables/hashable types and values the corresponding real numbers</p></li>
+<li><p><strong>samples</strong> (<em>int</em><em>, </em><em>optional:</em>) – if None a full wavefunction simulation is performed, otherwise a fixed number of samples is simulated</p></li>
+<li><p><strong>backend</strong> (<em>str</em><em>, </em><em>optional:</em>) – specify the backend or give None for automatic assignment</p></li>
+<li><p><strong>noise</strong> (<a class="reference internal" href="circuit.html#tequila_code.circuit.noise.NoiseModel" title="tequila_code.circuit.noise.NoiseModel"><em>NoiseModel</em></a><em>, </em><em>optional:</em>) – specify a noise model to apply to simulation/sampling</p></li>
+<li><p><strong>device</strong> – a device upon which (or in emulation of which) to sample</p></li>
+<li><p><strong>*args</strong></p></li>
+<li><p><strong>**kwargs</strong> – read_out_qubits = list[int] (define the qubits which shall be measured, has only effect on pure QCircuit simulation with samples)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the result of simulation.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float or QubitWaveFunction</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-tequila_code.simulators.simulator_base">
+<span id="simulator-base-module"></span><h2>simulator base module<a class="headerlink" href="#module-tequila_code.simulators.simulator_base" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.simulators.simulator_base.</span></span><span class="sig-name descname"><span class="pre">BackendCircuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abstract_circuit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QCircuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qubit_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_circuit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for circuits compiled to run on specific backends.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.no_translation">
+<span class="sig-name descname"><span class="pre">no_translation</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.no_translation" title="Link to this definition"></a></dt>
+<dd><p>set this attribute in the derived __init__ to prevent translation of abstract_circuits
+needed for simulators that use native tequila types.
+Default is false</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.abstract_circuit">
+<span class="sig-name descname"><span class="pre">abstract_circuit</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.abstract_circuit" title="Link to this definition"></a></dt>
+<dd><p>the tequila circuit from which the backend circuit is built.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.circuit">
+<span class="sig-name descname"><span class="pre">circuit</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.circuit" title="Link to this definition"></a></dt>
+<dd><p>the compiled circuit in the backend language.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.compiler_arguments">
+<span class="sig-name descname"><span class="pre">compiler_arguments</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.compiler_arguments" title="Link to this definition"></a></dt>
+<dd><p>dictionary of arguments for compilation needed for chosen backend. Overwritten by inheritors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.device">
+<span class="sig-name descname"><span class="pre">device</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.device" title="Link to this definition"></a></dt>
+<dd><p>instantiated device (or None) for executing circuits.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.n_qubits">
+<span class="sig-name descname"><span class="pre">n_qubits</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.n_qubits" title="Link to this definition"></a></dt>
+<dd><p>the number of qubits this circuit operates on.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.noise">
+<span class="sig-name descname"><span class="pre">noise</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.noise" title="Link to this definition"></a></dt>
+<dd><p>the NoiseModel applied to this circuit when sampled.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.qubit_map">
+<span class="sig-name descname"><span class="pre">qubit_map</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.qubit_map" title="Link to this definition"></a></dt>
+<dd><p>the mapping from tequila qubits to the qubits of the backend circuit.
+Dicationary with keys being integers that enumerate the abstract qubits of the abstract_circuit
+and values being data-structures holding <cite>number</cite> and <cite>instance</cite> where number enumerates the
+backend qubits and instance is the instance of a backend qubit</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.qubits">
+<span class="sig-name descname"><span class="pre">qubits</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.qubits" title="Link to this definition"></a></dt>
+<dd><p>a list of the qubits operated on by the circuit.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.create_circuit">
+<span class="sig-name descname"><span class="pre">create_circuit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.create_circuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.create_circuit" title="Link to this definition"></a></dt>
+<dd><p>generate a backend circuit from an abstract tequila circuit</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">check_device:</span></span></dt>
+<dd><p>see if a given device is valid for the backend.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">retrieve_device:</span></span></dt>
+<dd><p>get an instance of or necessary informaton about a device, for emulation or use.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.add_parametrized_gate">
+<span class="sig-name descname"><span class="pre">add_parametrized_gate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.add_parametrized_gate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.add_parametrized_gate" title="Link to this definition"></a></dt>
+<dd><p>add a parametrized gate to a backend circuit.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.add_basic_gate">
+<span class="sig-name descname"><span class="pre">add_basic_gate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.add_basic_gate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.add_basic_gate" title="Link to this definition"></a></dt>
+<dd><p>add an unparametrized gate to a backend circuit.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.add_measurement">
+<span class="sig-name descname"><span class="pre">add_measurement</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.add_measurement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.add_measurement" title="Link to this definition"></a></dt>
+<dd><p>add a measurement gate to a backend circuit.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">initialize_circuit:</span></span></dt>
+<dd><p>generate an empty circuit object for the backend.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">update_variables:</span></span></dt>
+<dd><p>overwrite the saved values of variables for backend execution.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">simulate:</span></span></dt>
+<dd><p>perform simulation, simulated sampling, or execute the circuit, e.g. with some hamiltonian for measurement.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">sample_paulistring:</span></span></dt>
+<dd><p>sample a circuit with one paulistring of a larger hamiltonian</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">sample:</span></span></dt>
+<dd><p>sample a circuit, measuring an entire hamiltonian.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">do_sample:</span></span></dt>
+<dd><p>subroutine for sampling. must be overwritten by inheritors.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">do_simulate:</span></span></dt>
+<dd><p>subroutine for wavefunction simulation. must be overwritten by inheritors.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">convert_measurements:</span></span></dt>
+<dd><p>transform the result of simulation from the backend return type.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">make_qubit_map:</span></span></dt>
+<dd><p>create a dictionary to map the tequila qubit ordering to the backend qubits.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">optimize_circuit:</span></span></dt>
+<dd><p>use backend features to improve circuit depth.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">extract_variables:</span></span></dt>
+<dd><p>return a list of the variables in the abstract tequila circuit this backend circuit corresponds to.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.abstract_qubits">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">abstract_qubits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Integral</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.abstract_qubits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">add_basic_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.add_basic_gate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">add_measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_qubits</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.add_measurement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">add_parametrized_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.add_parametrized_gate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.check_device">
+<span class="sig-name descname"><span class="pre">check_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.check_device"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.check_device" title="Link to this definition"></a></dt>
+<dd><p>Verify if a device can be used in the selected backend. Overwritten by inheritors.
+:param device: the device to verify.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TequilaException</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">compiler_arguments</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'cc_max':</span> <span class="pre">True,</span> <span class="pre">'controlled_exponential_pauli':</span> <span class="pre">True,</span> <span class="pre">'controlled_phase':</span> <span class="pre">True,</span> <span class="pre">'controlled_power':</span> <span class="pre">True,</span> <span class="pre">'controlled_rotation':</span> <span class="pre">True,</span> <span class="pre">'exponential_pauli':</span> <span class="pre">True,</span> <span class="pre">'generalized_rotation':</span> <span class="pre">True,</span> <span class="pre">'hadamard_power':</span> <span class="pre">True,</span> <span class="pre">'multitarget':</span> <span class="pre">True,</span> <span class="pre">'phase':</span> <span class="pre">True,</span> <span class="pre">'phase_to_z':</span> <span class="pre">True,</span> <span class="pre">'power':</span> <span class="pre">True,</span> <span class="pre">'swap':</span> <span class="pre">True,</span> <span class="pre">'toffoli':</span> <span class="pre">True,</span> <span class="pre">'trotterized':</span> <span class="pre">True}</span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.convert_measurements">
+<span class="sig-name descname"><span class="pre">convert_measurements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backend_result</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitWaveFunction</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.convert_measurements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.convert_measurements" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">create_circuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abstract_circuit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QCircuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circuit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.create_circuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd><p>build the backend specific circuit from the abstract tequila circuit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>abstract_circuit</strong> (<em>QCircuit:</em>) – the circuit to build in the backend</p></li>
+<li><p><strong>circuit</strong> (<em>BackendCircuitType</em><em> (</em><em>optional</em><em>)</em><em>:</em>) – Add to this already initialized circuit (not all backends support + operation)</p></li>
+<li><p><strong>args</strong></p></li>
+<li><p><strong>kwargs</strong></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The circuit, compiled to the backend.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>type varies</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.do_sample">
+<span class="sig-name descname"><span class="pre">do_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abstract_qubits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitWaveFunction</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.do_sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.do_sample" title="Link to this definition"></a></dt>
+<dd><p>helper function for sampling. MUST be overwritten by inheritors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>samples</strong> (<em>int:</em>) – the number of samples to take</p></li>
+<li><p><strong>circuit</strong> – the circuit to sample from.
+Note:
+Not necessarily self.circuit!</p></li>
+<li><p><strong>noise</strong> – the noise to apply to the sampled circuit.</p></li>
+<li><p><strong>abstract_qubits</strong> – specify which qubits to measure. Default is all</p></li>
+<li><p><strong>args</strong></p></li>
+<li><p><strong>kwargs</strong></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the result of sampling.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>QubitWaveFunction</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.do_simulate">
+<span class="sig-name descname"><span class="pre">do_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitWaveFunction</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.do_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.do_simulate" title="Link to this definition"></a></dt>
+<dd><p>helper for simulation. MUST be overwritten by inheritors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variables</strong> – the variables with which the circuit may be simulated.</p></li>
+<li><p><strong>initial_state</strong> – the initial state in which the system is in prior to the application of the circuit.</p></li>
+<li><p><strong>args</strong></p></li>
+<li><p><strong>kwargs</strong></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the result of simulating the circuit.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>QubitWaveFunction</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.extract_variables">
+<span class="sig-name descname"><span class="pre">extract_variables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Real</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.extract_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.extract_variables" title="Link to this definition"></a></dt>
+<dd><p>extract the tequila variables from the circuit.
+:returns: the variables of the circuit.
+:rtype: dict</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.initialize_circuit">
+<span class="sig-name descname"><span class="pre">initialize_circuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.initialize_circuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.initialize_circuit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.initialize_qubit">
+<span class="sig-name descname"><span class="pre">initialize_qubit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.initialize_qubit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.initialize_qubit" title="Link to this definition"></a></dt>
+<dd><p>In case the backend has its own Qubit Types,
+this function should be overwritten by inheritors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>number</strong> – the qubit number</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Initialized backend qubit type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.make_qubit_map">
+<span class="sig-name descname"><span class="pre">make_qubit_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.make_qubit_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.make_qubit_map" title="Link to this definition"></a></dt>
+<dd><p>Build the mapping between abstract qubits.</p>
+<p>Must be overwritten by inheritors to do anything other than check the validity of the map.
+:param qubits: the qubits to map onto.</p>
+<blockquote>
+<div><p>If given as a dictionary, the map is already defined
+If given as a list the map will be those qubits mapped to 0 …. n_qubit-1 of the backend</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the dictionary that maps the qubits of the abstract circuits to an ordered sequence of integers.
+keys are the abstract qubit integers
+values are the backend qubits
+those are data structures which contain name and instance
+where number is the qubit identifier and instance the instance of the backend qubit
+if the backend does not require a special object for qubits the instance should be the same as number</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id5">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_qubits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Integral</span></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.optimize_circuit">
+<span class="sig-name descname"><span class="pre">optimize_circuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.optimize_circuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.optimize_circuit" title="Link to this definition"></a></dt>
+<dd><p>Optimize a circuit using backend tools. Should be overwritten by inheritors.
+:param circuit: the circuit to optimize
+:param args:
+:param kwargs:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optimized version of the circuit.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.qubit">
+<span class="sig-name descname"><span class="pre">qubit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abstract_qubit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.qubit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.qubit" title="Link to this definition"></a></dt>
+<dd><p>Convenience. Gives back a qubit instance of the corresponding backend
+:param abstract_qubit: the abstract tequila qubit</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>instance of backend qubit</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.retrieve_device">
+<span class="sig-name descname"><span class="pre">retrieve_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.retrieve_device"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.retrieve_device" title="Link to this definition"></a></dt>
+<dd><p>get the instantiated backend device object, from user provided object (e.g, a string).</p>
+<p>Must be overwritten by inheritors, to use devices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>device</strong> – object which points to the device in question, to be returned.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>varies by backend.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">read_out_qubits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circuit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.sample" title="Link to this definition"></a></dt>
+<dd><p>Sample the circuit. If circuit natively equips paulistrings, sample therefrom.
+:param variables: the variables with which to sample the circuit.
+:param samples: the number of samples to take.
+:type samples: int:
+:param read_out_qubits: target qubits to measure (default is all)
+:type read_out_qubits: int:
+:param args:
+:param kwargs:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The result of sampling, a recreated QubitWaveFunction in the sampled basis.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>QubitWaveFunction</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.sample_all_z_hamiltonian">
+<span class="sig-name descname"><span class="pre">sample_all_z_hamiltonian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hamiltonian</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.sample_all_z_hamiltonian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.sample_all_z_hamiltonian" title="Link to this definition"></a></dt>
+<dd><p>Sample from a Hamiltonian which only consists of Pauli-Z and unit operators
+:param samples: number of samples to take
+:param hamiltonian: the tequila hamiltonian
+:param args: arguments for do_sample
+:param kwargs: keyword arguments for do_sample</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>samples, evaluated and summed Hamiltonian expectationvalue</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.sample_paulistring">
+<span class="sig-name descname"><span class="pre">sample_paulistring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paulistring</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Real</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.sample_paulistring"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.sample_paulistring" title="Link to this definition"></a></dt>
+<dd><p>Sample an individual pauli word (pauli string) and return the average result thereof.
+:param samples: how many samples to evaluate.
+:type samples: int:
+:param paulistring: the paulistring to be sampled.
+:param args:
+:param kwargs:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the average result of sampling the chosen paulistring</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.simulate">
+<span class="sig-name descname"><span class="pre">simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitWaveFunction</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.simulate" title="Link to this definition"></a></dt>
+<dd><p>simulate the circuit via the backend.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variables</strong> – the parameters with which to simulate the circuit.</p></li>
+<li><p><strong>initial_state</strong> (<em>Default = 0:</em>) – one of several types; determines the base state onto which the circuit is applied.
+Default: the circuit is applied to the all-zero state.</p></li>
+<li><p><strong>args</strong></p></li>
+<li><p><strong>kwargs</strong></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the wavefunction of the system produced by the action of the circuit on the initial state.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>QubitWaveFunction</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendCircuit.update_variables">
+<span class="sig-name descname"><span class="pre">update_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendCircuit.update_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendCircuit.update_variables" title="Link to this definition"></a></dt>
+<dd><p>This is the default, which just translates the circuit again.
+Overwrite in inheritors if parametrized circuits are supported.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendExpectationValue">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.simulators.simulator_base.</span></span><span class="sig-name descname"><span class="pre">BackendExpectationValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendExpectationValue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendExpectationValue" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class representing an ExpectationValue for evaluation by some backend.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendExpectationValue.H">
+<span class="sig-name descname"><span class="pre">H</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendExpectationValue.H" title="Link to this definition"></a></dt>
+<dd><p>the reduced tequila Hamiltonian(s) of the expectationvalue
+reduction procedure is tracing out all qubits that are not part of the unitary U
+stored as a tuple to evaluate multiple Hamiltonians over the same circuit faster in pure simulations</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendExpectationValue.abstract_H">
+<span class="sig-name descname"><span class="pre">abstract_H</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendExpectationValue.abstract_H" title="Link to this definition"></a></dt>
+<dd><p>the original (non-reduced) Hamiltonian(s)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendExpectationValue.n_qubits">
+<span class="sig-name descname"><span class="pre">n_qubits</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendExpectationValue.n_qubits" title="Link to this definition"></a></dt>
+<dd><p>how many qubits appear in the expectationvalue.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendExpectationValue.U">
+<span class="sig-name descname"><span class="pre">U</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendExpectationValue.U" title="Link to this definition"></a></dt>
+<dd><p>the underlying BackendCircuit of the expectationvalue.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">extract_variables:</span></span></dt>
+<dd><p>return the underlying tequila variables of the circuit</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendExpectationValue.initialize_hamiltonian">
+<span class="sig-name descname"><span class="pre">initialize_hamiltonian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendExpectationValue.initialize_hamiltonian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendExpectationValue.initialize_hamiltonian" title="Link to this definition"></a></dt>
+<dd><p>prepare the hamiltonian for iteration over as a tuple</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendExpectationValue.initialize_unitary">
+<span class="sig-name descname"><span class="pre">initialize_unitary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendExpectationValue.initialize_unitary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendExpectationValue.initialize_unitary" title="Link to this definition"></a></dt>
+<dd><p>compile the abstract circuit to a backend circuit.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">simulate:</span></span></dt>
+<dd><p>simulate the unitary to measure H</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">sample:</span></span></dt>
+<dd><p>sample the unitary to measure H</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendExpectationValue.sample_paulistring">
+<span class="sig-name descname"><span class="pre">sample_paulistring</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendExpectationValue.sample_paulistring" title="Link to this definition"></a></dt>
+<dd><p>sample a single term from H</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendExpectationValue.update_variables">
+<span class="sig-name descname"><span class="pre">update_variables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendExpectationValue.update_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendExpectationValue.update_variables" title="Link to this definition"></a></dt>
+<dd><p>wrapper over the update_variables of BackendCircuit.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendExpectationValue.BackendCircuitType">
+<span class="sig-name descname"><span class="pre">BackendCircuitType</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendExpectationValue.BackendCircuitType" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#tequila_code.simulators.simulator_base.BackendCircuit" title="tequila_code.simulators.simulator_base.BackendCircuit"><code class="xref py py-class docutils literal notranslate"><span class="pre">BackendCircuit</span></code></a></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id6">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">H</span></span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id7">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">U</span></span><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendExpectationValue.count_measurements">
+<span class="sig-name descname"><span class="pre">count_measurements</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendExpectationValue.count_measurements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendExpectationValue.count_measurements" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendExpectationValue.extract_variables">
+<span class="sig-name descname"><span class="pre">extract_variables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Real</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendExpectationValue.extract_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendExpectationValue.extract_variables" title="Link to this definition"></a></dt>
+<dd><p>wrapper over circuit extract variables
+:returns: Todo: is it really a dict?
+:rtype: Dict</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">initialize_hamiltonian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hamiltonians</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendExpectationValue.initialize_hamiltonian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">initialize_unitary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">U</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendExpectationValue.initialize_unitary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
+<dd><p>return a compiled unitary</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id10">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_qubits</span></span><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendExpectationValue.reduce_hamiltonians">
+<span class="sig-name descname"><span class="pre">reduce_hamiltonians</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abstract_hamiltonians</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendExpectationValue.reduce_hamiltonians"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendExpectationValue.reduce_hamiltonians" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>abstract_hamiltonians</strong> – tuple of abstract tequila Hamiltonians</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>reduces Hamiltonians where the qubits that are not defined in self.U are traced out</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendExpectationValue.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendExpectationValue.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendExpectationValue.sample" title="Link to this definition"></a></dt>
+<dd><p>sample the expectationvalue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variables</strong> (<em>dict:</em>) – variables to supply to the unitary.</p></li>
+<li><p><strong>samples</strong> (<em>int:</em>) – number of samples to perform.</p></li>
+<li><p><strong>args</strong></p></li>
+<li><p><strong>kwargs</strong></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a numpy array, the result of sampling.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendExpectationValue.simulate">
+<span class="sig-name descname"><span class="pre">simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendExpectationValue.simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendExpectationValue.simulate" title="Link to this definition"></a></dt>
+<dd><p>Simulate the expectationvalue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variables</strong> – variables to supply to the unitary.</p></li>
+<li><p><strong>args</strong></p></li>
+<li><p><strong>kwargs</strong></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the result of simulation.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">update_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_base.html#BackendExpectationValue.update_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id11" title="Link to this definition"></a></dt>
+<dd><p>wrapper over circuit update_variables</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_base.BackendExpectationValue.use_mapping">
+<span class="sig-name descname"><span class="pre">use_mapping</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#tequila_code.simulators.simulator_base.BackendExpectationValue.use_mapping" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="simulator-cirq-module">
+<h2>simulator cirq module<a class="headerlink" href="#simulator-cirq-module" title="Link to this heading"></a></h2>
+</section>
+<section id="simulator-pyquil-module">
+<h2>simulator pyquil module<a class="headerlink" href="#simulator-pyquil-module" title="Link to this heading"></a></h2>
+</section>
+<section id="simulator-qibo-module">
+<h2>simulator qibo module<a class="headerlink" href="#simulator-qibo-module" title="Link to this heading"></a></h2>
+</section>
+<section id="simulator-qiskit-module">
+<h2>simulator qiskit module<a class="headerlink" href="#simulator-qiskit-module" title="Link to this heading"></a></h2>
+</section>
+<section id="simulator-qlm-module">
+<h2>simulator qlm module<a class="headerlink" href="#simulator-qlm-module" title="Link to this heading"></a></h2>
+</section>
+<section id="module-tequila_code.simulators.simulator_qulacs">
+<span id="simulator-qulacs-module"></span><h2>simulator qulacs module<a class="headerlink" href="#module-tequila_code.simulators.simulator_qulacs" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.simulators.simulator_qulacs.</span></span><span class="sig-name descname"><span class="pre">BackendCircuitQulacs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abstract_circuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs.html#BackendCircuitQulacs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BackendCircuit</span></code></p>
+<p>Class representing circuits compiled to qulacs.
+See BackendCircuit for documentation of features and methods inherited therefrom</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.counter">
+<span class="sig-name descname"><span class="pre">counter</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.counter" title="Link to this definition"></a></dt>
+<dd><p>counts how many distinct sympy.Symbol objects are employed in the circuit.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.has_noise">
+<span class="sig-name descname"><span class="pre">has_noise</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.has_noise" title="Link to this definition"></a></dt>
+<dd><p>whether or not the circuit is noisy. needed by the expectationvalue to do sampling properly.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.noise_lookup">
+<span class="sig-name descname"><span class="pre">noise_lookup</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.noise_lookup" title="Link to this definition"></a></dt>
+<dd><p>dict mapping strings to lists of constructors for cirq noise channel objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict:</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.op_lookup">
+<span class="sig-name descname"><span class="pre">op_lookup</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.op_lookup" title="Link to this definition"></a></dt>
+<dd><p>dictionary mapping strings (tequila gate names) to cirq.ops objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict:</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.variables">
+<span class="sig-name descname"><span class="pre">variables</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.variables" title="Link to this definition"></a></dt>
+<dd><p>a list of the qulacs variables of the circuit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list:</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">add_noise_to_circuit:</span></span></dt>
+<dd><p>apply a tequila NoiseModel to a qulacs circuit, by translating the NoiseModel’s instructions into noise gates.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_basic_gate">
+<span class="sig-name descname"><span class="pre">add_basic_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs.html#BackendCircuitQulacs.add_basic_gate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_basic_gate" title="Link to this definition"></a></dt>
+<dd><p>add an unparametrized gate to the circuit.
+:param gate: the gate to be added to the circuit.
+:type gate: QGateImpl:
+:param circuit: the circuit, to which a gate is to be added.
+:param args:
+:param kwargs:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_exponential_pauli_gate">
+<span class="sig-name descname"><span class="pre">add_exponential_pauli_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs.html#BackendCircuitQulacs.add_exponential_pauli_gate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_exponential_pauli_gate" title="Link to this definition"></a></dt>
+<dd><p>Add a native qulacs Exponential Pauli gate to a circuit.
+:param gate: the gate to add
+:type gate: ExpPauliGateImpl:
+:param circuit: the qulacs circuit, to which the gate is to be added.
+:param variables: dict containing values of the parameters appearing in the pauli gate.
+:param args:
+:param kwargs:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_measurement">
+<span class="sig-name descname"><span class="pre">add_measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_qubits</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs.html#BackendCircuitQulacs.add_measurement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_measurement" title="Link to this definition"></a></dt>
+<dd><p>Add a measurement operation to a circuit.
+:param circuit: a circuit, to which the measurement is to be added.
+:param target_qubits: abstract target qubits
+:type target_qubits: List[int]
+:param args:
+:param kwargs:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_noise_to_circuit">
+<span class="sig-name descname"><span class="pre">add_noise_to_circuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">noise_model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs.html#BackendCircuitQulacs.add_noise_to_circuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_noise_to_circuit" title="Link to this definition"></a></dt>
+<dd><p>Apply noise from a NoiseModel to a circuit.
+:param noise_model: the noisemodel to apply to the circuit.
+:type noise_model: NoiseModel:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>self.circuit, with noise added on.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>qulacs.ParametrizedQuantumCircuit</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_parametrized_gate">
+<span class="sig-name descname"><span class="pre">add_parametrized_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs.html#BackendCircuitQulacs.add_parametrized_gate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_parametrized_gate" title="Link to this definition"></a></dt>
+<dd><p>add a parametrized gate.
+:param gate: the gate to add to the circuit.
+:type gate: QGateImpl:
+:param circuit: the circuit to which the gate is to be added
+:param variables: dict that tells values of variables; needed IFF the gate is an ExpPauli gate.
+:param args:
+:param kwargs:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.compiler_arguments">
+<span class="sig-name descname"><span class="pre">compiler_arguments</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'cc_max':</span> <span class="pre">False,</span> <span class="pre">'controlled_exponential_pauli':</span> <span class="pre">True,</span> <span class="pre">'controlled_phase':</span> <span class="pre">True,</span> <span class="pre">'controlled_power':</span> <span class="pre">True,</span> <span class="pre">'controlled_rotation':</span> <span class="pre">True,</span> <span class="pre">'exponential_pauli':</span> <span class="pre">False,</span> <span class="pre">'generalized_rotation':</span> <span class="pre">True,</span> <span class="pre">'hadamard_power':</span> <span class="pre">True,</span> <span class="pre">'multitarget':</span> <span class="pre">True,</span> <span class="pre">'phase':</span> <span class="pre">True,</span> <span class="pre">'phase_to_z':</span> <span class="pre">True,</span> <span class="pre">'power':</span> <span class="pre">True,</span> <span class="pre">'swap':</span> <span class="pre">False,</span> <span class="pre">'toffoli':</span> <span class="pre">False,</span> <span class="pre">'trotterized':</span> <span class="pre">True}</span></em><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.compiler_arguments" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.convert_measurements">
+<span class="sig-name descname"><span class="pre">convert_measurements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backend_result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_qubits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitWaveFunction</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs.html#BackendCircuitQulacs.convert_measurements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.convert_measurements" title="Link to this definition"></a></dt>
+<dd><p>Transform backend evaluation results into QubitWaveFunction
+:param backend_result: the return value of backend simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>results transformed to tequila native QubitWaveFunction</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>QubitWaveFunction</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.do_sample">
+<span class="sig-name descname"><span class="pre">do_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitWaveFunction</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs.html#BackendCircuitQulacs.do_sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.do_sample" title="Link to this definition"></a></dt>
+<dd><p>Helper function for performing sampling.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>samples</strong> (<em>int:</em>) – the number of samples to be taken.</p></li>
+<li><p><strong>circuit</strong> – the circuit to sample from.</p></li>
+<li><p><strong>noise_model</strong> (<em>optional:</em>) – noise model to be applied to the circuit.</p></li>
+<li><p><strong>initial_state</strong> – sampling supports initial states for qulacs. Indicates the initial state to which circuit is applied.</p></li>
+<li><p><strong>args</strong></p></li>
+<li><p><strong>kwargs</strong></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the results of sampling, as a Qubit Wave Function.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>QubitWaveFunction</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.do_simulate">
+<span class="sig-name descname"><span class="pre">do_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs.html#BackendCircuitQulacs.do_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.do_simulate" title="Link to this definition"></a></dt>
+<dd><p>Helper function to perform simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variables</strong> (<em>dict:</em>) – variables to supply to the circuit.</p></li>
+<li><p><strong>initial_state</strong> – information indicating the initial state on which the circuit should act.</p></li>
+<li><p><strong>args</strong></p></li>
+<li><p><strong>kwargs</strong></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>QubitWaveFunction representing result of the simulation.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>QubitWaveFunction</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.initialize_circuit">
+<span class="sig-name descname"><span class="pre">initialize_circuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs.html#BackendCircuitQulacs.initialize_circuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.initialize_circuit" title="Link to this definition"></a></dt>
+<dd><p>return an empty circuit.
+:param args:
+:param kwargs:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>qulacs.ParametricQuantumCircuit</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.initialize_state">
+<span class="sig-name descname"><span class="pre">initialize_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_qubits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QuantumState</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs.html#BackendCircuitQulacs.initialize_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.initialize_state" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.no_translation">
+<span class="sig-name descname"><span class="pre">no_translation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abstract_circuit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs.html#BackendCircuitQulacs.no_translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.no_translation" title="Link to this definition"></a></dt>
+<dd><p>Todo: what is this for?
+:param abstract_circuit:</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.numbering">
+<span class="sig-name descname"><span class="pre">numbering</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.numbering" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.optimize_circuit">
+<span class="sig-name descname"><span class="pre">optimize_circuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_block_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs.html#BackendCircuitQulacs.optimize_circuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.optimize_circuit" title="Link to this definition"></a></dt>
+<dd><p>reduce circuit depth using the native qulacs optimizer.
+:param circuit:
+:param max_block_size: the maximum block size for use by the qulacs internal optimizer.
+:type max_block_size: int: Default = 4:
+:param silent: whether or not to print the resullt of having optimized.
+:type silent: bool:
+:param args:
+:param kwargs:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>optimized qulacs circuit.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>qulacs.QuantumCircuit</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.update_variables">
+<span class="sig-name descname"><span class="pre">update_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs.html#BackendCircuitQulacs.update_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.update_variables" title="Link to this definition"></a></dt>
+<dd><p>set new variable values for the circuit.
+:param variables: the variables to supply to the circuit.
+:type variables: dict:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.simulators.simulator_qulacs.</span></span><span class="sig-name descname"><span class="pre">BackendExpectationValueQulacs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs.html#BackendExpectationValueQulacs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BackendExpectationValue</span></code></p>
+<p>Class representing Expectation Values compiled for Qulacs.</p>
+<p>Ovverrides some methods of BackendExpectationValue, which should be seen for details.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.BackendCircuitType">
+<span class="sig-name descname"><span class="pre">BackendCircuitType</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.BackendCircuitType" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs" title="tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs"><code class="xref py py-class docutils literal notranslate"><span class="pre">BackendCircuitQulacs</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.initialize_hamiltonian">
+<span class="sig-name descname"><span class="pre">initialize_hamiltonian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hamiltonians</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs.html#BackendExpectationValueQulacs.initialize_hamiltonian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.initialize_hamiltonian" title="Link to this definition"></a></dt>
+<dd><p>Convert reduced hamiltonians to native Qulacs types for efficient expectation value evaluation.
+:param hamiltonians: an interable set of hamiltonian objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>initialized hamiltonian objects.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs.html#BackendExpectationValueQulacs.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.sample" title="Link to this definition"></a></dt>
+<dd><p>Sample this Expectation Value.
+:param variables: variables, to supply to the underlying circuit.
+:param samples: the number of samples to take.
+:type samples: int:
+:param args:
+:param kwargs:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the result of sampling as a number.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.simulate">
+<span class="sig-name descname"><span class="pre">simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs.html#BackendExpectationValueQulacs.simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.simulate" title="Link to this definition"></a></dt>
+<dd><p>Perform simulation of this expectationvalue.
+:param variables: variables, to be supplied to the underlying circuit.
+:param args:
+:param kwargs:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the result of simulation as an array.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.use_mapping">
+<span class="sig-name descname"><span class="pre">use_mapping</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.use_mapping" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs.TequilaQulacsException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.simulators.simulator_qulacs.</span></span><span class="sig-name descname"><span class="pre">TequilaQulacsException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs.html#TequilaQulacsException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs.TequilaQulacsException" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TequilaException</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-tequila_code.simulators.simulator_qulacs_gpu">
+<span id="simulator-qulacs-gpu-module"></span><h2>simulator qulacs gpu module<a class="headerlink" href="#module-tequila_code.simulators.simulator_qulacs_gpu" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs_gpu.BackendCircuitQulacsGpu">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.simulators.simulator_qulacs_gpu.</span></span><span class="sig-name descname"><span class="pre">BackendCircuitQulacsGpu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abstract_circuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs_gpu.html#BackendCircuitQulacsGpu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs_gpu.BackendCircuitQulacsGpu" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BackendCircuitQulacs</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs_gpu.BackendCircuitQulacsGpu.initialize_state">
+<span class="sig-name descname"><span class="pre">initialize_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_qubits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QuantumState</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs_gpu.html#BackendCircuitQulacsGpu.initialize_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs_gpu.BackendCircuitQulacsGpu.initialize_state" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs_gpu.BackendExpectationValueQulacsGpu">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.simulators.simulator_qulacs_gpu.</span></span><span class="sig-name descname"><span class="pre">BackendExpectationValueQulacsGpu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs_gpu.html#BackendExpectationValueQulacsGpu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs_gpu.BackendExpectationValueQulacsGpu" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BackendExpectationValueQulacs</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs_gpu.BackendExpectationValueQulacsGpu.BackendCircuitType">
+<span class="sig-name descname"><span class="pre">BackendCircuitType</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs_gpu.BackendExpectationValueQulacsGpu.BackendCircuitType" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#tequila_code.simulators.simulator_qulacs_gpu.BackendCircuitQulacsGpu" title="tequila_code.simulators.simulator_qulacs_gpu.BackendCircuitQulacsGpu"><code class="xref py py-class docutils literal notranslate"><span class="pre">BackendCircuitQulacsGpu</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_qulacs_gpu.TequilaQulacsGpuException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.simulators.simulator_qulacs_gpu.</span></span><span class="sig-name descname"><span class="pre">TequilaQulacsGpuException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_qulacs_gpu.html#TequilaQulacsGpuException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_qulacs_gpu.TequilaQulacsGpuException" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TequilaException</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-tequila_code.simulators.simulator_symbolic">
+<span id="simulator-symbolic-module"></span><h2>simulator symbolic module<a class="headerlink" href="#module-tequila_code.simulators.simulator_symbolic" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.simulators.simulator_symbolic.</span></span><span class="sig-name descname"><span class="pre">BackendCircuitSymbolic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abstract_circuit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QCircuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qubit_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_circuit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_symbolic.html#BackendCircuitSymbolic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BackendCircuit</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.apply_gate">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">apply_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QubitWaveFunction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QGate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qubits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitWaveFunction</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_symbolic.html#BackendCircuitSymbolic.apply_gate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.apply_gate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.apply_on_standard_basis">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">apply_on_standard_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QGate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basisfunction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BitString</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qubits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitWaveFunction</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_symbolic.html#BackendCircuitSymbolic.apply_on_standard_basis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.apply_on_standard_basis" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.compiler_arguments">
+<span class="sig-name descname"><span class="pre">compiler_arguments</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'cc_max':</span> <span class="pre">True,</span> <span class="pre">'controlled_exponential_pauli':</span> <span class="pre">True,</span> <span class="pre">'controlled_phase':</span> <span class="pre">True,</span> <span class="pre">'controlled_power':</span> <span class="pre">True,</span> <span class="pre">'controlled_rotation':</span> <span class="pre">False,</span> <span class="pre">'exponential_pauli':</span> <span class="pre">True,</span> <span class="pre">'generalized_rotation':</span> <span class="pre">True,</span> <span class="pre">'hadamard_power':</span> <span class="pre">True,</span> <span class="pre">'multitarget':</span> <span class="pre">True,</span> <span class="pre">'phase':</span> <span class="pre">True,</span> <span class="pre">'phase_to_z':</span> <span class="pre">True,</span> <span class="pre">'power':</span> <span class="pre">True,</span> <span class="pre">'swap':</span> <span class="pre">True,</span> <span class="pre">'toffoli':</span> <span class="pre">True,</span> <span class="pre">'trotterized':</span> <span class="pre">True}</span></em><a class="headerlink" href="#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.compiler_arguments" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.convert_to_numpy">
+<span class="sig-name descname"><span class="pre">convert_to_numpy</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.convert_to_numpy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.create_circuit">
+<span class="sig-name descname"><span class="pre">create_circuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abstract_circuit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QCircuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_symbolic.html#BackendCircuitSymbolic.create_circuit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.create_circuit" title="Link to this definition"></a></dt>
+<dd><p>build the backend specific circuit from the abstract tequila circuit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>abstract_circuit</strong> (<em>QCircuit:</em>) – the circuit to build in the backend</p></li>
+<li><p><strong>circuit</strong> (<em>BackendCircuitType</em><em> (</em><em>optional</em><em>)</em><em>:</em>) – Add to this already initialized circuit (not all backends support + operation)</p></li>
+<li><p><strong>args</strong></p></li>
+<li><p><strong>kwargs</strong></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The circuit, compiled to the backend.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>type varies</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.do_simulate">
+<span class="sig-name descname"><span class="pre">do_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QubitWaveFunction</span></span></span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_symbolic.html#BackendCircuitSymbolic.do_simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.do_simulate" title="Link to this definition"></a></dt>
+<dd><p>helper for simulation. MUST be overwritten by inheritors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variables</strong> – the variables with which the circuit may be simulated.</p></li>
+<li><p><strong>initial_state</strong> – the initial state in which the system is in prior to the application of the circuit.</p></li>
+<li><p><strong>args</strong></p></li>
+<li><p><strong>kwargs</strong></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the result of simulating the circuit.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>QubitWaveFunction</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.update_variables">
+<span class="sig-name descname"><span class="pre">update_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_symbolic.html#BackendCircuitSymbolic.update_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.update_variables" title="Link to this definition"></a></dt>
+<dd><p>This is the default, which just translates the circuit again.
+Overwrite in inheritors if parametrized circuits are supported.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_symbolic.BackendExpectationValueSymbolic">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tequila_code.simulators.simulator_symbolic.</span></span><span class="sig-name descname"><span class="pre">BackendExpectationValueSymbolic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tequila_code/simulators/simulator_symbolic.html#BackendExpectationValueSymbolic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tequila_code.simulators.simulator_symbolic.BackendExpectationValueSymbolic" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BackendExpectationValue</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tequila_code.simulators.simulator_symbolic.BackendExpectationValueSymbolic.BackendCircuitType">
+<span class="sig-name descname"><span class="pre">BackendCircuitType</span></span><a class="headerlink" href="#tequila_code.simulators.simulator_symbolic.BackendExpectationValueSymbolic.BackendCircuitType" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic" title="tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic"><code class="xref py py-class docutils literal notranslate"><span class="pre">BackendCircuitSymbolic</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-tequila_code.simulators">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tequila_code.simulators" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="optimizers.html" class="btn btn-neutral float-left" title="Optimizers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="quantumchemistry.html" class="btn btn-neutral float-right" title="Quantum Chemistry" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ram Mosco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

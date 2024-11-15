@@ -1,0 +1,815 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tequila_code.quantumchemistry.psi4_interface &mdash; Tequila Documentation 13.9.2024 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=7dcc51c3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Tequila Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Tequila Library Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tequila Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../quantumchemistry.html">tequila_code.quantumchemistry</a></li>
+      <li class="breadcrumb-item active">tequila_code.quantumchemistry.psi4_interface</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tequila_code.quantumchemistry.psi4_interface</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">tequila</span> <span class="kn">import</span> <span class="n">TequilaException</span><span class="p">,</span> <span class="n">TequilaWarning</span>
+
+<span class="kn">from</span> <span class="nn">tequila.circuit</span> <span class="kn">import</span> <span class="n">QCircuit</span>
+<span class="kn">from</span> <span class="nn">tequila.objective.objective</span> <span class="kn">import</span> <span class="n">Variables</span>
+<span class="kn">from</span> <span class="nn">tequila.quantumchemistry.qc_base</span> <span class="kn">import</span> <span class="n">QuantumChemistryBase</span>
+<span class="kn">from</span> <span class="nn">tequila.quantumchemistry.chemistry_tools</span> <span class="kn">import</span> <span class="n">ClosedShellAmplitudes</span><span class="p">,</span> <span class="n">Amplitudes</span>
+<span class="kn">from</span> <span class="nn">tequila.quantumchemistry</span> <span class="kn">import</span> <span class="n">ParametersQC</span><span class="p">,</span> <span class="n">NBodyTensor</span>
+
+<span class="kn">from</span> <span class="nn">.chemistry_tools</span> <span class="kn">import</span> <span class="n">ActiveSpaceData</span><span class="p">,</span> <span class="n">OrbitalData</span>
+
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">typing</span>
+<span class="kn">import</span> <span class="nn">psi4</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+
+
+<div class="viewcode-block" id="TequilaPsi4Exception">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.TequilaPsi4Exception">[docs]</a>
+<span class="k">class</span> <span class="nc">TequilaPsi4Exception</span><span class="p">(</span><span class="n">TequilaException</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="OpenVQEEPySCFException">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.OpenVQEEPySCFException">[docs]</a>
+<span class="k">class</span> <span class="nc">OpenVQEEPySCFException</span><span class="p">(</span><span class="n">TequilaException</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="Psi4Results">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.Psi4Results">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Psi4Results</span><span class="p">:</span>
+    <span class="n">variables</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># psi4 variables dictionary, storing all computed values</span>
+    <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># psi4 output file</span>
+    <span class="n">wfn</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span>
+        <span class="n">psi4</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Wavefunction</span><span class="p">,</span> <span class="n">psi4</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">CCWavefunction</span><span class="p">,</span> <span class="n">psi4</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">CIWavefunction</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># psi4 wavefunction</span>
+    <span class="n">mol</span><span class="p">:</span> <span class="n">psi4</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Molecule</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="QuantumChemistryPsi4">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.QuantumChemistryPsi4">[docs]</a>
+<span class="k">class</span> <span class="nc">QuantumChemistryPsi4</span><span class="p">(</span><span class="n">QuantumChemistryBase</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">_make_psi4_active_space_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">active_orbitals</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Small helper function</span>
+<span class="sd">        Internal use only</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        active_orbitals: dictionary :</span>
+<span class="sd">            dictionary with irreps as keys and a list of integers as values</span>
+<span class="sd">            i.e. occ = {&quot;A1&quot;:[0,1], &quot;A2&quot;:[0]}</span>
+<span class="sd">            means the occupied active space is made up of spatial orbitals</span>
+<span class="sd">            0A1, 1A1 and 0A2</span>
+<span class="sd">            as list: Give a list of spatial orbital indices</span>
+<span class="sd">            i.e. occ = [0,1,3] means that spatial orbital 0, 1 and 3 are used</span>
+<span class="sd">        reference: (Default value=None)</span>
+<span class="sd">            List of orbitals which form the reference</span>
+<span class="sd">            Can be given in the same format as active_orbitals</span>
+<span class="sd">            If given as None then the first N_electron/2 orbitals are taken</span>
+<span class="sd">            and the corresponding active orbitals are removed</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dataclass with active indices and reference indices (in spatial notation)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">active_orbitals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="nd">@dataclass</span>
+        <span class="k">class</span> <span class="nc">ActiveSpaceDataPsi4</span><span class="p">(</span><span class="n">ActiveSpaceData</span><span class="p">):</span>
+
+            <span class="n">frozen_docc</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># frozen reference orbitals grouped by irrep (psi4 option, if None then the active space can not be represented by psi4)</span>
+            <span class="n">frozen_uocc</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># frozen virtual orbtials grouped by irrep (psi4 option, if None then the active space can not be represented by psi4)</span>
+
+            <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{key:15}</span><span class="s2"> : </span><span class="si">{value:15}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;frozen_docc&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frozen_docc</span><span class="p">))</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{key:15}</span><span class="s2"> : </span><span class="si">{value:15}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;frozen_uocc&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frozen_uocc</span><span class="p">))</span>
+                <span class="k">return</span> <span class="n">result</span>
+
+            <span class="nd">@property</span>
+            <span class="k">def</span> <span class="nf">psi4_representable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="n">standard_ref</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_orbitals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">reference_orbitals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_orbitals</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
+                    <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_orbitals</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">frozen_docc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">frozen_uocc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="n">standard_ref</span><span class="p">)</span>
+
+        <span class="c1"># transform irrep notation to absolute ints</span>
+        <span class="n">active_idx</span> <span class="o">=</span> <span class="n">active_orbitals</span>
+        <span class="n">ref_idx</span> <span class="o">=</span> <span class="n">reference</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">active_orbitals</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">active_idx</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">active_orbitals</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">active_idx</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">orbitals_by_irrep</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">upper</span><span class="p">()][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">idx_total</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">value</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">active_orbitals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">active_idx</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span><span class="p">)]</span>
+
+        <span class="n">standard_ref</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_electrons</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)])</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">ref_idx</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">reference</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">orbitals</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">orbitals_by_irrep</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">upper</span><span class="p">()][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">value</span><span class="p">]</span>
+                <span class="n">ref_idx</span> <span class="o">+=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">idx_total</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">orbitals</span><span class="p">]</span>
+                <span class="n">ref_idx</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">ref_idx</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">reference</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_electrons</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">ref_idx</span> <span class="o">=</span> <span class="n">standard_ref</span>
+
+        <span class="c1"># determine if the active space can be represented by psi4</span>
+        <span class="c1"># reference needs to be the scf reference</span>
+        <span class="c1"># all frozen orbitals need to be without gaps since we can not freeze individual orbitals</span>
+        <span class="n">frozen_docc</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">ref_idx</span> <span class="o">==</span> <span class="n">standard_ref</span><span class="p">:</span>
+            <span class="n">frozen_docc</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nirrep</span>
+            <span class="n">frozen_docc_all</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">orbitals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">standard_ref</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbitals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">idx_total</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">active_idx</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">irrep</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">irreps</span><span class="p">):</span>
+                <span class="n">sorted_array</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">idx_irrep</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">frozen_docc_all</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">irrep</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="n">irrep</span><span class="o">.</span><span class="n">upper</span><span class="p">()])</span>
+                <span class="n">frozen_docc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sorted_array</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sorted_array</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sorted_array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">sorted_array</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sorted_array</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">frozen_docc</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;active space not CAS type: frozen_docc of </span><span class="si">{}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">irrep</span><span class="p">),</span> <span class="n">sorted_array</span><span class="p">)</span>
+                    <span class="k">break</span>
+
+        <span class="c1"># and the same for the unoccupied ones</span>
+        <span class="n">frozen_uocc</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">frozen_docc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">frozen_uocc</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nirrep</span>
+            <span class="n">frozen_uocc_all</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbitals</span> <span class="k">if</span> <span class="n">o</span><span class="o">.</span><span class="n">idx_total</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">active_idx</span> <span class="o">+</span> <span class="n">ref_idx</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">irrep</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">irreps</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">irrep</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbitals_by_irrep</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">sorted_array</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">idx_irrep</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">frozen_uocc_all</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">irrep</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="n">irrep</span><span class="o">.</span><span class="n">upper</span><span class="p">()])</span>
+                <span class="n">frozen_uocc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sorted_array</span><span class="p">)</span>
+                <span class="n">last</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbitals_by_irrep</span><span class="p">[</span><span class="n">irrep</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sorted_array</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span>
+                        <span class="n">sorted_array</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">last</span><span class="o">.</span><span class="n">idx_irrep</span> <span class="ow">or</span> <span class="n">sorted_array</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">sorted_array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span>
+                    <span class="n">sorted_array</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">frozen_uocc</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="k">break</span>
+
+        <span class="k">return</span> <span class="n">ActiveSpaceDataPsi4</span><span class="p">(</span><span class="n">active_orbitals</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">active_idx</span><span class="p">),</span>
+                                   <span class="n">reference_orbitals</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">ref_idx</span><span class="p">),</span>
+                                   <span class="n">frozen_docc</span><span class="o">=</span><span class="n">frozen_docc</span><span class="p">,</span>
+                                   <span class="n">frozen_uocc</span><span class="o">=</span><span class="n">frozen_uocc</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">ParametersQC</span><span class="p">,</span>
+                 <span class="n">transformation</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">active_orbitals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">reference_orbitals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">frozen_orbitals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        parameters</span>
+<span class="sd">        transformation</span>
+<span class="sd">        active_orbitals: dictionary :</span>
+<span class="sd">            dictionary with irreps as keys and a list of integers as values</span>
+<span class="sd">            i.e. occ = {&quot;A1&quot;:[0,1], &quot;A2&quot;:[0]}</span>
+<span class="sd">            means the occupied active space is made up of spatial orbitals</span>
+<span class="sd">            0A1, 1A1 and 0A2</span>
+<span class="sd">            as list: Give a list of spatial orbital indices</span>
+<span class="sd">            i.e. occ = [0,1,3] means that spatial orbital 0, 1 and 3 are used</span>
+<span class="sd">        reference: (Default value=None)</span>
+<span class="sd">            List of orbitals which form the reference</span>
+<span class="sd">            Can be given in the same format as active_orbitals</span>
+<span class="sd">            If given as None then the first N_electron/2 orbitals are taken</span>
+<span class="sd">            and the corresponding active orbitals are removed</span>
+<span class="sd">        args</span>
+<span class="sd">        kwargs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">psi4</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
+        <span class="n">psi4</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">clean_options</span><span class="p">()</span>
+        <span class="n">psi4</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">clean_variables</span><span class="p">()</span>
+
+        <span class="n">psi4</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
+        <span class="n">psi4</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">clean_options</span><span class="p">()</span>
+        <span class="n">psi4</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">clean_variables</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi4_mol</span> <span class="o">=</span> <span class="n">psi4</span><span class="o">.</span><span class="n">geometry</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">get_geometry_string</span><span class="p">())</span>
+        <span class="n">psi4</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi4_mol</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_point_group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi4_mol</span><span class="o">.</span><span class="n">point_group</span><span class="p">()</span><span class="o">.</span><span class="n">symbol</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;point_group&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_point_group</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;point_group&quot;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">energies</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># history to avoid recomputation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logs</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># store full psi4 output</span>
+
+        <span class="c1"># psi4 active space will be formed later</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">transformation</span><span class="o">=</span><span class="n">transformation</span><span class="p">,</span> <span class="n">active_orbitals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                         <span class="n">reference_orbitals</span><span class="o">=</span><span class="n">reference_orbitals</span><span class="p">,</span><span class="n">frozen_orbitals</span><span class="o">=</span><span class="p">[],</span>
+                         <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">oenergies</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">irreps</span><span class="p">:</span>
+            <span class="n">oenergies</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">orbital_energies</span><span class="p">(</span><span class="n">irrep</span><span class="o">=</span><span class="n">i</span><span class="p">))]</span>
+
+        <span class="n">oenergies</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">oenergies</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbitals</span><span class="p">:</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">irrep</span> <span class="o">=</span> <span class="n">oenergies</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">idx_total</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">idx_irrep</span> <span class="o">=</span> <span class="n">oenergies</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">idx_total</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">energy</span> <span class="o">=</span> <span class="n">oenergies</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">idx_total</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="n">orbitals_by_irrep</span> <span class="o">=</span> <span class="p">{</span><span class="n">o</span><span class="o">.</span><span class="n">irrep</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbitals</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbitals</span><span class="p">:</span>
+            <span class="n">orbitals_by_irrep</span><span class="p">[</span><span class="n">o</span><span class="o">.</span><span class="n">irrep</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">o</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">orbitals_by_irrep</span> <span class="o">=</span> <span class="n">orbitals_by_irrep</span>
+        <span class="k">if</span> <span class="n">reference_orbitals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">reference_orbitals</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">idx_total</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_orbitals</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">active_orbitals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">active_orbitals</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">frozen_orbitals</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">frozen_core</span><span class="p">:</span>
+            <span class="n">frozen_orbitals</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">get_number_of_core_electrons</span><span class="p">()</span><span class="o">//</span><span class="mi">2</span><span class="p">)]</span>
+
+        <span class="k">def</span> <span class="nf">list_to_irrep_dict</span><span class="p">(</span><span class="n">orbital_list</span><span class="p">):</span>
+            <span class="c1"># assume we have been given a list of orbitals with their total indices instead of a dictionary with irreps</span>
+            <span class="n">active_dict</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="n">orbital_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">active_dict</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">orbital_list</span><span class="p">:</span>
+                <span class="n">orbital</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbitals</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">orbital</span><span class="o">.</span><span class="n">irrep</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">active_dict</span><span class="p">:</span>
+                    <span class="n">active_dict</span><span class="p">[</span><span class="n">orbital</span><span class="o">.</span><span class="n">irrep</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">orbital</span><span class="o">.</span><span class="n">idx_irrep</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">active_dict</span><span class="p">[</span><span class="n">orbital</span><span class="o">.</span><span class="n">irrep</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">orbital</span><span class="o">.</span><span class="n">idx_irrep</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">active_dict</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">active_orbitals</span><span class="p">,</span> <span class="s2">&quot;keys&quot;</span><span class="p">):</span>
+            <span class="n">active_orbitals</span> <span class="o">=</span> <span class="n">list_to_irrep_dict</span><span class="p">(</span><span class="n">active_orbitals</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">reference_orbitals</span><span class="p">,</span> <span class="s2">&quot;keys&quot;</span><span class="p">):</span>
+            <span class="n">reference_orbitals</span> <span class="o">=</span> <span class="n">list_to_irrep_dict</span><span class="p">(</span><span class="n">reference_orbitals</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">frozen_orbitals</span><span class="p">,</span> <span class="s2">&quot;keys&quot;</span><span class="p">):</span>
+            <span class="n">frozen_orbitals</span> <span class="o">=</span> <span class="n">list_to_irrep_dict</span><span class="p">(</span><span class="n">frozen_orbitals</span><span class="p">)</span>
+        
+        <span class="c1"># remove frozen-orbitals from active orbitals</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">frozen_orbitals</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">active_orbitals</span> <span class="ow">and</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">active_orbitals</span><span class="p">[</span><span class="n">k</span><span class="p">]:</span>
+                    <span class="n">active_orbitals</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">integral_manager</span><span class="o">.</span><span class="n">active_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_psi4_active_space_data</span><span class="p">(</span><span class="n">active_orbitals</span><span class="o">=</span><span class="n">active_orbitals</span><span class="p">,</span>
+                                                                               <span class="n">reference</span><span class="o">=</span><span class="n">reference_orbitals</span><span class="p">)</span>
+        <span class="c1"># need to recompute</span>
+        <span class="c1"># (psi4 won&#39;t take over active space information otherwise)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_energy</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;hf&quot;</span><span class="p">,</span> <span class="n">recompute</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ref_wfn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s2">&quot;hf&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">wfn</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">transformation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_transformation</span><span class="p">(</span><span class="n">transformation</span><span class="o">=</span><span class="n">transformation</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">point_group</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_point_group</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">nirrep</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_wfn</span><span class="o">.</span><span class="n">nirrep</span><span class="p">()</span>
+
+<div class="viewcode-block" id="QuantumChemistryPsi4.orbital_energies">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.QuantumChemistryPsi4.orbital_energies">[docs]</a>
+    <span class="k">def</span> <span class="nf">orbital_energies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">beta</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">wfn</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns orbital energies of a given irrep</span>
+<span class="sd">        or all orbital energies of all irreps (default)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        irrep: int or str :</span>
+<span class="sd">            int: specify the irrep by number (in cotton ordering)</span>
+<span class="sd">            str: specify the irrep by name (like &#39;A1&#39;)</span>
+<span class="sd">            specify from which irrep you want the orbital energies</span>
+<span class="sd">            psi4 orders irreps in &#39;Cotton ordering&#39;</span>
+<span class="sd">            http://www.psicode.org/psi4manual/master/psithonmol.html#table-irrepordering</span>
+<span class="sd">        beta: bool : (Default value=False)</span>
+<span class="sd">            get the beta electrons</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list or orbital energies</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">wfn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">wfn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_wfn</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">irrep</span><span class="p">,</span> <span class="s2">&quot;upper&quot;</span><span class="p">):</span>
+            <span class="n">irrep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">irreps</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">irrep</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">beta</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">psi4</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">p4util</span><span class="o">.</span><span class="n">numpy_helper</span><span class="o">.</span><span class="n">_to_array</span><span class="p">(</span><span class="n">wfn</span><span class="o">.</span><span class="n">epsilon_b</span><span class="p">(),</span> <span class="n">dense</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">psi4</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">p4util</span><span class="o">.</span><span class="n">numpy_helper</span><span class="o">.</span><span class="n">_to_array</span><span class="p">(</span><span class="n">wfn</span><span class="o">.</span><span class="n">epsilon_a</span><span class="p">(),</span> <span class="n">dense</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">irrep</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">point_group</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;c1&quot;</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">tmp</span><span class="p">[</span><span class="n">irrep</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="QuantumChemistryPsi4.initialize_integral_manager">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.QuantumChemistryPsi4.initialize_integral_manager">[docs]</a>
+    <span class="k">def</span> <span class="nf">initialize_integral_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># get HF wavefunction and orbital coefficients</span>
+        <span class="k">if</span> <span class="s2">&quot;ref_wfn&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">ref_wfn</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;ref_wfn&quot;</span><span class="p">]</span>
+            <span class="n">hf_energy</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">hf_energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_energy</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;hf&quot;</span><span class="p">,</span> <span class="n">ignore_active_space</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                            <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;RHF__FAIL_ON_MAXITER&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span> <span class="n">point_group</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">point_group</span><span class="p">)</span>
+            <span class="n">ref_wfn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;hf&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">wfn</span>
+
+        <span class="k">if</span> <span class="n">ref_wfn</span><span class="o">.</span><span class="n">nirrep</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">wfn</span> <span class="o">=</span> <span class="n">ref_wfn</span><span class="o">.</span><span class="n">c1_deep_copy</span><span class="p">(</span><span class="n">ref_wfn</span><span class="o">.</span><span class="n">basisset</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">wfn</span> <span class="o">=</span> <span class="n">ref_wfn</span>
+        <span class="n">Ca</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">wfn</span><span class="o">.</span><span class="n">Ca</span><span class="p">())</span>
+
+        <span class="n">basisset</span> <span class="o">=</span> <span class="n">ref_wfn</span><span class="o">.</span><span class="n">basisset</span><span class="p">()</span>
+        <span class="n">mints</span> <span class="o">=</span> <span class="n">psi4</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">MintsHelper</span><span class="p">(</span><span class="n">basisset</span><span class="p">)</span>
+
+        <span class="c1"># get integrals in atomic basis</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mints</span><span class="o">.</span><span class="n">ao_overlap</span><span class="p">())</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">wfn</span><span class="o">.</span><span class="n">H</span><span class="p">())</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mints</span><span class="o">.</span><span class="n">ao_eri</span><span class="p">())</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">wfn</span><span class="o">.</span><span class="n">variables</span><span class="p">()[</span><span class="s1">&#39;NUCLEAR REPULSION ENERGY&#39;</span><span class="p">])</span>
+
+        <span class="n">g</span> <span class="o">=</span> <span class="n">NBodyTensor</span><span class="p">(</span><span class="n">elems</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="n">ordering</span><span class="o">=</span><span class="s1">&#39;chem&#39;</span><span class="p">)</span>
+
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;overlap_integrals&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">S</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;two_body_integrals&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;one_body_integrals&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;constant_term&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;orbital_coefficients&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ca</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;basis_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;GBS&quot;</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;basis_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">basis_set</span>
+
+        <span class="n">irreps</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">psi4_mol</span><span class="o">.</span><span class="n">point_group</span><span class="p">()</span><span class="o">.</span><span class="n">char_table</span><span class="p">()</span><span class="o">.</span><span class="n">gamma</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">symbol</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ref_wfn</span><span class="o">.</span><span class="n">nirrep</span><span class="p">())]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">irreps</span> <span class="o">=</span> <span class="n">irreps</span>
+
+        <span class="n">oenergies</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">irreps</span><span class="p">:</span>
+            <span class="n">oenergies</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">orbital_energies</span><span class="p">(</span><span class="n">irrep</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">wfn</span><span class="o">=</span><span class="n">ref_wfn</span><span class="p">))]</span>
+
+        <span class="n">oenergies</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">oenergies</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="s2">&quot;orbitals&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">orbitals</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;orbitals&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">orbitals</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">orbitals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">orbitals</span> <span class="o">=</span> <span class="p">[</span><span class="n">OrbitalData</span><span class="p">(</span><span class="n">idx_total</span><span class="o">=</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">orbitals</span><span class="p">:</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">irrep</span> <span class="o">=</span> <span class="n">oenergies</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">idx_total</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">idx_irrep</span> <span class="o">=</span> <span class="n">oenergies</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">idx_total</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">energy</span> <span class="o">=</span> <span class="n">oenergies</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">idx_total</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;orbitals&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">orbitals</span>
+
+        <span class="c1"># set some psi4 specific features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ref_energy</span> <span class="o">=</span> <span class="n">hf_energy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ref_wfn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;hf&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">wfn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">irreps</span> <span class="o">=</span> <span class="n">irreps</span>
+
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize_integral_manager</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="QuantumChemistryPsi4.compute_ccsd_amplitudes">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.QuantumChemistryPsi4.compute_ccsd_amplitudes">[docs]</a>
+    <span class="k">def</span> <span class="nf">compute_ccsd_amplitudes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_amplitudes</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;ccsd&#39;</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_run_psi4</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_wfn</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">point_group</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">guess_wfn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ref_wfn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ignore_active_space</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">psi4</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
+        <span class="n">psi4</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">clean_variables</span><span class="p">()</span>
+        <span class="n">psi4</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">clean_options</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="s2">&quot;threads&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">psi4</span><span class="o">.</span><span class="n">set_num_threads</span><span class="p">(</span><span class="n">nthread</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;threads&quot;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">.out&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+
+        <span class="n">psi4</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">set_output_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+        <span class="c1"># easier guess read in</span>
+        <span class="k">if</span> <span class="n">guess_wfn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">guess_wfn</span><span class="p">,</span> <span class="n">QuantumChemistryPsi4</span><span class="p">):</span>
+                <span class="n">guess_wfn</span> <span class="o">=</span> <span class="n">guess_wfn</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="s2">&quot;hf&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">wfn</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">guess_wfn</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">guess_wfn</span> <span class="o">=</span> <span class="n">psi4</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Wavefunction</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">guess_wfn</span><span class="p">)</span>
+            <span class="n">guess_wfn</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">guess_wfn</span><span class="o">.</span><span class="n">get_scratch_filename</span><span class="p">(</span><span class="mi">180</span><span class="p">))</span>  <span class="c1"># this is necessary</span>
+            <span class="n">options</span><span class="p">[</span><span class="s2">&quot;guess&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;read&quot;</span>
+
+        <span class="c1"># prevent known flaws</span>
+        <span class="k">if</span> <span class="s2">&quot;guess&quot;</span> <span class="ow">in</span> <span class="n">options</span> <span class="ow">and</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;guess&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;read&quot;</span><span class="p">:</span>
+            <span class="n">options</span><span class="p">[</span><span class="s2">&quot;basis_guess&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="c1"># additionally the outputfile needs to be the same</span>
+            <span class="c1"># as in the previous guess</span>
+            <span class="c1"># this can not be determined here</span>
+            <span class="c1"># better pass down a guess_wfn</span>
+
+        <span class="n">mol</span> <span class="o">=</span> <span class="n">psi4</span><span class="o">.</span><span class="n">geometry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">get_geometry_string</span><span class="p">())</span>
+        <span class="n">mol</span><span class="o">.</span><span class="n">set_multiplicity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">multiplicity</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">multiplicity</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TequilaPsi4Exception</span><span class="p">(</span><span class="s2">&quot;Multiplicity != 1 no yet supported&quot;</span><span class="p">)</span>
+        <span class="n">mol</span><span class="o">.</span><span class="n">set_molecular_charge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">charge</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">point_group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">mol</span><span class="o">.</span><span class="n">reset_point_group</span><span class="p">(</span><span class="n">point_group</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">ref_wfn</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;ref_wfn&quot;</span><span class="p">):</span>
+            <span class="n">ref_wfn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_wfn</span>
+
+        <span class="k">if</span> <span class="n">point_group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">point_group</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;c1&quot;</span><span class="p">:</span>
+            <span class="n">ref_wfn</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># ref_wfn.c1_deep_copy(ref_wfn.basisset())  # CC will not converge otherwise</span>
+            <span class="n">guess_wfn</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">psi4</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+
+        <span class="n">psi4</span><span class="o">.</span><span class="n">set_options</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ref_wfn</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;hf&quot;</span><span class="p">:</span>
+            <span class="n">energy</span><span class="p">,</span> <span class="n">wfn</span> <span class="o">=</span> <span class="n">psi4</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">return_wfn</span><span class="o">=</span><span class="n">return_wfn</span><span class="p">,</span> <span class="n">molecule</span><span class="o">=</span><span class="n">mol</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">energy</span><span class="p">,</span> <span class="n">wfn</span> <span class="o">=</span> <span class="n">psi4</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">ref_wfn</span><span class="o">=</span><span class="n">ref_wfn</span><span class="p">,</span> <span class="n">return_wfn</span><span class="o">=</span><span class="n">return_wfn</span><span class="p">,</span> <span class="n">molecule</span><span class="o">=</span><span class="n">mol</span><span class="p">,</span>
+                                      <span class="n">guess_wfn</span><span class="o">=</span><span class="n">guess_wfn</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">energies</span><span class="p">[</span><span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span> <span class="o">=</span> <span class="n">energy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span> <span class="o">=</span> <span class="n">Psi4Results</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">psi4</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">variables</span><span class="p">()),</span>
+                                                <span class="n">wfn</span><span class="o">=</span><span class="n">wfn</span><span class="p">,</span> <span class="n">mol</span><span class="o">=</span><span class="n">mol</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">energy</span><span class="p">,</span> <span class="n">wfn</span>
+
+    <span class="k">def</span> <span class="nf">_extract_active_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arr</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal function that helps to convert CCSD amplitudes if an actice space was set</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">integral_manager</span><span class="o">.</span><span class="n">active_space</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">arr</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">integral_manager</span><span class="o">.</span><span class="n">active_space</span><span class="o">.</span><span class="n">active_orbitals</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">integral_manager</span><span class="o">.</span><span class="n">one_body_integrals</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span>
+            <span class="mi">0</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="n">arr</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">ClosedShellAmplitudes</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">arr</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">result</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_active_space</span><span class="p">(</span><span class="n">arr</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">ClosedShellAmplitudes</span><span class="p">(</span><span class="o">**</span><span class="n">result</span><span class="p">)</span>
+        <span class="n">asd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">integral_manager</span><span class="o">.</span><span class="n">active_space</span>
+        <span class="n">aocc</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">asd</span><span class="o">.</span><span class="n">active_orbitals</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">asd</span><span class="o">.</span><span class="n">reference_orbitals</span><span class="p">]</span>
+        <span class="n">avir</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">asd</span><span class="o">.</span><span class="n">active_orbitals</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">asd</span><span class="o">.</span><span class="n">reference_orbitals</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_orbitals</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">aocc</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">avir</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_electrons</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">aocc</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span>
+
+        <span class="n">n_orb_total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">orbitals</span><span class="p">)</span>
+        <span class="n">n_electrons_total</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_electrons</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">asd</span><span class="o">.</span><span class="n">frozen_reference_orbitals</span><span class="p">)</span>
+        <span class="n">nocc</span> <span class="o">=</span> <span class="n">n_electrons_total</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="n">nvirt</span> <span class="o">=</span> <span class="n">n_orb_total</span> <span class="o">-</span> <span class="n">nocc</span>
+        <span class="n">avir</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="n">nocc</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">avir</span><span class="p">]</span>
+        <span class="n">nav</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">avir</span><span class="p">)</span>
+        <span class="n">nao</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">aocc</span><span class="p">)</span>
+
+        <span class="n">arr_shape</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">final_shape</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">active_sets</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">arr_shape</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">nocc</span><span class="p">:</span>
+                <span class="n">final_shape</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nao</span><span class="p">)</span>
+                <span class="n">active_sets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aocc</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="n">nvirt</span><span class="p">:</span>
+                <span class="n">final_shape</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nav</span><span class="p">)</span>
+                <span class="n">active_sets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">avir</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">i</span> <span class="o">==</span> <span class="n">nocc</span> <span class="o">+</span> <span class="n">nvirt</span>
+                <span class="n">final_shape</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nao</span> <span class="o">+</span> <span class="n">nav</span><span class="p">)</span>
+                <span class="n">active_sets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aocc</span> <span class="o">+</span> <span class="n">avir</span><span class="p">)</span>
+
+        <span class="n">final_shape</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">final_shape</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)):</span>
+                <span class="n">result</span> <span class="o">*=</span> <span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">active_sets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="n">c</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">fromfunction</span><span class="p">(</span>
+            <span class="n">function</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">func</span><span class="p">),</span>
+            <span class="n">shape</span><span class="o">=</span><span class="n">arr_shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">condition</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">arr</span><span class="o">=</span><span class="n">arr</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">final_shape</span><span class="p">)</span>
+
+    <span class="c1">#def compute_mp2_amplitudes(self, active_orbitals=None, *args, **kwargs) -&gt; ClosedShellAmplitudes:</span>
+    <span class="c1">#    return self._extract_active_space(super().compute_mp2_amplitudes(*args, **kwargs))</span>
+
+<div class="viewcode-block" id="QuantumChemistryPsi4.compute_amplitudes">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.QuantumChemistryPsi4.compute_amplitudes">[docs]</a>
+    <span class="k">def</span> <span class="nf">compute_amplitudes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                           <span class="n">options</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                           <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                           <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+                           <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span>
+        <span class="n">Amplitudes</span><span class="p">,</span> <span class="n">ClosedShellAmplitudes</span><span class="p">]:</span>
+
+        <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">options</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">options</span><span class="p">[</span><span class="s1">&#39;basis&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">basis_set</span>
+
+        <span class="k">if</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;mp2&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_mp2_amplitudes</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">psi4</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">clean_options</span><span class="p">()</span>
+            <span class="n">psi4</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">clean_variables</span><span class="p">()</span>
+            <span class="n">energy</span><span class="p">,</span> <span class="n">wfn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_psi4</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+                                         <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
+                                         <span class="n">point_group</span><span class="o">=</span><span class="s1">&#39;c1&#39;</span><span class="p">,</span>
+                                         <span class="n">ref_wfn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_wfn</span><span class="o">.</span><span class="n">c1_deep_copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_wfn</span><span class="o">.</span><span class="n">basisset</span><span class="p">()),</span>
+                                         <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span>
+                                         <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+                                         <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">all_amplitudes</span> <span class="o">=</span> <span class="n">wfn</span><span class="o">.</span><span class="n">get_amplitudes</span><span class="p">()</span>
+            <span class="n">closed_shell</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wfn</span><span class="o">.</span><span class="n">reference_wavefunction</span><span class="p">(),</span> <span class="n">psi4</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">RHF</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">closed_shell</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_active_space</span><span class="p">(</span>
+                    <span class="n">ClosedShellAmplitudes</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">to_array</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">all_amplitudes</span><span class="o">.</span><span class="n">items</span><span class="p">()}))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">integral_manager</span><span class="o">.</span><span class="n">trivial_active_space</span><span class="p">())</span>  <span class="c1"># only for closed-shell currently</span>
+                <span class="k">return</span> <span class="n">Amplitudes</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">to_array</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">all_amplitudes</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TequilaPsi4Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Failed to compute </span><span class="si">{}</span><span class="s2"> amplitudes.</span><span class="se">\n</span><span class="s2">&quot;</span> \
+                                       <span class="s2">&quot;Make sure that you don&#39;t read in previous wavefunctions.&quot;</span>
+                                       <span class="s2">&quot;Active spaces might get you in trouble.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="QuantumChemistryPsi4.compute_energy">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.QuantumChemistryPsi4.compute_energy">[docs]</a>
+    <span class="k">def</span> <span class="nf">compute_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;fci&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">recompute</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">ignore_active_space</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">recompute</span> <span class="ow">and</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">energies</span> <span class="ow">and</span> <span class="ow">not</span> <span class="s2">&quot;point_group&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">energies</span><span class="p">[</span><span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+
+        <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">options</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">options</span><span class="p">[</span><span class="s1">&#39;basis&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">basis_set</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_active_space</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">integral_manager</span><span class="o">.</span><span class="n">active_space_is_trivial</span><span class="p">()</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_space</span><span class="o">.</span><span class="n">psi4_representable</span><span class="p">:</span>
+            <span class="n">options</span><span class="p">[</span><span class="s1">&#39;frozen_docc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_space</span><span class="o">.</span><span class="n">frozen_docc</span>
+            <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">active_space</span><span class="o">.</span><span class="n">frozen_uocc</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;hf&quot;</span><span class="p">,</span> <span class="s2">&quot;fci&quot;</span><span class="p">,</span> <span class="s2">&quot;detci&quot;</span><span class="p">]:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;There are known issues with some psi4 methods and frozen virtual orbitals. Proceed with fingers crossed for </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">method</span><span class="p">))</span>
+            <span class="n">options</span><span class="p">[</span><span class="s1">&#39;frozen_uocc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_space</span><span class="o">.</span><span class="n">frozen_uocc</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_active_space</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_space</span><span class="o">.</span><span class="n">psi4_representable</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">integral_manager</span><span class="o">.</span><span class="n">active_space_is_trivial</span><span class="p">():</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Warning: Active space is not Psi4 representable&quot;</span><span class="p">,</span> <span class="n">TequilaWarning</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_psi4</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="n">ignore_active_space</span><span class="o">=</span><span class="n">ignore_active_space</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)[</span>
+            <span class="mi">0</span><span class="p">]</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Psi4 Data</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{key:15}</span><span class="s2"> : </span><span class="si">{value:15}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;Point Group (full)&quot;</span><span class="p">,</span>
+                                                    <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">psi4_mol</span><span class="o">.</span><span class="n">get_full_point_group</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{key:15}</span><span class="s2"> : </span><span class="si">{value:15}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;Point Group (used)&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">point_group</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{key:15}</span><span class="s2"> : </span><span class="si">{value}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;nirrep&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nirrep</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{key:15}</span><span class="s2"> : </span><span class="si">{value}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;irreps&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">irreps</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{key:15}</span><span class="s2"> : </span><span class="si">{value:15}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;mos per irrep&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="nb">str</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">orbital_energies</span><span class="p">(</span><span class="n">irrep</span><span class="o">=</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nirrep</span><span class="p">)]))</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rdm1</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">rdm1</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rdm2</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">rdm2</span>
+
+<div class="viewcode-block" id="QuantumChemistryPsi4.compute_rdms">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.QuantumChemistryPsi4.compute_rdms">[docs]</a>
+    <span class="k">def</span> <span class="nf">compute_rdms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">U</span><span class="p">:</span> <span class="n">QCircuit</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">variables</span><span class="p">:</span> <span class="n">Variables</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">spin_free</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                     <span class="n">get_rdm1</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">get_rdm2</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">psi4_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">psi4_options</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Same functionality as qc_base.compute_rdms (look there for more information),</span>
+<span class="sd">        plus the additional option to compute 1- and 2-RDM using psi4 by the keyword psi4_rdms</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        U :</span>
+<span class="sd">             Quantum Circuit to achieve the desired state \\psi = U |0\\rangle, optional if psi4_rdms is set to True</span>
+<span class="sd">        variables :</span>
+<span class="sd">            If U is parametrized, then need to hand over a set of fixed variables</span>
+<span class="sd">        spin_free :</span>
+<span class="sd">            Set whether matrices should be spin-free (summation over spin) or defined by spin-orbitals</span>
+<span class="sd">        get_rdm1, get_rdm2 :</span>
+<span class="sd">            Set whether either one or both rdm1, rdm2 should be computed. If both are needed at some point,</span>
+<span class="sd">            it is recommended to compute them at once.</span>
+<span class="sd">            Note that whatever is specified in psi4_options has priority.</span>
+<span class="sd">        psi4_method:</span>
+<span class="sd">            Method to be run, currently only methods returning a CIWavefuntion are supported</span>
+<span class="sd">            (e.g. &quot;detci&quot; + ex_level in options, or &quot;fci&quot;, &quot;cisdt&quot;, &quot;casscf&quot;, but NOT &quot;cisd&quot;)</span>
+<span class="sd">        psi4_options:</span>
+<span class="sd">           Options to be handed over to psi4, containing e.g. excitation level of &quot;detci&quot;-method.</span>
+<span class="sd">           If &quot;detci__opdm&quot; for 1-RDM and &quot;detci__tpdm&quot; for 2-RDM are not included, the keywords get_rdm1, get_rdm2 are</span>
+<span class="sd">           used (if both are specified, prioritizing psi4_options).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">psi4_method</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">compute_rdms</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">U</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="n">spin_free</span><span class="o">=</span><span class="n">spin_free</span><span class="p">,</span>
+                                 <span class="n">get_rdm1</span><span class="o">=</span><span class="n">get_rdm1</span><span class="p">,</span> <span class="n">get_rdm2</span><span class="o">=</span><span class="n">get_rdm2</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Get 1- and 2-particle reduced density matrix via Psi4 CISD computation</span>
+            <span class="c1"># If &quot;cisd&quot; is chosen, change to &quot;detci&quot; (default is excitation level 2 anyhow) to obtain a CIWavefunction</span>
+            <span class="k">if</span> <span class="n">psi4_method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;cisd&quot;</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Changed psi4_method from &#39;cisd&#39; to &#39;detci&#39; with ex_level=2 s.th. psi4 returns a CIWavefunction.&quot;</span><span class="p">)</span>
+                <span class="n">psi4_method</span> <span class="o">=</span> <span class="s2">&quot;detci&quot;</span>
+            <span class="c1"># Set options if not handed over</span>
+            <span class="n">psi4_options</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">psi4_options</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>  <span class="c1"># set to lower-case for string comparison</span>
+            <span class="k">if</span> <span class="s2">&quot;detci__opdm&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">psi4_options</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">psi4_options</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;detci__opdm&quot;</span><span class="p">:</span> <span class="n">get_rdm1</span><span class="p">})</span>
+            <span class="k">if</span> <span class="s2">&quot;detci__tpdm&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">psi4_options</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">psi4_options</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;detci__tpdm&quot;</span><span class="p">:</span> <span class="n">get_rdm2</span><span class="p">})</span>
+            <span class="k">if</span> <span class="n">psi4_method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;detci&quot;</span> <span class="ow">and</span> <span class="s2">&quot;detci__ex_level&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">psi4_options</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">psi4_options</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;detci__ex_level&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>  <span class="c1"># use CISD as default</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">psi4_options</span><span class="p">)</span>
+
+            <span class="c1"># Compute and set matrices</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">compute_energy</span><span class="p">(</span><span class="n">psi4_method</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">psi4_options</span><span class="p">)</span>
+            <span class="n">wfn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logs</span><span class="p">[</span><span class="n">psi4_method</span><span class="p">]</span><span class="o">.</span><span class="n">wfn</span>
+            <span class="k">if</span> <span class="n">psi4_options</span><span class="p">[</span><span class="s2">&quot;detci__opdm&quot;</span><span class="p">]:</span>
+                <span class="n">rdm1</span> <span class="o">=</span> <span class="n">psi4</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">p4util</span><span class="o">.</span><span class="n">numpy_helper</span><span class="o">.</span><span class="n">_to_array</span><span class="p">(</span><span class="n">wfn</span><span class="o">.</span><span class="n">get_opdm</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;SUM&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="n">dense</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_rdm1</span> <span class="o">=</span> <span class="n">rdm1</span>
+            <span class="k">if</span> <span class="n">psi4_options</span><span class="p">[</span><span class="s2">&quot;detci__tpdm&quot;</span><span class="p">]:</span>
+                <span class="n">rdm2</span> <span class="o">=</span> <span class="n">psi4</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">p4util</span><span class="o">.</span><span class="n">numpy_helper</span><span class="o">.</span><span class="n">_to_array</span><span class="p">(</span><span class="n">wfn</span><span class="o">.</span><span class="n">get_tpdm</span><span class="p">(</span><span class="s2">&quot;SUM&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="n">dense</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">rdm2</span> <span class="o">=</span> <span class="n">NBodyTensor</span><span class="p">(</span><span class="n">elems</span><span class="o">=</span><span class="n">rdm2</span><span class="p">,</span> <span class="n">ordering</span><span class="o">=</span><span class="s1">&#39;chem&#39;</span><span class="p">)</span>
+                <span class="n">rdm2</span><span class="o">.</span><span class="n">reorder</span><span class="p">(</span><span class="n">to</span><span class="o">=</span><span class="s1">&#39;phys&#39;</span><span class="p">)</span>  <span class="c1"># RDMs in physics ordering (cp. to NBodyTensor in qc_base.py)</span>
+                <span class="n">rdm2</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">rdm2</span><span class="o">.</span><span class="n">elems</span>  <span class="c1"># Factor 2 since psi4 normalizes 2-rdm by 1/2</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_rdm2</span> <span class="o">=</span> <span class="n">rdm2</span></div>
+
+
+<div class="viewcode-block" id="QuantumChemistryPsi4.perturbative_f12_correction">
+<a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.QuantumChemistryPsi4.perturbative_f12_correction">[docs]</a>
+    <span class="k">def</span> <span class="nf">perturbative_f12_correction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdm1</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rdm2</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">gamma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.4</span><span class="p">,</span>
+                                    <span class="n">n_ri</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cabs_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="n">cabs_options</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                                    <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the spin-free [2]_R12 correction, needing only the 1- and 2-RDM of a reference method</span>
+<span class="sd">        Requires either 1-RDM, 2-RDM or information to compute them in kwargs</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rdm1 :</span>
+<span class="sd">            1-electron reduced density matrix</span>
+<span class="sd">        rdm2 :</span>
+<span class="sd">            2-electron reduced density matrix</span>
+<span class="sd">        gamma :</span>
+<span class="sd">            f12-exponent, for a correlation factor f_12 = -1/gamma * exp[-gamma*r_12]</span>
+<span class="sd">        n_ri :</span>
+<span class="sd">            dimensionality of RI-basis; if None, then the maximum available via tensors / basis-set is used</span>
+<span class="sd">        cabs_type :</span>
+<span class="sd">            - either &quot;active&quot; for using a given basis set as is as approximative CBS (complete basis set), and specify</span>
+<span class="sd">            OBS (orbital basis) by an active space</span>
+<span class="sd">            - or &quot;cabs+&quot; for CABS+-approach as in</span>
+<span class="sd">                Valeev, E. F. (2004). Improving on the resolution of the identity in linear R12 ab initio theories.</span>
+<span class="sd">                Chemical Physics Letters, 395(4–6), 190–195. https://doi.org/10.1016/j.cplett.2004.07.061</span>
+<span class="sd">                -&gt; pass cabs_name in cabs_options</span>
+<span class="sd">        cabs_options :</span>
+<span class="sd">            dict, which needs at least {&quot;cabs_name&quot;: some CABS basis set} if cabs_type==&quot;cabs+&quot;</span>
+<span class="sd">        kwargs :</span>
+<span class="sd">            e.g. RDM-information via {&quot;U&quot;: QCircuit, &quot;variables&quot;: optimal angles} if computation via VQE,</span>
+<span class="sd">            or {&quot;rdm__psi4_method&quot;: some CI method, &quot;rdm__psi4_options&quot;: dict with psi4 options} if computation via</span>
+<span class="sd">            psi4, compare to psi4_interface.compute_rdms</span>
+<span class="sd">            one of the above needs to be passed if rdm1,rdm2 not yet computed</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            the f12 correction for the energy</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">.f12_corrections._f12_correction_psi4</span> <span class="kn">import</span> <span class="n">ExplicitCorrelationCorrectionPsi4</span>
+        <span class="n">correction</span> <span class="o">=</span> <span class="n">ExplicitCorrelationCorrectionPsi4</span><span class="p">(</span><span class="n">mol</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdm1</span><span class="o">=</span><span class="n">rdm1</span><span class="p">,</span> <span class="n">rdm2</span><span class="o">=</span><span class="n">rdm2</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span>
+                                                       <span class="n">n_ri</span><span class="o">=</span><span class="n">n_ri</span><span class="p">,</span> <span class="n">cabs_type</span><span class="o">=</span><span class="n">cabs_type</span><span class="p">,</span> <span class="n">cabs_options</span><span class="o">=</span><span class="n">cabs_options</span><span class="p">,</span>
+                                                       <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">correction</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ram Mosco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

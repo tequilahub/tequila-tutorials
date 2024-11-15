@@ -1,0 +1,955 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tequila Library Reference &mdash; Tequila Documentation 13.9.2024 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7dcc51c3"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Hamiltonian" href="hamiltonian.html" />
+    <link rel="prev" title="Tequila Documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Tequila Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tequila Library Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hamiltonian.html">Hamiltonian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="circuit.html">Circuit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimizers.html">Optimizers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulators.html">Simulators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantumchemistry.html">Quantum Chemistry</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Tequila Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Tequila Library Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tequila-library-reference">
+<h1>Tequila Library Reference<a class="headerlink" href="#tequila-library-reference" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hamiltonian.html">Hamiltonian</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hamiltonian.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hamiltonian.html#module-tequila_code.hamiltonian.paulis">paulis module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hamiltonian.html#tequila_code.hamiltonian.paulis.I"><code class="docutils literal notranslate"><span class="pre">I()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hamiltonian.html#tequila_code.hamiltonian.paulis.KetBra"><code class="docutils literal notranslate"><span class="pre">KetBra()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hamiltonian.html#tequila_code.hamiltonian.paulis.Projector"><code class="docutils literal notranslate"><span class="pre">Projector()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hamiltonian.html#tequila_code.hamiltonian.paulis.Qm"><code class="docutils literal notranslate"><span class="pre">Qm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hamiltonian.html#tequila_code.hamiltonian.paulis.Qp"><code class="docutils literal notranslate"><span class="pre">Qp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hamiltonian.html#tequila_code.hamiltonian.paulis.Sm"><code class="docutils literal notranslate"><span class="pre">Sm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hamiltonian.html#tequila_code.hamiltonian.paulis.Sp"><code class="docutils literal notranslate"><span class="pre">Sp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hamiltonian.html#tequila_code.hamiltonian.paulis.X"><code class="docutils literal notranslate"><span class="pre">X()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hamiltonian.html#tequila_code.hamiltonian.paulis.Y"><code class="docutils literal notranslate"><span class="pre">Y()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hamiltonian.html#tequila_code.hamiltonian.paulis.Z"><code class="docutils literal notranslate"><span class="pre">Z()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hamiltonian.html#tequila_code.hamiltonian.paulis.Zero"><code class="docutils literal notranslate"><span class="pre">Zero()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hamiltonian.html#tequila_code.hamiltonian.paulis.decompose_transfer_operator"><code class="docutils literal notranslate"><span class="pre">decompose_transfer_operator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hamiltonian.html#tequila_code.hamiltonian.paulis.from_string"><code class="docutils literal notranslate"><span class="pre">from_string()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hamiltonian.html#tequila_code.hamiltonian.paulis.pauli"><code class="docutils literal notranslate"><span class="pre">pauli()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hamiltonian.html#module-tequila_code.hamiltonian.paulistring">paulistring module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hamiltonian.html#qubit-hamiltonian-module">qubit-hamiltonian module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hamiltonian.html#module-tequila_code.hamiltonian">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="circuit.html">Circuit</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="circuit.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="circuit.html#module-tequila_code.circuit.circuit">circuit module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.Moment"><code class="docutils literal notranslate"><span class="pre">Moment</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.Moment.add_gate"><code class="docutils literal notranslate"><span class="pre">Moment.add_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.Moment.as_circuit"><code class="docutils literal notranslate"><span class="pre">Moment.as_circuit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.Moment.canonical_depth"><code class="docutils literal notranslate"><span class="pre">Moment.canonical_depth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.Moment.canonical_moments"><code class="docutils literal notranslate"><span class="pre">Moment.canonical_moments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.Moment.depth"><code class="docutils literal notranslate"><span class="pre">Moment.depth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.Moment.from_moments"><code class="docutils literal notranslate"><span class="pre">Moment.from_moments()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.Moment.fully_parametrized"><code class="docutils literal notranslate"><span class="pre">Moment.fully_parametrized()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.Moment.moments"><code class="docutils literal notranslate"><span class="pre">Moment.moments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.Moment.replace_gate"><code class="docutils literal notranslate"><span class="pre">Moment.replace_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.Moment.with_gate"><code class="docutils literal notranslate"><span class="pre">Moment.with_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.Moment.with_gates"><code class="docutils literal notranslate"><span class="pre">Moment.with_gates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.Moment.wrap_gate"><code class="docutils literal notranslate"><span class="pre">Moment.wrap_gate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit"><code class="docutils literal notranslate"><span class="pre">QCircuit</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.canonical_depth"><code class="docutils literal notranslate"><span class="pre">QCircuit.canonical_depth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.canonical_moments"><code class="docutils literal notranslate"><span class="pre">QCircuit.canonical_moments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.depth"><code class="docutils literal notranslate"><span class="pre">QCircuit.depth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.gates"><code class="docutils literal notranslate"><span class="pre">QCircuit.gates</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.moments"><code class="docutils literal notranslate"><span class="pre">QCircuit.moments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.n_qubits"><code class="docutils literal notranslate"><span class="pre">QCircuit.n_qubits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.numbering"><code class="docutils literal notranslate"><span class="pre">QCircuit.numbering</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.qubits"><code class="docutils literal notranslate"><span class="pre">QCircuit.qubits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.add_controls"><code class="docutils literal notranslate"><span class="pre">QCircuit.add_controls()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#id0"><code class="docutils literal notranslate"><span class="pre">QCircuit.canonical_depth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#id1"><code class="docutils literal notranslate"><span class="pre">QCircuit.canonical_moments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.dagger"><code class="docutils literal notranslate"><span class="pre">QCircuit.dagger()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#id2"><code class="docutils literal notranslate"><span class="pre">QCircuit.depth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.export_to"><code class="docutils literal notranslate"><span class="pre">QCircuit.export_to()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.extract_variables"><code class="docutils literal notranslate"><span class="pre">QCircuit.extract_variables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.from_moments"><code class="docutils literal notranslate"><span class="pre">QCircuit.from_moments()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#id3"><code class="docutils literal notranslate"><span class="pre">QCircuit.gates</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.insert_gates"><code class="docutils literal notranslate"><span class="pre">QCircuit.insert_gates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.is_fully_parametrized"><code class="docutils literal notranslate"><span class="pre">QCircuit.is_fully_parametrized()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.is_fully_unparametrized"><code class="docutils literal notranslate"><span class="pre">QCircuit.is_fully_unparametrized()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.is_mixed"><code class="docutils literal notranslate"><span class="pre">QCircuit.is_mixed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.is_primitive"><code class="docutils literal notranslate"><span class="pre">QCircuit.is_primitive()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.make_parameter_map"><code class="docutils literal notranslate"><span class="pre">QCircuit.make_parameter_map()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.map_qubits"><code class="docutils literal notranslate"><span class="pre">QCircuit.map_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.map_variables"><code class="docutils literal notranslate"><span class="pre">QCircuit.map_variables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.max_qubit"><code class="docutils literal notranslate"><span class="pre">QCircuit.max_qubit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#id4"><code class="docutils literal notranslate"><span class="pre">QCircuit.moments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#id5"><code class="docutils literal notranslate"><span class="pre">QCircuit.n_qubits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#id6"><code class="docutils literal notranslate"><span class="pre">QCircuit.numbering</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#id7"><code class="docutils literal notranslate"><span class="pre">QCircuit.qubits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.replace_gates"><code class="docutils literal notranslate"><span class="pre">QCircuit.replace_gates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.sort_gates"><code class="docutils literal notranslate"><span class="pre">QCircuit.sort_gates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.to_networkx"><code class="docutils literal notranslate"><span class="pre">QCircuit.to_networkx()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.verify"><code class="docutils literal notranslate"><span class="pre">QCircuit.verify()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.QCircuit.wrap_gate"><code class="docutils literal notranslate"><span class="pre">QCircuit.wrap_gate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.circuit.find_unused_qubit"><code class="docutils literal notranslate"><span class="pre">find_unused_qubit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="circuit.html#module-tequila_code.circuit.compiler">compiler module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.CircuitCompiler"><code class="docutils literal notranslate"><span class="pre">CircuitCompiler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.CircuitCompiler.compile_objective"><code class="docutils literal notranslate"><span class="pre">CircuitCompiler.compile_objective()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.CircuitCompiler.compile_objective_argument"><code class="docutils literal notranslate"><span class="pre">CircuitCompiler.compile_objective_argument()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.CircuitCompiler.all_flags_true"><code class="docutils literal notranslate"><span class="pre">CircuitCompiler.all_flags_true()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.CircuitCompiler.compile_circuit"><code class="docutils literal notranslate"><span class="pre">CircuitCompiler.compile_circuit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#id8"><code class="docutils literal notranslate"><span class="pre">CircuitCompiler.compile_objective()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#id9"><code class="docutils literal notranslate"><span class="pre">CircuitCompiler.compile_objective_argument()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.CircuitCompiler.standard_gate_set"><code class="docutils literal notranslate"><span class="pre">CircuitCompiler.standard_gate_set()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.TequilaCompilerException"><code class="docutils literal notranslate"><span class="pre">TequilaCompilerException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.change_basis"><code class="docutils literal notranslate"><span class="pre">change_basis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.compile_ch"><code class="docutils literal notranslate"><span class="pre">compile_ch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.compile_controlled_phase"><code class="docutils literal notranslate"><span class="pre">compile_controlled_phase()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.compile_controlled_power"><code class="docutils literal notranslate"><span class="pre">compile_controlled_power()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.compile_controlled_rotation"><code class="docutils literal notranslate"><span class="pre">compile_controlled_rotation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.compile_exponential_pauli_gate"><code class="docutils literal notranslate"><span class="pre">compile_exponential_pauli_gate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.compile_generalized_rotation_gate"><code class="docutils literal notranslate"><span class="pre">compile_generalized_rotation_gate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.compile_multitarget"><code class="docutils literal notranslate"><span class="pre">compile_multitarget()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.compile_phase"><code class="docutils literal notranslate"><span class="pre">compile_phase()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.compile_phase_to_z"><code class="docutils literal notranslate"><span class="pre">compile_phase_to_z()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.compile_power_base"><code class="docutils literal notranslate"><span class="pre">compile_power_base()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.compile_power_gate"><code class="docutils literal notranslate"><span class="pre">compile_power_gate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.compile_ry"><code class="docutils literal notranslate"><span class="pre">compile_ry()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.compile_swap"><code class="docutils literal notranslate"><span class="pre">compile_swap()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.compile_to_single_control"><code class="docutils literal notranslate"><span class="pre">compile_to_single_control()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.compile_toffoli"><code class="docutils literal notranslate"><span class="pre">compile_toffoli()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.compile_trotterized_gate"><code class="docutils literal notranslate"><span class="pre">compile_trotterized_gate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.compile_y"><code class="docutils literal notranslate"><span class="pre">compile_y()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.compiler"><code class="docutils literal notranslate"><span class="pre">compiler()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compiler.do_compile_trotterized_gate"><code class="docutils literal notranslate"><span class="pre">do_compile_trotterized_gate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="circuit.html#module-tequila_code.circuit.gates">gates module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.CNOT"><code class="docutils literal notranslate"><span class="pre">CNOT()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.CRx"><code class="docutils literal notranslate"><span class="pre">CRx()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.CRy"><code class="docutils literal notranslate"><span class="pre">CRy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.CRz"><code class="docutils literal notranslate"><span class="pre">CRz()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.CX"><code class="docutils literal notranslate"><span class="pre">CX()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.CY"><code class="docutils literal notranslate"><span class="pre">CY()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.CZ"><code class="docutils literal notranslate"><span class="pre">CZ()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.ExpPauli"><code class="docutils literal notranslate"><span class="pre">ExpPauli()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.GenRot"><code class="docutils literal notranslate"><span class="pre">GenRot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.GeneralizedRotation"><code class="docutils literal notranslate"><span class="pre">GeneralizedRotation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.Givens"><code class="docutils literal notranslate"><span class="pre">Givens()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.H"><code class="docutils literal notranslate"><span class="pre">H()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.PauliGate"><code class="docutils literal notranslate"><span class="pre">PauliGate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.Phase"><code class="docutils literal notranslate"><span class="pre">Phase()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.PowerGate"><code class="docutils literal notranslate"><span class="pre">PowerGate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.QGate"><code class="docutils literal notranslate"><span class="pre">QGate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.QubitExcitation"><code class="docutils literal notranslate"><span class="pre">QubitExcitation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.QubitExcitationImpl"><code class="docutils literal notranslate"><span class="pre">QubitExcitationImpl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.QubitExcitationImpl.compile"><code class="docutils literal notranslate"><span class="pre">QubitExcitationImpl.compile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.QubitExcitationImpl.map_qubits"><code class="docutils literal notranslate"><span class="pre">QubitExcitationImpl.map_qubits()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.RotationGate"><code class="docutils literal notranslate"><span class="pre">RotationGate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.Rp"><code class="docutils literal notranslate"><span class="pre">Rp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.Rx"><code class="docutils literal notranslate"><span class="pre">Rx()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.Ry"><code class="docutils literal notranslate"><span class="pre">Ry()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.Rz"><code class="docutils literal notranslate"><span class="pre">Rz()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.S"><code class="docutils literal notranslate"><span class="pre">S()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.SWAP"><code class="docutils literal notranslate"><span class="pre">SWAP()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.T"><code class="docutils literal notranslate"><span class="pre">T()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.Toffoli"><code class="docutils literal notranslate"><span class="pre">Toffoli()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.Trotterized"><code class="docutils literal notranslate"><span class="pre">Trotterized()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.U"><code class="docutils literal notranslate"><span class="pre">U()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.X"><code class="docutils literal notranslate"><span class="pre">X()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.Y"><code class="docutils literal notranslate"><span class="pre">Y()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.Z"><code class="docutils literal notranslate"><span class="pre">Z()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.iSWAP"><code class="docutils literal notranslate"><span class="pre">iSWAP()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.u1"><code class="docutils literal notranslate"><span class="pre">u1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.u2"><code class="docutils literal notranslate"><span class="pre">u2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gates.u3"><code class="docutils literal notranslate"><span class="pre">u3()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="circuit.html#module-tequila_code.circuit.gradient">gradient module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.gradient.grad"><code class="docutils literal notranslate"><span class="pre">grad()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="circuit.html#module-tequila_code.circuit.noise">noise module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.noise.AmplitudeDamp"><code class="docutils literal notranslate"><span class="pre">AmplitudeDamp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.noise.BitFlip"><code class="docutils literal notranslate"><span class="pre">BitFlip()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.noise.DepolarizingError"><code class="docutils literal notranslate"><span class="pre">DepolarizingError()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.noise.NoiseModel"><code class="docutils literal notranslate"><span class="pre">NoiseModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.noise.NoiseModel.noises"><code class="docutils literal notranslate"><span class="pre">NoiseModel.noises</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.noise.NoiseModel.without_noise_on_level"><code class="docutils literal notranslate"><span class="pre">NoiseModel.without_noise_on_level()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.noise.NoiseModel.without_noise_op"><code class="docutils literal notranslate"><span class="pre">NoiseModel.without_noise_op()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.noise.NoiseModel.wrap_noise"><code class="docutils literal notranslate"><span class="pre">NoiseModel.wrap_noise()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.noise.PhaseAmplitudeDamp"><code class="docutils literal notranslate"><span class="pre">PhaseAmplitudeDamp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.noise.PhaseDamp"><code class="docutils literal notranslate"><span class="pre">PhaseDamp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.noise.PhaseFlip"><code class="docutils literal notranslate"><span class="pre">PhaseFlip()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.noise.QuantumNoise"><code class="docutils literal notranslate"><span class="pre">QuantumNoise</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.noise.QuantumNoise.name"><code class="docutils literal notranslate"><span class="pre">QuantumNoise.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.noise.QuantumNoise.probs"><code class="docutils literal notranslate"><span class="pre">QuantumNoise.probs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.noise.QuantumNoise.level"><code class="docutils literal notranslate"><span class="pre">QuantumNoise.level</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.noise.QuantumNoise.from_dict"><code class="docutils literal notranslate"><span class="pre">QuantumNoise.from_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#id10"><code class="docutils literal notranslate"><span class="pre">QuantumNoise.level</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#id11"><code class="docutils literal notranslate"><span class="pre">QuantumNoise.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="circuit.html#tequila_code.circuit.noise.QuantumNoise.prob_length"><code class="docutils literal notranslate"><span class="pre">QuantumNoise.prob_length</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="circuit.html#module-tequila_code.circuit.pyzx">pyzx module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.pyzx.convert_from_pyzx"><code class="docutils literal notranslate"><span class="pre">convert_from_pyzx()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.pyzx.convert_to_pyzx"><code class="docutils literal notranslate"><span class="pre">convert_to_pyzx()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="circuit.html#module-tequila_code.circuit.qasm">qasm module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.qasm.apply_custom_gate"><code class="docutils literal notranslate"><span class="pre">apply_custom_gate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.qasm.convert_to_open_qasm_2"><code class="docutils literal notranslate"><span class="pre">convert_to_open_qasm_2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.qasm.export_open_qasm"><code class="docutils literal notranslate"><span class="pre">export_open_qasm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.qasm.get_angle"><code class="docutils literal notranslate"><span class="pre">get_angle()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.qasm.get_qregister"><code class="docutils literal notranslate"><span class="pre">get_qregister()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.qasm.import_open_qasm"><code class="docutils literal notranslate"><span class="pre">import_open_qasm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.qasm.import_open_qasm_from_file"><code class="docutils literal notranslate"><span class="pre">import_open_qasm_from_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.qasm.name_and_params"><code class="docutils literal notranslate"><span class="pre">name_and_params()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.qasm.parse_command"><code class="docutils literal notranslate"><span class="pre">parse_command()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.qasm.parse_custom_gate"><code class="docutils literal notranslate"><span class="pre">parse_custom_gate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.qasm.parse_from_open_qasm_2"><code class="docutils literal notranslate"><span class="pre">parse_from_open_qasm_2()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="circuit.html#module-tequila_code.circuit.qpic">qpic module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.qpic.assign_name"><code class="docutils literal notranslate"><span class="pre">assign_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.qpic.export_to"><code class="docutils literal notranslate"><span class="pre">export_to()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.qpic.export_to_qpic"><code class="docutils literal notranslate"><span class="pre">export_to_qpic()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="circuit.html#module-tequila_code.circuit">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="circuit.html#tequila_code.circuit.compile_circuit"><code class="docutils literal notranslate"><span class="pre">compile_circuit()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="optimizers.html">Optimizers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="optimizers.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimizers.html#module-tequila_code.optimizers.optimizer_base">optimizer base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer"><code class="docutils literal notranslate"><span class="pre">Optimizer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer.backend"><code class="docutils literal notranslate"><span class="pre">Optimizer.backend</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer.maxiter"><code class="docutils literal notranslate"><span class="pre">Optimizer.maxiter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer.silent"><code class="docutils literal notranslate"><span class="pre">Optimizer.silent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer.samples"><code class="docutils literal notranslate"><span class="pre">Optimizer.samples</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer.print_level"><code class="docutils literal notranslate"><span class="pre">Optimizer.print_level</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer.save_history"><code class="docutils literal notranslate"><span class="pre">Optimizer.save_history</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer.history"><code class="docutils literal notranslate"><span class="pre">Optimizer.history</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer.noise"><code class="docutils literal notranslate"><span class="pre">Optimizer.noise</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer.device"><code class="docutils literal notranslate"><span class="pre">Optimizer.device</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer.compile_gradient"><code class="docutils literal notranslate"><span class="pre">Optimizer.compile_gradient()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer.compile_hessian"><code class="docutils literal notranslate"><span class="pre">Optimizer.compile_hessian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer.compile_objective"><code class="docutils literal notranslate"><span class="pre">Optimizer.compile_objective()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer.initialize_variables"><code class="docutils literal notranslate"><span class="pre">Optimizer.initialize_variables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer.reset_history"><code class="docutils literal notranslate"><span class="pre">Optimizer.reset_history()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerHistory"><code class="docutils literal notranslate"><span class="pre">OptimizerHistory</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerHistory.angles"><code class="docutils literal notranslate"><span class="pre">OptimizerHistory.angles</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerHistory.angles_calls"><code class="docutils literal notranslate"><span class="pre">OptimizerHistory.angles_calls</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerHistory.energies"><code class="docutils literal notranslate"><span class="pre">OptimizerHistory.energies</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerHistory.energies_calls"><code class="docutils literal notranslate"><span class="pre">OptimizerHistory.energies_calls</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerHistory.energies_evaluations"><code class="docutils literal notranslate"><span class="pre">OptimizerHistory.energies_evaluations</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerHistory.energy_calls"><code class="docutils literal notranslate"><span class="pre">OptimizerHistory.energy_calls</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerHistory.extract_angles"><code class="docutils literal notranslate"><span class="pre">OptimizerHistory.extract_angles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerHistory.extract_energies"><code class="docutils literal notranslate"><span class="pre">OptimizerHistory.extract_energies()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerHistory.extract_gradients"><code class="docutils literal notranslate"><span class="pre">OptimizerHistory.extract_gradients()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerHistory.gradient_calls"><code class="docutils literal notranslate"><span class="pre">OptimizerHistory.gradient_calls</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerHistory.gradients"><code class="docutils literal notranslate"><span class="pre">OptimizerHistory.gradients</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerHistory.iterations"><code class="docutils literal notranslate"><span class="pre">OptimizerHistory.iterations</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerHistory.plot"><code class="docutils literal notranslate"><span class="pre">OptimizerHistory.plot()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerResults"><code class="docutils literal notranslate"><span class="pre">OptimizerResults</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerResults.angles"><code class="docutils literal notranslate"><span class="pre">OptimizerResults.angles</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerResults.energy"><code class="docutils literal notranslate"><span class="pre">OptimizerResults.energy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerResults.history"><code class="docutils literal notranslate"><span class="pre">OptimizerResults.history</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerResults.variables"><code class="docutils literal notranslate"><span class="pre">OptimizerResults.variables</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_base.TequilaOptimizerException"><code class="docutils literal notranslate"><span class="pre">TequilaOptimizerException</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="optimizers.html#module-tequila_code.optimizers.optimizer_gd">optimizer gradient module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.DIIS"><code class="docutils literal notranslate"><span class="pre">DIIS</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.DIIS.do_diis"><code class="docutils literal notranslate"><span class="pre">DIIS.do_diis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.DIIS.drop_error"><code class="docutils literal notranslate"><span class="pre">DIIS.drop_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.DIIS.drop_first"><code class="docutils literal notranslate"><span class="pre">DIIS.drop_first()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.DIIS.push"><code class="docutils literal notranslate"><span class="pre">DIIS.push()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.DIIS.reset"><code class="docutils literal notranslate"><span class="pre">DIIS.reset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.DIIS.update"><code class="docutils literal notranslate"><span class="pre">DIIS.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.GDResults"><code class="docutils literal notranslate"><span class="pre">GDResults</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.GDResults.moments"><code class="docutils literal notranslate"><span class="pre">GDResults.moments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.GDResults.num_iteration"><code class="docutils literal notranslate"><span class="pre">GDResults.num_iteration</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD"><code class="docutils literal notranslate"><span class="pre">OptimizerGD</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.f"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.f</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.gradient_lookup"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.gradient_lookup</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.active_key_lookup"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.active_key_lookup</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.moments_lookup"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.moments_lookup</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.moments_trajectory"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.moments_trajectory</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.step_lookup"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.step_lookup</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.diis"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.diis</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.lr"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.lr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.alpha"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.alpha</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.gamma"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.gamma</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.beta"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.beta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.rho"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.rho</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.c"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.c</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.epsilon"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.epsilon</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.tol"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.tol</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.calibrate_lr"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.calibrate_lr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.iteration"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.iteration</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.available_diis"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.available_diis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.available_methods"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.available_methods()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.nextLearningRate"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.nextLearningRate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.prepare"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.prepare()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.reset_momenta"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.reset_momenta()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.reset_momenta_for"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.reset_momenta_for()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.reset_stepper"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.reset_stepper()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.OptimizerGD.step"><code class="docutils literal notranslate"><span class="pre">OptimizerGD.step()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_gd.minimize"><code class="docutils literal notranslate"><span class="pre">minimize()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="optimizers.html#optimizer-gpyopt-module">optimizer gpyopt module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimizers.html#module-tequila_code.optimizers.optimizer_scipy">optimizer scipy module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy"><code class="docutils literal notranslate"><span class="pre">OptimizerSciPy</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.method"><code class="docutils literal notranslate"><span class="pre">OptimizerSciPy.method</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.tol"><code class="docutils literal notranslate"><span class="pre">OptimizerSciPy.tol</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.method_options"><code class="docutils literal notranslate"><span class="pre">OptimizerSciPy.method_options</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.method_bounds"><code class="docutils literal notranslate"><span class="pre">OptimizerSciPy.method_bounds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.method_constraints"><code class="docutils literal notranslate"><span class="pre">OptimizerSciPy.method_constraints</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.silent"><code class="docutils literal notranslate"><span class="pre">OptimizerSciPy.silent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.available_methods"><code class="docutils literal notranslate"><span class="pre">OptimizerSciPy.available_methods()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.gradient_based_methods"><code class="docutils literal notranslate"><span class="pre">OptimizerSciPy.gradient_based_methods</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.gradient_free_methods"><code class="docutils literal notranslate"><span class="pre">OptimizerSciPy.gradient_free_methods</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.hessian_based_methods"><code class="docutils literal notranslate"><span class="pre">OptimizerSciPy.hessian_based_methods</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_scipy.SciPyResults"><code class="docutils literal notranslate"><span class="pre">SciPyResults</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_scipy.SciPyResults.scipy_result"><code class="docutils literal notranslate"><span class="pre">SciPyResults.scipy_result</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_scipy.TequilaScipyException"><code class="docutils literal notranslate"><span class="pre">TequilaScipyException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_scipy.available_methods"><code class="docutils literal notranslate"><span class="pre">available_methods()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.optimizer_scipy.minimize"><code class="docutils literal notranslate"><span class="pre">minimize()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="optimizers.html#module-tequila_code.optimizers">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.minimize"><code class="docutils literal notranslate"><span class="pre">minimize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="optimizers.html#tequila_code.optimizers.show_available_optimizers"><code class="docutils literal notranslate"><span class="pre">show_available_optimizers()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="simulators.html">Simulators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="simulators.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulators.html#module-tequila_code.simulators.simulator_api">simulator api module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_api.BackendTypes"><code class="docutils literal notranslate"><span class="pre">BackendTypes</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_api.BackendTypes.CircType"><code class="docutils literal notranslate"><span class="pre">BackendTypes.CircType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_api.BackendTypes.ExpValueType"><code class="docutils literal notranslate"><span class="pre">BackendTypes.ExpValueType</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_api.compile"><code class="docutils literal notranslate"><span class="pre">compile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_api.compile_circuit"><code class="docutils literal notranslate"><span class="pre">compile_circuit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_api.compile_objective"><code class="docutils literal notranslate"><span class="pre">compile_objective()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_api.compile_to_function"><code class="docutils literal notranslate"><span class="pre">compile_to_function()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_api.draw"><code class="docutils literal notranslate"><span class="pre">draw()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_api.pick_backend"><code class="docutils literal notranslate"><span class="pre">pick_backend()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_api.show_available_simulators"><code class="docutils literal notranslate"><span class="pre">show_available_simulators()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_api.simulate"><code class="docutils literal notranslate"><span class="pre">simulate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simulators.html#module-tequila_code.simulators.simulator_base">simulator base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit"><code class="docutils literal notranslate"><span class="pre">BackendCircuit</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.no_translation"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.no_translation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.abstract_circuit"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.abstract_circuit</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.circuit"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.circuit</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.compiler_arguments"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.compiler_arguments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.device"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.device</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.n_qubits"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.n_qubits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.noise"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.noise</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.qubit_map"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.qubit_map</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.qubits"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.qubits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.create_circuit"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.create_circuit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.add_parametrized_gate"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.add_parametrized_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.add_basic_gate"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.add_basic_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.add_measurement"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.add_measurement()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.abstract_qubits"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.abstract_qubits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#id0"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.add_basic_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#id1"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.add_measurement()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#id2"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.add_parametrized_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.check_device"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.check_device()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#id3"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.compiler_arguments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.convert_measurements"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.convert_measurements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#id4"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.create_circuit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.do_sample"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.do_sample()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.do_simulate"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.do_simulate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.extract_variables"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.extract_variables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.initialize_circuit"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.initialize_circuit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.initialize_qubit"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.initialize_qubit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.make_qubit_map"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.make_qubit_map()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#id5"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.n_qubits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.optimize_circuit"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.optimize_circuit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.qubit"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.qubit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.retrieve_device"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.retrieve_device()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.sample"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.sample()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.sample_all_z_hamiltonian"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.sample_all_z_hamiltonian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.sample_paulistring"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.sample_paulistring()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.simulate"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.simulate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendCircuit.update_variables"><code class="docutils literal notranslate"><span class="pre">BackendCircuit.update_variables()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.H"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.H</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.abstract_H"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.abstract_H</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.n_qubits"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.n_qubits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.U"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.U</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.initialize_hamiltonian"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.initialize_hamiltonian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.initialize_unitary"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.initialize_unitary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.sample_paulistring"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.sample_paulistring()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.update_variables"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.update_variables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.BackendCircuitType"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.BackendCircuitType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#id6"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.H</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#id7"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.U</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.count_measurements"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.count_measurements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.extract_variables"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.extract_variables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#id8"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.initialize_hamiltonian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#id9"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.initialize_unitary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#id10"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.n_qubits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.reduce_hamiltonians"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.reduce_hamiltonians()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.sample"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.sample()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.simulate"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.simulate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#id11"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.update_variables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_base.BackendExpectationValue.use_mapping"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValue.use_mapping</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simulators.html#simulator-cirq-module">simulator cirq module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulators.html#simulator-pyquil-module">simulator pyquil module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulators.html#simulator-qibo-module">simulator qibo module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulators.html#simulator-qiskit-module">simulator qiskit module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulators.html#simulator-qlm-module">simulator qlm module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulators.html#module-tequila_code.simulators.simulator_qulacs">simulator qulacs module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.counter"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs.counter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.has_noise"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs.has_noise</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.noise_lookup"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs.noise_lookup</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.op_lookup"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs.op_lookup</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.variables"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs.variables</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_basic_gate"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs.add_basic_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_exponential_pauli_gate"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs.add_exponential_pauli_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_measurement"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs.add_measurement()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_noise_to_circuit"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs.add_noise_to_circuit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_parametrized_gate"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs.add_parametrized_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.compiler_arguments"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs.compiler_arguments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.convert_measurements"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs.convert_measurements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.do_sample"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs.do_sample()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.do_simulate"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs.do_simulate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.initialize_circuit"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs.initialize_circuit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.initialize_state"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs.initialize_state()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.no_translation"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs.no_translation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.numbering"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs.numbering</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.optimize_circuit"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs.optimize_circuit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.update_variables"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacs.update_variables()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValueQulacs</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.BackendCircuitType"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValueQulacs.BackendCircuitType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.initialize_hamiltonian"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValueQulacs.initialize_hamiltonian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.sample"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValueQulacs.sample()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.simulate"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValueQulacs.simulate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.use_mapping"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValueQulacs.use_mapping</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs.TequilaQulacsException"><code class="docutils literal notranslate"><span class="pre">TequilaQulacsException</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simulators.html#module-tequila_code.simulators.simulator_qulacs_gpu">simulator qulacs gpu module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs_gpu.BackendCircuitQulacsGpu"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacsGpu</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs_gpu.BackendCircuitQulacsGpu.initialize_state"><code class="docutils literal notranslate"><span class="pre">BackendCircuitQulacsGpu.initialize_state()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs_gpu.BackendExpectationValueQulacsGpu"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValueQulacsGpu</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs_gpu.BackendExpectationValueQulacsGpu.BackendCircuitType"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValueQulacsGpu.BackendCircuitType</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_qulacs_gpu.TequilaQulacsGpuException"><code class="docutils literal notranslate"><span class="pre">TequilaQulacsGpuException</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simulators.html#module-tequila_code.simulators.simulator_symbolic">simulator symbolic module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic"><code class="docutils literal notranslate"><span class="pre">BackendCircuitSymbolic</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.apply_gate"><code class="docutils literal notranslate"><span class="pre">BackendCircuitSymbolic.apply_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.apply_on_standard_basis"><code class="docutils literal notranslate"><span class="pre">BackendCircuitSymbolic.apply_on_standard_basis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.compiler_arguments"><code class="docutils literal notranslate"><span class="pre">BackendCircuitSymbolic.compiler_arguments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.convert_to_numpy"><code class="docutils literal notranslate"><span class="pre">BackendCircuitSymbolic.convert_to_numpy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.create_circuit"><code class="docutils literal notranslate"><span class="pre">BackendCircuitSymbolic.create_circuit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.do_simulate"><code class="docutils literal notranslate"><span class="pre">BackendCircuitSymbolic.do_simulate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.update_variables"><code class="docutils literal notranslate"><span class="pre">BackendCircuitSymbolic.update_variables()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_symbolic.BackendExpectationValueSymbolic"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValueSymbolic</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simulators.html#tequila_code.simulators.simulator_symbolic.BackendExpectationValueSymbolic.BackendCircuitType"><code class="docutils literal notranslate"><span class="pre">BackendExpectationValueSymbolic.BackendCircuitType</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simulators.html#module-tequila_code.simulators">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quantumchemistry.html">Quantum Chemistry</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quantumchemistry.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantumchemistry.html#module-tequila_code.quantumchemistry.chemistry_tools">chemistry tools module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ActiveSpaceData"><code class="docutils literal notranslate"><span class="pre">ActiveSpaceData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ActiveSpaceData.active_orbitals"><code class="docutils literal notranslate"><span class="pre">ActiveSpaceData.active_orbitals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ActiveSpaceData.active_reference_orbitals"><code class="docutils literal notranslate"><span class="pre">ActiveSpaceData.active_reference_orbitals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ActiveSpaceData.frozen_reference_orbitals"><code class="docutils literal notranslate"><span class="pre">ActiveSpaceData.frozen_reference_orbitals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ActiveSpaceData.reference_orbitals"><code class="docutils literal notranslate"><span class="pre">ActiveSpaceData.reference_orbitals</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.Amplitudes"><code class="docutils literal notranslate"><span class="pre">Amplitudes</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.Amplitudes.from_closed_shell"><code class="docutils literal notranslate"><span class="pre">Amplitudes.from_closed_shell()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.Amplitudes.make_parameter_dictionary"><code class="docutils literal notranslate"><span class="pre">Amplitudes.make_parameter_dictionary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.Amplitudes.tIA"><code class="docutils literal notranslate"><span class="pre">Amplitudes.tIA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.Amplitudes.tIJAB"><code class="docutils literal notranslate"><span class="pre">Amplitudes.tIJAB</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.Amplitudes.tIjAb"><code class="docutils literal notranslate"><span class="pre">Amplitudes.tIjAb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.Amplitudes.tiJaB"><code class="docutils literal notranslate"><span class="pre">Amplitudes.tiJaB</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.Amplitudes.tia"><code class="docutils literal notranslate"><span class="pre">Amplitudes.tia</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.Amplitudes.tijab"><code class="docutils literal notranslate"><span class="pre">Amplitudes.tijab</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ClosedShellAmplitudes"><code class="docutils literal notranslate"><span class="pre">ClosedShellAmplitudes</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ClosedShellAmplitudes.make_parameter_dictionary"><code class="docutils literal notranslate"><span class="pre">ClosedShellAmplitudes.make_parameter_dictionary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ClosedShellAmplitudes.tIA"><code class="docutils literal notranslate"><span class="pre">ClosedShellAmplitudes.tIA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ClosedShellAmplitudes.tIjAb"><code class="docutils literal notranslate"><span class="pre">ClosedShellAmplitudes.tIjAb</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.FermionicGateImpl"><code class="docutils literal notranslate"><span class="pre">FermionicGateImpl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.FermionicGateImpl.cCRy"><code class="docutils literal notranslate"><span class="pre">FermionicGateImpl.cCRy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.FermionicGateImpl.compile"><code class="docutils literal notranslate"><span class="pre">FermionicGateImpl.compile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.FermionicGateImpl.fermionic_excitation"><code class="docutils literal notranslate"><span class="pre">FermionicGateImpl.fermionic_excitation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.FermionicGateImpl.format_excitation_indices"><code class="docutils literal notranslate"><span class="pre">FermionicGateImpl.format_excitation_indices()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.FermionicGateImpl.format_excitation_variables"><code class="docutils literal notranslate"><span class="pre">FermionicGateImpl.format_excitation_variables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.FermionicGateImpl.is_convertable_to_qubit_excitation"><code class="docutils literal notranslate"><span class="pre">FermionicGateImpl.is_convertable_to_qubit_excitation()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager"><code class="docutils literal notranslate"><span class="pre">IntegralManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.active_orbitals"><code class="docutils literal notranslate"><span class="pre">IntegralManager.active_orbitals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.active_reference_orbitals"><code class="docutils literal notranslate"><span class="pre">IntegralManager.active_reference_orbitals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.active_space"><code class="docutils literal notranslate"><span class="pre">IntegralManager.active_space</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.active_space_is_trivial"><code class="docutils literal notranslate"><span class="pre">IntegralManager.active_space_is_trivial()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.basis_is_orthogonal"><code class="docutils literal notranslate"><span class="pre">IntegralManager.basis_is_orthogonal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.constant_term"><code class="docutils literal notranslate"><span class="pre">IntegralManager.constant_term</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.get_integrals"><code class="docutils literal notranslate"><span class="pre">IntegralManager.get_integrals()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.get_orthonormalized_orbital_coefficients"><code class="docutils literal notranslate"><span class="pre">IntegralManager.get_orthonormalized_orbital_coefficients()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.is_unitary"><code class="docutils literal notranslate"><span class="pre">IntegralManager.is_unitary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.one_body_integrals"><code class="docutils literal notranslate"><span class="pre">IntegralManager.one_body_integrals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.orbital_coefficients"><code class="docutils literal notranslate"><span class="pre">IntegralManager.orbital_coefficients</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.orbitals"><code class="docutils literal notranslate"><span class="pre">IntegralManager.orbitals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.overlap_integrals"><code class="docutils literal notranslate"><span class="pre">IntegralManager.overlap_integrals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.print_basis_info"><code class="docutils literal notranslate"><span class="pre">IntegralManager.print_basis_info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.reference_orbitals"><code class="docutils literal notranslate"><span class="pre">IntegralManager.reference_orbitals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.transform_orbitals"><code class="docutils literal notranslate"><span class="pre">IntegralManager.transform_orbitals()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.transform_to_native_orbitals"><code class="docutils literal notranslate"><span class="pre">IntegralManager.transform_to_native_orbitals()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.two_body_integrals"><code class="docutils literal notranslate"><span class="pre">IntegralManager.two_body_integrals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.verify_orbital_coefficients"><code class="docutils literal notranslate"><span class="pre">IntegralManager.verify_orbital_coefficients()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor"><code class="docutils literal notranslate"><span class="pre">NBodyTensor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.Ordering"><code class="docutils literal notranslate"><span class="pre">NBodyTensor.Ordering</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.Ordering.assign_scheme"><code class="docutils literal notranslate"><span class="pre">NBodyTensor.Ordering.assign_scheme()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.Ordering.is_chem"><code class="docutils literal notranslate"><span class="pre">NBodyTensor.Ordering.is_chem()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.Ordering.is_of"><code class="docutils literal notranslate"><span class="pre">NBodyTensor.Ordering.is_of()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.Ordering.is_phys"><code class="docutils literal notranslate"><span class="pre">NBodyTensor.Ordering.is_phys()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.identify_ordering"><code class="docutils literal notranslate"><span class="pre">NBodyTensor.identify_ordering()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.reorder"><code class="docutils literal notranslate"><span class="pre">NBodyTensor.reorder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.set_index_lists"><code class="docutils literal notranslate"><span class="pre">NBodyTensor.set_index_lists()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.shape"><code class="docutils literal notranslate"><span class="pre">NBodyTensor.shape</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.sub_lists"><code class="docutils literal notranslate"><span class="pre">NBodyTensor.sub_lists()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.sub_str"><code class="docutils literal notranslate"><span class="pre">NBodyTensor.sub_str()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.OrbitalData"><code class="docutils literal notranslate"><span class="pre">OrbitalData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.OrbitalData.energy"><code class="docutils literal notranslate"><span class="pre">OrbitalData.energy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.OrbitalData.idx"><code class="docutils literal notranslate"><span class="pre">OrbitalData.idx</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.OrbitalData.idx_irrep"><code class="docutils literal notranslate"><span class="pre">OrbitalData.idx_irrep</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.OrbitalData.idx_total"><code class="docutils literal notranslate"><span class="pre">OrbitalData.idx_total</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.OrbitalData.irrep"><code class="docutils literal notranslate"><span class="pre">OrbitalData.irrep</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.OrbitalData.occ"><code class="docutils literal notranslate"><span class="pre">OrbitalData.occ</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.OrbitalData.pair"><code class="docutils literal notranslate"><span class="pre">OrbitalData.pair</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC"><code class="docutils literal notranslate"><span class="pre">ParametersQC</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.basis_set"><code class="docutils literal notranslate"><span class="pre">ParametersQC.basis_set</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.charge"><code class="docutils literal notranslate"><span class="pre">ParametersQC.charge</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.convert_to_list"><code class="docutils literal notranslate"><span class="pre">ParametersQC.convert_to_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.description"><code class="docutils literal notranslate"><span class="pre">ParametersQC.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.filename"><code class="docutils literal notranslate"><span class="pre">ParametersQC.filename</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.format_element_name"><code class="docutils literal notranslate"><span class="pre">ParametersQC.format_element_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.frozen_core"><code class="docutils literal notranslate"><span class="pre">ParametersQC.frozen_core</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.geometry"><code class="docutils literal notranslate"><span class="pre">ParametersQC.geometry</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.get_atom_number"><code class="docutils literal notranslate"><span class="pre">ParametersQC.get_atom_number()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.get_atoms"><code class="docutils literal notranslate"><span class="pre">ParametersQC.get_atoms()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.get_geometry"><code class="docutils literal notranslate"><span class="pre">ParametersQC.get_geometry()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.get_geometry_string"><code class="docutils literal notranslate"><span class="pre">ParametersQC.get_geometry_string()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.get_nuc_charge"><code class="docutils literal notranslate"><span class="pre">ParametersQC.get_nuc_charge()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.get_number_of_core_electrons"><code class="docutils literal notranslate"><span class="pre">ParametersQC.get_number_of_core_electrons()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.molecular_data_param"><code class="docutils literal notranslate"><span class="pre">ParametersQC.molecular_data_param</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.multiplicity"><code class="docutils literal notranslate"><span class="pre">ParametersQC.multiplicity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.n_electrons"><code class="docutils literal notranslate"><span class="pre">ParametersQC.n_electrons</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.name"><code class="docutils literal notranslate"><span class="pre">ParametersQC.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.read_xyz_from_file"><code class="docutils literal notranslate"><span class="pre">ParametersQC.read_xyz_from_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.prepare_product_state"><code class="docutils literal notranslate"><span class="pre">prepare_product_state()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quantumchemistry.html#module-tequila_code.quantumchemistry.encodings">encodings module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaev"><code class="docutils literal notranslate"><span class="pre">BravyiKitaev</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaev.bk_to_me"><code class="docutils literal notranslate"><span class="pre">BravyiKitaev.bk_to_me()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaev.do_transform"><code class="docutils literal notranslate"><span class="pre">BravyiKitaev.do_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaev.jw_to_me"><code class="docutils literal notranslate"><span class="pre">BravyiKitaev.jw_to_me()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaev.me_to_bk"><code class="docutils literal notranslate"><span class="pre">BravyiKitaev.me_to_bk()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaev.me_to_jw"><code class="docutils literal notranslate"><span class="pre">BravyiKitaev.me_to_jw()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaevFast"><code class="docutils literal notranslate"><span class="pre">BravyiKitaevFast</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaevFast.do_transform"><code class="docutils literal notranslate"><span class="pre">BravyiKitaevFast.do_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaevFast.me_to_jw"><code class="docutils literal notranslate"><span class="pre">BravyiKitaevFast.me_to_jw()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaevTree"><code class="docutils literal notranslate"><span class="pre">BravyiKitaevTree</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaevTree.do_transform"><code class="docutils literal notranslate"><span class="pre">BravyiKitaevTree.do_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.BravyiKitaevTree.me_to_jw"><code class="docutils literal notranslate"><span class="pre">BravyiKitaevTree.me_to_jw()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase"><code class="docutils literal notranslate"><span class="pre">EncodingBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.bk_to_me"><code class="docutils literal notranslate"><span class="pre">EncodingBase.bk_to_me()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.do_transform"><code class="docutils literal notranslate"><span class="pre">EncodingBase.do_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.down"><code class="docutils literal notranslate"><span class="pre">EncodingBase.down()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.hcb_to_me"><code class="docutils literal notranslate"><span class="pre">EncodingBase.hcb_to_me()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.jw_to_me"><code class="docutils literal notranslate"><span class="pre">EncodingBase.jw_to_me()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.map_state"><code class="docutils literal notranslate"><span class="pre">EncodingBase.map_state()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.me_to_bk"><code class="docutils literal notranslate"><span class="pre">EncodingBase.me_to_bk()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.me_to_jw"><code class="docutils literal notranslate"><span class="pre">EncodingBase.me_to_jw()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.name"><code class="docutils literal notranslate"><span class="pre">EncodingBase.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.post_processing"><code class="docutils literal notranslate"><span class="pre">EncodingBase.post_processing()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.supports_ucc"><code class="docutils literal notranslate"><span class="pre">EncodingBase.supports_ucc</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.EncodingBase.up"><code class="docutils literal notranslate"><span class="pre">EncodingBase.up()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.JordanWigner"><code class="docutils literal notranslate"><span class="pre">JordanWigner</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.JordanWigner.do_transform"><code class="docutils literal notranslate"><span class="pre">JordanWigner.do_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.JordanWigner.hcb_to_me"><code class="docutils literal notranslate"><span class="pre">JordanWigner.hcb_to_me()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.JordanWigner.jw_to_me"><code class="docutils literal notranslate"><span class="pre">JordanWigner.jw_to_me()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.JordanWigner.map_state"><code class="docutils literal notranslate"><span class="pre">JordanWigner.map_state()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.JordanWigner.me_to_jw"><code class="docutils literal notranslate"><span class="pre">JordanWigner.me_to_jw()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.TaperedBravyKitaev"><code class="docutils literal notranslate"><span class="pre">TaperedBravyKitaev</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.TaperedBravyKitaev.do_transform"><code class="docutils literal notranslate"><span class="pre">TaperedBravyKitaev.do_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.TaperedBravyKitaev.map_state"><code class="docutils literal notranslate"><span class="pre">TaperedBravyKitaev.map_state()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.TaperedBravyKitaev.me_to_jw"><code class="docutils literal notranslate"><span class="pre">TaperedBravyKitaev.me_to_jw()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.encodings.known_encodings"><code class="docutils literal notranslate"><span class="pre">known_encodings()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quantumchemistry.html#module-tequila_code.quantumchemistry.madness_interface">madness interface module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryMadness</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.cleanup"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryMadness.cleanup()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.compute_energy"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryMadness.compute_energy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.convert_madness_output_from_bin_to_npy"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryMadness.convert_madness_output_from_bin_to_npy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.find_executable"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryMadness.find_executable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.get_pair_orbitals"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryMadness.get_pair_orbitals()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.get_virtual_orbitals"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryMadness.get_virtual_orbitals()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.local_qubit_map"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryMadness.local_qubit_map()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.make_hardcore_boson_pno_upccd_ansatz"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryMadness.make_hardcore_boson_pno_upccd_ansatz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.make_pno_upccgsd_ansatz"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryMadness.make_pno_upccgsd_ansatz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.make_spa_ansatz"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryMadness.make_spa_ansatz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.make_upccgsd_ansatz"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryMadness.make_upccgsd_ansatz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.make_upccgsd_indices"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryMadness.make_upccgsd_indices()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.perturbative_f12_correction"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryMadness.perturbative_f12_correction()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.plot2cube"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryMadness.plot2cube()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.read_tensors"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryMadness.read_tensors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.run_madness"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryMadness.run_madness()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.QuantumChemistryMadness.write_madness_input"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryMadness.write_madness_input()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.madness_interface.TequilaMadnessException"><code class="docutils literal notranslate"><span class="pre">TequilaMadnessException</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quantumchemistry.html#module-tequila_code.quantumchemistry.orbital_optimizer">orbital optimizer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.OptimizeOrbitalsResult"><code class="docutils literal notranslate"><span class="pre">OptimizeOrbitalsResult</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.OptimizeOrbitalsResult.energy"><code class="docutils literal notranslate"><span class="pre">OptimizeOrbitalsResult.energy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.OptimizeOrbitalsResult.iterations"><code class="docutils literal notranslate"><span class="pre">OptimizeOrbitalsResult.iterations</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.OptimizeOrbitalsResult.mcscf_local_data"><code class="docutils literal notranslate"><span class="pre">OptimizeOrbitalsResult.mcscf_local_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.OptimizeOrbitalsResult.mcscf_object"><code class="docutils literal notranslate"><span class="pre">OptimizeOrbitalsResult.mcscf_object</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.OptimizeOrbitalsResult.mo_coeff"><code class="docutils literal notranslate"><span class="pre">OptimizeOrbitalsResult.mo_coeff</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.OptimizeOrbitalsResult.molecule"><code class="docutils literal notranslate"><span class="pre">OptimizeOrbitalsResult.molecule</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.OptimizeOrbitalsResult.old_molecule"><code class="docutils literal notranslate"><span class="pre">OptimizeOrbitalsResult.old_molecule</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper"><code class="docutils literal notranslate"><span class="pre">PySCFVQEWrapper</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.circuit"><code class="docutils literal notranslate"><span class="pre">PySCFVQEWrapper.circuit</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.const_part"><code class="docutils literal notranslate"><span class="pre">PySCFVQEWrapper.const_part</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.history"><code class="docutils literal notranslate"><span class="pre">PySCFVQEWrapper.history</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.kernel"><code class="docutils literal notranslate"><span class="pre">PySCFVQEWrapper.kernel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.make_rdm12"><code class="docutils literal notranslate"><span class="pre">PySCFVQEWrapper.make_rdm12()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.molecule_arguments"><code class="docutils literal notranslate"><span class="pre">PySCFVQEWrapper.molecule_arguments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.molecule_factory"><code class="docutils literal notranslate"><span class="pre">PySCFVQEWrapper.molecule_factory</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.n_electrons"><code class="docutils literal notranslate"><span class="pre">PySCFVQEWrapper.n_electrons</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.one_body_integrals"><code class="docutils literal notranslate"><span class="pre">PySCFVQEWrapper.one_body_integrals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.rdm1"><code class="docutils literal notranslate"><span class="pre">PySCFVQEWrapper.rdm1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.rdm2"><code class="docutils literal notranslate"><span class="pre">PySCFVQEWrapper.rdm2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.reorder"><code class="docutils literal notranslate"><span class="pre">PySCFVQEWrapper.reorder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.silent"><code class="docutils literal notranslate"><span class="pre">PySCFVQEWrapper.silent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.two_body_integrals"><code class="docutils literal notranslate"><span class="pre">PySCFVQEWrapper.two_body_integrals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.vqe_solver"><code class="docutils literal notranslate"><span class="pre">PySCFVQEWrapper.vqe_solver</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.vqe_solver_arguments"><code class="docutils literal notranslate"><span class="pre">PySCFVQEWrapper.vqe_solver_arguments</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.optimize_orbitals"><code class="docutils literal notranslate"><span class="pre">optimize_orbitals()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quantumchemistry.html#module-tequila_code.quantumchemistry.psi4_interface">psi4 interface module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.OpenVQEEPySCFException"><code class="docutils literal notranslate"><span class="pre">OpenVQEEPySCFException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.Psi4Results"><code class="docutils literal notranslate"><span class="pre">Psi4Results</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.Psi4Results.filename"><code class="docutils literal notranslate"><span class="pre">Psi4Results.filename</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.Psi4Results.mol"><code class="docutils literal notranslate"><span class="pre">Psi4Results.mol</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.Psi4Results.variables"><code class="docutils literal notranslate"><span class="pre">Psi4Results.variables</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.Psi4Results.wfn"><code class="docutils literal notranslate"><span class="pre">Psi4Results.wfn</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.QuantumChemistryPsi4"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryPsi4</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.QuantumChemistryPsi4.compute_amplitudes"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryPsi4.compute_amplitudes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.QuantumChemistryPsi4.compute_ccsd_amplitudes"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryPsi4.compute_ccsd_amplitudes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.QuantumChemistryPsi4.compute_energy"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryPsi4.compute_energy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.QuantumChemistryPsi4.compute_rdms"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryPsi4.compute_rdms()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.QuantumChemistryPsi4.initialize_integral_manager"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryPsi4.initialize_integral_manager()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.QuantumChemistryPsi4.nirrep"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryPsi4.nirrep</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.QuantumChemistryPsi4.orbital_energies"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryPsi4.orbital_energies()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.QuantumChemistryPsi4.perturbative_f12_correction"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryPsi4.perturbative_f12_correction()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.QuantumChemistryPsi4.point_group"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryPsi4.point_group</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.QuantumChemistryPsi4.rdm1"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryPsi4.rdm1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.QuantumChemistryPsi4.rdm2"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryPsi4.rdm2</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.psi4_interface.TequilaPsi4Exception"><code class="docutils literal notranslate"><span class="pre">TequilaPsi4Exception</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quantumchemistry.html#module-tequila_code.quantumchemistry.pyscf_interface">pyscf interface module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.pyscf_interface.OpenVQEEPySCFException"><code class="docutils literal notranslate"><span class="pre">OpenVQEEPySCFException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.pyscf_interface.QuantumChemistryPySCF"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryPySCF</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.pyscf_interface.QuantumChemistryPySCF.compute_energy"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryPySCF.compute_energy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.pyscf_interface.QuantumChemistryPySCF.compute_fci"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryPySCF.compute_fci()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quantumchemistry.html#module-tequila_code.quantumchemistry.qc_base">qc base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.UC"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.UC()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.UR"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.UR()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.active_space"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.active_space</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.compute_amplitudes"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.compute_amplitudes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.compute_ccsd_amplitudes"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.compute_ccsd_amplitudes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.compute_cis_amplitudes"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.compute_cis_amplitudes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.compute_constant_part"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.compute_constant_part()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.compute_energy"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.compute_energy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.compute_fock_matrix"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.compute_fock_matrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.compute_mp2_amplitudes"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.compute_mp2_amplitudes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.compute_one_body_integrals"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.compute_one_body_integrals()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.compute_rdms"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.compute_rdms()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.compute_two_body_integrals"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.compute_two_body_integrals()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.do_make_molecule"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.do_make_molecule()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.format_excitation_indices"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.format_excitation_indices()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.from_openfermion"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.from_openfermion()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.from_tequila"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.from_tequila()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.get_givens_circuit"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.get_givens_circuit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.get_integrals"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.get_integrals()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.get_pair_specific_indices"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.get_pair_specific_indices()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.hcb_to_me"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.hcb_to_me()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.initialize_integral_manager"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.initialize_integral_manager()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.is_canonical"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.is_canonical()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.is_closed_shell"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.is_closed_shell()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_annihilation_op"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_annihilation_op()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_ansatz"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_ansatz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_creation_op"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_creation_op()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_excitation_gate"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_excitation_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_excitation_generator"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_excitation_generator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_hamiltonian"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_hamiltonian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_hardcore_boson_excitation_gate"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_hardcore_boson_excitation_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_hardcore_boson_hamiltonian"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_hardcore_boson_hamiltonian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_hardcore_boson_upccgd_layer"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_hardcore_boson_upccgd_layer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_molecular_hamiltonian"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_molecular_hamiltonian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_molecule"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_molecule()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_number_op"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_number_op()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_orbital_rotation_gate"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_orbital_rotation_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_s2_op"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_s2_op()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_sm_op"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_sm_op()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_sp_op"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_sp_op()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_spa_ansatz"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_spa_ansatz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_sz_op"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_sz_op()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_uccsd_ansatz"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_uccsd_ansatz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_upccgsd_ansatz"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_upccgsd_ansatz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_upccgsd_indices"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_upccgsd_indices()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_upccgsd_layer"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_upccgsd_layer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.make_upccgsd_singles"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.make_upccgsd_singles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.n_electrons"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.n_electrons</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.n_orbitals"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.n_orbitals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.n_rotation"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.n_rotation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.orbitals"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.orbitals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.orthonormalize_basis_orbitals"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.orthonormalize_basis_orbitals()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.perturbative_f12_correction"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.perturbative_f12_correction()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.prepare_hardcore_boson_reference"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.prepare_hardcore_boson_reference()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.prepare_reference"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.prepare_reference()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.print_basis_info"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.print_basis_info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.rdm1"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.rdm1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.rdm2"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.rdm2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.rdm_spinsum"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.rdm_spinsum()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.reference_orbitals"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.reference_orbitals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.supports_ucc"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.supports_ucc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.transform_orbitals"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.transform_orbitals()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.QuantumChemistryBase.use_native_orbitals"><code class="docutils literal notranslate"><span class="pre">QuantumChemistryBase.use_native_orbitals()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.get_givens_decomposition"><code class="docutils literal notranslate"><span class="pre">get_givens_decomposition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.givens_matrix"><code class="docutils literal notranslate"><span class="pre">givens_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.qc_base.reconstruct_matrix_from_givens"><code class="docutils literal notranslate"><span class="pre">reconstruct_matrix_from_givens()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quantumchemistry.html#module-tequila_code.quantumchemistry">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.Molecule"><code class="docutils literal notranslate"><span class="pre">Molecule()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.MoleculeFromOpenFermion"><code class="docutils literal notranslate"><span class="pre">MoleculeFromOpenFermion()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.MoleculeFromTequila"><code class="docutils literal notranslate"><span class="pre">MoleculeFromTequila()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.show_available_modules"><code class="docutils literal notranslate"><span class="pre">show_available_modules()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantumchemistry.html#tequila_code.quantumchemistry.show_supported_modules"><code class="docutils literal notranslate"><span class="pre">show_supported_modules()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Tequila Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="hamiltonian.html" class="btn btn-neutral float-right" title="Hamiltonian" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ram Mosco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

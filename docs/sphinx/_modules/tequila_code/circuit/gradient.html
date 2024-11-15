@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tequila_code.circuit.gradient &mdash; Tequila Documentation 13.9.2024 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=7dcc51c3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Tequila Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Tequila Library Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Tequila Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../circuit.html">tequila_code.circuit</a></li>
+      <li class="breadcrumb-item active">tequila_code.circuit.gradient</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tequila_code.circuit.gradient</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">tequila.circuit.compiler</span> <span class="kn">import</span> <span class="n">CircuitCompiler</span>
+<span class="kn">from</span> <span class="nn">tequila.objective.objective</span> <span class="kn">import</span> <span class="n">Objective</span><span class="p">,</span> <span class="n">ExpectationValueImpl</span><span class="p">,</span> <span class="n">Variable</span><span class="p">,</span> \
+    <span class="n">assign_variable</span><span class="p">,</span> <span class="n">identity</span><span class="p">,</span> <span class="n">FixedVariable</span>
+<span class="kn">from</span> <span class="nn">tequila</span> <span class="kn">import</span> <span class="n">TequilaException</span>
+<span class="kn">from</span> <span class="nn">tequila.objective</span> <span class="kn">import</span> <span class="n">QTensor</span>
+<span class="kn">from</span> <span class="nn">tequila.simulators.simulator_api</span> <span class="kn">import</span> <span class="nb">compile</span>
+<span class="kn">import</span> <span class="nn">typing</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">vectorize</span>
+<span class="kn">from</span> <span class="nn">tequila.autograd_imports</span> <span class="kn">import</span> <span class="n">jax</span><span class="p">,</span> <span class="n">__AUTOGRAD__BACKEND__</span>
+
+
+<div class="viewcode-block" id="grad">
+<a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.gradient.grad">[docs]</a>
+<span class="k">def</span> <span class="nf">grad</span><span class="p">(</span><span class="n">objective</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="n">Objective</span><span class="p">,</span> <span class="n">QTensor</span><span class="p">],</span> <span class="n">variable</span><span class="p">:</span> <span class="n">Variable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">no_compile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    wrapper function for getting the gradients of Objectives,ExpectationValues, Unitaries (including single gates), and Transforms.</span>
+<span class="sd">    :param obj (QCircuit,ParametrizedGateImpl,Objective,ExpectationValue,Transform,Variable): structure to be differentiated</span>
+<span class="sd">    :param variables (list of Variable): parameter with respect to which obj should be differentiated.</span>
+<span class="sd">        default None: total gradient.</span>
+<span class="sd">    return: dictionary of Objectives, if called on gate, circuit, exp.value, or objective; if Variable or Transform, returns number.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="n">variable</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># None means that all components are created</span>
+        <span class="n">variables</span> <span class="o">=</span> <span class="n">objective</span><span class="o">.</span><span class="n">extract_variables</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Error in gradient: Objective has no variables&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="p">(</span><span class="n">k</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">grad</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">no_compile</span><span class="o">=</span><span class="n">no_compile</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">variable</span> <span class="o">=</span> <span class="n">assign_variable</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span>
+
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">QTensor</span><span class="p">):</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">grad</span><span class="p">(</span><span class="n">objective</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="n">variable</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">ff</span> <span class="o">=</span> <span class="n">vectorize</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ff</span><span class="p">(</span><span class="n">objective</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">variable</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">objective</span><span class="o">.</span><span class="n">extract_variables</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">Objective</span><span class="p">()</span>
+
+    <span class="c1"># objective translation</span>
+    <span class="c1"># if the objective was already translated to a backend</span>
+    <span class="c1"># we need to reverse that here</span>
+    <span class="k">if</span> <span class="n">objective</span><span class="o">.</span><span class="n">is_translated</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">gradient of:</span><span class="si">{}</span><span class="se">\n</span><span class="s2">can not form gradient that was already compiled to a quantum backend</span><span class="se">\n</span><span class="s2">tq.grad neds to be applied to the abstract - non compiled objective</span><span class="se">\n</span><span class="s2">E.g. for the (compiled) objective E1 </span><span class="se">\n\t</span><span class="s2">E1 = tq.compile(E0)</span><span class="se">\n</span><span class="s2">instead of doing</span><span class="se">\n\t</span><span class="s2">dE = tq.grad(E1)</span><span class="se">\n</span><span class="s2">do</span><span class="se">\n\t</span><span class="s2">dE = tq.grad(E0)</span><span class="se">\n</span><span class="s2">and compile dE afterwards (if wanted) with</span><span class="se">\n\t</span><span class="s2">dE = tq.compile(dE)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">objective</span><span class="p">)))</span>
+     
+
+    <span class="c1"># circuit compilation</span>
+    <span class="k">if</span> <span class="n">no_compile</span><span class="p">:</span>
+        <span class="n">compiled</span> <span class="o">=</span> <span class="n">objective</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">compiler</span> <span class="o">=</span> <span class="n">CircuitCompiler</span><span class="p">(</span><span class="n">multitarget</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">trotterized</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">hadamard_power</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">power</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">controlled_phase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">controlled_rotation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">gradient_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">compiled</span> <span class="o">=</span> <span class="n">compiler</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="n">variable</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">variable</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">compiled</span><span class="o">.</span><span class="n">extract_variables</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Error in taking gradient. Objective does not depend on variable </span><span class="si">{}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">variable</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">ExpectationValueImpl</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">__grad_expectationvalue</span><span class="p">(</span><span class="n">E</span><span class="o">=</span><span class="n">objective</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="n">variable</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">objective</span><span class="o">.</span><span class="n">is_expectationvalue</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">__grad_expectationvalue</span><span class="p">(</span><span class="n">E</span><span class="o">=</span><span class="n">compiled</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">variable</span><span class="o">=</span><span class="n">variable</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">compiled</span><span class="p">,</span> <span class="n">Objective</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">compiled</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">compiled</span><span class="p">,</span> <span class="s2">&quot;transformation&quot;</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="n">__grad_objective</span><span class="p">(</span><span class="n">objective</span><span class="o">=</span><span class="n">compiled</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="n">variable</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Gradient not implemented for other types than ExpectationValue and Objective.&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">__grad_objective</span><span class="p">(</span><span class="n">objective</span><span class="p">:</span> <span class="n">Objective</span><span class="p">,</span> <span class="n">variable</span><span class="p">:</span> <span class="n">Variable</span><span class="p">):</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">objective</span><span class="o">.</span><span class="n">args</span>
+    <span class="n">transformation</span> <span class="o">=</span> <span class="n">objective</span><span class="o">.</span><span class="n">transformation</span>
+    <span class="n">dO</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">processed_expectationvalues</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">__AUTOGRAD__BACKEND__</span> <span class="o">==</span> <span class="s2">&quot;jax&quot;</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">transformation</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">__AUTOGRAD__BACKEND__</span> <span class="o">==</span> <span class="s2">&quot;autograd&quot;</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">transformation</span><span class="p">,</span> <span class="n">argnum</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Can&#39;t differentiate without autograd or jax&quot;</span><span class="p">)</span>
+
+        <span class="c1"># We can detect one simple case where the outer derivative is const=1</span>
+        <span class="k">if</span> <span class="n">transformation</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">transformation</span> <span class="o">==</span> <span class="n">identity</span><span class="p">:</span>
+            <span class="n">outer</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">outer</span> <span class="o">=</span> <span class="n">Objective</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">transformation</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s2">&quot;U&quot;</span><span class="p">):</span>
+            <span class="c1"># save redundancies</span>
+            <span class="k">if</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">processed_expectationvalues</span><span class="p">:</span>
+                <span class="n">inner</span> <span class="o">=</span> <span class="n">processed_expectationvalues</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">inner</span> <span class="o">=</span> <span class="n">__grad_inner</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="n">arg</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="n">variable</span><span class="p">)</span>
+                <span class="n">processed_expectationvalues</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span> <span class="o">=</span> <span class="n">inner</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># this means this inner derivative is purely variable dependent</span>
+            <span class="n">inner</span> <span class="o">=</span> <span class="n">__grad_inner</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="n">arg</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="n">variable</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">inner</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="c1"># don&#39;t pile up zero expectationvalues</span>
+            <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="n">dO</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dO</span> <span class="o">=</span> <span class="n">outer</span> <span class="o">*</span> <span class="n">inner</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dO</span> <span class="o">=</span> <span class="n">dO</span> <span class="o">+</span> <span class="n">outer</span> <span class="o">*</span> <span class="n">inner</span>
+
+    <span class="k">if</span> <span class="n">dO</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;caught None in __grad_objective&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dO</span>
+
+
+<span class="c1"># def __grad_vector_objective(objective: Objective, variable: Variable):</span>
+<span class="c1">#     argsets = objective.argsets</span>
+<span class="c1">#     transformations = objective._transformations</span>
+<span class="c1">#     outputs = []</span>
+<span class="c1">#     for pos in range(len(objective)):</span>
+<span class="c1">#         args = argsets[pos]</span>
+<span class="c1">#         transformation = transformations[pos]</span>
+<span class="c1">#         dO = None</span>
+<span class="c1">#</span>
+<span class="c1">#         processed_expectationvalues = {}</span>
+<span class="c1">#         for i, arg in enumerate(args):</span>
+<span class="c1">#             if __AUTOGRAD__BACKEND__ == &quot;jax&quot;:</span>
+<span class="c1">#                 df = jax.grad(transformation, argnums=i)</span>
+<span class="c1">#             elif __AUTOGRAD__BACKEND__ == &quot;autograd&quot;:</span>
+<span class="c1">#                 df = jax.grad(transformation, argnum=i)</span>
+<span class="c1">#             else:</span>
+<span class="c1">#                 raise TequilaException(&quot;Can&#39;t differentiate without autograd or jax&quot;)</span>
+<span class="c1">#</span>
+<span class="c1">#             # We can detect one simple case where the outer derivative is const=1</span>
+<span class="c1">#             if transformation is None or transformation == identity:</span>
+<span class="c1">#                 outer = 1.0</span>
+<span class="c1">#             else:</span>
+<span class="c1">#                 outer = Objective(args=args, transformation=df)</span>
+<span class="c1">#</span>
+<span class="c1">#             if hasattr(arg, &quot;U&quot;):</span>
+<span class="c1">#                 # save redundancies</span>
+<span class="c1">#                 if arg in processed_expectationvalues:</span>
+<span class="c1">#                     inner = processed_expectationvalues[arg]</span>
+<span class="c1">#                 else:</span>
+<span class="c1">#                     inner = __grad_inner(arg=arg, variable=variable)</span>
+<span class="c1">#                     processed_expectationvalues[arg] = inner</span>
+<span class="c1">#             else:</span>
+<span class="c1">#                 # this means this inner derivative is purely variable dependent</span>
+<span class="c1">#                 inner = __grad_inner(arg=arg, variable=variable)</span>
+<span class="c1">#</span>
+<span class="c1">#             if inner == 0.0:</span>
+<span class="c1">#                 # don&#39;t pile up zero expectationvalues</span>
+<span class="c1">#                 continue</span>
+<span class="c1">#</span>
+<span class="c1">#             if dO is None:</span>
+<span class="c1">#                 dO = outer * inner</span>
+<span class="c1">#             else:</span>
+<span class="c1">#                 dO = dO + outer * inner</span>
+<span class="c1">#</span>
+<span class="c1">#         if dO is None:</span>
+<span class="c1">#             dO = Objective()</span>
+<span class="c1">#         outputs.append(dO)</span>
+<span class="c1">#     if len(outputs) == 1:</span>
+<span class="c1">#         return outputs[0]</span>
+<span class="c1">#     return outputs</span>
+
+
+<span class="k">def</span> <span class="nf">__grad_inner</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">variable</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    a modified loop over __grad_objective, which gets derivatives</span>
+<span class="sd">     all the way down to variables, return 1 or 0 when a variable is (isnt) identical to var.</span>
+<span class="sd">    :param arg: a transform or variable object, to be differentiated</span>
+<span class="sd">    :param variable: the Variable with respect to which par should be differentiated.</span>
+<span class="sd">    :ivar var: the string representation of variable</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">assert</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">Variable</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">Variable</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">arg</span> <span class="o">==</span> <span class="n">variable</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">1.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">FixedVariable</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">ExpectationValueImpl</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">__grad_expectationvalue</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="n">variable</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s2">&quot;abstract_expectationvalue&quot;</span><span class="p">):</span>
+        <span class="n">E</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">abstract_expectationvalue</span>
+        <span class="n">dE</span> <span class="o">=</span> <span class="n">__grad_expectationvalue</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="n">variable</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">compile</span><span class="p">(</span><span class="n">dE</span><span class="p">,</span> <span class="o">**</span><span class="n">arg</span><span class="o">.</span><span class="n">_input_args</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">__grad_objective</span><span class="p">(</span><span class="n">objective</span><span class="o">=</span><span class="n">arg</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="n">variable</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">__grad_expectationvalue</span><span class="p">(</span><span class="n">E</span><span class="p">:</span> <span class="n">ExpectationValueImpl</span><span class="p">,</span> <span class="n">variable</span><span class="p">:</span> <span class="n">Variable</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    implements the analytic partial derivative of a unitary as it would appear in an expectation value. See the paper.</span>
+<span class="sd">    :param unitary: the unitary whose gradient should be obtained</span>
+<span class="sd">    :param variables (list, dict, str): the variables with respect to which differentiation should be performed.</span>
+<span class="sd">    :return: vector (as dict) of dU/dpi as Objective (without hamiltonian)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">hamiltonian</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">H</span>
+    <span class="n">unitary</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">U</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">unitary</span><span class="o">.</span><span class="n">verify</span><span class="p">()):</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;error in grad_expectationvalue unitary is </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unitary</span><span class="p">))</span>
+
+    <span class="c1"># fast return if possible</span>
+    <span class="k">if</span> <span class="n">variable</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unitary</span><span class="o">.</span><span class="n">extract_variables</span><span class="p">():</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+
+    <span class="n">param_gates</span> <span class="o">=</span> <span class="n">unitary</span><span class="o">.</span><span class="n">_parameter_map</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span>
+
+    <span class="n">dO</span> <span class="o">=</span> <span class="n">Objective</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">idx_g</span> <span class="ow">in</span> <span class="n">param_gates</span><span class="p">:</span>
+        <span class="n">idx</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">idx_g</span>
+        <span class="n">dOinc</span> <span class="o">=</span> <span class="n">__grad_shift_rule</span><span class="p">(</span><span class="n">unitary</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">hamiltonian</span><span class="p">)</span>
+        <span class="n">dO</span> <span class="o">+=</span> <span class="n">dOinc</span>
+
+    <span class="k">assert</span> <span class="n">dO</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">dO</span>
+
+
+<span class="k">def</span> <span class="nf">__grad_shift_rule</span><span class="p">(</span><span class="n">unitary</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">hamiltonian</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    function for getting the gradients of directly differentiable gates. Expects precompiled circuits.</span>
+<span class="sd">    :param unitary: QCircuit: the QCircuit object containing the gate to be differentiated</span>
+<span class="sd">    :param g: a parametrized: the gate being differentiated</span>
+<span class="sd">    :param i: Int: the position in unitary at which g appears</span>
+<span class="sd">    :param variable: Variable or String: the variable with respect to which gate g is being differentiated</span>
+<span class="sd">    :param hamiltonian: the hamiltonian with respect to which unitary is to be measured, in the case that unitary</span>
+<span class="sd">        is contained within an ExpectationValue</span>
+<span class="sd">    :return: an Objective, whose calculation yields the gradient of g w.r.t variable</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># possibility for overwride in custom gate construction</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="s2">&quot;shifted_gates&quot;</span><span class="p">):</span>
+        <span class="n">inner_grad</span> <span class="o">=</span> <span class="n">__grad_inner</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">parameter</span><span class="p">,</span> <span class="n">variable</span><span class="p">)</span>
+        <span class="n">shifted</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">shifted_gates</span><span class="p">()</span>
+        <span class="n">dOinc</span> <span class="o">=</span> <span class="n">Objective</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">shifted</span><span class="p">:</span>
+            <span class="n">w</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="n">Ux</span> <span class="o">=</span> <span class="n">unitary</span><span class="o">.</span><span class="n">replace_gates</span><span class="p">(</span><span class="n">positions</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">circuits</span><span class="o">=</span><span class="p">[</span><span class="n">g</span><span class="p">])</span>
+            <span class="n">wx</span> <span class="o">=</span> <span class="n">w</span> <span class="o">*</span> <span class="n">inner_grad</span>
+            <span class="n">Ex</span> <span class="o">=</span> <span class="n">Objective</span><span class="o">.</span><span class="n">ExpectationValue</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">Ux</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="n">hamiltonian</span><span class="p">)</span>
+            <span class="n">dOinc</span> <span class="o">+=</span> <span class="n">wx</span> <span class="o">*</span> <span class="n">Ex</span>
+        <span class="k">return</span> <span class="n">dOinc</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s1">&#39;No shift found for gate </span><span class="si">{}</span><span class="se">\n</span><span class="s1">Was the compiler called?&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ram Mosco.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -42,6 +42,12 @@ jobs:
         run: |
           conda run -n blogqa quarto install tinytex
 
+      # Build Sphinx documentation
+      - name: Build Sphinx documentation
+        run: |
+          cd docs
+          make html
+
       # Commit changes to gh-pages branch
       - name: Switch to gh-pages branch
         run: |

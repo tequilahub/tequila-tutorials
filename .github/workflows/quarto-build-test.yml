@@ -40,6 +40,12 @@ jobs:
         run: |
           conda run -n blogqa quarto install tinytex
 
+      # Build Sphinx documentation
+      - name: Build Sphinx documentation
+        run: |
+          cd docs
+          make html
+
       # Compile Quarto site and check for compiling errors
       - name: Check if Quarto site compiles
         run: |

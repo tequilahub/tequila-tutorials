@@ -1,6 +1,6 @@
 ---
 title: "Tequila Tutorials"
-subtitle: "Quantum Computing, Quantum Chemistry and Tequila"
+subtitle: "Quantum Computing and Quantum Chemistry"
 page-layout: full
 title-block-banner: true
 
@@ -17,8 +17,6 @@ about:
 ![](tequila.png){width=400}
 </center>
 <br/>
-
-# Welcome to the Official Website of Tequila Tutorials
 
 Tequila is an abstraction framework for (variational) quantum algorithms.
 It operates on abstract data structures allowing the formulation, combination, automatic differentiation and optimization of generalized objectives. 

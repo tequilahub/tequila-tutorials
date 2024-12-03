@@ -5,7 +5,7 @@ website:
   title: "Tequila Tutorials"
   description: "quantum computing, quantum chemistry and tequila"
   image: tequila_logo.png
-  repo-url: https://github.com/tequilahub/tequila
+  repo-url: https://github.com/tequilahub/tequila-tutorials
   repo-actions: [source, issue]
   navbar:
     logo: tequila_logo.png

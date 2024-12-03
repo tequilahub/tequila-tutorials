@@ -4835,7 +4835,7 @@ u,v){for(var t=db(d(r,u)),w=0;w<t.length;++w)b(t[w],u,v)}function f(r,u,v,t){var
 0;p<n.length;p++){var q=n[p];f(q,"first_name",wi,p);f(q,"last_name",wi,p);f(q,"street",xi,p);f(q,"city",xi,p);f(q,"postal_code",yi,p);f(q,"region",xi,p);f(q,"country",yi,p)}return k},Ai=function(a){var b=a?zi(a):[];return pi({kf:b})},Bi=function(a){return a&&a!=null&&Object.keys(a).length>0&&B.Promise?zi(a).some(function(b){return b.value&&fi(b.name)&&!Wh.test(b.value)}):!1},qi=function(a,b){var c=zi(a);Ci(c,b)},si=function(a){return a==null?"":z(a)?ob(String(a)):"e0"},yi=function(a){return a.replace(Di,
 "")},wi=function(a){return xi(a.replace(/\s/g,""))},xi=function(a){return ob(a.replace(Ei,"").toLowerCase())},vi=function(a){a=a.replace(/[\s-()/.]/g,"");a.charAt(0)!=="+"&&(a="+"+a);return Fi.test(a)?a:"e0"},ui=function(a){var b=a.toLowerCase().split("@");if(b.length===2){var c=b[0];/^(gmail|googlemail)\./.test(b[1])&&(c=c.replace(/\./g,""));c=c+"@"+b[1];if(Gi.test(c))return c}return"e0"},Ci=function(a,b){var c=!1;if(c=R(57)?!a.some(function(e){return e.value&&fi(e.name)}):a.some(function(e){e.value&&
 fi(e.name)}))b({kf:a});else if(B.Promise){var d;if(R(56)||R(89))d=Hc();Promise.all(a.map(function(e){return e.value&&fi(e.name)?Yh(e.value).then(function(f){e.value=f}):Promise.resolve()})).then(function(){var e={kf:a};if(d!==void 0){var f=Hc();d&&f&&(e.time=Math.round(f)-Math.round(d))}b(e)}).catch(function(){b({kf:[]})})}else b({kf:[]})},Ei=/[0-9`~!@#$%^&*()_\-+=:;<>,.?|/\\[\]]/g,Gi=/^\S+@\S+\.\S+$/,Fi=/^\+\d{10,15}$/,Di=/[.~]/g,ri=/^[0-9A-Za-z_-]{43}$/,Hi={},ei=(Hi.email="em",Hi.phone_number="pn",
-Hi.first_name="fn",Hi.last_name="ln",Hi.street="sa",Hi.city="ct",Hi.region="rg",Hi.country="co",Hi.postal_code="pc",Hi.error_code="ec",Hi),Ii={},ti=(Ii.email="sha256_email_address",Ii.phone_number="sha256_phone_number",Ii.first_name="sha256_first_name",Ii.last_name="sha256_last_name",Ii.street="sha256_street",Ii);var ji=Object.freeze(["email","phone_number","first_name","last_name","street"]);var Ji={Bn:'101925629~102067555~102067808~102077855~102081485'};var Ki={},Li=B.google_tag_manager=B.google_tag_manager||{};Ki.wh="4bk0";Ki.Ce=Number("0")||0;Ki.ob="dataLayer";Ki.Dn="ChAIgPW6ugYQ57nr1N2Y3r8xEiUA1yD4FO2lh3pzcU76EhTuRnhArlwxewnHMSLKcxc00bsQvWLWGgJqfg\x3d\x3d";var Mi={__cl:1,__ecl:1,__ehl:1,__evl:1,__fal:1,__fil:1,__fsl:1,__hl:1,__jel:1,__lcl:1,__sdl:1,__tl:1,__ytl:1},Ni={__paused:1,__tg:1},Oi;for(Oi in Mi)Mi.hasOwnProperty(Oi)&&(Ni[Oi]=1);var Pi=mb("true"),Qi=!1,Ri,Si=!1;Si=!0;
+Hi.first_name="fn",Hi.last_name="ln",Hi.street="sa",Hi.city="ct",Hi.region="rg",Hi.country="co",Hi.postal_code="pc",Hi.error_code="ec",Hi),Ii={},ti=(Ii.email="sha256_email_address",Ii.phone_number="sha256_phone_number",Ii.first_name="sha256_first_name",Ii.last_name="sha256_last_name",Ii.street="sha256_street",Ii);var ji=Object.freeze(["email","phone_number","first_name","last_name","street"]);var Ji={Bn:'101925629~102067555~102067808~102077855~102081485'};var Ki={},Li=B.google_tag_manager=B.google_tag_manager||{};Ki.wh="4bk0";Ki.Ce=Number("0")||0;Ki.ob="dataLayer";Ki.Dn="ChAIgPW6ugYQ57nr1N2Y3r8xEiUA1yD4FB1er6mJNyTWVsgXj4ntqNDs/cSCjbIyl2b8AKX6euCnGgJDSw\x3d\x3d";var Mi={__cl:1,__ecl:1,__ehl:1,__evl:1,__fal:1,__fil:1,__fsl:1,__hl:1,__jel:1,__lcl:1,__sdl:1,__tl:1,__ytl:1},Ni={__paused:1,__tg:1},Oi;for(Oi in Mi)Mi.hasOwnProperty(Oi)&&(Ni[Oi]=1);var Pi=mb("true"),Qi=!1,Ri,Si=!1;Si=!0;
 Ri=Si;var Ti,Ui=!1;Ti=Ui;var Vi,Wi=!1;Vi=Wi;Ki.xf="www.googletagmanager.com";var Xi=""+Ki.xf+(Ri?"/gtag/js":"/gtm.js"),Yi=null,Zi=null,$i={},aj={};function bj(){var a=Li.sequence||1;Li.sequence=a+1;return a}Ki.Sk="true";var cj="";Ki.xh=cj;var dj=function(){this.j=new Set},fj=function(){return Array.from(ej.aa.j).join("~")},ej=new function(){this.aa=new dj;this.C=!1;this.j=0;this.K=this.P=this.Ua=this.H=""};function gj(){var a=ej.H.length;return ej.H[a-1]==="/"?ej.H.substring(0,a-1):ej.H}function hj(){return ej.C?R(75)?ej.j===0:ej.j!==1:!1}function ij(a){for(var b={},c=l(a.split("|")),d=c.next();!d.done;d=c.next())b[d.value]=!0;return b}var jj=new hb,kj={},lj={},oj={name:Ki.ob,set:function(a,b){Vc(yb(a,b),kj);mj()},get:function(a){return nj(a,2)},reset:function(){jj=new hb;kj={};mj()}};function nj(a,b){return b!=2?jj.get(a):pj(a)}function pj(a,b){var c=a.split(".");b=b||[];for(var d=kj,e=0;e<c.length;e++){if(d===null)return!1;if(d===void 0)break;d=d[c[e]];if(b.indexOf(d)!==-1)return}return d}function qj(a,b){lj.hasOwnProperty(a)||(jj.set(a,b),Vc(yb(a,b),kj),mj())}
 function rj(){for(var a=["gtm.allowlist","gtm.blocklist","gtm.whitelist","gtm.blacklist","tagTypeBlacklist"],b=0;b<a.length;b++){var c=a[b],d=nj(c,1);if(Array.isArray(d)||Uc(d))d=Vc(d,null);lj[c]=d}}function mj(a){ib(lj,function(b,c){jj.set(b,c);Vc(yb(b),kj);Vc(yb(b,c),kj);a&&delete lj[b]})}function sj(a,b){var c,d=(b===void 0?2:b)!==1?pj(a):jj.get(a);Sc(d)==="array"||Sc(d)==="object"?c=Vc(d,null):c=d;return c};
 var tj=function(a,b,c){if(!c)return!1;for(var d=String(c.value),e,f=d.replace(/\["?'?/g,".").replace(/"?'?\]/g,"").split(","),g=0;g<f.length;g++){var k=f[g].trim();if(k&&!vb(k,"#")&&!vb(k,".")){if(vb(k,"dataLayer."))e=nj(k.substring(10));else{var m=k.split(".");e=B[m.shift()];for(var n=0;n<m.length;n++)e=e&&e[m[n]]}if(e!==void 0)break}}if(e===void 0&&Rh)try{var p=Qh(d);if(p&&p.length>0){e=[];for(var q=0;q<p.length&&q<(b==="email"||b==="phone_number"?5:1);q++)e.push(yc(p[q])||ob(p[q].value));e=e.length===
@@ -4867,7 +4867,7 @@ k.default,e!==void 0)return e?1:2}e=d.declare;if(e!==void 0)return e?1:2;e=d.imp
 function bl(a){var b=Tk();b.accessedAny=!0;return b.getConsentState(a,$k)}function cl(a){for(var b={},c=l(a),d=c.next();!d.done;d=c.next()){var e=d.value;b[e]=$k.corePlatformServices[e]!==!1}return b}function dl(a){var b=Tk();b.accessedAny=!0;return!(b.entries[a]||{}).quiet}
 function el(){if(!$a(10))return!1;var a=Tk();a.accessedAny=!0;if(a.active)return!0;if(!$k.usedContainerScopedDefaults)return!1;for(var b=l(Object.keys($k.containerScopedDefaults)),c=b.next();!c.done;c=b.next())if($k.containerScopedDefaults[c.value]!==1)return!0;return!1}function fl(a,b){Tk().addListener(a,b)}function gl(a,b){Tk().notifyListeners(a,b)}
 function hl(a,b){function c(){for(var e=0;e<b.length;e++)if(!dl(b[e]))return!0;return!1}if(c()){var d=!1;fl(b,function(e){d||c()||(d=!0,a(e))})}else a({})}
-function il(a,b){function c(){for(var k=[],m=0;m<e.length;m++){var n=e[m];al(n)&&!f[n]&&k.push(n)}return k}function d(k){for(var m=0;m<k.length;m++)f[k[m]]=!0}var e=z(b)?[b]:b,f={},g=c();g.length!==e.length&&(d(g),fl(e,function(k){function m(q){q.length!==0&&(d(q),k.consentTypes=q,a(k))}var n=c();if(n.length!==0){var p=Object.keys(f).length;n.length+p>=e.length?m(n):B.setTimeout(function(){m(c())},500)}}))};var jl=["ad_storage","analytics_storage","ad_user_data","ad_personalization"],kl=!1,ll=!1;function ml(){!ll&&kl&&(jl.some(function(a){return $k.containerScopedDefaults[a]!==1})||nl("mbc"));ll=!0}function nl(a){Wj&&(Kk(a,"1"),Ok())}function ol(a){Va("HEALTH",a)};var pl;try{pl=JSON.parse(Ta("eyIwIjoiVVMiLCIxIjoiVVMtSUwiLCIyIjpmYWxzZSwiMyI6IiIsIjQiOiIiLCI1Ijp0cnVlLCI2IjpmYWxzZSwiNyI6ImFkX3N0b3JhZ2V8YW5hbHl0aWNzX3N0b3JhZ2V8YWRfdXNlcl9kYXRhfGFkX3BlcnNvbmFsaXphdGlvbiJ9"))}catch(a){V(123),ol(2),pl={}}function ql(){return pl["0"]||""}function rl(){return pl["1"]||""}function sl(){var a=!1;a=!!pl["2"];return a}function tl(){return pl["6"]!==!1}function ul(){var a="";a=pl["4"]||"";return a}
+function il(a,b){function c(){for(var k=[],m=0;m<e.length;m++){var n=e[m];al(n)&&!f[n]&&k.push(n)}return k}function d(k){for(var m=0;m<k.length;m++)f[k[m]]=!0}var e=z(b)?[b]:b,f={},g=c();g.length!==e.length&&(d(g),fl(e,function(k){function m(q){q.length!==0&&(d(q),k.consentTypes=q,a(k))}var n=c();if(n.length!==0){var p=Object.keys(f).length;n.length+p>=e.length?m(n):B.setTimeout(function(){m(c())},500)}}))};var jl=["ad_storage","analytics_storage","ad_user_data","ad_personalization"],kl=!1,ll=!1;function ml(){!ll&&kl&&(jl.some(function(a){return $k.containerScopedDefaults[a]!==1})||nl("mbc"));ll=!0}function nl(a){Wj&&(Kk(a,"1"),Ok())}function ol(a){Va("HEALTH",a)};var pl;try{pl=JSON.parse(Ta("eyIwIjoiVVMiLCIxIjoiVVMtVkEiLCIyIjpmYWxzZSwiMyI6IiIsIjQiOiIiLCI1Ijp0cnVlLCI2IjpmYWxzZSwiNyI6ImFkX3N0b3JhZ2V8YW5hbHl0aWNzX3N0b3JhZ2V8YWRfdXNlcl9kYXRhfGFkX3BlcnNvbmFsaXphdGlvbiJ9"))}catch(a){V(123),ol(2),pl={}}function ql(){return pl["0"]||""}function rl(){return pl["1"]||""}function sl(){var a=!1;a=!!pl["2"];return a}function tl(){return pl["6"]!==!1}function ul(){var a="";a=pl["4"]||"";return a}
 function vl(){var a=!1;a=!!pl["5"];return a}function wl(){var a="";a=pl["3"]||"";return a}var xl=[O.g.O,O.g.U,O.g.N,O.g.Aa],yl,zl;function Al(a){for(var b=a[O.g.Jb],c=Array.isArray(b)?b:[b],d={Ve:0};d.Ve<c.length;d={Ve:d.Ve},++d.Ve)ib(a,function(e){return function(f,g){if(f!==O.g.Jb){var k=c[e.Ve],m=ql(),n=rl();Yk=!0;Xk&&Va("TAGGING",20);Tk().declare(f,g,k,m,n)}}}(d))}
 function Bl(a){ml();!zl&&yl&&nl("crc");zl=!0;var b=a[O.g.Jb];b&&V(40);var c=a[O.g.vf];c&&V(41);for(var d=Array.isArray(b)?b:[b],e={We:0};e.We<d.length;e={We:e.We},++e.We)ib(a,function(f){return function(g,k){if(g!==O.g.Jb&&g!==O.g.vf){var m=d[f.We],n=Number(c),p=ql(),q=rl();n=n===void 0?0:n;Xk=!0;Yk&&Va("TAGGING",20);Tk().default(g,k,m,p,q,n,$k)}}}(e))}
 function Cl(a){$k.usedContainerScopedDefaults=!0;var b=a[O.g.Jb];if(b){var c=Array.isArray(b)?b:[b];if(!c.includes(rl())&&!c.includes(ql()))return}ib(a,function(d,e){switch(d){case "ad_storage":case "analytics_storage":case "ad_user_data":case "ad_personalization":break;default:return}$k.usedContainerScopedDefaults=!0;$k.containerScopedDefaults[d]=e==="granted"?3:2})}function Dl(a,b){ml();yl=!0;ib(a,function(c,d){Xk=!0;Yk&&Va("TAGGING",20);Tk().update(c,d,$k)});gl(b.eventId,b.priorityId)}
@@ -5464,7 +5464,7 @@ cookieconsent.run({
   <li><a href="#conclusion-and-outlook" id="toc-conclusion-and-outlook" class="nav-link" data-scroll-target="#conclusion-and-outlook"><span class="header-section-number">4</span> Conclusion and outlook</a></li>
   <li><a href="#bibliography" id="toc-bibliography" class="nav-link" data-scroll-target="#bibliography"><span class="header-section-number">5</span> Bibliography</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/tequilahub/tequila/blob/main/Tutorials/AdaptiveMethods/jupyter_notebook.ipynb" class="toc-action">View source</a></p><p><a href="https://github.com/tequilahub/tequila/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/tequilahub/tequila-tutorials/blob/main/Tutorials/AdaptiveMethods/jupyter_notebook.ipynb" class="toc-action">View source</a></p><p><a href="https://github.com/tequilahub/tequila-tutorials/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
@@ -5642,11 +5642,11 @@ R_Z(\Phi) = \begin{pmatrix} e^{-i\frac{\Phi}{2}} &amp; 0 \\ 0 &amp; e^{i\frac{\P
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-11" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-11" data-code-lines="1" data-code-annotation="1">Define the abstract expectation value, that we will use to optimize the circuit.</span>
+<span data-code-cell="annotated-cell-11" data-code-annotation="1" data-code-lines="1">Define the abstract expectation value, that we will use to optimize the circuit.</span>
 </dd>
 <dt data-target-cell="annotated-cell-11" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-11" data-code-lines="2" data-code-annotation="2">Minimize the expectation value, which results in the optimal parameters for the circuit.</span>
+<span data-code-cell="annotated-cell-11" data-code-annotation="2" data-code-lines="2">Minimize the expectation value, which results in the optimal parameters for the circuit.</span>
 </dd>
 </dl>
 </div>
@@ -5726,15 +5726,15 @@ R_Z(\Phi) = \begin{pmatrix} e^{-i\frac{\Phi}{2}} &amp; 0 \\ 0 &amp; e^{i\frac{\P
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-13" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-13" data-code-lines="9,10,11" data-code-annotation="1">Create gate with maximum gradient</span>
+<span data-code-cell="annotated-cell-13" data-code-annotation="1" data-code-lines="9,10,11">Create gate with maximum gradient</span>
 </dd>
 <dt data-target-cell="annotated-cell-13" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-13" data-code-lines="14" data-code-annotation="2">Add gate to circuit</span>
+<span data-code-cell="annotated-cell-13" data-code-annotation="2" data-code-lines="14">Add gate to circuit</span>
 </dd>
 <dt data-target-cell="annotated-cell-13" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-13" data-code-lines="17" data-code-annotation="3">Minimize and update the optimize variable values</span>
+<span data-code-cell="annotated-cell-13" data-code-annotation="3" data-code-lines="17">Minimize and update the optimize variable values</span>
 </dd>
 </dl>
 </div>
@@ -5774,19 +5774,19 @@ H = 2\cdot(X(0) \cdot X(1) + Y(0) \cdot Y(1)) + 10 \cdot (X(3) \cdot X(5) + Y(3)
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-14" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-14" data-code-lines="1" data-code-annotation="1">Define circuit</span>
+<span data-code-cell="annotated-cell-14" data-code-annotation="1" data-code-lines="1">Define circuit</span>
 </dd>
 <dt data-target-cell="annotated-cell-14" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-14" data-code-lines="4" data-code-annotation="2">Define Hamiltonian H</span>
+<span data-code-cell="annotated-cell-14" data-code-annotation="2" data-code-lines="4">Define Hamiltonian H</span>
 </dd>
 <dt data-target-cell="annotated-cell-14" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-14" data-code-lines="6,8,9" data-code-annotation="3">Define operator pool</span>
+<span data-code-cell="annotated-cell-14" data-code-annotation="3" data-code-lines="6,8,9">Define operator pool</span>
 </dd>
 <dt data-target-cell="annotated-cell-14" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-cell="annotated-cell-14" data-code-lines="17" data-code-annotation="4">Calculate eigenvalues and eigenvectors of H, to calculate the ground state energy of the system.</span>
+<span data-code-cell="annotated-cell-14" data-code-annotation="4" data-code-lines="17">Calculate eigenvalues and eigenvectors of H, to calculate the ground state energy of the system.</span>
 </dd>
 </dl>
 </div>
@@ -5905,15 +5905,15 @@ H = 2\cdot(X(0) \cdot X(1) + Y(0) \cdot Y(1)) + 10 \cdot (X(3) \cdot X(5) + Y(3)
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-18" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-18" data-code-lines="1" data-code-annotation="1">Define operator pool, based on fermionic rotations from the UpCCSD ansatz.</span>
+<span data-code-cell="annotated-cell-18" data-code-annotation="1" data-code-lines="1">Define operator pool, based on fermionic rotations from the UpCCSD ansatz.</span>
 </dd>
 <dt data-target-cell="annotated-cell-18" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-18" data-code-lines="2" data-code-annotation="2">Construct the adaptive solver</span>
+<span data-code-cell="annotated-cell-18" data-code-annotation="2" data-code-lines="2">Construct the adaptive solver</span>
 </dd>
 <dt data-target-cell="annotated-cell-18" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-18" data-code-lines="13" data-code-annotation="3">Construct the final circuit, which also contains the circuit preparation for the given molecule.</span>
+<span data-code-cell="annotated-cell-18" data-code-annotation="3" data-code-lines="13">Construct the final circuit, which also contains the circuit preparation for the given molecule.</span>
 </dd>
 </dl>
 </div>

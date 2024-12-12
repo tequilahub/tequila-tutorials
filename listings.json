@@ -2,6 +2,7 @@
   {
     "listing": "/research.html",
     "items": [
+      "/Researches/gaussian_convolution/index.html",
       "/Researches/Eigensolver/Eigensolver.html",
       "/Researches/molcirc/index.html",
       "/Researches/quantum_classifier/quantum_classifier.html",

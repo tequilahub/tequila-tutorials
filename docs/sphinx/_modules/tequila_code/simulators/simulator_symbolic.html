@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tequila_code.simulators.simulator_symbolic &mdash; Tequila Documentation 13.9.2024 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -69,14 +69,14 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tequila_code.simulators.simulator_symbolic</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">tequila.simulators.simulator_base</span> <span class="kn">import</span> <span class="n">BackendExpectationValue</span><span class="p">,</span> <span class="n">BackendCircuit</span>
-<span class="kn">from</span> <span class="nn">tequila.wavefunction.qubit_wavefunction</span> <span class="kn">import</span> <span class="n">QubitWaveFunction</span>
-<span class="kn">from</span> <span class="nn">tequila.circuit.circuit</span> <span class="kn">import</span> <span class="n">QCircuit</span>
-<span class="kn">from</span> <span class="nn">tequila.circuit.gates</span> <span class="kn">import</span> <span class="n">QGate</span>
-<span class="kn">from</span> <span class="nn">tequila</span> <span class="kn">import</span> <span class="n">BitString</span>
-<span class="kn">import</span> <span class="nn">numpy</span>
-<span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">import</span> <span class="nn">sympy</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tequila.simulators.simulator_base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BackendExpectationValue</span><span class="p">,</span> <span class="n">BackendCircuit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.wavefunction.qubit_wavefunction</span><span class="w"> </span><span class="kn">import</span> <span class="n">QubitWaveFunction</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.circuit.circuit</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCircuit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.circuit.gates</span><span class="w"> </span><span class="kn">import</span> <span class="n">QGate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila</span><span class="w"> </span><span class="kn">import</span> <span class="n">BitString</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sympy</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Simple Symbolic Simulator for debugging purposes</span>
@@ -84,7 +84,7 @@
 
 <div class="viewcode-block" id="BackendCircuitSymbolic">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic">[docs]</a>
-<span class="k">class</span> <span class="nc">BackendCircuitSymbolic</span><span class="p">(</span><span class="n">BackendCircuit</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BackendCircuitSymbolic</span><span class="p">(</span><span class="n">BackendCircuit</span><span class="p">):</span>
 
     <span class="c1"># compiler instructions</span>
     <span class="n">compiler_arguments</span> <span class="o">=</span> <span class="p">{</span>
@@ -109,20 +109,20 @@
 
 <div class="viewcode-block" id="BackendCircuitSymbolic.create_circuit">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.create_circuit">[docs]</a>
-    <span class="k">def</span> <span class="nf">create_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abstract_circuit</span><span class="p">:</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abstract_circuit</span><span class="p">:</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">abstract_circuit</span></div>
 
 
 <div class="viewcode-block" id="BackendCircuitSymbolic.update_variables">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.update_variables">[docs]</a>
-    <span class="k">def</span> <span class="nf">update_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">):</span>
         <span class="k">pass</span></div>
 
 
 <div class="viewcode-block" id="BackendCircuitSymbolic.apply_gate">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.apply_gate">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">apply_gate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">QubitWaveFunction</span><span class="p">,</span> <span class="n">gate</span><span class="p">:</span> <span class="n">QGate</span><span class="p">,</span> <span class="n">qubits</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">variables</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitWaveFunction</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">apply_gate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">QubitWaveFunction</span><span class="p">,</span> <span class="n">gate</span><span class="p">:</span> <span class="n">QGate</span><span class="p">,</span> <span class="n">qubits</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">variables</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitWaveFunction</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">QubitWaveFunction</span><span class="p">()</span>
         <span class="n">n_qubits</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">qubits</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">state</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -134,7 +134,7 @@
 <div class="viewcode-block" id="BackendCircuitSymbolic.apply_on_standard_basis">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.apply_on_standard_basis">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">apply_on_standard_basis</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">gate</span><span class="p">:</span> <span class="n">QGate</span><span class="p">,</span> <span class="n">basisfunction</span><span class="p">:</span> <span class="n">BitString</span><span class="p">,</span> <span class="n">qubits</span><span class="p">:</span><span class="nb">dict</span><span class="p">,</span> <span class="n">variables</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitWaveFunction</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">apply_on_standard_basis</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">gate</span><span class="p">:</span> <span class="n">QGate</span><span class="p">,</span> <span class="n">basisfunction</span><span class="p">:</span> <span class="n">BitString</span><span class="p">,</span> <span class="n">qubits</span><span class="p">:</span><span class="nb">dict</span><span class="p">,</span> <span class="n">variables</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitWaveFunction</span><span class="p">:</span>
 
         <span class="n">basis_array</span> <span class="o">=</span> <span class="n">basisfunction</span><span class="o">.</span><span class="n">array</span>
         <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">is_controlled</span><span class="p">():</span>
@@ -197,7 +197,7 @@
 
 <div class="viewcode-block" id="BackendCircuitSymbolic.do_simulate">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic.do_simulate">[docs]</a>
-    <span class="k">def</span> <span class="nf">do_simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitWaveFunction</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">do_simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitWaveFunction</span><span class="p">:</span>
         <span class="n">qubits</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">abstract_circuit</span><span class="o">.</span><span class="n">qubits</span><span class="p">:</span>
@@ -228,7 +228,7 @@
 
 <div class="viewcode-block" id="BackendExpectationValueSymbolic">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_symbolic.BackendExpectationValueSymbolic">[docs]</a>
-<span class="k">class</span> <span class="nc">BackendExpectationValueSymbolic</span><span class="p">(</span><span class="n">BackendExpectationValue</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BackendExpectationValueSymbolic</span><span class="p">(</span><span class="n">BackendExpectationValue</span><span class="p">):</span>
     <span class="n">BackendCircuitType</span> <span class="o">=</span> <span class="n">BackendCircuitSymbolic</span></div>
 
 </pre></div>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tequila_code.circuit.qpic &mdash; Tequila Documentation 13.9.2024 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -75,12 +75,12 @@
 <span class="sd">https://github.com/qpic/qpic/blob/master/doc/qpic_doc.pdf</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">tequila.objective.objective</span> <span class="kn">import</span> <span class="n">FixedVariable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.objective.objective</span><span class="w"> </span><span class="kn">import</span> <span class="n">FixedVariable</span>
 
-<span class="kn">import</span> <span class="nn">subprocess</span><span class="o">,</span> <span class="nn">numpy</span>
-<span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">which</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span><span class="o">,</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shutil</span><span class="w"> </span><span class="kn">import</span> <span class="n">which</span>
 
-<span class="kn">import</span> <span class="nn">numbers</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numbers</span>
 
 <span class="n">system_has_qpic</span> <span class="o">=</span> <span class="n">which</span><span class="p">(</span><span class="s2">&quot;qpic&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 <span class="n">system_has_pdflatex</span> <span class="o">=</span> <span class="n">which</span><span class="p">(</span><span class="s2">&quot;pdflatex&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
@@ -88,7 +88,7 @@
 
 <div class="viewcode-block" id="assign_name">
 <a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qpic.assign_name">[docs]</a>
-<span class="k">def</span> <span class="nf">assign_name</span><span class="p">(</span><span class="n">parameter</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">assign_name</span><span class="p">(</span><span class="n">parameter</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parameter</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">theta&quot;</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">parameter</span><span class="p">,</span> <span class="s2">&quot;extract_variables&quot;</span><span class="p">):</span>
@@ -111,7 +111,7 @@
 
 <div class="viewcode-block" id="export_to_qpic">
 <a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qpic.export_to_qpic">[docs]</a>
-<span class="k">def</span> <span class="nf">export_to_qpic</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">always_use_generators</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">export_to_qpic</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">always_use_generators</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                    <span class="n">decompose_control_generators</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                    <span class="n">group_together</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">qubit_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mark_parametrized_gates</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gatecolor1</span><span class="o">=</span><span class="s2">&quot;tq&quot;</span><span class="p">,</span>
                    <span class="n">textcolor1</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">gatecolor2</span><span class="o">=</span><span class="s2">&quot;guo&quot;</span><span class="p">,</span> <span class="n">textcolor2</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -241,7 +241,7 @@
 
 <div class="viewcode-block" id="export_to">
 <a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qpic.export_to">[docs]</a>
-<span class="k">def</span> <span class="nf">export_to</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">export_to</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span>
               <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
               <span class="n">style</span><span class="o">=</span><span class="s2">&quot;tequila&quot;</span><span class="p">,</span>
               <span class="n">qubit_names</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>

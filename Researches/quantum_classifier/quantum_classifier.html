@@ -326,31 +326,31 @@ cookieconsent.run({
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-annotation="1" data-code-lines="1,2" data-code-cell="annotated-cell-2">Initialize tunable variables, that will be optimized later</span>
+<span data-code-annotation="1" data-code-cell="annotated-cell-2" data-code-lines="1,2">Initialize tunable variables, that will be optimized later</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-annotation="2" data-code-lines="3" data-code-cell="annotated-cell-2">Create a unitary/quantum circuit using a given problem structure</span>
+<span data-code-annotation="2" data-code-cell="annotated-cell-2" data-code-lines="3">Create a unitary/quantum circuit using a given problem structure</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-annotation="3" data-code-lines="5" data-code-cell="annotated-cell-2">Define an Observable whose expectation we want to measure</span>
+<span data-code-annotation="3" data-code-cell="annotated-cell-2" data-code-lines="5">Define an Observable whose expectation we want to measure</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-annotation="4" data-code-lines="6" data-code-cell="annotated-cell-2">Define the Objective/Loss function we want to minimize as the expectation value of the Observable after applying the Unitary</span>
+<span data-code-annotation="4" data-code-cell="annotated-cell-2" data-code-lines="6">Define the Objective/Loss function we want to minimize as the expectation value of the Observable after applying the Unitary</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="5">5</dt>
 <dd>
-<span data-code-annotation="5" data-code-lines="8" data-code-cell="annotated-cell-2">Define some initial values for the variables we want to optimize</span>
+<span data-code-annotation="5" data-code-cell="annotated-cell-2" data-code-lines="8">Define some initial values for the variables we want to optimize</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="6">6</dt>
 <dd>
-<span data-code-annotation="6" data-code-lines="9" data-code-cell="annotated-cell-2">Minimize the Objective through one of many different minimization methods to compute optimal variable assignments</span>
+<span data-code-annotation="6" data-code-cell="annotated-cell-2" data-code-lines="9">Minimize the Objective through one of many different minimization methods to compute optimal variable assignments</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="7">7</dt>
 <dd>
-<span data-code-annotation="7" data-code-lines="10,11" data-code-cell="annotated-cell-2">Return the calculated parameters of the circuit and the minimal value of the Objective</span>
+<span data-code-annotation="7" data-code-cell="annotated-cell-2" data-code-lines="10,11">Return the calculated parameters of the circuit and the minimal value of the Objective</span>
 </dd>
 </dl>
 </div>
@@ -619,15 +619,15 @@ L(i)= R_z(\theta_{2i+1}+w_{2i+1} x_2) R_y(\theta_{2i} + w_{2i}x_1).
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-10" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-annotation="1" data-code-lines="12" data-code-cell="annotated-cell-10">We iterate through the training data and calculate the impact of that datapoint on the loss function</span>
+<span data-code-annotation="1" data-code-cell="annotated-cell-10" data-code-lines="12">We iterate through the training data and calculate the impact of that datapoint on the loss function</span>
 </dd>
 <dt data-target-cell="annotated-cell-10" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-annotation="2" data-code-lines="15" data-code-cell="annotated-cell-10">The fidelity between the circuit result and the correct label state is expressed as a expectation value</span>
+<span data-code-annotation="2" data-code-cell="annotated-cell-10" data-code-lines="15">The fidelity between the circuit result and the correct label state is expressed as a expectation value</span>
 </dd>
 <dt data-target-cell="annotated-cell-10" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-annotation="3" data-code-lines="16" data-code-cell="annotated-cell-10">A value in <span class="math inline">\([0,1]\)</span> gets added based on how good the current datapoint is treated by the circuit</span>
+<span data-code-annotation="3" data-code-cell="annotated-cell-10" data-code-lines="16">A value in <span class="math inline">\([0,1]\)</span> gets added based on how good the current datapoint is treated by the circuit</span>
 </dd>
 </dl>
 </div>

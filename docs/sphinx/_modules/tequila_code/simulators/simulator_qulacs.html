@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tequila_code.simulators.simulator_qulacs &mdash; Tequila Documentation 13.9.2024 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -69,15 +69,15 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tequila_code.simulators.simulator_qulacs</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">qulacs</span>
-<span class="kn">import</span> <span class="nn">numbers</span><span class="o">,</span> <span class="nn">numpy</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">qulacs</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numbers</span><span class="o">,</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">from</span> <span class="nn">tequila</span> <span class="kn">import</span> <span class="n">TequilaException</span><span class="p">,</span> <span class="n">TequilaWarning</span>
-<span class="kn">from</span> <span class="nn">tequila.utils.bitstrings</span> <span class="kn">import</span> <span class="n">BitNumbering</span><span class="p">,</span> <span class="n">BitString</span><span class="p">,</span> <span class="n">BitStringLSB</span>
-<span class="kn">from</span> <span class="nn">tequila.wavefunction.qubit_wavefunction</span> <span class="kn">import</span> <span class="n">QubitWaveFunction</span>
-<span class="kn">from</span> <span class="nn">tequila.simulators.simulator_base</span> <span class="kn">import</span> <span class="n">BackendCircuit</span><span class="p">,</span> <span class="n">BackendExpectationValue</span><span class="p">,</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">change_basis</span>
-<span class="kn">from</span> <span class="nn">tequila.utils.keymap</span> <span class="kn">import</span> <span class="n">KeyMapRegisterToSubregister</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila</span><span class="w"> </span><span class="kn">import</span> <span class="n">TequilaException</span><span class="p">,</span> <span class="n">TequilaWarning</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.utils.bitstrings</span><span class="w"> </span><span class="kn">import</span> <span class="n">BitNumbering</span><span class="p">,</span> <span class="n">BitString</span><span class="p">,</span> <span class="n">BitStringLSB</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.wavefunction.qubit_wavefunction</span><span class="w"> </span><span class="kn">import</span> <span class="n">QubitWaveFunction</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.simulators.simulator_base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BackendCircuit</span><span class="p">,</span> <span class="n">BackendExpectationValue</span><span class="p">,</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">change_basis</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.utils.keymap</span><span class="w"> </span><span class="kn">import</span> <span class="n">KeyMapRegisterToSubregister</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Developer Note:</span>
@@ -88,14 +88,14 @@
 
 <div class="viewcode-block" id="TequilaQulacsException">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.TequilaQulacsException">[docs]</a>
-<span class="k">class</span> <span class="nc">TequilaQulacsException</span><span class="p">(</span><span class="n">TequilaException</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TequilaQulacsException</span><span class="p">(</span><span class="n">TequilaException</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Error in qulacs backend:&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span></div>
 
 
 <div class="viewcode-block" id="BackendCircuitQulacs">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs">[docs]</a>
-<span class="k">class</span> <span class="nc">BackendCircuitQulacs</span><span class="p">(</span><span class="n">BackendCircuit</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BackendCircuitQulacs</span><span class="p">(</span><span class="n">BackendCircuit</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class representing circuits compiled to qulacs.</span>
 <span class="sd">    See BackendCircuit for documentation of features and methods inherited therefrom</span>
@@ -139,7 +139,7 @@
 
     <span class="n">numbering</span> <span class="o">=</span> <span class="n">BitNumbering</span><span class="o">.</span><span class="n">LSB</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abstract_circuit</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abstract_circuit</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -188,7 +188,7 @@
 
 <div class="viewcode-block" id="BackendCircuitQulacs.initialize_state">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.initialize_state">[docs]</a>
-    <span class="k">def</span> <span class="nf">initialize_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">QuantumState</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">QuantumState</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">n_qubits</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">n_qubits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span>
         <span class="k">return</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">QuantumState</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span></div>
@@ -196,7 +196,7 @@
 
 <div class="viewcode-block" id="BackendCircuitQulacs.update_variables">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.update_variables">[docs]</a>
-    <span class="k">def</span> <span class="nf">update_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        set new variable values for the circuit.</span>
 <span class="sd">        Parameters</span>
@@ -214,7 +214,7 @@
 
 <div class="viewcode-block" id="BackendCircuitQulacs.do_simulate">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.do_simulate">[docs]</a>
-    <span class="k">def</span> <span class="nf">do_simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">do_simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Helper function to perform simulation.</span>
 
@@ -243,7 +243,7 @@
 
 <div class="viewcode-block" id="BackendCircuitQulacs.convert_measurements">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.convert_measurements">[docs]</a>
-    <span class="k">def</span> <span class="nf">convert_measurements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend_result</span><span class="p">,</span> <span class="n">target_qubits</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitWaveFunction</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_measurements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend_result</span><span class="p">,</span> <span class="n">target_qubits</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitWaveFunction</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Transform backend evaluation results into QubitWaveFunction</span>
 <span class="sd">        Parameters</span>
@@ -279,7 +279,7 @@
 
 <div class="viewcode-block" id="BackendCircuitQulacs.do_sample">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.do_sample">[docs]</a>
-    <span class="k">def</span> <span class="nf">do_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">noise_model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitWaveFunction</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">do_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">noise_model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitWaveFunction</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Helper function for performing sampling.</span>
 
@@ -311,7 +311,7 @@
 
 <div class="viewcode-block" id="BackendCircuitQulacs.no_translation">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.no_translation">[docs]</a>
-    <span class="k">def</span> <span class="nf">no_translation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abstract_circuit</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">no_translation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abstract_circuit</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Todo: what is this for?</span>
 <span class="sd">        Parameters</span>
@@ -327,7 +327,7 @@
 
 <div class="viewcode-block" id="BackendCircuitQulacs.initialize_circuit">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.initialize_circuit">[docs]</a>
-    <span class="k">def</span> <span class="nf">initialize_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        return an empty circuit.</span>
 <span class="sd">        Parameters</span>
@@ -344,7 +344,7 @@
 
 <div class="viewcode-block" id="BackendCircuitQulacs.add_exponential_pauli_gate">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_exponential_pauli_gate">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_exponential_pauli_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_exponential_pauli_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a native qulacs Exponential Pauli gate to a circuit.</span>
 <span class="sd">        Parameters</span>
@@ -376,7 +376,7 @@
 
 <div class="viewcode-block" id="BackendCircuitQulacs.add_parametrized_gate">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_parametrized_gate">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_parametrized_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_parametrized_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        add a parametrized gate.</span>
 <span class="sd">        Parameters</span>
@@ -418,7 +418,7 @@
 
 <div class="viewcode-block" id="BackendCircuitQulacs.add_basic_gate">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_basic_gate">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_basic_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_basic_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        add an unparametrized gate to the circuit.</span>
 <span class="sd">        Parameters</span>
@@ -446,7 +446,7 @@
 
 <div class="viewcode-block" id="BackendCircuitQulacs.add_measurement">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_measurement">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_measurement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">target_qubits</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_measurement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">target_qubits</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a measurement operation to a circuit.</span>
 <span class="sd">        Parameters</span>
@@ -469,7 +469,7 @@
 
 <div class="viewcode-block" id="BackendCircuitQulacs.add_noise_to_circuit">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_noise_to_circuit">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_noise_to_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">noise_model</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_noise_to_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">noise_model</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Apply noise from a NoiseModel to a circuit.</span>
 <span class="sd">        Parameters</span>
@@ -501,7 +501,7 @@
 
 <div class="viewcode-block" id="BackendCircuitQulacs.optimize_circuit">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.optimize_circuit">[docs]</a>
-    <span class="k">def</span> <span class="nf">optimize_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">max_block_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">silent</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">max_block_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">silent</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        reduce circuit depth using the native qulacs optimizer.</span>
 <span class="sd">        Parameters</span>
@@ -533,7 +533,7 @@
 
 <div class="viewcode-block" id="BackendExpectationValueQulacs">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs">[docs]</a>
-<span class="k">class</span> <span class="nc">BackendExpectationValueQulacs</span><span class="p">(</span><span class="n">BackendExpectationValue</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BackendExpectationValueQulacs</span><span class="p">(</span><span class="n">BackendExpectationValue</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class representing Expectation Values compiled for Qulacs.</span>
 
@@ -544,7 +544,7 @@
 
 <div class="viewcode-block" id="BackendExpectationValueQulacs.simulate">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.simulate">[docs]</a>
-    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Perform simulation of this expectationvalue.</span>
 <span class="sd">        Parameters</span>
@@ -582,7 +582,7 @@
 
 <div class="viewcode-block" id="BackendExpectationValueQulacs.initialize_hamiltonian">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.initialize_hamiltonian">[docs]</a>
-    <span class="k">def</span> <span class="nf">initialize_hamiltonian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hamiltonians</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize_hamiltonian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hamiltonians</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert reduced hamiltonians to native Qulacs types for efficient expectation value evaluation.</span>
 <span class="sd">        Parameters</span>
@@ -616,7 +616,7 @@
 
 <div class="viewcode-block" id="BackendExpectationValueQulacs.sample">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.sample">[docs]</a>
-    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">samples</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">samples</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sample this Expectation Value.</span>
 <span class="sd">        Parameters</span>

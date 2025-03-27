@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tequila_code.circuit.pyzx &mdash; Tequila Documentation 13.9.2024 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -78,19 +78,19 @@
 
 <span class="n">HAS_PYZX</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">pyzx</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pyzx</span>
     <span class="n">HAS_PYZX</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">HAS_PYZX</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">from</span> <span class="nn">tequila</span> <span class="kn">import</span> <span class="n">TequilaException</span>
-<span class="kn">from</span> <span class="nn">tequila</span> <span class="kn">import</span> <span class="n">export_open_qasm</span><span class="p">,</span> <span class="n">import_open_qasm</span>
-<span class="kn">from</span> <span class="nn">tequila.circuit</span> <span class="kn">import</span> <span class="n">QCircuit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila</span><span class="w"> </span><span class="kn">import</span> <span class="n">TequilaException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila</span><span class="w"> </span><span class="kn">import</span> <span class="n">export_open_qasm</span><span class="p">,</span> <span class="n">import_open_qasm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.circuit</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCircuit</span>
 
 
 <div class="viewcode-block" id="convert_to_pyzx">
 <a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.pyzx.convert_to_pyzx">[docs]</a>
-<span class="k">def</span> <span class="nf">convert_to_pyzx</span><span class="p">(</span><span class="n">circuit</span><span class="p">:</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_to_pyzx</span><span class="p">(</span><span class="n">circuit</span><span class="p">:</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Allow convert from Tequila circuit to pyzx circuit</span>
 
@@ -110,7 +110,7 @@
 
 <div class="viewcode-block" id="convert_from_pyzx">
 <a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.pyzx.convert_from_pyzx">[docs]</a>
-<span class="k">def</span> <span class="nf">convert_from_pyzx</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_from_pyzx</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Allow convert from pyzx circuit to Tequila circuit</span>
 

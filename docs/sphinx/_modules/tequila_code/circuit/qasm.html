@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tequila_code.circuit.qasm &mdash; Tequila Documentation 13.9.2024 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -77,18 +77,18 @@
 <span class="sd">A. W. Cross, L. S. Bishop, J. A. Smolin, and J. M. Gambetta, e-print arXiv:1707.03429v2 [quant-ph] (2017).</span>
 <span class="sd">https://arxiv.org/pdf/1707.03429v2.pdf</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">tequila</span> <span class="kn">import</span> <span class="n">TequilaException</span>
-<span class="kn">from</span> <span class="nn">tequila.circuit</span> <span class="kn">import</span> <span class="n">QCircuit</span>
-<span class="kn">from</span> <span class="nn">tequila.circuit.compiler</span> <span class="kn">import</span> <span class="n">CircuitCompiler</span>
-<span class="kn">import</span> <span class="nn">tequila.circuit.gates</span> <span class="k">as</span> <span class="nn">gates</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">pi</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
-<span class="kn">import</span> <span class="nn">typing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila</span><span class="w"> </span><span class="kn">import</span> <span class="n">TequilaException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.circuit</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCircuit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.circuit.compiler</span><span class="w"> </span><span class="kn">import</span> <span class="n">CircuitCompiler</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tequila.circuit.gates</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gates</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">pi</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
 
 
 <div class="viewcode-block" id="export_open_qasm">
 <a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.export_open_qasm">[docs]</a>
-<span class="k">def</span> <span class="nf">export_open_qasm</span><span class="p">(</span><span class="n">circuit</span><span class="p">:</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;2.0&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">zx_calculus</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">export_open_qasm</span><span class="p">(</span><span class="n">circuit</span><span class="p">:</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;2.0&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">zx_calculus</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Allow export to different versions of OpenQASM</span>
 
@@ -120,7 +120,7 @@
 
 <div class="viewcode-block" id="import_open_qasm">
 <a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.import_open_qasm">[docs]</a>
-<span class="k">def</span> <span class="nf">import_open_qasm</span><span class="p">(</span><span class="n">qasm_code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;2.0&quot;</span><span class="p">,</span> <span class="n">rigorous</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">import_open_qasm</span><span class="p">(</span><span class="n">qasm_code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;2.0&quot;</span><span class="p">,</span> <span class="n">rigorous</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Allow import from different versions of OpenQASM</span>
 
@@ -145,7 +145,7 @@
 
 <div class="viewcode-block" id="import_open_qasm_from_file">
 <a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.import_open_qasm_from_file">[docs]</a>
-<span class="k">def</span> <span class="nf">import_open_qasm_from_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;2.0&quot;</span><span class="p">,</span> <span class="n">rigorous</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">import_open_qasm_from_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;2.0&quot;</span><span class="p">,</span> <span class="n">rigorous</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Allow import from different versions of OpenQASM from a file</span>
 
@@ -169,7 +169,7 @@
 
 <div class="viewcode-block" id="convert_to_open_qasm_2">
 <a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.convert_to_open_qasm_2">[docs]</a>
-<span class="k">def</span> <span class="nf">convert_to_open_qasm_2</span><span class="p">(</span><span class="n">circuit</span><span class="p">:</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zx_calculus</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_to_open_qasm_2</span><span class="p">(</span><span class="n">circuit</span><span class="p">:</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zx_calculus</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Allow export to OpenQASM version 2.0</span>
 
@@ -245,7 +245,7 @@
 
 <div class="viewcode-block" id="name_and_params">
 <a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.name_and_params">[docs]</a>
-<span class="k">def</span> <span class="nf">name_and_params</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">variables</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">name_and_params</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">variables</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Determines the quantum gate name and its parameters if applicable</span>
 
@@ -275,7 +275,7 @@
 
 <div class="viewcode-block" id="parse_from_open_qasm_2">
 <a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.parse_from_open_qasm_2">[docs]</a>
-<span class="k">def</span> <span class="nf">parse_from_open_qasm_2</span><span class="p">(</span><span class="n">qasm_code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rigorous</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_from_open_qasm_2</span><span class="p">(</span><span class="n">qasm_code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rigorous</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
 
     <span class="n">lines</span> <span class="o">=</span> <span class="n">qasm_code</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
     <span class="n">clean_code</span> <span class="o">=</span> <span class="p">[]</span>
@@ -326,7 +326,7 @@
 
 <div class="viewcode-block" id="parse_custom_gate">
 <a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.parse_custom_gate">[docs]</a>
-<span class="k">def</span> <span class="nf">parse_custom_gate</span><span class="p">(</span><span class="n">gate_custom</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">custom_gates_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">QCircuit</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">QCircuit</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_custom_gate</span><span class="p">(</span><span class="n">gate_custom</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">custom_gates_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">QCircuit</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">QCircuit</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse custom gates code</span>
 
@@ -371,7 +371,7 @@
 
 <div class="viewcode-block" id="parse_command">
 <a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.parse_command">[docs]</a>
-<span class="k">def</span> <span class="nf">parse_command</span><span class="p">(</span><span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">custom_gates_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">QCircuit</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_command</span><span class="p">(</span><span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">custom_gates_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">QCircuit</span><span class="p">],</span> <span class="n">qregisters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse qasm code command</span>
 
@@ -482,7 +482,7 @@
 
 <div class="viewcode-block" id="apply_custom_gate">
 <a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.apply_custom_gate">[docs]</a>
-<span class="k">def</span> <span class="nf">apply_custom_gate</span><span class="p">(</span><span class="n">custom_circuit</span><span class="p">:</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">qregisters_values</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">apply_custom_gate</span><span class="p">(</span><span class="n">custom_circuit</span><span class="p">:</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">qregisters_values</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
     <span class="n">applied_custom_circuit</span> <span class="o">=</span> <span class="n">QCircuit</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">custom_circuit</span><span class="o">.</span><span class="n">gates</span><span class="p">:</span>
         <span class="n">g</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -495,7 +495,7 @@
 
 <div class="viewcode-block" id="get_qregister">
 <a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.get_qregister">[docs]</a>
-<span class="k">def</span> <span class="nf">get_qregister</span><span class="p">(</span><span class="n">qreg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">qregisters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_qregister</span><span class="p">(</span><span class="n">qreg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">qregisters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
     <span class="k">if</span> <span class="n">qreg</span> <span class="o">==</span> <span class="n">qreg</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]:</span>
         <span class="n">qreg_tequila</span> <span class="o">=</span> <span class="p">[</span><span class="n">qregisters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">qregisters</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">qreg</span> <span class="o">==</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
     <span class="k">else</span><span class="p">:</span>
@@ -505,7 +505,7 @@
 
 <div class="viewcode-block" id="get_angle">
 <a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.qasm.get_angle">[docs]</a>
-<span class="k">def</span> <span class="nf">get_angle</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_angle</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
     <span class="n">i</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">)</span>
     <span class="n">j</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;)&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>

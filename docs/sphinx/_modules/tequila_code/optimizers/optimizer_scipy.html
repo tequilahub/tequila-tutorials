@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tequila_code.optimizers.optimizer_scipy &mdash; Tequila Documentation 13.9.2024 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -70,20 +70,20 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tequila_code.optimizers.optimizer_scipy</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">scipy</span><span class="o">,</span> <span class="nn">numpy</span><span class="o">,</span> <span class="nn">typing</span><span class="o">,</span> <span class="nn">numbers</span>
-<span class="kn">from</span> <span class="nn">tequila.objective</span> <span class="kn">import</span> <span class="n">Objective</span>
-<span class="kn">from</span> <span class="nn">tequila.objective.objective</span> <span class="kn">import</span> <span class="n">assign_variable</span><span class="p">,</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">format_variable_dictionary</span><span class="p">,</span> <span class="n">format_variable_list</span>
-<span class="kn">from</span> <span class="nn">.optimizer_base</span> <span class="kn">import</span> <span class="n">Optimizer</span><span class="p">,</span> <span class="n">OptimizerResults</span>
-<span class="kn">from</span> <span class="nn">._containers</span> <span class="kn">import</span> <span class="n">_EvalContainer</span><span class="p">,</span> <span class="n">_GradContainer</span><span class="p">,</span> <span class="n">_HessContainer</span><span class="p">,</span> <span class="n">_QngContainer</span>
-<span class="kn">from</span> <span class="nn">tequila.utils.exceptions</span> <span class="kn">import</span> <span class="n">TequilaException</span>
-<span class="kn">from</span> <span class="nn">tequila.circuit.noise</span> <span class="kn">import</span> <span class="n">NoiseModel</span>
-<span class="kn">from</span> <span class="nn">tequila.tools.qng</span> <span class="kn">import</span> <span class="n">get_qng_combos</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span><span class="o">,</span><span class="w"> </span><span class="nn">numpy</span><span class="o">,</span><span class="w"> </span><span class="nn">typing</span><span class="o">,</span><span class="w"> </span><span class="nn">numbers</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.objective</span><span class="w"> </span><span class="kn">import</span> <span class="n">Objective</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.objective.objective</span><span class="w"> </span><span class="kn">import</span> <span class="n">assign_variable</span><span class="p">,</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">format_variable_dictionary</span><span class="p">,</span> <span class="n">format_variable_list</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.optimizer_base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optimizer</span><span class="p">,</span> <span class="n">OptimizerResults</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._containers</span><span class="w"> </span><span class="kn">import</span> <span class="n">_EvalContainer</span><span class="p">,</span> <span class="n">_GradContainer</span><span class="p">,</span> <span class="n">_HessContainer</span><span class="p">,</span> <span class="n">_QngContainer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.utils.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TequilaException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.circuit.noise</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoiseModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.tools.qng</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_qng_combos</span>
 
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 
 <div class="viewcode-block" id="TequilaScipyException">
 <a class="viewcode-back" href="../../../optimizers.html#tequila_code.optimizers.optimizer_scipy.TequilaScipyException">[docs]</a>
-<span class="k">class</span> <span class="nc">TequilaScipyException</span><span class="p">(</span><span class="n">TequilaException</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TequilaScipyException</span><span class="p">(</span><span class="n">TequilaException</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; &quot;&quot;&quot;</span>
     <span class="k">pass</span></div>
 
@@ -91,7 +91,7 @@
 <div class="viewcode-block" id="SciPyResults">
 <a class="viewcode-back" href="../../../optimizers.html#tequila_code.optimizers.optimizer_scipy.SciPyResults">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">SciPyResults</span><span class="p">(</span><span class="n">OptimizerResults</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SciPyResults</span><span class="p">(</span><span class="n">OptimizerResults</span><span class="p">):</span>
 
     <span class="n">scipy_result</span><span class="p">:</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">OptimizeResult</span> <span class="o">=</span> <span class="kc">None</span></div>
 
@@ -100,7 +100,7 @@
 
 <div class="viewcode-block" id="OptimizerSciPy">
 <a class="viewcode-back" href="../../../optimizers.html#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy">[docs]</a>
-<span class="k">class</span> <span class="nc">OptimizerSciPy</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OptimizerSciPy</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class wrapping over the scipy optimizer for use by Tequila.</span>
 
@@ -126,12 +126,12 @@
 <div class="viewcode-block" id="OptimizerSciPy.available_methods">
 <a class="viewcode-back" href="../../../optimizers.html#tequila_code.optimizers.optimizer_scipy.OptimizerSciPy.available_methods">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">available_methods</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">available_methods</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;:return: All tested available methods&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">gradient_free_methods</span> <span class="o">+</span> <span class="bp">cls</span><span class="o">.</span><span class="n">gradient_based_methods</span> <span class="o">+</span> <span class="bp">cls</span><span class="o">.</span><span class="n">hessian_based_methods</span></div>
 
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;L-BFGS-B&quot;</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;L-BFGS-B&quot;</span><span class="p">,</span>
                  <span class="n">tol</span><span class="p">:</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Real</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">method_options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">method_bounds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -179,7 +179,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">method_constraints</span> <span class="o">=</span> <span class="n">method_constraints</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">:</span> <span class="n">Objective</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">:</span> <span class="n">Objective</span><span class="p">,</span>
                  <span class="n">variables</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">Variable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">initial_values</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="n">Variable</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Real</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">gradient</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="n">Variable</span><span class="p">,</span> <span class="n">Objective</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -325,14 +325,14 @@
         <span class="n">Es</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="n">optimizer_instance</span> <span class="o">=</span> <span class="bp">self</span>
-        <span class="k">class</span> <span class="nc">SciPyCallback</span><span class="p">:</span>
+        <span class="k">class</span><span class="w"> </span><span class="nc">SciPyCallback</span><span class="p">:</span>
             <span class="n">energies</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">gradients</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">hessians</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">angles</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">real_iterations</span> <span class="o">=</span> <span class="mi">0</span>
 
-            <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">energies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">E</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">angles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">E</span><span class="o">.</span><span class="n">history_angles</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
                 <span class="k">if</span> <span class="n">dE</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dE</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -385,7 +385,7 @@
 
 <div class="viewcode-block" id="available_methods">
 <a class="viewcode-back" href="../../../optimizers.html#tequila_code.optimizers.optimizer_scipy.available_methods">[docs]</a>
-<span class="k">def</span> <span class="nf">available_methods</span><span class="p">(</span><span class="n">energy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">hessian</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">available_methods</span><span class="p">(</span><span class="n">energy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">hessian</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convenience</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -414,7 +414,7 @@
 
 <div class="viewcode-block" id="minimize">
 <a class="viewcode-back" href="../../../optimizers.html#tequila_code.optimizers.optimizer_scipy.minimize">[docs]</a>
-<span class="k">def</span> <span class="nf">minimize</span><span class="p">(</span><span class="n">objective</span><span class="p">:</span> <span class="n">Objective</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">minimize</span><span class="p">(</span><span class="n">objective</span><span class="p">:</span> <span class="n">Objective</span><span class="p">,</span>
              <span class="n">gradient</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="n">Variable</span><span class="p">,</span> <span class="n">Objective</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
              <span class="n">hessian</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Variable</span><span class="p">,</span> <span class="n">Variable</span><span class="p">],</span> <span class="n">Objective</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
              <span class="n">initial_values</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Hashable</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Real</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>

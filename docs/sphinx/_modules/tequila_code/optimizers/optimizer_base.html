@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tequila_code.optimizers.optimizer_base &mdash; Tequila Documentation 13.9.2024 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -73,21 +73,21 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Base class for Optimizers.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">typing</span><span class="o">,</span> <span class="nn">numbers</span><span class="o">,</span> <span class="nn">copy</span><span class="o">,</span> <span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span><span class="o">,</span><span class="w"> </span><span class="nn">numbers</span><span class="o">,</span><span class="w"> </span><span class="nn">copy</span><span class="o">,</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">from</span> <span class="nn">tequila.utils.exceptions</span> <span class="kn">import</span> <span class="n">TequilaException</span><span class="p">,</span> <span class="n">TequilaWarning</span>
-<span class="kn">from</span> <span class="nn">tequila.simulators.simulator_api</span> <span class="kn">import</span> <span class="nb">compile</span><span class="p">,</span> <span class="n">pick_backend</span>
-<span class="kn">from</span> <span class="nn">tequila.objective</span> <span class="kn">import</span> <span class="n">Objective</span>
-<span class="kn">from</span> <span class="nn">tequila.circuit.gradient</span> <span class="kn">import</span> <span class="n">grad</span>
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-<span class="kn">from</span> <span class="nn">tequila.objective.objective</span> <span class="kn">import</span> <span class="n">assign_variable</span><span class="p">,</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">format_variable_dictionary</span><span class="p">,</span> <span class="n">format_variable_list</span>
-<span class="kn">import</span> <span class="nn">numpy</span>
-<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">choices</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.utils.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TequilaException</span><span class="p">,</span> <span class="n">TequilaWarning</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.simulators.simulator_api</span><span class="w"> </span><span class="kn">import</span> <span class="nb">compile</span><span class="p">,</span> <span class="n">pick_backend</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.objective</span><span class="w"> </span><span class="kn">import</span> <span class="n">Objective</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.circuit.gradient</span><span class="w"> </span><span class="kn">import</span> <span class="n">grad</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.objective.objective</span><span class="w"> </span><span class="kn">import</span> <span class="n">assign_variable</span><span class="p">,</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">format_variable_dictionary</span><span class="p">,</span> <span class="n">format_variable_list</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">choices</span>
 
 
 <div class="viewcode-block" id="TequilaOptimizerException">
 <a class="viewcode-back" href="../../../optimizers.html#tequila_code.optimizers.optimizer_base.TequilaOptimizerException">[docs]</a>
-<span class="k">class</span> <span class="nc">TequilaOptimizerException</span><span class="p">(</span><span class="n">TequilaException</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TequilaOptimizerException</span><span class="p">(</span><span class="n">TequilaException</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
@@ -95,13 +95,13 @@
 <div class="viewcode-block" id="OptimizerHistory">
 <a class="viewcode-back" href="../../../optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerHistory">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">OptimizerHistory</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OptimizerHistory</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class representing the history of optimizers over time. Has a variety of convenience functions attached to it.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">iterations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">iterations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">energies</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span>
         <span class="k">else</span><span class="p">:</span>
@@ -119,13 +119,13 @@
     
     <span class="c1"># backward comp.</span>
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">energies_calls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">energies_calls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy_calls</span>
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">energies_evaluations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">energies_evaluations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy_calls</span>
     
-    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        magic method for convenient combination of history objects.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -135,7 +135,7 @@
         <span class="n">result</span><span class="o">.</span><span class="n">angles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">angles</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">angles</span>
         <span class="k">return</span> <span class="n">result</span>
 
-    <span class="k">def</span> <span class="fm">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        magic method for convenient in place combination of history objects.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -146,7 +146,7 @@
 
 <div class="viewcode-block" id="OptimizerHistory.extract_energies">
 <a class="viewcode-back" href="../../../optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerHistory.extract_energies">[docs]</a>
-    <span class="k">def</span> <span class="nf">extract_energies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Real</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">extract_energies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Real</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        convenience function to get the energies back as a dictionary.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -155,7 +155,7 @@
 
 <div class="viewcode-block" id="OptimizerHistory.extract_gradients">
 <a class="viewcode-back" href="../../../optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerHistory.extract_gradients">[docs]</a>
-    <span class="k">def</span> <span class="nf">extract_gradients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Real</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">extract_gradients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Real</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        convenience function to get the gradients of some variable out of the history.</span>
 <span class="sd">        Parameters</span>
@@ -177,7 +177,7 @@
 
 <div class="viewcode-block" id="OptimizerHistory.extract_angles">
 <a class="viewcode-back" href="../../../optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerHistory.extract_angles">[docs]</a>
-    <span class="k">def</span> <span class="nf">extract_angles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Real</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">extract_angles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Real</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        convenience function to get the value of some variable out of the history.</span>
 
@@ -200,7 +200,7 @@
 
 <div class="viewcode-block" id="OptimizerHistory.plot">
 <a class="viewcode-back" href="../../../optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerHistory.plot">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
              <span class="nb">property</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="s1">&#39;energies&#39;</span><span class="p">,</span>
              <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
              <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -234,11 +234,11 @@
 <span class="sd">        None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-        <span class="kn">from</span> <span class="nn">matplotlib.ticker</span> <span class="kn">import</span> <span class="n">MaxNLocator</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">MaxNLocator</span>
         <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">MaxNLocator</span><span class="p">(</span><span class="n">integer</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-        <span class="kn">import</span> <span class="nn">pickle</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
 
         <span class="k">if</span> <span class="n">baselines</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">baselines</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -304,7 +304,7 @@
 <div class="viewcode-block" id="OptimizerResults">
 <a class="viewcode-back" href="../../../optimizers.html#tequila_code.optimizers.optimizer_base.OptimizerResults">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">OptimizerResults</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OptimizerResults</span><span class="p">:</span>
 
     <span class="n">energy</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">history</span><span class="p">:</span> <span class="n">OptimizerHistory</span> <span class="o">=</span> <span class="kc">None</span>
@@ -312,7 +312,7 @@
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">angles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">angles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># allow backwards compatibility</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span></div>
 
@@ -320,7 +320,7 @@
 
 <div class="viewcode-block" id="Optimizer">
 <a class="viewcode-back" href="../../../optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer">[docs]</a>
-<span class="k">class</span> <span class="nc">Optimizer</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Optimizer</span><span class="p">:</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The base optimizer class, from which other optimizers inherit.</span>
@@ -363,7 +363,7 @@
 <span class="sd">        convenience: build and compile (i.e render callable) the hessian of an objective.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">maxiter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">device</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -439,7 +439,7 @@
 
 <div class="viewcode-block" id="Optimizer.reset_history">
 <a class="viewcode-back" href="../../../optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer.reset_history">[docs]</a>
-    <span class="k">def</span> <span class="nf">reset_history</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_history</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        replace self.history with a blank history.</span>
 
@@ -450,7 +450,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="n">OptimizerHistory</span><span class="p">()</span></div>
 
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">:</span> <span class="n">Objective</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">:</span> <span class="n">Objective</span><span class="p">,</span>
                  <span class="n">variables</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">Variable</span><span class="p">],</span>
                  <span class="n">initial_values</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="n">Variable</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Real</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="o">*</span><span class="n">args</span><span class="p">,</span>
@@ -478,7 +478,7 @@
 
 <div class="viewcode-block" id="Optimizer.initialize_variables">
 <a class="viewcode-back" href="../../../optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer.initialize_variables">[docs]</a>
-    <span class="k">def</span> <span class="nf">initialize_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">,</span> <span class="n">initial_values</span><span class="p">,</span> <span class="n">variables</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">,</span> <span class="n">initial_values</span><span class="p">,</span> <span class="n">variables</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convenience function to format the variables of some objective recieved in calls to optimzers.</span>
 
@@ -557,7 +557,7 @@
 
 <div class="viewcode-block" id="Optimizer.compile_objective">
 <a class="viewcode-back" href="../../../optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer.compile_objective">[docs]</a>
-    <span class="k">def</span> <span class="nf">compile_objective</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">:</span> <span class="n">Objective</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compile_objective</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">:</span> <span class="n">Objective</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        convenience function to wrap over compile; for use by inheritors.</span>
 <span class="sd">        Parameters</span>
@@ -582,7 +582,7 @@
 
 <div class="viewcode-block" id="Optimizer.compile_gradient">
 <a class="viewcode-back" href="../../../optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer.compile_gradient">[docs]</a>
-    <span class="k">def</span> <span class="nf">compile_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">:</span> <span class="n">Objective</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compile_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">:</span> <span class="n">Objective</span><span class="p">,</span>
                          <span class="n">variables</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">Variable</span><span class="p">],</span>
                          <span class="n">gradient</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                          <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">[</span>
@@ -632,7 +632,7 @@
 
 <div class="viewcode-block" id="Optimizer.compile_hessian">
 <a class="viewcode-back" href="../../../optimizers.html#tequila_code.optimizers.optimizer_base.Optimizer.compile_hessian">[docs]</a>
-    <span class="k">def</span> <span class="nf">compile_hessian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compile_hessian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                         <span class="n">variables</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">Variable</span><span class="p">],</span>
                         <span class="n">grad_obj</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="n">Variable</span><span class="p">,</span> <span class="n">Objective</span><span class="p">],</span>
                         <span class="n">comp_grad_obj</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="n">Variable</span><span class="p">,</span> <span class="n">Objective</span><span class="p">],</span>
@@ -695,7 +695,7 @@
         <span class="k">return</span> <span class="n">ddO</span><span class="p">,</span> <span class="n">compiled_hessian</span></div>
 
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">infostring</span> <span class="o">=</span> <span class="s2">&quot;Optimizer: </span><span class="si">{}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)))</span>
         <span class="n">infostring</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{:15}</span><span class="s2"> : </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;backend&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend</span><span class="p">)</span>
         <span class="n">infostring</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{:15}</span><span class="s2"> : </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;device&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
@@ -706,7 +706,7 @@
 
 
 
-<span class="k">class</span> <span class="nc">_NumGrad</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_NumGrad</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Numerical Gradient object.</span>
 
 <span class="sd">    Should not be used outside of optimizers.</span>
@@ -737,7 +737,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">stepsize</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">stepsize</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -764,7 +764,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">symmetric_two_point_stencil</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">symmetric_two_point_stencil</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        calculate objective gradient by symmetric shifts about a point.</span>
 <span class="sd">        Parameters</span>
@@ -793,7 +793,7 @@
         <span class="k">return</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">step</span> <span class="o">*</span> <span class="p">(</span><span class="n">obj</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-</span> <span class="n">obj</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">forward_two_point_stencil</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward_two_point_stencil</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        calculate objective gradient by asymmetric upward shfit relative to some point.</span>
 <span class="sd">        Parameters</span>
@@ -822,7 +822,7 @@
         <span class="k">return</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">step</span> <span class="o">*</span> <span class="p">(</span><span class="n">obj</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-</span> <span class="n">obj</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">backward_two_point_stencil</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">backward_two_point_stencil</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        calculate objective gradient by asymmetric downward shfit relative to some point.</span>
 <span class="sd">        Parameters</span>
@@ -849,7 +849,7 @@
         <span class="n">right</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">-=</span> <span class="n">step</span>
         <span class="k">return</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">step</span> <span class="o">*</span> <span class="p">(</span><span class="n">obj</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-</span> <span class="n">obj</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        convenience function to call self.method, e.g one of the staticmethods of this class.</span>
 
@@ -867,7 +867,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">objective</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">variable</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stepsize</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">count_expectationvalues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">count_expectationvalues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        how many expectationvalues are in self.objective?</span>
 <span class="sd">        Parameters</span>
@@ -882,7 +882,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">objective</span><span class="o">.</span><span class="n">count_expectationvalues</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<span class="k">class</span> <span class="nc">_SPSAGrad</span><span class="p">(</span><span class="n">_NumGrad</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_SPSAGrad</span><span class="p">(</span><span class="n">_NumGrad</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Simultaneous Perturbation Stochastic Approximation Gradient object.</span>
 
 <span class="sd">    Should not be used outside of optimizers.</span>
@@ -900,7 +900,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">stepsize</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">stepsize</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -932,7 +932,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">standard_spsa</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">keys</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">standard_spsa</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">keys</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        calculate objective gradient using standar spsa.</span>
 <span class="sd">        Parameters</span>
@@ -967,7 +967,7 @@
             <span class="n">gradient</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gradientComponent</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">gradient</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        convenience function to call self.method, e.g one of the staticmethods of this class.</span>
 
@@ -994,7 +994,7 @@
    
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">objective</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">,</span> <span class="n">stepsize</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">calibrated_lr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="n">initial_value</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calibrated_lr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="n">initial_value</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates a calibrated learning rate for spsa</span>
 <span class="sd">        Parameters</span>

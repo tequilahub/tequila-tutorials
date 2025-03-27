@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tequila_code.optimizers &mdash; Tequila Documentation 13.9.2024 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -69,19 +69,19 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tequila_code.optimizers</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">tequila.optimizers.optimizer_base</span> <span class="kn">import</span> <span class="n">OptimizerHistory</span><span class="p">,</span> <span class="n">Optimizer</span><span class="p">,</span> <span class="n">TequilaOptimizerException</span><span class="p">,</span> <span class="n">OptimizerResults</span>
-<span class="kn">from</span> <span class="nn">tequila.optimizers.optimizer_scipy</span> <span class="kn">import</span> <span class="n">OptimizerSciPy</span>
-<span class="kn">from</span> <span class="nn">tequila.optimizers.optimizer_gd</span> <span class="kn">import</span> <span class="n">OptimizerGD</span>
-<span class="kn">from</span> <span class="nn">tequila.optimizers.optimizer_scipy</span> <span class="kn">import</span> <span class="n">minimize</span> <span class="k">as</span> <span class="n">minimize_scipy</span>
-<span class="kn">from</span> <span class="nn">tequila.optimizers.optimizer_gd</span> <span class="kn">import</span> <span class="n">minimize</span> <span class="k">as</span> <span class="n">minimize_gd</span>
-<span class="kn">from</span> <span class="nn">tequila.simulators.simulator_api</span> <span class="kn">import</span> <span class="n">simulate</span>
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tequila.optimizers.optimizer_base</span><span class="w"> </span><span class="kn">import</span> <span class="n">OptimizerHistory</span><span class="p">,</span> <span class="n">Optimizer</span><span class="p">,</span> <span class="n">TequilaOptimizerException</span><span class="p">,</span> <span class="n">OptimizerResults</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.optimizers.optimizer_scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">OptimizerSciPy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.optimizers.optimizer_gd</span><span class="w"> </span><span class="kn">import</span> <span class="n">OptimizerGD</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.optimizers.optimizer_scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">minimize</span> <span class="k">as</span> <span class="n">minimize_scipy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.optimizers.optimizer_gd</span><span class="w"> </span><span class="kn">import</span> <span class="n">minimize</span> <span class="k">as</span> <span class="n">minimize_gd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.simulators.simulator_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">simulate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 
-<span class="kn">import</span> <span class="nn">typing</span><span class="o">,</span> <span class="nn">numbers</span><span class="o">,</span> <span class="nn">numpy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span><span class="o">,</span><span class="w"> </span><span class="nn">numbers</span><span class="o">,</span><span class="w"> </span><span class="nn">numpy</span>
 
 
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">_Optimizers</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_Optimizers</span><span class="p">:</span>
     <span class="n">minimize</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">methods</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span>
@@ -98,8 +98,8 @@
 
 <span class="n">has_gpyopt</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">tequila.optimizers.optimizer_gpyopt</span> <span class="kn">import</span> <span class="n">OptimizerGPyOpt</span>
-    <span class="kn">from</span> <span class="nn">tequila.optimizers.optimizer_gpyopt</span> <span class="kn">import</span> <span class="n">minimize</span> <span class="k">as</span> <span class="n">minimize_gpyopt</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">tequila.optimizers.optimizer_gpyopt</span><span class="w"> </span><span class="kn">import</span> <span class="n">OptimizerGPyOpt</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">tequila.optimizers.optimizer_gpyopt</span><span class="w"> </span><span class="kn">import</span> <span class="n">minimize</span> <span class="k">as</span> <span class="n">minimize_gpyopt</span>
 
     <span class="n">INSTALLED_OPTIMIZERS</span><span class="p">[</span><span class="s1">&#39;gpyopt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_Optimizers</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">OptimizerGPyOpt</span><span class="p">,</span>
                                                  <span class="n">minimize</span><span class="o">=</span><span class="n">minimize_gpyopt</span><span class="p">,</span>
@@ -110,7 +110,7 @@
 
 <div class="viewcode-block" id="show_available_optimizers">
 <a class="viewcode-back" href="../../optimizers.html#tequila_code.optimizers.show_available_optimizers">[docs]</a>
-<span class="k">def</span> <span class="nf">show_available_optimizers</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">show_available_optimizers</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -141,7 +141,7 @@
 
 <div class="viewcode-block" id="minimize">
 <a class="viewcode-back" href="../../optimizers.html#tequila_code.optimizers.minimize">[docs]</a>
-<span class="k">def</span> <span class="nf">minimize</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">minimize</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span>
              <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;bfgs&quot;</span><span class="p">,</span>
              <span class="n">variables</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
              <span class="n">initial_values</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tequila_code.quantumchemistry &mdash; Tequila Documentation 13.9.2024 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -69,27 +69,27 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tequila_code.quantumchemistry</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">typing</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">from</span> <span class="nn">tequila</span> <span class="kn">import</span> <span class="n">TequilaWarning</span>
-<span class="kn">from</span> <span class="nn">.qc_base</span> <span class="kn">import</span> <span class="n">QuantumChemistryBase</span>
-<span class="kn">from</span> <span class="nn">.chemistry_tools</span> <span class="kn">import</span> <span class="n">ParametersQC</span><span class="p">,</span> <span class="n">NBodyTensor</span>
-<span class="kn">from</span> <span class="nn">.madness_interface</span> <span class="kn">import</span> <span class="n">QuantumChemistryMadness</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila</span><span class="w"> </span><span class="kn">import</span> <span class="n">TequilaWarning</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.qc_base</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuantumChemistryBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.chemistry_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParametersQC</span><span class="p">,</span> <span class="n">NBodyTensor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.madness_interface</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuantumChemistryMadness</span>
 
 
 <span class="n">SUPPORTED_QCHEMISTRY_BACKENDS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;base&quot;</span><span class="p">,</span> <span class="s2">&quot;psi4&quot;</span><span class="p">,</span> <span class="s2">&quot;madness&quot;</span><span class="p">,</span> <span class="s2">&quot;pyscf&quot;</span><span class="p">]</span>
 <span class="n">INSTALLED_QCHEMISTRY_BACKENDS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;base&quot;</span><span class="p">:</span> <span class="n">QuantumChemistryBase</span><span class="p">,</span> <span class="s2">&quot;madness&quot;</span><span class="p">:</span> <span class="n">QuantumChemistryMadness</span><span class="p">}</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">.psi4_interface</span> <span class="kn">import</span> <span class="n">QuantumChemistryPsi4</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.psi4_interface</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuantumChemistryPsi4</span>
 
     <span class="n">INSTALLED_QCHEMISTRY_BACKENDS</span><span class="p">[</span><span class="s2">&quot;psi4&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">QuantumChemistryPsi4</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="k">pass</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">.pyscf_interface</span> <span class="kn">import</span> <span class="n">QuantumChemistryPySCF</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.pyscf_interface</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuantumChemistryPySCF</span>
 
     <span class="n">INSTALLED_QCHEMISTRY_BACKENDS</span><span class="p">[</span><span class="s2">&quot;pyscf&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">QuantumChemistryPySCF</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -98,7 +98,7 @@
 
 <div class="viewcode-block" id="show_available_modules">
 <a class="viewcode-back" href="../../quantumchemistry.html#tequila_code.quantumchemistry.show_available_modules">[docs]</a>
-<span class="k">def</span> <span class="nf">show_available_modules</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">show_available_modules</span><span class="p">():</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Available QuantumChemistry Modules:&quot;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">INSTALLED_QCHEMISTRY_BACKENDS</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">)</span></div>
@@ -107,14 +107,14 @@
 
 <div class="viewcode-block" id="show_supported_modules">
 <a class="viewcode-back" href="../../quantumchemistry.html#tequila_code.quantumchemistry.show_supported_modules">[docs]</a>
-<span class="k">def</span> <span class="nf">show_supported_modules</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">show_supported_modules</span><span class="p">():</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">SUPPORTED_QCHEMISTRY_BACKENDS</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="Molecule">
 <a class="viewcode-back" href="../../quantumchemistry.html#tequila_code.quantumchemistry.Molecule">[docs]</a>
-<span class="k">def</span> <span class="nf">Molecule</span><span class="p">(</span><span class="n">geometry</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">Molecule</span><span class="p">(</span><span class="n">geometry</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
              <span class="n">basis_set</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
              <span class="n">transformation</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
              <span class="n">orbital_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -223,7 +223,7 @@
 
 <div class="viewcode-block" id="MoleculeFromTequila">
 <a class="viewcode-back" href="../../quantumchemistry.html#tequila_code.quantumchemistry.MoleculeFromTequila">[docs]</a>
-<span class="k">def</span> <span class="nf">MoleculeFromTequila</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">transformation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">MoleculeFromTequila</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">transformation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">get_integrals</span><span class="p">()</span>
     <span class="n">parameters</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">parameters</span>
     <span class="k">if</span> <span class="n">backend</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -241,7 +241,7 @@
 
 <div class="viewcode-block" id="MoleculeFromOpenFermion">
 <a class="viewcode-back" href="../../quantumchemistry.html#tequila_code.quantumchemistry.MoleculeFromOpenFermion">[docs]</a>
-<span class="k">def</span> <span class="nf">MoleculeFromOpenFermion</span><span class="p">(</span><span class="n">molecule</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">MoleculeFromOpenFermion</span><span class="p">(</span><span class="n">molecule</span><span class="p">,</span>
                             <span class="n">transformation</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                             <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                             <span class="o">*</span><span class="n">args</span><span class="p">,</span>
@@ -269,7 +269,7 @@
 
 
 <span class="c1"># needs pyscf (handeled in call)</span>
-<span class="kn">from</span> <span class="nn">.orbital_optimizer</span> <span class="kn">import</span> <span class="n">optimize_orbitals</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.orbital_optimizer</span><span class="w"> </span><span class="kn">import</span> <span class="n">optimize_orbitals</span>
 </pre></div>
 
            </div>

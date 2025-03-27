@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tequila_code.circuit &mdash; Tequila Documentation 13.9.2024 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -69,14 +69,14 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tequila_code.circuit</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">.circuit</span> <span class="kn">import</span> <span class="n">QCircuit</span>
-<span class="kn">from</span> <span class="nn">.noise</span> <span class="kn">import</span> <span class="n">NoiseModel</span>
-<span class="kn">from</span> <span class="nn">.qpic</span> <span class="kn">import</span> <span class="n">export_to</span>
-<span class="kn">from</span> <span class="nn">.compiler</span> <span class="kn">import</span> <span class="n">CircuitCompiler</span> <span class="k">as</span> <span class="n">CircuitCompiler</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.circuit</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCircuit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.noise</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoiseModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.qpic</span><span class="w"> </span><span class="kn">import</span> <span class="n">export_to</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.compiler</span><span class="w"> </span><span class="kn">import</span> <span class="n">CircuitCompiler</span> <span class="k">as</span> <span class="n">CircuitCompiler</span>
 
 <div class="viewcode-block" id="compile_circuit">
 <a class="viewcode-back" href="../../circuit.html#tequila_code.circuit.compile_circuit">[docs]</a>
-<span class="k">def</span> <span class="nf">compile_circuit</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compile_circuit</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="c1"># see CircuitCompiler documentation</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">CircuitCompiler</span><span class="o">.</span><span class="n">standard_gate_set</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">c</span><span class="p">(</span><span class="n">U</span><span class="p">)</span></div>

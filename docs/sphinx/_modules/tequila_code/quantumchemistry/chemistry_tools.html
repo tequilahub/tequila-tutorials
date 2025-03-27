@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tequila_code.quantumchemistry.chemistry_tools &mdash; Tequila Documentation 13.9.2024 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -70,25 +70,25 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tequila_code.quantumchemistry.chemistry_tools</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">typing</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Real</span>
-<span class="kn">import</span> <span class="nn">numpy</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numbers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Real</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
 
-<span class="kn">from</span> <span class="nn">tequila</span> <span class="kn">import</span> <span class="n">BitString</span><span class="p">,</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">TequilaException</span><span class="p">,</span><span class="n">Variable</span><span class="p">,</span><span class="n">compile_circuit</span>
-<span class="kn">from</span> <span class="nn">tequila.circuit</span> <span class="kn">import</span> <span class="n">gates</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila</span><span class="w"> </span><span class="kn">import</span> <span class="n">BitString</span><span class="p">,</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">TequilaException</span><span class="p">,</span><span class="n">Variable</span><span class="p">,</span><span class="n">compile_circuit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila.circuit</span><span class="w"> </span><span class="kn">import</span> <span class="n">gates</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">openfermion.ops.representations</span> <span class="kn">import</span> <span class="n">get_active_space_integrals</span>  <span class="c1"># needs openfermion 1.3</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">openfermion.ops.representations</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_active_space_integrals</span>  <span class="c1"># needs openfermion 1.3</span>
 <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">E</span><span class="p">:</span>
     <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="se">\n</span><span class="s2">please update openfermion to version 1.3 or higher&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">E</span><span class="p">)))</span>
 
 <div class="viewcode-block" id="ActiveSpaceData">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ActiveSpaceData">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ActiveSpaceData</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ActiveSpaceData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Small dataclass to keep the overview in active spaces</span>
 <span class="sd">    Class is used internally</span>
@@ -96,7 +96,7 @@
     <span class="n">active_orbitals</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># active orbitals (spatial, c1)</span>
     <span class="n">reference_orbitals</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># reference orbitals (spatial, c1)</span>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;Active Space Data:</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{key:15}</span><span class="s2"> : </span><span class="si">{value:15}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;active_orbitals&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">active_orbitals</span><span class="p">))</span>
         <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{key:15}</span><span class="s2"> : </span><span class="si">{value:15}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;reference_orbitals&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_orbitals</span><span class="p">))</span>
@@ -105,24 +105,24 @@
         <span class="k">return</span> <span class="n">result</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">frozen_reference_orbitals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">frozen_reference_orbitals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_orbitals</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_orbitals</span><span class="p">]</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">active_reference_orbitals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">active_reference_orbitals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_orbitals</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_orbitals</span><span class="p">]</span></div>
 
 
 
 <div class="viewcode-block" id="FermionicGateImpl">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.FermionicGateImpl">[docs]</a>
-<span class="k">class</span> <span class="nc">FermionicGateImpl</span><span class="p">(</span><span class="n">gates</span><span class="o">.</span><span class="n">QubitExcitationImpl</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FermionicGateImpl</span><span class="p">(</span><span class="n">gates</span><span class="o">.</span><span class="n">QubitExcitationImpl</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Small helper class for Fermionic Excictation Gates</span>
 <span class="sd">    Mainly so that &quot;FermionicGate is displayed when circuits are printed</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">generator</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">transformation</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">generator</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">transformation</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">generator</span><span class="o">=</span><span class="n">generator</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">generator</span><span class="o">.</span><span class="n">qubits</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">p0</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="s2">&quot;FermionicExcitation&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">transformation</span> <span class="o">=</span> <span class="n">transformation</span>
@@ -133,7 +133,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_excitation_indices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span>
 <div class="viewcode-block" id="FermionicGateImpl.compile">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.FermionicGateImpl.compile">[docs]</a>
-    <span class="k">def</span> <span class="nf">compile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_convertable_to_qubit_excitation</span><span class="p">():</span>
             <span class="n">target</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">:</span>
@@ -148,7 +148,7 @@
 
 <div class="viewcode-block" id="FermionicGateImpl.format_excitation_indices">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.FermionicGateImpl.format_excitation_indices">[docs]</a>
-    <span class="k">def</span> <span class="nf">format_excitation_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_excitation_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Consistent formatting of excitation indices</span>
 <span class="sd">        idx = [(p0,q0),(p1,q1),...,(pn,qn)]</span>
@@ -163,7 +163,7 @@
 
 <div class="viewcode-block" id="FermionicGateImpl.format_excitation_variables">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.FermionicGateImpl.format_excitation_variables">[docs]</a>
-    <span class="k">def</span> <span class="nf">format_excitation_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_excitation_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Consistent formatting of excitation variable</span>
 <span class="sd">        idx = [(p0,q0),(p1,q1),...,(pn,qn)]</span>
@@ -182,7 +182,7 @@
 
 <div class="viewcode-block" id="FermionicGateImpl.cCRy">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.FermionicGateImpl.cCRy">[docs]</a>
-    <span class="k">def</span> <span class="nf">cCRy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dcontrol</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">control</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cCRy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dcontrol</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">control</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
              <span class="n">angle</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="n">Real</span><span class="p">,</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Hashable</span><span class="p">],</span> <span class="n">case</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Compilation of CRy as on https://doi.org/10.1103/PhysRevA.102.062612</span>
@@ -219,7 +219,7 @@
 
 <div class="viewcode-block" id="FermionicGateImpl.fermionic_excitation">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.FermionicGateImpl.fermionic_excitation">[docs]</a>
-    <span class="k">def</span> <span class="nf">fermionic_excitation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="n">Real</span><span class="p">,</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Hashable</span><span class="p">],</span> <span class="n">indices</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fermionic_excitation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="n">Real</span><span class="p">,</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Hashable</span><span class="p">],</span> <span class="n">indices</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">,</span>
                              <span class="n">control</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">opt</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">            Excitation [(i,j),(k,l)],... compiled following https://doi.org/10.1103/PhysRevA.102.062612</span>
@@ -269,17 +269,17 @@
         <span class="k">return</span> <span class="n">Upair</span> <span class="o">+</span> <span class="n">Uladder</span> <span class="o">+</span> <span class="n">Ur</span> <span class="o">+</span> <span class="n">Uladder</span><span class="o">.</span><span class="n">dagger</span><span class="p">()</span> <span class="o">+</span> <span class="n">Upair2</span></div>
 
 
-    <span class="k">def</span> <span class="nf">__str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;FermionicExcitation(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">))</span>
         <span class="k">return</span> <span class="s2">&quot;FermionicExcitation&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
 
 <div class="viewcode-block" id="FermionicGateImpl.is_convertable_to_qubit_excitation">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.FermionicGateImpl.is_convertable_to_qubit_excitation">[docs]</a>
-    <span class="k">def</span> <span class="nf">is_convertable_to_qubit_excitation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_convertable_to_qubit_excitation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        spin-paired double excitations (both electrons occupy the same spatial orbital and are excited to another spatial orbital)</span>
 <span class="sd">        in the jordan-wigner representation are identical to 4-qubit excitations which can be compiled more efficient</span>
@@ -300,7 +300,7 @@
 
 <div class="viewcode-block" id="prepare_product_state">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.prepare_product_state">[docs]</a>
-<span class="k">def</span> <span class="nf">prepare_product_state</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">BitString</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">prepare_product_state</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">BitString</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Small convenience function</span>
 
 <span class="sd">    Parameters</span>
@@ -327,7 +327,7 @@
 <div class="viewcode-block" id="ParametersQC">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ParametersQC</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ParametersQC</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Specialization of ParametersHamiltonian&quot;&quot;&quot;</span>
     <span class="n">basis_set</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Quantum chemistry basis set</span>
     <span class="n">geometry</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># geometry of the underlying molecule (units: Angstrom!),</span>
@@ -340,7 +340,7 @@
     
 <div class="viewcode-block" id="ParametersQC.get_number_of_core_electrons">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.get_number_of_core_electrons">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_number_of_core_electrons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_core_electrons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_atoms</span><span class="p">():</span>
             <span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_atom_number</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
@@ -360,24 +360,24 @@
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">n_electrons</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_electrons</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_nuc_charge</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">charge</span>
 
 <div class="viewcode-block" id="ParametersQC.get_nuc_charge">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.get_nuc_charge">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_nuc_charge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_nuc_charge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_atom_number</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">atom</span><span class="p">)</span> <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_atoms</span><span class="p">())</span></div>
 
 
 <div class="viewcode-block" id="ParametersQC.get_atom_number">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.get_atom_number">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_atom_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_atom_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="n">atom_numbers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;h&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;he&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;li&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;be&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s2">&quot;o&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;f&quot;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="s2">&quot;ne&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;na&quot;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
                         <span class="s2">&quot;mg&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">&quot;al&quot;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="s2">&quot;si&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s2">&quot;ph&quot;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;cl&quot;</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="s2">&quot;ar&quot;</span><span class="p">:</span> <span class="mi">18</span><span class="p">}</span>
         <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">atom_numbers</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">atom_numbers</span><span class="p">[</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="kn">import</span> <span class="nn">periodictable</span> <span class="k">as</span> <span class="nn">pt</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">periodictable</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pt</span>
             <span class="n">atom</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
             <span class="n">atom</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">atom</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
             <span class="n">atom</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
@@ -390,11 +390,11 @@
 
 <div class="viewcode-block" id="ParametersQC.get_atoms">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.get_atoms">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_atoms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_atoms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_geometry</span><span class="p">()]</span></div>
 
 
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span>
@@ -421,12 +421,12 @@
             <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;could not find file for molecular coordinates </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="p">))</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">filename</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">filename</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis_set</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">molecular_data_param</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">molecular_data_param</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;:return: Give back all parameters for the MolecularData format from openfermion as dictionary&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;basis&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis_set</span><span class="p">,</span> <span class="s1">&#39;geometry&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_geometry</span><span class="p">(),</span> <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
                 <span class="s1">&#39;charge&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">charge</span><span class="p">,</span> <span class="s1">&#39;multiplicity&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiplicity</span><span class="p">,</span> <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span>
@@ -435,7 +435,7 @@
 <div class="viewcode-block" id="ParametersQC.format_element_name">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.format_element_name">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">format_element_name</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_element_name</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;OpenFermion uses case sensitive hash tables for chemical elements</span>
 <span class="sd">        I.e. you need to name Lithium: &#39;Li&#39; and &#39;li&#39; or &#39;LI&#39; will not work</span>
 <span class="sd">        this convenience function does the naming</span>
@@ -459,7 +459,7 @@
 <div class="viewcode-block" id="ParametersQC.convert_to_list">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.convert_to_list">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">convert_to_list</span><span class="p">(</span><span class="n">geometry</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_to_list</span><span class="p">(</span><span class="n">geometry</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert a molecular structure given as a string into a list suitable for openfermion</span>
 
 <span class="sd">        Parameters</span>
@@ -495,7 +495,7 @@
 
 <div class="viewcode-block" id="ParametersQC.get_geometry_string">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.get_geometry_string">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_geometry_string</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_geometry_string</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;returns the geometry as a string</span>
 <span class="sd">        :return: geometry string</span>
 
@@ -517,7 +517,7 @@
 
 <div class="viewcode-block" id="ParametersQC.get_geometry">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.get_geometry">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the geometry</span>
 <span class="sd">        If a xyz filename was given the file is read out</span>
 <span class="sd">        otherwise it is assumed that the geometry was given as string</span>
@@ -547,7 +547,7 @@
 <div class="viewcode-block" id="ParametersQC.read_xyz_from_file">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ParametersQC.read_xyz_from_file">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">read_xyz_from_file</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_xyz_from_file</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read XYZ filetype for molecular structures</span>
 <span class="sd">        https://en.wikipedia.org/wiki/XYZ_file_format</span>
 <span class="sd">        Units: Angstrom!</span>
@@ -576,7 +576,7 @@
 <div class="viewcode-block" id="ClosedShellAmplitudes">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ClosedShellAmplitudes">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ClosedShellAmplitudes</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ClosedShellAmplitudes</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper Class for clasical amplitudes</span>
 <span class="sd">    used internally</span>
@@ -586,7 +586,7 @@
 
 <div class="viewcode-block" id="ClosedShellAmplitudes.make_parameter_dictionary">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.ClosedShellAmplitudes.make_parameter_dictionary">[docs]</a>
-    <span class="k">def</span> <span class="nf">make_parameter_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">1.e-8</span><span class="p">,</span> <span class="n">screening</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_parameter_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">1.e-8</span><span class="p">,</span> <span class="n">screening</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -619,7 +619,7 @@
 <div class="viewcode-block" id="Amplitudes">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.Amplitudes">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Amplitudes</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Amplitudes</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper class for classical Coupled-Cluster Amplitudes</span>
 <span class="sd">    We adopt the Psi4 notation for consistency</span>
@@ -637,7 +637,7 @@
 <div class="viewcode-block" id="Amplitudes.from_closed_shell">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.Amplitudes.from_closed_shell">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_closed_shell</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">cs</span><span class="p">:</span> <span class="n">ClosedShellAmplitudes</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_closed_shell</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">cs</span><span class="p">:</span> <span class="n">ClosedShellAmplitudes</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize from closed-shell Amplitude structure</span>
 
@@ -663,7 +663,7 @@
 
 <div class="viewcode-block" id="Amplitudes.make_parameter_dictionary">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.Amplitudes.make_parameter_dictionary">[docs]</a>
-    <span class="k">def</span> <span class="nf">make_parameter_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">1.e-8</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_parameter_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">1.e-8</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -713,12 +713,12 @@
 
 <div class="viewcode-block" id="NBodyTensor">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor">[docs]</a>
-<span class="k">class</span> <span class="nc">NBodyTensor</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NBodyTensor</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Convenience class for handling N-body tensors &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="NBodyTensor.Ordering">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.Ordering">[docs]</a>
-    <span class="k">class</span> <span class="nc">Ordering</span><span class="p">:</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">Ordering</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convenience to keep track of aliases in odering names for two body integrals</span>
 <span class="sd">        i.e. Mulliken/Chem/1122</span>
@@ -726,7 +726,7 @@
 <span class="sd">             openfermion/1221</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scheme</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scheme</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">scheme</span><span class="p">,</span> <span class="s2">&quot;_scheme&quot;</span><span class="p">):</span>
                 <span class="n">scheme</span> <span class="o">=</span> <span class="n">scheme</span><span class="o">.</span><span class="n">_scheme</span>
             <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">scheme</span><span class="p">,</span> <span class="s2">&quot;scheme&quot;</span><span class="p">):</span>
@@ -735,7 +735,7 @@
 
 <div class="viewcode-block" id="NBodyTensor.Ordering.assign_scheme">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.Ordering.assign_scheme">[docs]</a>
-        <span class="k">def</span> <span class="nf">assign_scheme</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scheme</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">assign_scheme</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scheme</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">scheme</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">return</span> <span class="s2">&quot;chem&quot;</span>
             <span class="k">else</span><span class="p">:</span>
@@ -754,29 +754,29 @@
 
 <div class="viewcode-block" id="NBodyTensor.Ordering.is_phys">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.Ordering.is_phys">[docs]</a>
-        <span class="k">def</span> <span class="nf">is_phys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">is_phys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scheme</span> <span class="o">==</span> <span class="s2">&quot;phys&quot;</span></div>
 
 
 <div class="viewcode-block" id="NBodyTensor.Ordering.is_chem">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.Ordering.is_chem">[docs]</a>
-        <span class="k">def</span> <span class="nf">is_chem</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">is_chem</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scheme</span> <span class="o">==</span> <span class="s2">&quot;chem&quot;</span></div>
 
 
 <div class="viewcode-block" id="NBodyTensor.Ordering.is_of">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.Ordering.is_of">[docs]</a>
-        <span class="k">def</span> <span class="nf">is_of</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">is_of</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scheme</span> <span class="o">==</span> <span class="s2">&quot;of&quot;</span></div>
 
 
-        <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scheme</span></div>
 
 
 <div class="viewcode-block" id="NBodyTensor.identify_ordering">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.identify_ordering">[docs]</a>
-    <span class="k">def</span> <span class="nf">identify_ordering</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trials</span><span class="o">=</span><span class="mi">25</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">identify_ordering</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trials</span><span class="o">=</span><span class="mi">25</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">chem</span><span class="o">=</span><span class="kc">False</span>
@@ -799,7 +799,7 @@
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;NBTensor ordering could not be identified&quot;</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_verify_ordering_dirac</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trials</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_verify_ordering_dirac</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trials</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="c1"># dirac ordering: ijkl = &lt;ij|kl&gt; i.e 1212</span>
@@ -816,7 +816,7 @@
 
         <span class="k">return</span> <span class="kc">True</span>
 
-    <span class="k">def</span> <span class="nf">_verify_ordering_mulliken</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trials</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_verify_ordering_mulliken</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trials</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="c1"># mulliken ordering: ijkl = (ij|kl) i.e 1122</span>
@@ -832,7 +832,7 @@
 
         <span class="k">return</span> <span class="kc">True</span>
 
-    <span class="k">def</span> <span class="nf">_verify_ordering_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trials</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_verify_ordering_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trials</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="c1"># openfermion ordering: ijkl = [ij|kl] i.e 1221</span>
@@ -848,7 +848,7 @@
 
         <span class="k">return</span> <span class="kc">True</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elems</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">active_indices</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ordering</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elems</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">active_indices</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ordering</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">size_full</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -905,12 +905,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">ordering</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elems</span><span class="o">.</span><span class="n">shape</span>
 
 <div class="viewcode-block" id="NBodyTensor.sub_lists">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.sub_lists">[docs]</a>
-    <span class="k">def</span> <span class="nf">sub_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx_lists</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sub_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx_lists</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get subspace of tensor by a set of index lists</span>
 <span class="sd">        according to hPQ.sub_lists(idx_lists=[p, q]) = [hPQ for P in p and Q in q]</span>
@@ -944,7 +944,7 @@
 
 <div class="viewcode-block" id="NBodyTensor.set_index_lists">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.set_index_lists">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_index_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_index_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Set passive and full index lists based on class inputs &quot;&quot;&quot;</span>
         <span class="n">tmp_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size_full</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size_full</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -957,7 +957,7 @@
 
 <div class="viewcode-block" id="NBodyTensor.sub_str">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.sub_str">[docs]</a>
-    <span class="k">def</span> <span class="nf">sub_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sub_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get subspace of tensor by a string</span>
 <span class="sd">        Currently is able to resolve an active space, named &#39;a&#39;, full space &#39;f&#39;, and the complement &#39;p&#39; = &#39;f&#39; - &#39;a&#39;.</span>
@@ -1012,7 +1012,7 @@
 
 <div class="viewcode-block" id="NBodyTensor.reorder">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.NBodyTensor.reorder">[docs]</a>
-    <span class="k">def</span> <span class="nf">reorder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;of&#39;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reorder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;of&#39;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function to reorder tensors according to some convention.</span>
 
@@ -1071,7 +1071,7 @@
 <div class="viewcode-block" id="OrbitalData">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.OrbitalData">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">OrbitalData</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OrbitalData</span><span class="p">:</span>
     <span class="n">irrep</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># irrep of symmetry group (if assigned)</span>
     <span class="n">idx_irrep</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># index within the irrep</span>
     <span class="n">idx_total</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># index within the total set of orbitals</span>
@@ -1080,19 +1080,19 @@
     <span class="n">occ</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># occupation number assigned to orbital</span>
     <span class="n">pair</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># potential electron pair that the orbital is assigned to</span>
 
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># backward compatibility</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pair</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pair</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pair</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">occ</span> <span class="o">=</span> <span class="mf">2.0</span>  <span class="c1"># mark as reference</span>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;{&quot;</span><span class="o">+</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">, &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]))</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;}&quot;</span></div>
 
 
 <div class="viewcode-block" id="IntegralManager">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager">[docs]</a>
-<span class="k">class</span> <span class="nc">IntegralManager</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IntegralManager</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Manage Basis Integrals of Quantum Chemistry</span>
 <span class="sd">    All integrals are held in their original basis, the corresponding mo-coefficients have to be passed down</span>
@@ -1108,7 +1108,7 @@
     <span class="n">_active_space</span><span class="p">:</span> <span class="n">ActiveSpaceData</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">_orbitals</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">OrbitalData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">one_body_integrals</span><span class="p">,</span> <span class="n">two_body_integrals</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">one_body_integrals</span><span class="p">,</span> <span class="n">two_body_integrals</span><span class="p">,</span>
                  <span class="n">basis_name</span><span class="o">=</span><span class="s2">&quot;unknown&quot;</span><span class="p">,</span> <span class="n">orbital_type</span><span class="o">=</span><span class="s2">&quot;unknown&quot;</span><span class="p">,</span>
                  <span class="n">constant_term</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">orbital_coefficients</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">active_space</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overlap_integrals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">orbitals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_one_body_integrals</span> <span class="o">=</span> <span class="n">one_body_integrals</span>
@@ -1148,7 +1148,7 @@
     
 <div class="viewcode-block" id="IntegralManager.get_orthonormalized_orbital_coefficients">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.get_orthonormalized_orbital_coefficients">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_orthonormalized_orbital_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_orthonormalized_orbital_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computes orbitals in this basis that are orthonormal (through loewdin orthonormalization)</span>
 
@@ -1167,19 +1167,19 @@
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">active_orbitals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">active_orbitals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_orbitals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_space</span><span class="o">.</span><span class="n">active_orbitals</span><span class="p">]</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">orbitals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">orbitals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orbitals</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">active_space</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">active_space</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_space</span>
 
     <span class="nd">@active_space</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">active_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">active_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_active_space</span> <span class="o">=</span> <span class="n">other</span>
         <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orbitals</span><span class="p">:</span>
             <span class="n">x</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1187,15 +1187,15 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_orbitals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="n">ii</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">reference_orbitals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reference_orbitals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_orbitals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_space</span><span class="o">.</span><span class="n">reference_orbitals</span><span class="p">]</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">active_reference_orbitals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">active_reference_orbitals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_orbitals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_space</span><span class="o">.</span><span class="n">active_orbitals</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_space</span><span class="o">.</span><span class="n">reference_orbitals</span><span class="p">]</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">overlap_integrals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">overlap_integrals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1204,7 +1204,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_overlap_integrals</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">one_body_integrals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">one_body_integrals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1213,7 +1213,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_one_body_integrals</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">two_body_integrals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">two_body_integrals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1223,7 +1223,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_two_body_integrals</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">constant_term</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">constant_term</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1232,7 +1232,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_constant_term</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">orbital_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">orbital_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        second index is the orbital index, first the basis index</span>
 <span class="sd">        Returns</span>
@@ -1242,7 +1242,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orbital_coefficients</span>
 
     <span class="nd">@orbital_coefficients</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">orbital_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">orbital_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verify_orbital_coefficients</span><span class="p">(</span><span class="n">orbital_coefficients</span><span class="o">=</span><span class="n">other</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_orbital_coefficients</span> <span class="o">=</span> <span class="n">other</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_orbitals</span><span class="p">):</span>
@@ -1251,7 +1251,7 @@
     
 <div class="viewcode-block" id="IntegralManager.transform_to_native_orbitals">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.transform_to_native_orbitals">[docs]</a>
-    <span class="k">def</span> <span class="nf">transform_to_native_orbitals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">transform_to_native_orbitals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Transform orbitals to orthonormal functions closest to the native basis</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1262,7 +1262,7 @@
 
 <div class="viewcode-block" id="IntegralManager.is_unitary">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.is_unitary">[docs]</a>
-    <span class="k">def</span> <span class="nf">is_unitary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">U</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_unitary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">U</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">U</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span> <span class="k">return</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="n">U</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">U</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="k">return</span> <span class="kc">False</span>
         <span class="n">test</span> <span class="o">=</span> <span class="p">(</span><span class="n">U</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">)</span> <span class="o">-</span> <span class="n">numpy</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">U</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -1272,7 +1272,7 @@
 
 <div class="viewcode-block" id="IntegralManager.transform_orbitals">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.transform_orbitals">[docs]</a>
-    <span class="k">def</span> <span class="nf">transform_orbitals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">transform_orbitals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Transform orbitals</span>
 <span class="sd">        Parameters</span>
@@ -1293,7 +1293,7 @@
 
 <div class="viewcode-block" id="IntegralManager.get_integrals">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.get_integrals">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_integrals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">orbital_coefficients</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ordering</span><span class="o">=</span><span class="s2">&quot;openfermion&quot;</span><span class="p">,</span> <span class="n">ignore_active_space</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_integrals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">orbital_coefficients</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ordering</span><span class="o">=</span><span class="s2">&quot;openfermion&quot;</span><span class="p">,</span> <span class="n">ignore_active_space</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get all molecular integrals in given orbital basis (determined by orbital_coefficients in self or the ones passed here)</span>
 <span class="sd">        active space is considered if not explicitly ignored</span>
@@ -1329,7 +1329,7 @@
         <span class="k">return</span> <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">g</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_get_transformed_one_body_integrals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">orbital_coefficients</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_transformed_one_body_integrals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">orbital_coefficients</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">orbital_coefficients</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">orbital_coefficients</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbital_coefficients</span>
         <span class="k">elif</span> <span class="n">verify</span><span class="p">:</span>
@@ -1340,7 +1340,7 @@
 
         <span class="k">return</span> <span class="n">h</span>
 
-    <span class="k">def</span> <span class="nf">_get_transformed_two_body_integrals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">orbital_coefficients</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ordering</span><span class="o">=</span><span class="s2">&quot;openfermion&quot;</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_transformed_two_body_integrals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">orbital_coefficients</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ordering</span><span class="o">=</span><span class="s2">&quot;openfermion&quot;</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">orbital_coefficients</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">orbital_coefficients</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">orbital_coefficients</span>
         <span class="k">elif</span> <span class="n">verify</span><span class="p">:</span>
@@ -1359,7 +1359,7 @@
 
 <div class="viewcode-block" id="IntegralManager.verify_orbital_coefficients">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.verify_orbital_coefficients">[docs]</a>
-    <span class="k">def</span> <span class="nf">verify_orbital_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">orbital_coefficients</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">1.e-5</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">verify_orbital_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">orbital_coefficients</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">1.e-5</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Verify if orbital coefficients are valid (i.e. if they define a orthonormal set of orbitals)</span>
 <span class="sd">        Parameters</span>
@@ -1380,18 +1380,18 @@
 
 <div class="viewcode-block" id="IntegralManager.basis_is_orthogonal">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.basis_is_orthogonal">[docs]</a>
-    <span class="k">def</span> <span class="nf">basis_is_orthogonal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">1.e-5</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">basis_is_orthogonal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">1.e-5</span><span class="p">):</span>
         <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">overlap_integrals</span>
         <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">S</span> <span class="o">-</span> <span class="n">numpy</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="o">&lt;</span> <span class="n">tolerance</span></div>
 
 
 <div class="viewcode-block" id="IntegralManager.active_space_is_trivial">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.active_space_is_trivial">[docs]</a>
-    <span class="k">def</span> <span class="nf">active_space_is_trivial</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">active_space_is_trivial</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">active_orbitals</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">orbitals</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">IntegralManager:</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="n">result</span><span class="o">+=</span> <span class="s2">&quot;ActiveSpace:</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="n">result</span><span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">active_space</span><span class="p">)</span>
@@ -1402,7 +1402,7 @@
 
 <div class="viewcode-block" id="IntegralManager.print_basis_info">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.chemistry_tools.IntegralManager.print_basis_info">[docs]</a>
-    <span class="k">def</span> <span class="nf">print_basis_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">print_coefficients</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">print_basis_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">print_coefficients</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:15}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;basis_name&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_name</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:15}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;orbital_type&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orbital_type</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:15}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;orthogonal basis&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis_is_orthogonal</span><span class="p">()),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>

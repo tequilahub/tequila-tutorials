@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tequila_code.quantumchemistry.orbital_optimizer &mdash; Tequila Documentation 13.9.2024 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -70,14 +70,14 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tequila_code.quantumchemistry.orbital_optimizer</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span>
-<span class="kn">import</span> <span class="nn">typing</span>
-<span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 
-<span class="kn">from</span> <span class="nn">tequila</span> <span class="kn">import</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">ExpectationValue</span><span class="p">,</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">TequilaWarning</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">QuantumChemistryBase</span><span class="p">,</span> <span class="n">ParametersQC</span><span class="p">,</span> <span class="n">NBodyTensor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tequila</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">ExpectationValue</span><span class="p">,</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">TequilaWarning</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuantumChemistryBase</span><span class="p">,</span> <span class="n">ParametersQC</span><span class="p">,</span> <span class="n">NBodyTensor</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Small application that wraps a tequila VQE object and passes it to the PySCF CASSCF solver.</span>
@@ -93,7 +93,7 @@
 <div class="viewcode-block" id="OptimizeOrbitalsResult">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.OptimizeOrbitalsResult">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">OptimizeOrbitalsResult</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OptimizeOrbitalsResult</span><span class="p">:</span>
     
     <span class="n">old_molecule</span><span class="p">:</span> <span class="n">QuantumChemistryBase</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># the old tequila molecule</span>
     <span class="n">molecule</span><span class="p">:</span> <span class="n">QuantumChemistryBase</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># the new tequila molecule with transformed orbitals</span>
@@ -103,7 +103,7 @@
     <span class="n">energy</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># the optimized energy</span>
     <span class="n">iterations</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">local_data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">local_data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># use as callback</span>
         <span class="k">if</span> <span class="s2">&quot;u&quot;</span> <span class="ow">in</span> <span class="n">local_data</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rotation_matrix</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">local_data</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">])</span>
@@ -113,7 +113,7 @@
 
 <div class="viewcode-block" id="optimize_orbitals">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.optimize_orbitals">[docs]</a>
-<span class="k">def</span> <span class="nf">optimize_orbitals</span><span class="p">(</span><span class="n">molecule</span><span class="p">,</span> <span class="n">circuit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vqe_solver</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pyscf_arguments</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">optimize_orbitals</span><span class="p">(</span><span class="n">molecule</span><span class="p">,</span> <span class="n">circuit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vqe_solver</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pyscf_arguments</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                       <span class="n">vqe_solver_arguments</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">initial_guess</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_mcscf</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_hcb</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">molecule_factory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">molecule_arguments</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">restrict_to_active_space</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 
@@ -147,8 +147,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">mcscf</span>
-        <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">QuantumChemistryPySCF</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">pyscf</span><span class="w"> </span><span class="kn">import</span> <span class="n">mcscf</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuantumChemistryPySCF</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="se">\n</span><span class="s2">optimize_orbitals: Need pyscf to run (pip install pyscf)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">exception</span><span class="p">)))</span>
 
@@ -238,7 +238,7 @@
 <div class="viewcode-block" id="PySCFVQEWrapper">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">PySCFVQEWrapper</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PySCFVQEWrapper</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wrapper for tequila VQE&#39;s to be compatible with PySCF orbital optimization</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -264,7 +264,7 @@
 
 <div class="viewcode-block" id="PySCFVQEWrapper.reorder">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.reorder">[docs]</a>
-    <span class="k">def</span> <span class="nf">reorder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">ordering</span><span class="p">,</span> <span class="n">to</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reorder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">ordering</span><span class="p">,</span> <span class="n">to</span><span class="p">):</span>
         <span class="c1"># convenience since we need to reorder</span>
         <span class="c1"># all the time</span>
         <span class="n">M</span> <span class="o">=</span> <span class="n">NBodyTensor</span><span class="p">(</span><span class="n">elems</span><span class="o">=</span><span class="n">M</span><span class="p">,</span> <span class="n">ordering</span><span class="o">=</span><span class="n">ordering</span><span class="p">)</span>
@@ -274,7 +274,7 @@
 
 <div class="viewcode-block" id="PySCFVQEWrapper.kernel">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.kernel">[docs]</a>
-    <span class="k">def</span> <span class="nf">kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">h2of</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reorder</span><span class="p">(</span><span class="n">h2</span><span class="p">,</span> <span class="s2">&quot;mulliken&quot;</span><span class="p">,</span> <span class="s2">&quot;openfermion&quot;</span><span class="p">)</span>
@@ -335,11 +335,11 @@
 
 <div class="viewcode-block" id="PySCFVQEWrapper.make_rdm12">
 <a class="viewcode-back" href="../../../quantumchemistry.html#tequila_code.quantumchemistry.orbital_optimizer.PySCFVQEWrapper.make_rdm12">[docs]</a>
-    <span class="k">def</span> <span class="nf">make_rdm12</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_rdm12</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdm1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdm2</span></div>
 
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;circuit&quot;</span> <span class="ow">and</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

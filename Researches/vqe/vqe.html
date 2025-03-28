@@ -254,12 +254,7 @@ pip install qulacs</code></pre>
 </div>
 <p>The following figure illustrates the different circuits using a high-level representation: - each line is a spatial orbital - circles indicate single excitations (one operation includes spin-up and spin-down excitations) - squared indicate paired double excitations (two spin-paired electrons from one spatial orbital into the other)</p>
 <p>The color code indicates what is created by the individual code blocks below.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="circuit.png" class="img-fluid figure-img" width="100"></p>
-<figcaption class="figure-caption">Elephant</figcaption>
-</figure>
-</div>
+<p><img src="circuit.png" class="img-fluid" width="400"></p>
 <p>The UpCCD circuit includes all paired double excitations from occupied to virtual orbitals</p>
 <div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> UpCCD(m):</span>
@@ -295,19 +290,22 @@ pip install qulacs</code></pre>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>As an example we compute the VQE energies of a <span class="math inline">\(H_4\)</span> molecule with different bond distances. We illustrate UpCCD and UpCCGSD and use either random or fixed initial values. Initial values fixed to zero essentially start from the HF reference. You will see that this is not sufficient to find the best paramters for the UpCCGSD – however, random initialization is also not the practiable solution, as you usually need a few tries.</p>
+<p>Our example looks like this</p>
+<p><img src="h4_mol.png" class="img-fluid" width="300"></p>
+<p>with a variable <span class="math inline">\(R\)</span> and fixed <span class="math inline">\(d=0.75\)</span> Angstroms.</p>
 <div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> <span class="fl">0.75</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>R <span class="op">=</span> <span class="fl">0.5</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {<span class="st">"exact"</span>:{}}</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    R <span class="op">+=</span> <span class="fl">0.25</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">15</span>):</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    R <span class="op">+=</span> <span class="fl">0.2</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    geom <span class="op">=</span> <span class="st">"H 0.0 0.0 0.0</span><span class="ch">\n</span><span class="st">H 0.0 0.0 0.75</span><span class="ch">\n</span><span class="st">H 0.0 0.0 </span><span class="sc">{}</span><span class="ch">\n</span><span class="st">H 0.0 0.0 </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(d<span class="op">+</span>R, d<span class="op">+</span>R<span class="op">+</span>d)</span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    mol <span class="op">=</span> tq.Molecule(geometry<span class="op">=</span>geom, basis_set<span class="op">=</span><span class="st">"sto-3g"</span>)</span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    U0 <span class="op">=</span> mol.prepare_reference()</span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    H <span class="op">=</span> mol.make_hamiltonian()</span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    data[<span class="st">"exact"</span>][R]<span class="op">=</span>mol.compute_energy(<span class="st">"fci"</span>)</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> circDesign <span class="kw">in</span> [UpCCD, UpCCGD, UpCCGSD]:</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> circDesign <span class="kw">in</span> [UpCCD, UpCCGSD]:</span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        name <span class="op">=</span> <span class="bu">str</span>(circDesign.<span class="va">__name__</span>)</span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        U <span class="op">=</span> U0 <span class="op">+</span> circDesign(mol)</span>
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>        E <span class="op">=</span> tq.ExpectationValue(U<span class="op">=</span>U, H<span class="op">=</span>H)</span>

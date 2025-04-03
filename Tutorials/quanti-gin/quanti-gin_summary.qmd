@@ -157,6 +157,10 @@ Looking at the source code of quanti-gin <https://github.com/nylser/quanti-gin> 
 The quanti-gin repository includes a Jupter Notebook for visualizations and analysis of the generated data.
 
 ### Data Visualization Example
+```{python}
+#| echo: false
+!pip install quanti-gin
+```
 
 If you just want to visualize the different methods and their results, you can use the following code.
 
@@ -171,8 +175,7 @@ from quanti_gin.shared import (
     read_data_file,
 )
 
-data = read_data_file(Path("../..//data/example_data.csv"))
-
+data = read_data_file(Path(__file__).parent / Path("./example_data.csv"))
 ```
 
 Now, `data.df` contains the data in a pandas DataFrame, which can be used for visualization and analysis.

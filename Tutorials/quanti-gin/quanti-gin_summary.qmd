@@ -175,7 +175,7 @@ from quanti_gin.shared import (
     read_data_file,
 )
 
-data = read_data_file(Path(__file__).parent / Path("./example_data.csv"))
+data = read_data_file(Path("./example_data.csv"))
 ```
 
 Now, `data.df` contains the data in a pandas DataFrame, which can be used for visualization and analysis.

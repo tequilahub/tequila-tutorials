@@ -10,8 +10,15 @@
       "/Tutorials/Braket/BraketTutorial.html",
       "/Tutorials/optimizer/Optimizers.html",
       "/Tutorials/KrylovTutorial/KrylovTutorial.html",
+      "/Tutorials/vqe/vqe.html",
       "/Tutorials/AdaptiveMethods/jupyter_notebook.html",
       "/Tutorials/gaussian_convolution/index.html"
+    ]
+  },
+  {
+    "listing": "/FAQ.html",
+    "items": [
+      "/FAQ/FAQ.html"
     ]
   },
   {
@@ -20,15 +27,8 @@
       "/Researches/gaussian_convolution/index.html",
       "/Researches/Eigensolver/Eigensolver.html",
       "/Researches/molcirc/index.html",
-      "/Researches/vqe/vqe.html",
       "/Researches/quantum_classifier/quantum_classifier.html",
       "/Researches/electronic-hamiltonians/index.html"
-    ]
-  },
-  {
-    "listing": "/FAQ.html",
-    "items": [
-      "/FAQ/FAQ.html"
     ]
   }
 ]

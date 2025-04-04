@@ -275,7 +275,7 @@ cookieconsent.run({
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>wfn <span class="op">=</span> tq.simulate(U)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(wfn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>(0.8775825618903728+0j) |00&gt; (0.479425538604203+0j) |11&gt; </code></pre>
+<pre><code>+0.8776 |00&gt; +0.4794 |11&gt; </code></pre>
 </div>
 </div>
 <p>In the code block above, we did not specify the simulator to be used, tequila determines this automatically. You can however specify the similator via the <code>backend</code> keyword. If you are not sure which simulators are installed on your system, use <code>tq.show_available_simulators()</code></p>
@@ -311,7 +311,7 @@ Usually it is convenient to leave gates like <span class="math inline">\(X,Y,Z,H
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>wfn <span class="op">=</span> tq.simulate(U, variables<span class="op">=</span>{<span class="st">"a"</span>:<span class="fl">1.0</span>})</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(wfn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>(0.8775825618903728+0j) |00&gt; (0.479425538604203+0j) |11&gt; </code></pre>
+<pre><code>+0.8776 |00&gt; +0.4794 |11&gt; </code></pre>
 </div>
 </div>
 <p>note that we need to specify the values of all parameters when we are simulating the circuit. The same example with the <code>tq.Variable</code> type</p>
@@ -321,7 +321,7 @@ Usually it is convenient to leave gates like <span class="math inline">\(X,Y,Z,H
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>wfn <span class="op">=</span> tq.simulate(U, variables<span class="op">=</span>{<span class="st">"a"</span>:<span class="fl">1.0</span>})</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(wfn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>(0.8775825618903728+0j) |00&gt; (0.479425538604203+0j) |11&gt; </code></pre>
+<pre><code>+0.8776 |00&gt; +0.4794 |11&gt; </code></pre>
 </div>
 </div>
 <p>note here, that the variables dictionary does not need to be initialized with the variable type, the plain names (as hashable types like strings) are enough - in the background this will all be converted to <code>tq.Variable</code>.</p>
@@ -346,7 +346,7 @@ Usually it is convenient to leave gates like <span class="math inline">\(X,Y,Z,H
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>wfn <span class="op">=</span> tq.simulate(U, variables<span class="op">=</span>{<span class="st">"a"</span>:<span class="fl">1.0</span>})</span>
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(wfn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>(0.8775825618903728+0j) |00&gt; (0.479425538604203+0j) |11&gt; </code></pre>
+<pre><code>+0.8776 |00&gt; +0.4794 |11&gt; </code></pre>
 </div>
 </div>
 </section>

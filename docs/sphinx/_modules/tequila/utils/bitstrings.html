@@ -140,6 +140,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">update_nbits</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_integer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numbering</span><span class="p">:</span> <span class="n">BitNumbering</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">numbering</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">numbering</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">integer</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">reverse_int_bits</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">integer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbits</span><span class="p">)</span>
+
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">array</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary</span><span class="p">]</span>

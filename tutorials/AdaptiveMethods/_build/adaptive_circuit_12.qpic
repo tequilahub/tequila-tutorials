@@ -1,0 +1,34 @@
+COLOR tq 0.03137254901960784 0.1607843137254902 0.23921568627450981
+COLOR guo 0.988 0.141 0.757
+a0 W 0
+a1 W 1
+a3 W 3
+a5 W 5
+ a0 P:fill=tq  \textcolor{white}{+} 
+
+ a3 P:fill=tq  \textcolor{white}{+} 
+
+ a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Y} 
+
+ a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Y} 
+
+ a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Y} 
+
+ a3 P:fill=guo  \textcolor{black}{X}  a5 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Y} 
+
+ a0 P:fill=guo  \textcolor{black}{X}  a1 P:fill=guo  \textcolor{black}{Y} 
+

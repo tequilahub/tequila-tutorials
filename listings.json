@@ -1,34 +1,22 @@
 [
   {
     "listing": "/tutorials.html",
+    "items": []
+  },
+  {
+    "listing": "/research.html",
     "items": [
-      "/Tutorials/tq-get-started/index.html",
-      "/Tutorials/tq-circuits/index.html",
-      "/Tutorials/CircuitCompiler/CircuitCompiler.html",
-      "/Tutorials/OpenQASMConversions/OpenQASMConversions.html",
-      "/Tutorials/QTensor/QTensor.html",
-      "/Tutorials/Braket/BraketTutorial.html",
-      "/Tutorials/optimizer/Optimizers.html",
-      "/Tutorials/KrylovTutorial/KrylovTutorial.html",
-      "/Tutorials/vqe/vqe.html",
-      "/Tutorials/AdaptiveMethods/jupyter_notebook.html",
-      "/Tutorials/gaussian_convolution/index.html"
+      "/research/gaussian_convolution/index.html",
+      "/research/exvqe/Eigensolver.html",
+      "/research/molcirc/index.html",
+      "/research/quantum_classifier/quantum_classifier.html",
+      "/research/electronic-hamiltonians/index.html"
     ]
   },
   {
     "listing": "/FAQ.html",
     "items": [
       "/FAQ/FAQ.html"
-    ]
-  },
-  {
-    "listing": "/research.html",
-    "items": [
-      "/Researches/gaussian_convolution/index.html",
-      "/Researches/Eigensolver/Eigensolver.html",
-      "/Researches/molcirc/index.html",
-      "/Researches/quantum_classifier/quantum_classifier.html",
-      "/Researches/electronic-hamiltonians/index.html"
     ]
   }
 ]

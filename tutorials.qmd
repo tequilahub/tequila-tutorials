@@ -3,7 +3,7 @@ title: "Tutorials"
 subtitle: "Quantum Computing, Quantum Chemistry and Tequila"
 image: preview.png
 listing:
-    contents: Tutorials
+    contents: tutorials
     sort: "date asc"
     type: default
     categories: true

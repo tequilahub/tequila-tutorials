@@ -3,7 +3,7 @@ title: "Research"
 subtitle: "Quantum Computing, Quantum Chemistry and Tequila"
 image: preview.png
 listing:
-    contents: Researches
+    contents: research
     sort: "date desc"
     type: default
     categories: true

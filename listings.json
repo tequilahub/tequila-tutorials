@@ -1,7 +1,20 @@
 [
   {
     "listing": "/tutorials.html",
-    "items": []
+    "items": [
+      "/tutorials/tq-get-started/index.html",
+      "/tutorials/tq-circuits/index.html",
+      "/tutorials/CircuitCompiler/CircuitCompiler.html",
+      "/tutorials/OpenQASMConversions/OpenQASMConversions.html",
+      "/tutorials/QTensor/QTensor.html",
+      "/tutorials/Braket/BraketTutorial.html",
+      "/tutorials/optimizer/Optimizers.html",
+      "/tutorials/KrylovTutorial/KrylovTutorial.html",
+      "/tutorials/vqe/vqe.html",
+      "/tutorials/AdaptiveMethods/jupyter_notebook.html",
+      "/tutorials/gaussian_convolution/index.html",
+      "/tutorials/quanti-gin/quanti-gin_summary.html"
+    ]
   },
   {
     "listing": "/research.html",

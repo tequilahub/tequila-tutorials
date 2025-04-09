@@ -1,0 +1,12 @@
+COLOR tq 0.03137254901960784 0.1607843137254902 0.23921568627450981
+COLOR guo 0.988 0.141 0.757
+a0 W 0
+a1 W 1
+
+ a0 P:fill=guo   \textcolor{black}{Z} 
+ a1 P:fill=guo   \textcolor{black}{Z}
+ a1 P:fill=tq   \textcolor{white}{+} a0
+ a1 P:fill=guo   \textcolor{black}{Z}
+ a1 P:fill=tq   \textcolor{white}{+} a0
+ 
+

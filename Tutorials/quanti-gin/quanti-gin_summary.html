@@ -339,19 +339,19 @@ cookieconsent.run({
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-annotation="1" data-code-cell="annotated-cell-2" data-code-lines="4,5">Add an Ry rotation gate for all qubits we need to represent the atoms of the molecule.</span>
+<span data-code-annotation="1" data-code-lines="4,5" data-code-cell="annotated-cell-2">Add an Ry rotation gate for all qubits we need to represent the atoms of the molecule.</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-annotation="2" data-code-cell="annotated-cell-2" data-code-lines="9">Repeat while configured depth is not reached:</span>
+<span data-code-annotation="2" data-code-lines="9" data-code-cell="annotated-cell-2">Repeat while configured depth is not reached:</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-annotation="3" data-code-cell="annotated-cell-2" data-code-lines="12,13">Add entangling layer: CNOTs alternating on even/odd qubits per iteration</span>
+<span data-code-annotation="3" data-code-lines="12,13" data-code-cell="annotated-cell-2">Add entangling layer: CNOTs alternating on even/odd qubits per iteration</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-annotation="4" data-code-cell="annotated-cell-2" data-code-lines="14,15">Add Ry rotation on all qubits</span>
+<span data-code-annotation="4" data-code-lines="14,15" data-code-cell="annotated-cell-2">Add Ry rotation on all qubits</span>
 </dd>
 </dl>
 <p>The resulting circuit with the configured <code>depth = 2</code> for 4 H-atoms is illustrated in <a href="#fig-circuit">Figure&nbsp;1</a>.</p>
@@ -369,11 +369,11 @@ cookieconsent.run({
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-3" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-annotation="1" data-code-cell="annotated-cell-3" data-code-lines="1">Create an expectation value <code>E</code> with our previously obtained Hamiltonian <code>H</code> for the molecule, and constructed circuit <code>U</code>.</span>
+<span data-code-annotation="1" data-code-lines="1" data-code-cell="annotated-cell-3">Create an expectation value <code>E</code> with our previously obtained Hamiltonian <code>H</code> for the molecule, and constructed circuit <code>U</code>.</span>
 </dd>
 <dt data-target-cell="annotated-cell-3" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-annotation="2" data-code-cell="annotated-cell-3" data-code-lines="2">run the minimization algorithm for that expectation value via tequila.</span>
+<span data-code-annotation="2" data-code-lines="2" data-code-cell="annotated-cell-3">run the minimization algorithm for that expectation value via tequila.</span>
 </dd>
 </dl>
 <p>The only requirement for the custom method is that it returns a dictionary in the form:</p>
@@ -494,17 +494,17 @@ Successfully installed quanti-gin-2.5.0</code></pre>
 <span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/tmp/ipykernel_2586/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
+<pre><code>/tmp/ipykernel_2536/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
   plot.boxplot(abs(energy_a - energy_b), labels=[f"{a} vs. {b}"])
-/tmp/ipykernel_2586/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
+/tmp/ipykernel_2536/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
   plot.boxplot(abs(energy_a - energy_b), labels=[f"{a} vs. {b}"])
-/tmp/ipykernel_2586/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
+/tmp/ipykernel_2536/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
   plot.boxplot(abs(energy_a - energy_b), labels=[f"{a} vs. {b}"])
-/tmp/ipykernel_2586/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
+/tmp/ipykernel_2536/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
   plot.boxplot(abs(energy_a - energy_b), labels=[f"{a} vs. {b}"])
-/tmp/ipykernel_2586/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
+/tmp/ipykernel_2536/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
   plot.boxplot(abs(energy_a - energy_b), labels=[f"{a} vs. {b}"])
-/tmp/ipykernel_2586/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
+/tmp/ipykernel_2536/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
   plot.boxplot(abs(energy_a - energy_b), labels=[f"{a} vs. {b}"])</code></pre>
 </div>
 <div class="cell-output cell-output-display">

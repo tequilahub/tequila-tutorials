@@ -1,0 +1,190 @@
+---
+title: "Tequila Basics: Circuits"
+author: "Jakob Kottmann"
+date: "2022-11-04"
+categories: [code]
+image: "tq-circuits-pic.png"
+image-width: "1cm"
+image-height: "1cm"
+format:
+    html:
+        code-fold: false
+        eval: true
+jupyter: blogqa
+---
+
+In this tutorial, you will get a brief introduction to tequila circuits.
+
+- [Initialization](#sec-init)
+- [Parametrization](#sec-param)
+- [Tricks (re-parametrize, map qubits, decompose gates, get generators)](#sec-tricks)
+
+<center>
+![](tq-circuits-pic.png){width=400}
+</center>
+
+
+# Initialize Tequila Circuits {#sec-init}
+
+Quantum circuits can be initialized in an intuitive way by assembling `tq.gates` objects (see [here](https://github.com/tequilahub/tequila/blob/master/src/tequila/circuit/gates.py) for a list of all gates). Take for example:  
+
+```{python}
+import tequila as tq
+U = tq.gates.Ry(target=0, angle=1.0) + tq.gates.X(control=0,target=1)
+``` 
+which initializes a two-qubit circuit with a Y-rotation and a controlled-NOT operation in sequence.
+All tequila gates can be initialized with the following keywords  
+       
+- `target`: the target qubit(s) | integer or list of integers   
+- `control`: the control qubits(s) | integer or list of integers      
+- `angle`: a parameter for the gate (see below) | float or variable      
+   
+the `angle` is optional for some gates that have a defined default value - like `X`, `Y`, `Z` and `H`.  
+
+We can simulate the circuit and get the corresponding wavefunction back. This is convenient, although not the main purpose of tequila
+
+```{python}
+wfn = tq.simulate(U)
+print(wfn)
+```
+
+In the code block above, we did not specify the simulator to be used, tequila determines this automatically. You can however specify the similator via the `backend` keyword. If you are not sure which simulators are installed on your system, use `tq.show_available_simulators()`
+
+```{python}
+#| code-fold: true
+#| eval: false
+#| output: false
+wfn = tq.simulate(U, backend="cirq")
+tq.show_available_simulators()
+```
+
+# Parametrization {#sec-param}
+
+All tequila gates are parametrized as
+
+$$ U(\theta) = e^{-i\frac{\theta}{2} G}  $$
+
+were $G$ is the so called **generator** of the gate. With $G=X$ we obtain the standard $R_x(\theta)$ rotation gate while with $G=\left(X-1\right)$ and $\theta=\pi$ we obtain the standard Pauli-$X$ gate. In the same way, initializing `tq.gates.X(target=0, angle="a")` defines the gate
+$$ e^{-i\frac{a}{2} \left(X-1\right)} = X^{\frac{a}{\pi}}.$$   
+Usually it is convenient to leave gates like $X,Y,Z,H$ and $CNOT$ unparametrized and use parametrized gates generated from single tensor products of Pauli operators. The latter can be viewed as the native gate set of tequila. An example is
+```{python}
+#| code-fold: false
+U = tq.gates.Rp(paulistring="X(0)Y(2)", angle="a")
+```
+which initialize the gate $e^{-i\frac{a}{2} \left(X(0)Y(2)\right)}$.
+
+Parameters that are passed with the `angle` keyword can be three datatypes  
+
+- floats   
+- strings or any hashable type
+- `tq.Variable`
+- any callable type that returns a float when given a dictionary of variables  
+
+we have already seen an example for the first type. Let's do it again for the other two. Let's start with strings
+
+```{python}
+U = tq.gates.Ry("a",0) + tq.gates.CNOT(0,1)
+wfn = tq.simulate(U, variables={"a":1.0})
+print(wfn)
+```
+
+note that we need to specify the values of all parameters when we are simulating the circuit. The same example with the `tq.Variable` type
+
+```{python}
+a = tq.Variable("a")
+U = tq.gates.Ry(a,0) + tq.gates.CNOT(0,1)
+wfn = tq.simulate(U, variables={"a":1.0})
+print(wfn)
+```
+
+note here, that the variables dictionary does not need to be initialized with the variable type, the plain names (as hashable types like strings) are enough - in the background this will all be converted to `tq.Variable`. 
+
+For the last datatype, we already saw an example, that is `tq.Variable` itself, as it can be evaluated
+```{python}
+variable = tq.Variable("name")
+evaluated = variable(variables={"name":1.0})
+print(evaluated)
+```
+
+as this alone would be boring, we can manipulate the variable object, here is some example in which we initialize a circuit parameterized by the function
+$$ f(a) = \sin^2\left(\frac{a}{2}\pi\right) $$
+
+```{python}
+from numpy import pi,sin
+
+a = tq.Variable("a")
+f = a*pi*0.5
+f = f.apply(sin)
+f = f**2
+U = tq.gates.Ry(f,0) + tq.gates.CNOT(0,1)
+wfn = tq.simulate(U, variables={"a":1.0})
+print(wfn)
+```
+
+# Tricks {#sec-tricks}
+
+## Add Controls
+You can take one circuit and add control-options to it
+
+```{python}
+cU = U.add_controls([3,4])
+```
+
+![original](circuit.png){width=30%}
+
+![added controls](cU.png){width=30%}
+
+## Re-Parametrize
+```{python}
+UX = U.map_variables({"a":"b"})
+UY = UX.map_variables({"b":1.0})
+print("angles in U :",U.extract_variables())
+print("angles in UX:",UX.extract_variables())
+print("angles in UY:",UY.extract_variables())
+```
+
+## Map-Qubits
+```{python}
+UZ = U.map_qubits({0:1,1:2}) 
+print(UZ)
+```
+
+## Decompose Gates
+Tequila can decompose gates automatically (e.g. for differentiation or translation to backend), you can however also do this manually with `tq.compile_circuit`. The default compiles down to the lowest lever (only standard single qubit gates and controlled-nots). You can specifiy the compile options with keywords like `controlled_rotation=False`. See [here](https://github.com/tequilahub/tequila/blob/master/src/tequila/circuit/compiler.py) for all keywords.
+
+```{python}
+U1 = tq.gates.H(0)
+U1+= tq.gates.Ry("a",0,control=1) 
+U1+= tq.gates.ExpPauli(angle="b", paulistring="X(0)X(2)")
+# let's compile to different levels
+U2 = tq.compile_circuit(U1)
+U3 = tq.compile_circuit(U1, controlled_rotation=False)
+U4 = tq.compile_circuit(U1, exponential_pauli=False)
+```
+
+the four circuits are 
+ 
+![U1](U1.png){width=30%}
+ 
+![U2 (full compile)](U2.png){width=70%}
+
+![U3 (conrolled_rotation=False)](U3.png){width=50%}
+
+![U4 (exponential_pauli=False)](U4.png){width=50%}
+
+## Get Generators
+
+The generators of individual gates can be constructed with the `make_generator` function. Here we can include the control qubits in the definition of the generator. Take for example
+```{python}
+#| code-fold: false
+U = tq.gates.Ry(angle="a", target=0) + tq.gates.X(control=0, target=1) 
+for gate in U.gates:
+    generator = gate.make_generator()
+    print("gate generated by:", generator)
+    if gate.is_controlled():
+        cgenerator = gate.make_generator(include_controls=True)
+        print("including control qubits:", cgenerator)
+
+```
+
+

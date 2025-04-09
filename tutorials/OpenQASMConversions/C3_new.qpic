@@ -1,0 +1,24 @@
+COLOR tq 0.03137254901960784 0.1607843137254902 0.23921568627450981
+COLOR guo 0.988 0.141 0.757
+a0 W 0
+a1 W 1
+a3 W 3
+a4 W 4
+a5 W 5
+a6 W 6
+ a0 P:fill=tq  \textcolor{white}{+} 
+
+ a1 G:fill=tq  \textcolor{white}{Y} 
+
+ a5 G:fill=tq  \textcolor{white}{H} 
+ a5 G:fill=tq  \textcolor{white}{Z} a0 
+
+ a6 G:fill=tq  \textcolor{white}{H} a4 
+ a4 P:fill=tq  \textcolor{white}{+} a0 a1 
+
+ a1 P:fill=tq  \textcolor{white}{X} 
+
+ a0 P:fill=tq  \textcolor{white}{Z} 
+
+ a4 P:fill=tq  \textcolor{white}{Y} a3 
+

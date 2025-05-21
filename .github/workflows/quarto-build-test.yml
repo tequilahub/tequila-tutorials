@@ -39,7 +39,7 @@ jobs:
       # Install TinyTeX
       - name: Install TinyTeX
         run: |
-          conda run -n blogqa quarto install tinytex
+          conda run -n blogqa quarto install tinytex --version=2024
 
       # Build Sphinx documentation
       - name: Build Sphinx documentation

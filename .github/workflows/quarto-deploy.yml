@@ -10,6 +10,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    container:
+      image: ghcr.io/qdm12/texlive:2024
+
     steps:
       # Checkout the repository and all branches
       - name: Checkout repository
@@ -26,7 +29,7 @@ jobs:
           activate-environment: blogqa
 
       # Install the ipykernel package and the sphinxcontrib package for documentation
-      - name: Install ipykernel
+      - name: Install ipykernel and dependencies
         run: |
           conda run -n blogqa conda install -y ipykernel
           conda run -n blogqa python -m ipykernel install --user --name blogqa
@@ -37,11 +40,6 @@ jobs:
         uses: quarto-dev/quarto-actions/setup@v2
         with:
           version: '1.3.450'
-      
-      # Install TinyTeX
-      - name: Install TinyTeX
-        run: |
-          conda run -n blogqa quarto install tinytex
 
       # Build Sphinx documentation
       - name: Build Sphinx documentation
@@ -56,7 +54,7 @@ jobs:
           git config --global user.name "GitHub Actions"
           git add .
           git commit -m "Committing generated build files"
-          git push origin main # Or push to a different branch if needed
+          git push origin main
 
       # Commit changes to gh-pages branch
       - name: Switch to gh-pages branch

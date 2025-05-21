@@ -8,10 +8,7 @@ format:
    html:
       toc: true
    pdf:
-      include-in-header:
-         text: |
-            \usepackage{fvextra}
-            \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+      pdf-engine: xelatex
 ---
 
 ## Introduction

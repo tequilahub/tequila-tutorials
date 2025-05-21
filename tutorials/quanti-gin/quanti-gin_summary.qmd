@@ -13,6 +13,7 @@ format:
             \usepackage{fvextra}
             \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines=true,commandchars=\\\{\}}
 ---
+$~$
 ## Introduction
 
 Working in the quantum domain, we often lack good tools to compare and benchmark against state-of-the-art optimization methods.

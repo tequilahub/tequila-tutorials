@@ -11,7 +11,7 @@ format:
       include-in-header:
          text: |
             \usepackage{fvextra}
-            \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+            \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines=true,commandchars=\\\{\}}
 ---
 
 ## Introduction

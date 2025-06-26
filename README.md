@@ -2,6 +2,8 @@
 
 The purpose of this repo is to host tutorials of various functionalities of the tequila library. 
 
+--> [see the rendered website here](https://tequilahub.github.io/tequila-tutorials/) <--
+
 ## Set Up
 At first make sure to have an environment variable that you run the blog on. 
 

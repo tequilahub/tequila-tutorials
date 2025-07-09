@@ -341,19 +341,19 @@ cookieconsent.run({
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="4,5" data-code-annotation="1" data-code-cell="annotated-cell-2">Add an Ry rotation gate for all qubits we need to represent the atoms of the molecule.</span>
+<span data-code-cell="annotated-cell-2" data-code-lines="4,5" data-code-annotation="1">Add an Ry rotation gate for all qubits we need to represent the atoms of the molecule.</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-lines="9" data-code-annotation="2" data-code-cell="annotated-cell-2">Repeat while configured depth is not reached:</span>
+<span data-code-cell="annotated-cell-2" data-code-lines="9" data-code-annotation="2">Repeat while configured depth is not reached:</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-lines="12,13" data-code-annotation="3" data-code-cell="annotated-cell-2">Add entangling layer: CNOTs alternating on even/odd qubits per iteration</span>
+<span data-code-cell="annotated-cell-2" data-code-lines="12,13" data-code-annotation="3">Add entangling layer: CNOTs alternating on even/odd qubits per iteration</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-lines="14,15" data-code-annotation="4" data-code-cell="annotated-cell-2">Add Ry rotation on all qubits</span>
+<span data-code-cell="annotated-cell-2" data-code-lines="14,15" data-code-annotation="4">Add Ry rotation on all qubits</span>
 </dd>
 </dl>
 <p>The resulting circuit with the configured <code>depth = 2</code> for 4 H-atoms is illustrated in <a href="#fig-circuit">Figure&nbsp;1</a>.</p>
@@ -371,11 +371,11 @@ cookieconsent.run({
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-3" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="1" data-code-annotation="1" data-code-cell="annotated-cell-3">Create an expectation value <code>E</code> with our previously obtained Hamiltonian <code>H</code> for the molecule, and constructed circuit <code>U</code>.</span>
+<span data-code-cell="annotated-cell-3" data-code-lines="1" data-code-annotation="1">Create an expectation value <code>E</code> with our previously obtained Hamiltonian <code>H</code> for the molecule, and constructed circuit <code>U</code>.</span>
 </dd>
 <dt data-target-cell="annotated-cell-3" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-lines="2" data-code-annotation="2" data-code-cell="annotated-cell-3">run the minimization algorithm for that expectation value via tequila.</span>
+<span data-code-cell="annotated-cell-3" data-code-lines="2" data-code-annotation="2">run the minimization algorithm for that expectation value via tequila.</span>
 </dd>
 </dl>
 <p>The only requirement for the custom method is that it returns a dictionary in the form:</p>
@@ -395,7 +395,7 @@ cookieconsent.run({
 <pre><code>Collecting quanti-gin
   Downloading quanti_gin-2.5.0-py3-none-any.whl.metadata (2.3 kB)
 Requirement already satisfied: numpy in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from quanti-gin) (2.3.1)
-Requirement already satisfied: pandas&lt;3.0.0,&gt;=2.2.2 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from quanti-gin) (2.3.0)
+Requirement already satisfied: pandas&lt;3.0.0,&gt;=2.2.2 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from quanti-gin) (2.3.1)
 Requirement already satisfied: tequila-basic&lt;2.0.0,&gt;=1.9.8 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from quanti-gin) (1.9.9)
 Requirement already satisfied: python-dateutil&gt;=2.8.2 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from pandas&lt;3.0.0,&gt;=2.2.2-&gt;quanti-gin) (2.9.0.post0)
 Requirement already satisfied: pytz&gt;=2020.1 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from pandas&lt;3.0.0,&gt;=2.2.2-&gt;quanti-gin) (2025.2)
@@ -415,19 +415,19 @@ Requirement already satisfied: requests~=2.32.2 in /usr/share/miniconda/envs/blo
 Requirement already satisfied: charset_normalizer&lt;4,&gt;=2 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from requests~=2.32.2-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (3.4.2)
 Requirement already satisfied: idna&lt;4,&gt;=2.5 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from requests~=2.32.2-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (3.10)
 Requirement already satisfied: urllib3&lt;3,&gt;=1.21.1 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from requests~=2.32.2-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (2.5.0)
-Requirement already satisfied: certifi&gt;=2017.4.17 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from requests~=2.32.2-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (2025.6.15)
+Requirement already satisfied: certifi&gt;=2017.4.17 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from requests~=2.32.2-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (2025.7.9)
 Requirement already satisfied: attrs&gt;=21.3.0 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (25.3.0)
 Requirement already satisfied: duet&gt;=0.2.8 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (0.2.9)
 Requirement already satisfied: matplotlib~=3.7 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (3.10.3)
 Requirement already satisfied: sortedcontainers~=2.0 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (2.4.0)
-Requirement already satisfied: typing_extensions&gt;=4.2 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (4.14.0)
+Requirement already satisfied: typing_extensions&gt;=4.2 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (4.14.1)
 Requirement already satisfied: tqdm&gt;=4.12 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (4.67.1)
 Requirement already satisfied: contourpy&gt;=1.0.1 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.7-&gt;cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (1.3.2)
 Requirement already satisfied: cycler&gt;=0.10 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.7-&gt;cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (0.12.1)
-Requirement already satisfied: fonttools&gt;=4.22.0 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.7-&gt;cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (4.58.4)
+Requirement already satisfied: fonttools&gt;=4.22.0 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.7-&gt;cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (4.58.5)
 Requirement already satisfied: kiwisolver&gt;=1.3.1 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.7-&gt;cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (1.4.8)
 Requirement already satisfied: packaging&gt;=20.0 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.7-&gt;cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (25.0)
-Requirement already satisfied: pillow&gt;=8 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.7-&gt;cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (11.2.1)
+Requirement already satisfied: pillow&gt;=8 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.7-&gt;cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (11.3.0)
 Requirement already satisfied: pyparsing&gt;=2.3.1 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.7-&gt;cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (3.2.3)
 Requirement already satisfied: six&gt;=1.5 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from python-dateutil&gt;=2.8.2-&gt;pandas&lt;3.0.0,&gt;=2.2.2-&gt;quanti-gin) (1.17.0)
 Requirement already satisfied: iniconfig&gt;=1 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from pytest-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (2.1.0)
@@ -497,17 +497,17 @@ Successfully installed quanti-gin-2.5.0</code></pre>
 <span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/tmp/ipykernel_3800/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
+<pre><code>/tmp/ipykernel_3554/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
   plot.boxplot(abs(energy_a - energy_b), labels=[f"{a} vs. {b}"])
-/tmp/ipykernel_3800/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
+/tmp/ipykernel_3554/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
   plot.boxplot(abs(energy_a - energy_b), labels=[f"{a} vs. {b}"])
-/tmp/ipykernel_3800/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
+/tmp/ipykernel_3554/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
   plot.boxplot(abs(energy_a - energy_b), labels=[f"{a} vs. {b}"])
-/tmp/ipykernel_3800/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
+/tmp/ipykernel_3554/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
   plot.boxplot(abs(energy_a - energy_b), labels=[f"{a} vs. {b}"])
-/tmp/ipykernel_3800/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
+/tmp/ipykernel_3554/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
   plot.boxplot(abs(energy_a - energy_b), labels=[f"{a} vs. {b}"])
-/tmp/ipykernel_3800/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
+/tmp/ipykernel_3554/1747858103.py:17: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
   plot.boxplot(abs(energy_a - energy_b), labels=[f"{a} vs. {b}"])</code></pre>
 </div>
 <div class="cell-output cell-output-display">

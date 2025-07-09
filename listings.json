@@ -1,11 +1,5 @@
 [
   {
-    "listing": "/FAQ.html",
-    "items": [
-      "/FAQ/FAQ.html"
-    ]
-  },
-  {
     "listing": "/research.html",
     "items": [
       "/research/gaussian_convolution/index.html",
@@ -13,6 +7,12 @@
       "/research/molcirc/index.html",
       "/research/quantum_classifier/quantum_classifier.html",
       "/research/electronic-hamiltonians/index.html"
+    ]
+  },
+  {
+    "listing": "/FAQ.html",
+    "items": [
+      "/FAQ/FAQ.html"
     ]
   },
   {
@@ -28,6 +28,7 @@
       "/tutorials/KrylovTutorial/KrylovTutorial.html",
       "/tutorials/vqe/vqe.html",
       "/tutorials/AdaptiveMethods/jupyter_notebook.html",
+      "/tutorials/LRZ/lrz.html",
       "/tutorials/quanti-gin/quanti-gin_summary.html"
     ]
   }

@@ -4,6 +4,9 @@ author:
     - name: Korbinian Stein
       id: ks
       email: korbinian.stein@uni-a.de
+date: "2025-03-25"
+image: "preview_output-circuit.png"
+categories: [code]
 format:
    html:
       toc: true

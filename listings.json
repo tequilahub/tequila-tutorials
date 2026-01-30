@@ -13,14 +13,9 @@
       "/tutorials/vqe/vqe.html",
       "/tutorials/AdaptiveMethods/jupyter_notebook.html",
       "/tutorials/quanti-gin/quanti-gin_summary.html",
+      "/tutorials/AutomaticDecompositions/index.html",
       "/tutorials/LRZ/lrz.html",
       "/tutorials/CombinatorialOptimization/jupyter_notebook.html"
-    ]
-  },
-  {
-    "listing": "/FAQ.html",
-    "items": [
-      "/FAQ/FAQ.html"
     ]
   },
   {
@@ -31,6 +26,12 @@
       "/research/molcirc/index.html",
       "/research/quantum_classifier/quantum_classifier.html",
       "/research/electronic-hamiltonians/index.html"
+    ]
+  },
+  {
+    "listing": "/FAQ.html",
+    "items": [
+      "/FAQ/FAQ.html"
     ]
   }
 ]

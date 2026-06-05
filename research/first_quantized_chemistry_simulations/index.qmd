@@ -1,5 +1,10 @@
 ---
 title: "Quantum Simulation of Chemistry in First Quantization using Plane Waves"
+
+author: "Tamara Wegner"
+date: "2026-03-18"
+image: "3Dnp3M8.jpg"
+
 number-sections: true
 bibliography: references.bib
 format: html

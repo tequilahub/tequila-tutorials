@@ -1,26 +1,14 @@
 [
   {
-    "listing": "/tutorials.html",
+    "listing": "/FAQ.html",
     "items": [
-      "/tutorials/tq-get-started/index.html",
-      "/tutorials/tq-circuits/index.html",
-      "/tutorials/CircuitCompiler/CircuitCompiler.html",
-      "/tutorials/QTensor/QTensor.html",
-      "/tutorials/Braket/BraketTutorial.html",
-      "/tutorials/OpenQASMConversions/OpenQASMConversions.html",
-      "/tutorials/optimizer/Optimizers.html",
-      "/tutorials/KrylovTutorial/KrylovTutorial.html",
-      "/tutorials/vqe/vqe.html",
-      "/tutorials/AdaptiveMethods/jupyter_notebook.html",
-      "/tutorials/quanti-gin/quanti-gin_summary.html",
-      "/tutorials/AutomaticDecompositions/index.html",
-      "/tutorials/LRZ/lrz.html",
-      "/tutorials/CombinatorialOptimization/jupyter_notebook.html"
+      "/FAQ/FAQ.html"
     ]
   },
   {
     "listing": "/research.html",
     "items": [
+      "/research/first_quantized_chemistry_simulations/index.html",
       "/research/gaussian_convolution/index.html",
       "/research/exvqe/Eigensolver.html",
       "/research/molcirc/index.html",
@@ -29,9 +17,22 @@
     ]
   },
   {
-    "listing": "/FAQ.html",
+    "listing": "/tutorials.html",
     "items": [
-      "/FAQ/FAQ.html"
+      "/tutorials/tq-get-started/index.html",
+      "/tutorials/tq-circuits/index.html",
+      "/tutorials/CircuitCompiler/CircuitCompiler.html",
+      "/tutorials/OpenQASMConversions/OpenQASMConversions.html",
+      "/tutorials/QTensor/QTensor.html",
+      "/tutorials/Braket/BraketTutorial.html",
+      "/tutorials/optimizer/Optimizers.html",
+      "/tutorials/KrylovTutorial/KrylovTutorial.html",
+      "/tutorials/vqe/vqe.html",
+      "/tutorials/AdaptiveMethods/jupyter_notebook.html",
+      "/tutorials/quanti-gin/quanti-gin_summary.html",
+      "/tutorials/AutomaticDecompositions/index.html",
+      "/tutorials/LRZ/lrz.html",
+      "/tutorials/CombinatorialOptimization/jupyter_notebook.html"
     ]
   }
 ]

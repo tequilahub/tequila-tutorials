@@ -1,5 +1,5 @@
 ---
-title: "Quantum Simulation of Chemistry in First Quantization using Plane Waves"
+title: "Efficient Preparation of Coulomb Potential States for Quantum Chemistry Simulation"
 
 author: "Tamara Wegner"
 date: "2026-03-18"

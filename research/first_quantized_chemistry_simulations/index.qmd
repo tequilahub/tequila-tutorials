@@ -3,7 +3,7 @@ title: "Efficient Preparation of Coulomb Potential States for Quantum Chemistry 
 
 author: "Tamara Wegner"
 date: "2026-03-18"
-image: "3Dnp3M8.jpg"
+image: "preview.png"
 
 number-sections: true
 bibliography: references.bib

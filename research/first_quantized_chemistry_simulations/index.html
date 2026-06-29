@@ -2,15 +2,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Tamara Wegner">
 <meta name="dcterms.date" content="2026-03-18">
 
-<title>Tequila Tutorials - Efficient Preparation of Coulomb Potential States for Quantum Chemistry Simulation</title>
+<title>Efficient Preparation of Coulomb Potential States for Quantum Chemistry Simulation – Tequila Tutorials</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -23,6 +26,7 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 /* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -60,6 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -88,24 +93,33 @@ div.csl-indent {
 <link href="../../favicon.ico" rel="icon">
 <script src="../../site_libs/cookie-consent/cookie-consent.js"></script>
 <link href="../../site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
-<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-a5883e7fa1e19cde57db4ec6b11febc3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-bca227963e21cb646e747543fe28dd8e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-a5883e7fa1e19cde57db4ec6b11febc3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -114,6 +128,7 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -140,68 +155,260 @@ cookieconsent.run({
   "notice_banner_reject_button_hide":false,
   "preferences_center_close_button_hide":false,
   "website_name":""
+  ,
+"language":"en"
   });
 });
 </script> 
   
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="Tequila Tutorials - Efficient Preparation of Coulomb Potential States for Quantum Chemistry Simulation">
-<meta property="og:description" content="">
-<meta property="og:image" content="https://github.com/tequilahub/tequila-tutorials/research/first_quantized_chemistry_simulations/preview.png">
-<meta property="og:site-name" content="Tequila Tutorials">
+<meta property="og:title" content="Efficient Preparation of Coulomb Potential States for Quantum Chemistry Simulation – Tequila Tutorials">
+<meta property="og:description" content="quantum computing, quantum chemistry and tequila">
+<meta property="og:image" content="https://tequilahub.github.io/tequila-tutorials/research/first_quantized_chemistry_simulations/preview.png">
+<meta property="og:site_name" content="Tequila Tutorials">
 <meta property="og:image:height" content="1792">
 <meta property="og:image:width" content="2486">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../../tequila_logo.png" alt="" class="navbar-logo">
+    <img src="../../tequila_logo.png" alt="" class="navbar-logo light-content">
+    <img src="../../tequila_logo.png" alt="" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Tequila Tutorials</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../research.html" rel="" target="">
- <span class="menu-text">Research</span></a>
+    <a class="nav-link" href="../../research.html"> 
+<span class="menu-text">Research</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../tutorials.html" rel="" target="">
- <span class="menu-text">Tutorials</span></a>
+    <a class="nav-link" href="../../tutorials.html"> 
+<span class="menu-text">Tutorials</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../FAQ/FAQ.html" rel="" target="">
- <span class="menu-text">FAQ</span></a>
+    <a class="nav-link" href="../../FAQ/FAQ.html"> 
+<span class="menu-text">FAQ</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../Contribution/Contribution.html" rel="" target="">
- <span class="menu-text">Contribution</span></a>
+    <a class="nav-link" href="../../Contribution/Contribution.html"> 
+<span class="menu-text">Contribution</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../docs/sphinx/index.html" rel="" target="">
- <span class="menu-text">Docs</span></a>
+    <a class="nav-link" href="../../docs/sphinx/index.html"> 
+<span class="menu-text">Docs</span></a>
   </li>  
 </ul>
+          </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -260,10 +467,12 @@ cookieconsent.run({
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">8</span> Conclusion</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">9</span> References</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/tequilahub/tequila-tutorials/blob/main/research/first_quantized_chemistry_simulations/index.qmd" class="toc-action">View source</a></p><p><a href="https://github.com/tequilahub/tequila-tutorials/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/tequilahub/tequila-tutorials/blob/main/research/first_quantized_chemistry_simulations/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila-tutorials/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
 
 
 
@@ -398,7 +607,7 @@ k_\nu = \frac{2\pi \nu}{\Omega^{1/3}}, \quad G_0 = [- (N^{1/3} - 1), N^{1/3} - 1
 <p>This state is prepared using Hadamard gates, controlled Hadamards, and final X gates that invert all bits. This works by first using a Hadamard gate on the first bit, then iteratively a controlled Hadamard on each bit until <span class="math inline">\(n_p - 2\)</span>, controlled by the previous bit. Then a Hadamard on a flag qubit controlled by <span class="math inline">\(n_p - 2\)</span>. For example, the complete circuit diagram for <span class="math inline">\(n_p = 5\)</span> looks like this:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="prep_mu_circuit.jpg" class="img-fluid figure-img" width="300"></p>
+<p><img src="prep_mu_circuit.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" width="300"></p>
 </figure>
 </div>
 <p>Applying the controlled Hadamard gates step by step produces the following intermediate states (assuming <span class="math inline">\(n_p \ge 2\)</span>):</p>
@@ -442,8 +651,8 @@ k_\nu = \frac{2\pi \nu}{\Omega^{1/3}}, \quad G_0 = [- (N^{1/3} - 1), N^{1/3} - 1
 <summary>
 Code
 </summary>
-<div class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prep_mu(</span>
+<div id="91456d43" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prep_mu(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>        n_p: <span class="bu">int</span>,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        mu: Sequence[<span class="bu">int</span>], <span class="co"># length should be n_p + 1</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        flag: <span class="bu">int</span></span>
@@ -459,15 +668,15 @@ Code
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        U <span class="op">+=</span> tq.gates.H(target <span class="op">=</span> flag, control <span class="op">=</span> mu[n_p <span class="op">-</span> <span class="dv">2</span>])</span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_p <span class="op">+</span> <span class="dv">1</span>):</span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        U <span class="op">+=</span> tq.gates.X(target <span class="op">=</span> mu[i])</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </details>
 <details>
 <summary>
 Test
 </summary>
-<div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> print_Toffoli_cost(U: tq.QCircuit <span class="op">|</span> PostselectionCircuit):</span>
+<div id="14b9eb64" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> print_Toffoli_cost(U: tq.QCircuit <span class="op">|</span> PostselectionCircuit):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    Toffoli_cost <span class="op">=</span> <span class="dv">0</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    circuits <span class="op">=</span> (</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        [circuit <span class="cf">for</span> circuit <span class="kw">in</span> U._fragments <span class="cf">if</span> <span class="bu">isinstance</span>(circuit, tq.QCircuit)]</span>
@@ -510,7 +719,7 @@ Test
 <span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>test_prep_mu(<span class="dv">4</span>)</span>
 <span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>test_prep_mu(<span class="dv">5</span>)</span>
 <span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>test_prep_mu(<span class="dv">6</span>)</span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>test_prep_mu(<span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>test_prep_mu(<span class="dv">7</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </details>
 <p>The next step is to prepare the state</p>
@@ -524,8 +733,8 @@ Test
 <summary>
 Code
 </summary>
-<div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> init_nu(</span>
+<div id="e5d55247" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> init_nu(</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>        n_p: <span class="bu">int</span>,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        mu: Sequence[<span class="bu">int</span>],          <span class="co"># mu and nu require length n_p + 1</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        nu_x: Sequence[<span class="bu">int</span>],</span>
@@ -577,15 +786,15 @@ Code
 <span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>    U <span class="op">+=</span> tq.gates.X(target <span class="op">=</span> <span class="bu">list</span>(nu_y[<span class="dv">1</span>:]))</span>
 <span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>    U <span class="op">+=</span> tq.gates.X(target <span class="op">=</span> <span class="bu">list</span>(nu_z[<span class="dv">1</span>:]))</span>
 <span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </details>
 <details>
 <summary>
 Test
 </summary>
-<div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># testing code for init_nu</span></span>
+<div id="6770f46d" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># testing code for init_nu</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decode_bits_init_nu(idx: <span class="bu">int</span>, n_p: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">int</span>]:</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    mu_width <span class="op">=</span> n_p <span class="op">+</span> <span class="dv">1</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    mu_bits <span class="op">=</span> idx <span class="op">&amp;</span> ((<span class="dv">1</span> <span class="op">&lt;&lt;</span> mu_width) <span class="op">-</span> <span class="dv">1</span>)</span>
@@ -657,7 +866,7 @@ Test
 <span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>test_init_nu(<span class="dv">1</span>)</span>
 <span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>test_init_nu(<span class="dv">2</span>)</span>
 <span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>test_init_nu(<span class="dv">3</span>)</span>
-<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>test_init_nu(<span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>test_init_nu(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </details>
 <p>Now we want to reduce the <span class="math inline">\(\nu\)</span> values to the set of <span class="math inline">\(B_\mu\)</span>, which is the set of <span class="math inline">\(\nu\)</span> such that all <span class="math inline">\(|\nu_x|\)</span>, <span class="math inline">\(|\nu_y|\)</span>, <span class="math inline">\(|\nu_z|\)</span> are less than <span class="math inline">\(2^{\mu - 1}\)</span>, excluding the case that they are all less than <span class="math inline">\(2^{\mu - 2}\)</span>. Since the first condition is already satisfied, we only need to remove those <span class="math inline">\(\nu\)</span> for which all components are smaller than <span class="math inline">\(2^{\mu - 2}\)</span>. For this we first convert the <span class="math inline">\(\mu\)</span> register to one-hot unary, meaning that for every <span class="math inline">\(\mu\)</span> only the most significant bit that is one stays one and the rest is changed to zero. This can be done by simply using CNOTs from MSB to (LSB - 1), where the bit controls an X gate on all lower bits. We then check for each <span class="math inline">\(\nu\)</span>, whether the <span class="math inline">\((\mu - 1)\)</span>th qubit is 0 and flag failure otherwise. This requires Toffoli gates with four controls and needs to be done for each bit of <span class="math inline">\(\nu\)</span> except for the sign, so <span class="math inline">\(n_p\)</span> times. The state we reach then looks like:</p>
@@ -668,8 +877,8 @@ Test
 <summary>
 Code
 </summary>
-<div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> filter_nu(</span>
+<div id="79ad6b83" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> filter_nu(</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>        n_p: <span class="bu">int</span>,</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        mu: Sequence[<span class="bu">int</span>],</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        nu_x: Sequence[<span class="bu">int</span>],</span>
@@ -703,15 +912,15 @@ Code
 <span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> reg <span class="kw">in</span> [nu_x, nu_y, nu_z]:</span>
 <span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>            U <span class="op">+=</span> tq.gates.X(target <span class="op">=</span> reg[i <span class="op">+</span> <span class="dv">1</span>])</span>
 <span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </details>
 <details>
 <summary>
 Test
 </summary>
-<div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decode_bits_filter_nu(idx: <span class="bu">int</span>, n_p: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">int</span>]:</span>
+<div id="6a3210c6" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decode_bits_filter_nu(idx: <span class="bu">int</span>, n_p: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">int</span>]:</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    mu_width <span class="op">=</span> n_p <span class="op">+</span> <span class="dv">1</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract μ field (bits 1–n_p + 1)</span></span>
@@ -806,7 +1015,7 @@ Test
 <span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>test_filter_nu(<span class="dv">1</span>)</span>
 <span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>test_filter_nu(<span class="dv">2</span>)</span>
 <span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>test_filter_nu(<span class="dv">3</span>)</span>
-<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>test_filter_nu(<span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>test_filter_nu(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </details>
 <p>Now we introduce a new register <span class="math inline">\(\ket{m}\)</span> that needs to be initialized in equal superposition from <span class="math inline">\(m = 0\)</span> to <span class="math inline">\(M - 1\)</span> where M is a power of two. As discussed above, the accuracy of the block encoding improves with increasing <span class="math inline">\(M\)</span>. It should thus be chosen sufficiently large. The superposition can be achieved by using a Hadamard on each bit of the register. This leads to the state</p>
@@ -832,13 +1041,13 @@ m(\nu_x^2 + \nu_y^2 + \nu_z^2) &lt; (2^{\mu - 2})^2M
 <p>We will first take a look at how to efficiently square a binary number in order to compute <span class="math inline">\((\nu_x^2 + \nu_y^2 + \nu_z^2)\)</span>. We will explain possible simplifications by using the squaring of a four-bit binary number as an example. A more formal derivation can be found in <span class="citation" data-cites="Su_2021"><a href="#ref-Su_2021" role="doc-biblioref">[1]</a></span> in Appendix G. The classic long multiplication of a four bit number can be displayed like this:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="squaring_1.jpeg" class="img-fluid figure-img" width="450"></p>
+<p><img src="squaring_1.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img" width="450"></p>
 </figure>
 </div>
 <p>There are on each level (<span class="math inline">\(2^0\)</span>, <span class="math inline">\(2^1\)</span> and so on) pairs of bits that are multiplied with each other, and then all pairs on one level need to be added up and ultimately the results of the additions on each level need to be added together. Multiplying two bits requires one Toffoli, since it needs to be checked, whether both are one. This is however not necessary when both bits are the same, as marked in blue in the image. In that case, the value of the bit is also the value of its square, which means that no Toffoli is required for those bits. Another observation is that, on each level, each pair of distinct bits appears twice in the multiplication. It is therefore unnecessary to compute these products twice, instead, one can just use the result once and directly move it up one level, which is equivalent to a multiplication with two. With these two realizations, the bits needed to be summed on each level above can be reduced to:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="squaring_2.jpeg" class="img-fluid figure-img" width="450"></p>
+<p><img src="squaring_2.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img" width="450"></p>
 </figure>
 </div>
 <p>Using these simplifications, Su et al.&nbsp;show that the square of a general binary number <span class="math inline">\(p\)</span> can be expressed like</p>
@@ -860,7 +1069,7 @@ m(\nu_x^2 + \nu_y^2 + \nu_z^2) &lt; (2^{\mu - 2})^2M
 <p>Now we will take a closer look at how to add up <span class="math inline">\(l\)</span> bits on a specific level. Three bits of the same level can be summed up using one Toffoli and CNOTs as shown in <span class="citation" data-cites="Gidney_2018"><a href="#ref-Gidney_2018" role="doc-biblioref">[2]</a></span>:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="sum_three.jpeg" class="img-fluid figure-img" width="250"></p>
+<p><img src="sum_three.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img" width="250"></p>
 </figure>
 </div>
 <p>This will leave the bits a and b untouched and change c to the result for the same level, while the last bit is a carry for the next level.</p>
@@ -868,8 +1077,8 @@ m(\nu_x^2 + \nu_y^2 + \nu_z^2) &lt; (2^{\mu - 2})^2M
 <summary>
 Code
 </summary>
-<div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># three bit adder, a and b stay the same, c -&gt; (a + b + c)_0, carry -&gt; (a + b + c)_1</span></span>
+<div id="6d3512d6" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># three bit adder, a and b stay the same, c -&gt; (a + b + c)_0, carry -&gt; (a + b + c)_1</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sum_triple(</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        a: <span class="bu">int</span>,</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        b: <span class="bu">int</span>,</span>
@@ -881,7 +1090,7 @@ Code
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    U <span class="op">+=</span> tq.gates.Toffoli(target<span class="op">=</span>carry, first<span class="op">=</span>b, second<span class="op">=</span>c)</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    U <span class="op">+=</span> tq.gates.X(target<span class="op">=</span>[b, carry], control<span class="op">=</span>a)</span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    U <span class="op">+=</span> tq.gates.CNOT(target<span class="op">=</span>c, control<span class="op">=</span>b)</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </details>
 <p>If we now want to sum <span class="math inline">\(l\)</span> same-level bits together, we need one bit for the result on that level and <span class="math inline">\(l/2\)</span> carry bits. Then we will always take two of the input bits as a and b, the result bit as c and one of the carry bits as carry. It is possible to initialize the result bit as one of the input bits to reduce Toffoli cost. If a single bit is left, a two bit adder can be used, which also requires one Toffoli. In the end we will have combined each two bits to one carry bit and have the result for that level in the result bit. Then we can go on with the next level, adding up the defined summands for that level as well as the carries from before.</p>
@@ -889,8 +1098,8 @@ Code
 <summary>
 Code
 </summary>
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># n-bit adder: adds n bits on the same level, writes carries to n/2 individual ancilla</span></span>
+<div id="5143d0ca" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># n-bit adder: adds n bits on the same level, writes carries to n/2 individual ancilla</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># If the carry bits need to be freed in the end, the circuit needs to reversed</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># and afterwards the other bits need to be recomputed.</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># The Uncompute gets appended by the uncomputation, that still needs to be daggered in the end.</span></span>
@@ -927,7 +1136,7 @@ Code
 <span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>    Uncompute <span class="op">+=</span> tq.gates.CNOT(in_bits[<span class="dv">0</span>], level_result).dagger()</span>
 <span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>    Uncompute <span class="op">+=</span> Recompute.dagger()</span>
 <span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>    Uncompute <span class="op">+=</span> U</span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </details>
 <p>Now we get to the implementation of the actual squaring. After taking a closer look at the four sums defined above, it gets clear that <span class="math inline">\(\Sigma_1\)</span> defines the bits needed to be summed on level <span class="math inline">\(2^2\)</span>, <span class="math inline">\(\Sigma_2\)</span> defines those for level <span class="math inline">\(2^3\)</span> and they take turns like this up until <span class="math inline">\(2^{2\lceil n/2\rceil - 1}\)</span>. Additionally to the bits defined in those sums, the carry bits from the level before need to be added. Similarly it then goes on for <span class="math inline">\(\Sigma_3\)</span> and <span class="math inline">\(\Sigma_4\)</span>. Also, note that in the end we want to compute <span class="math inline">\(m(\nu_x^2 + \nu_y^2 + \nu_z^2)\)</span>. Instead of computing each square separately and then summing up the three results, it is more efficient to directly sum the squaring bits on each level for each <span class="math inline">\(\nu\)</span> together. This means that we will implement a circuit that directly computes <span class="math inline">\(\nu_x^2 + \nu_y^2 + \nu_z^2\)</span>.</p>
@@ -935,8 +1144,8 @@ Code
 <summary>
 Code
 </summary>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Implements the sigmas used for the squaring circuit</span></span>
+<div id="265c6a1b" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Implements the sigmas used for the squaring circuit</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sigma(</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        sigma: <span class="bu">int</span>,</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        px: Sequence[<span class="bu">int</span>],</span>
@@ -1035,15 +1244,15 @@ Code
 <span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> uncompute:</span>
 <span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a>        U <span class="op">+=</span> Uncompute.dagger()</span>
 <span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </details>
 <details>
 <summary>
 Test
 </summary>
-<div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_triple_square(n, x, y, z):</span>
+<div id="75d1d076" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_triple_square(n, x, y, z):</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> x <span class="op">&lt;=</span> <span class="dv">2</span><span class="op">**</span>(n) <span class="op">-</span> <span class="dv">1</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> y <span class="op">&lt;=</span> <span class="dv">2</span><span class="op">**</span>(n) <span class="op">-</span> <span class="dv">1</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> z <span class="op">&lt;=</span> <span class="dv">2</span><span class="op">**</span>(n) <span class="op">-</span> <span class="dv">1</span></span>
@@ -1101,7 +1310,7 @@ Test
 <span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>test_triple_square(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
 <span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>test_triple_square(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
 <span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>test_triple_square(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
-<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a><span class="co">#test_triple_square(3, 7, 0, 1) qubit count too high</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a><span class="co">#test_triple_square(3, 7, 0, 1) qubit count too high</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </details>
 </section>
@@ -1116,8 +1325,8 @@ Test
 <summary>
 Code
 </summary>
-<div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Binary Product (Lemma 10, p.81), LSB -&gt; MSB</span></span>
+<div id="d82d7722" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Binary Product (Lemma 10, p.81), LSB -&gt; MSB</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> binary_product(</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        a: Sequence[<span class="bu">int</span>],</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>        b: Sequence[<span class="bu">int</span>],</span>
@@ -1188,7 +1397,7 @@ Code
 <span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> uncompute:</span>
 <span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a>        U <span class="op">+=</span> Uncompute.dagger()</span>
 <span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </details>
 <p>Now we need to compute <span class="math inline">\((2^{\mu-2})^2M\)</span>. Remember that <span class="math inline">\(\mu\)</span> is in unary representation. We can add zeros in between each two qubits to get a unary representation of <span class="math inline">\(2\mu\)</span>: For example <span class="math inline">\(\mu = 1\)</span> would be changed from <span class="math inline">\(0001\)</span> to <span class="math inline">\(0\underline{0}0\underline{0}0\underline{0}1\underline{0}\)</span> where the underlined zeros are those that have been newly inserted. This will always work since the number of zeros behind the one is always doubled when larger than zero. Now we have a bitstring where only the <span class="math inline">\((\mu+2)\)</span>th bit from the right is one. In binary representation, this represents the value <span class="math inline">\(2^{2\mu - 1}\)</span> and we have <span class="math inline">\(2^{2\mu - 1} \cdot 2^{-3}M = 2^{\mu - 4}M = 2^{(\mu-2)^2}M\)</span>. Since <span class="math inline">\(M\)</span> is a classically chosen value and a power of two, we have <span class="math inline">\(2^{-3}M = 2^{-3}\cdot 2^{\log M} = 2^{\log M - 3}\)</span>, where <span class="math inline">\(\log M\)</span> is a natural number. To multiply a binary number by a power of two, one can simply pad it with zeros from the LSB corresponding to the number of the exponent. Thus, <span class="math inline">\((2^{\mu-2})^2M\)</span> can be reached by padding <span class="math inline">\(2^{2\mu - 1}\)</span> with <span class="math inline">\((\log_2 M) - 3\)</span> bits <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. This means that in total we only need to insert zeros to achieve the aspired number. It is not necessary to actually insert those qubits, instead the comparison circuit, which will be introduced next, can simply be adjusted to work with the original <span class="math inline">\(\mu\)</span> and still output the comparison result for <span class="math inline">\((2^{\mu-2})^2M\)</span>.</p>
@@ -1200,7 +1409,7 @@ Code
 <p>In conclusion, the comparison of two binary strings can be implemented using binary addition. <span class="citation" data-cites="Gidney_2018"><a href="#ref-Gidney_2018" role="doc-biblioref">[2]</a></span> propose a quantum adder that requires the use of <span class="math inline">\(2n - 2\)</span> Toffoli gates, which can be constructed using only <span class="math inline">\(4n + O(1)\)</span> T gates. The circuit for four bits would look like:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="quantum_adder.jpeg" class="img-fluid figure-img" width="450"></p>
+<p><img src="quantum_adder.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img" width="450"></p>
 </figure>
 </div>
 <p>This adder has the qubit strings <span class="math inline">\(a = a_0 \dots a_{n-1}\)</span> and <span class="math inline">\(b = b_0 \dots b_{n-1}\)</span> as input, as well as <span class="math inline">\(n - 1\)</span> carry-bits, which are initialized as 0. <span class="math inline">\(a_0\)</span> and <span class="math inline">\(b_0\)</span> are the least significant bits and <span class="math inline">\(a_{n-1}\)</span> and <span class="math inline">\(b_{n-1}\)</span> the most significant bits of <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. First, the carry-bits are evaluated, and then in the end, the actual addition is done, where the result overwrites the <span class="math inline">\(b\)</span> lines.</p>
@@ -1210,15 +1419,15 @@ Code
 <p>Finally, since the qubits in <span class="math inline">\(b\)</span> must remain unchanged, we must revert all operations after computing flag. This means undoing intermediate steps and omitting the final CNOTs. Once these modifications are applied, the updated circuit looks as follows for three bit inputs:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="quantum_comparison.jpeg" class="img-fluid figure-img" width="450"></p>
+<p><img src="quantum_comparison.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img" width="450"></p>
 </figure>
 </div>
 <details>
 <summary>
 Code
 </summary>
-<div class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># comparator of 2 n-bit numbers, LSB -&gt; MSB, flag == 0 iff a &lt; b, requires n additional ancilla</span></span>
+<div id="7d9bf35a" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># comparator of 2 n-bit numbers, LSB -&gt; MSB, flag == 0 iff a &lt; b, requires n additional ancilla</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> comparator(</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>        a: Sequence[<span class="bu">int</span>],</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>        b: Sequence[<span class="bu">int</span>],</span>
@@ -1243,7 +1452,7 @@ Code
 <span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    U <span class="op">+=</span> tq.gates.CNOT(ancilla[n <span class="op">-</span> <span class="dv">1</span>], flag)</span>
 <span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    U <span class="op">+=</span> Uncompute</span>
 <span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </details>
 <p>For our specific use case however, we require further adaptations. Our input for <span class="math inline">\(a\)</span> will be <span class="math inline">\(\nu_x^2 + \nu_y^2 + \nu_z^2\)</span> and <span class="math inline">\(b\)</span> will be <span class="math inline">\((2^{\mu-2})^2M\)</span>. Unlike <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> as in the circuit above, these two inputs are not necessarily of the same length, which requires adaptation. Also we want to only give <span class="math inline">\(\mu\)</span> as input but receive the result for <span class="math inline">\(b\)</span> being <span class="math inline">\((2^{\mu-2})^2M\)</span>. Both necessary adaptations only require inserting additional zeros within <span class="math inline">\(a\)</span> or <span class="math inline">\(b\)</span>. We need to insert <span class="math inline">\(\log M - 3\)</span> zeros as the first bits of <span class="math inline">\(b\)</span>. This results in the comparing being redundant until that part, since we always have <span class="math inline">\(a \ge b\)</span> for that first part. The circuit only needs to start at the first bit, where <span class="math inline">\(b\)</span> is not an inserted zero. From that part on, we will need ancilla and Toffoli gates for every comparison, where a is still defined, but the circuit is slightly adjusted for the inserted zeros. In the case that <span class="math inline">\(a\)</span> is shorter than <span class="math inline">\(b\)</span>, we will fill it with zeros, which again slightly adjusts the circuit, and in the cases, where both bits <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are known to be zero, we can again skip that part.</p>
@@ -1251,8 +1460,8 @@ Code
 <summary>
 Code
 </summary>
-<div class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># comparator of 2 numbers, LSB -&gt; MSB, sets flag to 0 iff a &lt; (2^(mu - 1))^2*M</span></span>
+<div id="98fb819f" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># comparator of 2 numbers, LSB -&gt; MSB, sets flag to 0 iff a &lt; (2^(mu - 1))^2*M</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># mu in_put is assumed to be one-hot unary</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># requires max(len(a) - log2(M) - 1, 2*len(mu) - 1) ancilla</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># uses (2^(mu - 1))^2*M instead of mu, M needs to be power of 2 and &gt;= 8</span></span>
@@ -1321,15 +1530,15 @@ Code
 <span id="cb13-67"><a href="#cb13-67" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> uncompute:</span>
 <span id="cb13-68"><a href="#cb13-68" aria-hidden="true" tabindex="-1"></a>        U <span class="op">+=</span> Uncompute</span>
 <span id="cb13-69"><a href="#cb13-69" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb13-70"><a href="#cb13-70" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-70"><a href="#cb13-70" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </details>
 <details>
 <summary>
 Test
 </summary>
-<div class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Testing Code for comparator_M</span></span>
+<div id="2b04e849" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Testing Code for comparator_M</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> index_to_bits_msb_to_lsb(idx, n_qubits):</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns bits in physical qubit order [q0, q1, ..., q_{n-1}]</span></span>
@@ -1387,7 +1596,7 @@ Test
 <span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a>test_comparator(a_int <span class="op">=</span> <span class="dv">32</span>, a_len <span class="op">=</span> <span class="dv">6</span>, mu_int <span class="op">=</span> <span class="dv">2</span>, mu_len <span class="op">=</span> <span class="dv">2</span>, M <span class="op">=</span> <span class="dv">8</span>) <span class="co"># a = (2^(mu - 1))^2*M</span></span>
 <span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>test_comparator(a_int <span class="op">=</span> <span class="dv">15</span>, a_len <span class="op">=</span> <span class="dv">4</span>, mu_int <span class="op">=</span> <span class="dv">3</span>, mu_len <span class="op">=</span> <span class="dv">4</span>, M <span class="op">=</span> <span class="dv">32</span>) <span class="co"># a &lt; (2^(mu - 1))^2*M</span></span>
-<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>test_comparator(a_int <span class="op">=</span> <span class="dv">23</span>, a_len <span class="op">=</span> <span class="dv">5</span>, mu_int <span class="op">=</span> <span class="dv">1</span>, mu_len <span class="op">=</span> <span class="dv">6</span>, M <span class="op">=</span> <span class="dv">16</span>) <span class="co"># a &gt; (2^(mu - 1))^2*M</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>test_comparator(a_int <span class="op">=</span> <span class="dv">23</span>, a_len <span class="op">=</span> <span class="dv">5</span>, mu_int <span class="op">=</span> <span class="dv">1</span>, mu_len <span class="op">=</span> <span class="dv">6</span>, M <span class="op">=</span> <span class="dv">16</span>) <span class="co"># a &gt; (2^(mu - 1))^2*M</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </details>
 <p>Now all necessary components are implemented and we can put them together. Note that while we always prepare the states as MSB first here, the input for the squaring circuit, the multiplication circuit and the comparing circuit are LSB first thus we will have to change the bit ordering sometimes. Also the code here always allows to uncompute the used ancilla directly, to keep the ancilla code low. In practice however it would be more important to reduce the amount of non-Clifford gates, which for this code are the Toffoli gates. This means that one would not uncompute the ancilla in between, since that always doubles the Toffoli cost, which then again gets doubled for the amplitude amplification that will follow. Instead, additional ancilla are used. In the end, we have four different flags that should be combined to one using three Toffolis, since this increases the qubit count and does not really help with the simulation, it is not implemented here. Then one round of amplitude amplification would follow, which is not implemented as well.</p>
@@ -1395,8 +1604,8 @@ Test
 <summary>
 Code
 </summary>
-<div class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Full circuit:</span></span>
+<div id="0b1d13d1" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Full circuit:</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> state_prep_U_and_V(</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>        mu: Sequence[<span class="bu">int</span>], <span class="co"># len should be n_p + 1</span></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>        nu_x: Sequence[<span class="bu">int</span>], <span class="co"># len should be n_p + 1</span></span>
@@ -1456,15 +1665,15 @@ Code
 <span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a>    <span class="co"># test (2^(mu - 1))^2*M &gt; m*nu_x^2+nu_y^2+nu_z^2:</span></span>
 <span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a>    U <span class="op">+=</span> comparator_M(result_product, <span class="bu">list</span>(<span class="bu">reversed</span>(mu)), flags[<span class="dv">3</span>], ancilla_comparison, M, uncompute)</span>
-<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </details>
 <details>
 <summary>
 Example use
 </summary>
-<div class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prep_state_tequila(n_p, M, uncompute):</span>
+<div id="ede6d4e4" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prep_state_tequila(n_p, M, uncompute):</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> n_p <span class="op">+</span> <span class="dv">1</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    len_m <span class="op">=</span> math.ceil(math.log2(M))</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n_p <span class="op">==</span> <span class="dv">1</span>:</span>
@@ -1505,7 +1714,7 @@ Example use
 <span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>    U <span class="op">+=</span> state_prep_U_and_V(mu, nu_x, nu_y, nu_z, m, ancilla, result_square, result_product, flags, M, n_p, uncompute)</span>
 <span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>n_p <span class="op">=</span> <span class="dv">8</span></span>
 <span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>M <span class="op">=</span> <span class="dv">8</span></span>
-<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>prep_state_tequila(n_p, M, <span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>prep_state_tequila(n_p, M, <span class="va">False</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </details>
 </section>
@@ -1524,8 +1733,8 @@ Example use
 <summary>
 Code
 </summary>
-<div class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># helper function</span></span>
+<div id="597d47b2" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># helper function</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decode(idx: <span class="bu">int</span>, n_p: <span class="bu">int</span>, M: <span class="bu">int</span>):</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    mu_width <span class="op">=</span> n_p <span class="op">+</span> <span class="dv">1</span></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    m_bits <span class="op">=</span> math.ceil(math.log2(M))</span>
@@ -1590,7 +1799,7 @@ Code
 <span id="cb17-63"><a href="#cb17-63" aria-hidden="true" tabindex="-1"></a>    rhs <span class="op">=</span> m <span class="op">*</span> (nu_x<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> nu_y<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> nu_z<span class="op">**</span><span class="dv">2</span>)</span>
 <span id="cb17-64"><a href="#cb17-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> lhs <span class="op">&lt;=</span> rhs:</span>
 <span id="cb17-65"><a href="#cb17-65" aria-hidden="true" tabindex="-1"></a>        val <span class="op">^=</span> <span class="dv">1</span>  <span class="co"># toggle only the flag bit</span></span>
-<span id="cb17-66"><a href="#cb17-66" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> val</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-66"><a href="#cb17-66" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> val</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </details>
 <p>Here are some results for <span class="math inline">\(n_p = 3\)</span> and different values of <span class="math inline">\(M\)</span>:</p>
@@ -1598,56 +1807,56 @@ Code
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="3Dnp3M8.png" class="img-fluid figure-img" width="500"></p>
-<figcaption class="figure-caption"><span class="math inline">\(n_p = 3, M = 8\)</span></figcaption>
+<figcaption><span class="math inline">\(n_p = 3, M = 8\)</span></figcaption>
 </figure>
 </div>
 <p>The probability distribution clearly peaks near the origin, as expected from the theoretical scaling. To get better insight into to correctness of the result, we only plotted the <span class="math inline">\(\nu_x\)</span>-values where <span class="math inline">\(\nu_y\)</span> and <span class="math inline">\(\nu_z\)</span> are zero and compare it to the desired values:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="1Dn_p3M8.png" class="img-fluid figure-img" width="600"></p>
-<figcaption class="figure-caption"><span class="math inline">\(n_p = 3, M = 8\)</span></figcaption>
+<figcaption><span class="math inline">\(n_p = 3, M = 8\)</span></figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="1Dnp8M16.png" class="img-fluid figure-img" width="600"></p>
-<figcaption class="figure-caption"><span class="math inline">\(n_p = 3, M = 16\)</span></figcaption>
+<figcaption><span class="math inline">\(n_p = 3, M = 16\)</span></figcaption>
 </figure>
 </div>
 <p>There is only a very slight difference visible here for <span class="math inline">\(\nu_x = 5\)</span>. For a better comparison we also plotted the relative difference between the result and the true value. Again for <span class="math inline">\(\nu_y\)</span> and <span class="math inline">\(\nu_z\)</span> fixed to zero:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="diff00.png" class="img-fluid figure-img" width="600"></p>
+<p><img src="diff00.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="600"></p>
 </figure>
 </div>
 <p>As assumed, the only improvement here is for <span class="math inline">\(\nu_x = 5\)</span>. However, when fixing <span class="math inline">\(\nu_y\)</span> and <span class="math inline">\(\nu_z\)</span> fixed to seven, more differences appear:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="diff77.png" class="img-fluid figure-img" width="600"></p>
+<p><img src="diff77.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="600"></p>
 </figure>
 </div>
 <p>A different picture also arises for <span class="math inline">\(\nu_y\)</span> fixed to zero and <span class="math inline">\(\nu_z\)</span> to seven:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="diff07.png" class="img-fluid figure-img" width="600"></p>
+<p><img src="diff07.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="600"></p>
 </figure>
 </div>
 <p>A good way to see the improved granularity for increasing <span class="math inline">\(M\)</span> is also a 2D plot, where only the <span class="math inline">\(\nu_z\)</span> value is fixed to zero:</p>
-<div class="quarto-layout-panel">
-<div class="quarto-layout-row quarto-layout-valign-top">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="2Dnp3M8.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption"><span class="math inline">\(n_p = 3, M = 8\)</span></figcaption>
+<figcaption><span class="math inline">\(n_p = 3, M = 8\)</span></figcaption>
 </figure>
 </div>
 </div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="2Dnp3M16.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption"><span class="math inline">\(n_p = 3, M = 16\)</span></figcaption>
+<figcaption><span class="math inline">\(n_p = 3, M = 16\)</span></figcaption>
 </figure>
 </div>
 </div>
@@ -1747,12 +1956,12 @@ Code
 </section>
 <section id="references" class="level2" data-number="9">
 <h2 data-number="9" class="anchored" data-anchor-id="references"><span class="header-section-number">9</span> References</h2>
-<div id="refs" class="references csl-bib-body" role="list">
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
 <div id="ref-Su_2021" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[1] </div><div class="csl-right-inline">Y. Su, D. W. Berry, N. Wiebe, N. Rubin, and R. Babbush, <span>“Fault-tolerant quantum simulations of chemistry in first quantization,”</span> <em>PRX Quantum</em>, vol. 2, no. 4, Nov. 2021, doi: <a href="https://doi.org/10.1103/prxquantum.2.040332">10.1103/prxquantum.2.040332</a>.</div>
 </div>
 <div id="ref-Gidney_2018" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[2] </div><div class="csl-right-inline">C. Gidney, <span>“Halving the cost of quantum addition,”</span> <em>Quantum</em>, vol. 2, p. 74, Jun. 2018, doi: <a href="https://doi.org/10.22331/q-2018-06-18-74">10.22331/q-2018-06-18-74</a>.</div>
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">C. Gidney, <span>“Halving the cost of quantum addition,”</span> <em>Quantum</em>, vol. 2, p. 74, June 2018, doi: <a href="https://doi.org/10.22331/q-2018-06-18-74">10.22331/q-2018-06-18-74</a>.</div>
 </div>
 <div id="ref-Suzuki_2021" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[3] </div><div class="csl-right-inline">Y. Suzuki <em>et al.</em>, <span>“Qulacs: A fast and versatile quantum circuit simulator for research purpose,”</span> <em>Quantum</em>, vol. 5, p. 559, Oct. 2021, doi: <a href="https://doi.org/10.22331/q-2021-10-06-559">10.22331/q-2021-10-06-559</a>.</div>
@@ -1780,158 +1989,71 @@ Code
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
     }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const disableStylesheet = (stylesheets) => {
-    for (let i=0; i < stylesheets.length; i++) {
-      const stylesheet = stylesheets[i];
-      stylesheet.rel = 'prefetch';
-    }
-  }
-  const enableStylesheet = (stylesheets) => {
-    for (let i=0; i < stylesheets.length; i++) {
-      const stylesheet = stylesheets[i];
-      stylesheet.rel = 'stylesheet';
-    }
-  }
-  const manageTransitions = (selector, allowTransitions) => {
-    const els = window.document.querySelectorAll(selector);
-    for (let i=0; i < els.length; i++) {
-      const el = els[i];
-      if (allowTransitions) {
-        el.classList.remove('notransition');
-      } else {
-        el.classList.add('notransition');
-      }
-    }
-  }
-  const toggleColorMode = (alternate) => {
-    // Switch the stylesheets
-    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
-    manageTransitions('#quarto-margin-sidebar .nav-link', false);
-    if (alternate) {
-      enableStylesheet(alternateStylesheets);
-      for (const sheetNode of alternateStylesheets) {
-        if (sheetNode.id === "quarto-bootstrap") {
-          toggleBodyColorMode(sheetNode);
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
         }
       }
-    } else {
-      disableStylesheet(alternateStylesheets);
-      toggleBodyColorPrimary();
-    }
-    manageTransitions('#quarto-margin-sidebar .nav-link', true);
-    // Switch the toggles
-    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
-    for (let i=0; i < toggles.length; i++) {
-      const toggle = toggles[i];
-      if (toggle) {
-        if (alternate) {
-          toggle.classList.add("alternate");     
-        } else {
-          toggle.classList.remove("alternate");
-        }
-      }
-    }
-    // Hack to workaround the fact that safari doesn't
-    // properly recolor the scrollbar when toggling (#1455)
-    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
-      manageTransitions("body", false);
-      window.scrollTo(0, 1);
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-        manageTransitions("body", true);
-      }, 40);  
-    }
-  }
-  const isFileUrl = () => { 
-    return window.location.protocol === 'file:';
-  }
-  const hasAlternateSentinel = () => {  
-    let styleSentinel = getColorSchemeSentinel();
-    if (styleSentinel !== null) {
-      return styleSentinel === "alternate";
-    } else {
       return false;
     }
-  }
-  const setStyleSentinel = (alternate) => {
-    const value = alternate ? "alternate" : "default";
-    if (!isFileUrl()) {
-      window.localStorage.setItem("quarto-color-scheme", value);
-    } else {
-      localAlternateSentinel = value;
-    }
-  }
-  const getColorSchemeSentinel = () => {
-    if (!isFileUrl()) {
-      const storageValue = window.localStorage.getItem("quarto-color-scheme");
-      return storageValue != null ? storageValue : localAlternateSentinel;
-    } else {
-      return localAlternateSentinel;
-    }
-  }
-  let localAlternateSentinel = 'default';
-  // Dark / light mode switch
-  window.quartoToggleColorScheme = () => {
-    // Read the current dark / light value 
-    let toAlternate = !hasAlternateSentinel();
-    toggleColorMode(toAlternate);
-    setStyleSentinel(toAlternate);
-  };
-  // Ensure there is a toggle, if there isn't float one in the top right
-  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
-    const a = window.document.createElement('a');
-    a.classList.add('top-right');
-    a.classList.add('quarto-color-scheme-toggle');
-    a.href = "";
-    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
-    const i = window.document.createElement("i");
-    i.classList.add('bi');
-    a.appendChild(i);
-    window.document.body.appendChild(a);
-  }
-  // Switch to dark mode if need be
-  if (hasAlternateSentinel()) {
-    toggleColorMode(true);
-  } else {
-    toggleColorMode(false);
-  }
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
       }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
     }
-    return false;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
       for (const childEl of codeEl.children) {
         if (isCodeAnnotation(childEl)) {
           childEl.remove();
@@ -1939,248 +2061,400 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
       return codeEl.innerText;
     }
-  });
-  clipboard.on('success', function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  });
-  const viewSource = window.document.getElementById('quarto-view-source') ||
-                     window.document.getElementById('quarto-code-tools-source');
-  if (viewSource) {
-    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
-    viewSource.addEventListener("click", function(e) {
-      if (sourceUrl) {
-        // rstudio viewer pane
-        if (/\bcapabilities=\b/.test(window.location)) {
-          window.open(sourceUrl);
-        } else {
-          window.location.href = sourceUrl;
-        }
-      } else {
-        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
-        modal.show();
-      }
-      return false;
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
     });
-  }
-  function toggleCodeHandler(show) {
-    return function(e) {
-      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-      for (let i=0; i<detailsSrc.length; i++) {
-        const details = detailsSrc[i].parentElement;
-        if (show) {
-          details.open = true;
-        } else {
-          details.removeAttribute("open");
-        }
-      }
-      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
-      const fromCls = show ? "hidden" : "unhidden";
-      const toCls = show ? "unhidden" : "hidden";
-      for (let i=0; i<cellCodeDivs.length; i++) {
-        const codeDiv = cellCodeDivs[i];
-        if (codeDiv.classList.contains(fromCls)) {
-          codeDiv.classList.remove(fromCls);
-          codeDiv.classList.add(toCls);
-        } 
-      }
-      return false;
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
     }
-  }
-  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
-  if (hideAllCode) {
-    hideAllCode.addEventListener("click", toggleCodeHandler(false));
-  }
-  const showAllCode = window.document.getElementById("quarto-show-all-code");
-  if (showAllCode) {
-    showAllCode.addEventListener("click", toggleCodeHandler(true));
-  }
-  function tippyHover(el, contentFn) {
-    const config = {
-      allowHTML: true,
-      content: contentFn,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start'
-    };
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      return note.innerHTML;
-    });
-  }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
-        }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
           } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
+            window.location.href = sourceUrl;
           }
-        });
-      }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
       });
     }
-  }
-});
-</script>
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/tequilahub\.github\.io\/tequila-tutorials\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 <script src="https://utteranc.es/client.js" repo="tequilahub/tequila-tutorials" issue-term="pathname" theme="preferred-color-scheme" crossorigin="anonymous" async="">
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb18" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Efficient Preparation of Coulomb Potential States for Quantum Chemistry Simulation"</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Tamara Wegner"</span></span>
@@ -2258,7 +2532,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-76"><a href="#cb18-76" aria-hidden="true" tabindex="-1"></a>U &amp;=</span>
 <span id="cb18-77"><a href="#cb18-77" aria-hidden="true" tabindex="-1"></a>\sum_{\nu \in G_0}</span>
 <span id="cb18-78"><a href="#cb18-78" aria-hidden="true" tabindex="-1"></a>\sum_{\ell=1}^{L}</span>
-<span id="cb18-79"><a href="#cb18-79" aria-hidden="true" tabindex="-1"></a>\frac{2\pi \zeta_\ell}{\Omega \|k_\nu\|^2}</span>
+<span id="cb18-79"><a href="#cb18-79" aria-hidden="true" tabindex="-1"></a>\frac{2\pi \zeta_\ell}{\Omega <span class="sc">\|</span>k_\nu<span class="sc">\|</span>^2}</span>
 <span id="cb18-80"><a href="#cb18-80" aria-hidden="true" tabindex="-1"></a>\sum_{j=1}^{\eta}</span>
 <span id="cb18-81"><a href="#cb18-81" aria-hidden="true" tabindex="-1"></a>\sum_{b\in<span class="sc">\{</span>0,1<span class="sc">\}</span>}</span>
 <span id="cb18-82"><a href="#cb18-82" aria-hidden="true" tabindex="-1"></a>\left(</span>
@@ -2270,7 +2544,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-88"><a href="#cb18-88" aria-hidden="true" tabindex="-1"></a><span class="sc">\\</span></span>
 <span id="cb18-89"><a href="#cb18-89" aria-hidden="true" tabindex="-1"></a>V &amp;=</span>
 <span id="cb18-90"><a href="#cb18-90" aria-hidden="true" tabindex="-1"></a>\sum_{\nu \in G_0}</span>
-<span id="cb18-91"><a href="#cb18-91" aria-hidden="true" tabindex="-1"></a>\frac{\pi}{\Omega \|k_\nu\|^2}</span>
+<span id="cb18-91"><a href="#cb18-91" aria-hidden="true" tabindex="-1"></a>\frac{\pi}{\Omega <span class="sc">\|</span>k_\nu<span class="sc">\|</span>^2}</span>
 <span id="cb18-92"><a href="#cb18-92" aria-hidden="true" tabindex="-1"></a>\sum_{i\neq j}^{\eta}</span>
 <span id="cb18-93"><a href="#cb18-93" aria-hidden="true" tabindex="-1"></a>\sum_{b\in<span class="sc">\{</span>0,1<span class="sc">\}</span>}</span>
 <span id="cb18-94"><a href="#cb18-94" aria-hidden="true" tabindex="-1"></a>\left(</span>
@@ -2278,7 +2552,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-96"><a href="#cb18-96" aria-hidden="true" tabindex="-1"></a>(-1)^{b<span class="co">[</span><span class="ot">(p+\nu)\notin G \,\vee\, (q-\nu)\notin G</span><span class="co">]</span>}</span>
 <span id="cb18-97"><a href="#cb18-97" aria-hidden="true" tabindex="-1"></a>\,|p+\nu\rangle\langle p|_i</span>
 <span id="cb18-98"><a href="#cb18-98" aria-hidden="true" tabindex="-1"></a>\cdot</span>
-<span id="cb18-99"><a href="#cb18-99" aria-hidden="true" tabindex="-1"></a>|q-\nu\rangle\langle q|_j</span>
+<span id="cb18-99"><a href="#cb18-99" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>q-\nu\rangle\langle q<span class="pp">|</span>_j</span>
 <span id="cb18-100"><a href="#cb18-100" aria-hidden="true" tabindex="-1"></a>\right).</span>
 <span id="cb18-101"><a href="#cb18-101" aria-hidden="true" tabindex="-1"></a>\end{align}</span>
 <span id="cb18-102"><a href="#cb18-102" aria-hidden="true" tabindex="-1"></a></span>
@@ -2288,7 +2562,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-106"><a href="#cb18-106" aria-hidden="true" tabindex="-1"></a>k_\nu = \frac{2\pi \nu}{\Omega^{1/3}}, \quad G_0 = <span class="co">[</span><span class="ot">- (N^{1/3} - 1), N^{1/3} - 1</span><span class="co">]</span>^3,</span>
 <span id="cb18-107"><a href="#cb18-107" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb18-108"><a href="#cb18-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-109"><a href="#cb18-109" aria-hidden="true" tabindex="-1"></a>so $\|k_\nu\| = \sqrt{\frac{2\pi}{\Omega^{1/3}}} \|\nu\|$. For detailed explanations and definitions for all variables regard the introduction of @Su_2021.</span>
+<span id="cb18-109"><a href="#cb18-109" aria-hidden="true" tabindex="-1"></a>so $<span class="sc">\|</span>k_\nu<span class="sc">\|</span> = \sqrt{\frac{2\pi}{\Omega^{1/3}}} <span class="sc">\|</span>\nu<span class="sc">\|</span>$. For detailed explanations and definitions for all variables regard the introduction of @Su_2021.</span>
 <span id="cb18-110"><a href="#cb18-110" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-111"><a href="#cb18-111" aria-hidden="true" tabindex="-1"></a>The goal is then to implement $PREP_T$, and $PREP_{U + V}$ as well as $SEL_T$ and $SEL_{U + V}$ similarly to the block encoding for $H$ as shown above. Then the state preparation subroutine</span>
 <span id="cb18-112"><a href="#cb18-112" aria-hidden="true" tabindex="-1"></a></span>
@@ -2307,18 +2581,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-125"><a href="#cb18-125" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-126"><a href="#cb18-126" aria-hidden="true" tabindex="-1"></a>Here we will only focus on implementing $PREP_{U+V}$. Specifically, on implementing a state proportional to</span>
 <span id="cb18-127"><a href="#cb18-127" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb18-128"><a href="#cb18-128" aria-hidden="true" tabindex="-1"></a>\sum_{\nu \in G_0}\frac{1}{\|\nu\|}\ket{\nu}</span>
+<span id="cb18-128"><a href="#cb18-128" aria-hidden="true" tabindex="-1"></a>\sum_{\nu \in G_0}\frac{1}{<span class="sc">\|</span>\nu<span class="sc">\|</span>}\ket{\nu}</span>
 <span id="cb18-129"><a href="#cb18-129" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb18-130"><a href="#cb18-130" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-131"><a href="#cb18-131" aria-hidden="true" tabindex="-1"></a>where $\nu \in G_0 = <span class="co">[</span><span class="ot">- (N^{1/3} - 1), N^{1/3} - 1</span><span class="co">]</span>^3 \backslash <span class="sc">\{</span>(0,0,0)<span class="sc">\}</span>$ is an integer vector. </span>
-<span id="cb18-132"><a href="#cb18-132" aria-hidden="true" tabindex="-1"></a>This state preparation is required because both $U$ and $V$ involve coefficients proportional to $1/\|k\|^2$, which scales as $1/\|\nu\|^2$. Since the PREP routine prepares amplitudes proportional to the square root of these coefficients, we require amplitudes proportional to $1/\|\nu\|$. In the following, we see the detailed preparation of this state and the implementation using tequila.</span>
+<span id="cb18-132"><a href="#cb18-132" aria-hidden="true" tabindex="-1"></a>This state preparation is required because both $U$ and $V$ involve coefficients proportional to $1/<span class="sc">\|</span>k<span class="sc">\|</span>^2$, which scales as $1/<span class="sc">\|</span>\nu<span class="sc">\|</span>^2$. Since the PREP routine prepares amplitudes proportional to the square root of these coefficients, we require amplitudes proportional to $1/<span class="sc">\|</span>\nu<span class="sc">\|</span>$. In the following, we see the detailed preparation of this state and the implementation using tequila.</span>
 <span id="cb18-133"><a href="#cb18-133" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-134"><a href="#cb18-134" aria-hidden="true" tabindex="-1"></a><span class="fu">## Circuit Construction</span></span>
 <span id="cb18-135"><a href="#cb18-135" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-136"><a href="#cb18-136" aria-hidden="true" tabindex="-1"></a>We want to prepare</span>
 <span id="cb18-137"><a href="#cb18-137" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-138"><a href="#cb18-138" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb18-139"><a href="#cb18-139" aria-hidden="true" tabindex="-1"></a>\sum_{\nu \in G_0}\frac{1}{\|\nu\|}\ket{\nu}.</span>
+<span id="cb18-139"><a href="#cb18-139" aria-hidden="true" tabindex="-1"></a>\sum_{\nu \in G_0}\frac{1}{<span class="sc">\|</span>\nu<span class="sc">\|</span>}\ket{\nu}.</span>
 <span id="cb18-140"><a href="#cb18-140" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb18-141"><a href="#cb18-141" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-142"><a href="#cb18-142" aria-hidden="true" tabindex="-1"></a>where $\nu \in G_0 = <span class="co">[</span><span class="ot">- (2^{n_p} - 1), 2^{n_p} - 1</span><span class="co">]</span>^3 \backslash <span class="sc">\{</span>(0,0,0)<span class="sc">\}</span>$ is an integer vector and $n_p$ is the number of qubits we use to represent the magnitude of each value of $\nu$. The main registers we use for the implementation are:</span>
@@ -2331,19 +2605,19 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-149"><a href="#cb18-149" aria-hidden="true" tabindex="-1"></a>We will require many additional ancilla for the subroutines used. In the end our prepared state will be of the form</span>
 <span id="cb18-150"><a href="#cb18-150" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-151"><a href="#cb18-151" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb18-152"><a href="#cb18-152" aria-hidden="true" tabindex="-1"></a>\frac{1}{\sqrt{M2^{n_p + 2}}} \sum_{\mu=2}^{n_p + 1} \sum_{\nu \in B_\mu} \sum_{m=0}^{\lceil M(2^{\mu - 2} / \|\nu \|)^2 \rceil - 1} \frac{1}{2^\mu} \ket{\mu} \ket{\nu_x} \ket{\nu_y} \ket{\nu_z} \ket{m} \ket{0} + \ket{\Psi ^\perp}</span>
+<span id="cb18-152"><a href="#cb18-152" aria-hidden="true" tabindex="-1"></a>\frac{1}{\sqrt{M2^{n_p + 2}}} \sum_{\mu=2}^{n_p + 1} \sum_{\nu \in B_\mu} \sum_{m=0}^{\lceil M(2^{\mu - 2} / <span class="sc">\|</span>\nu <span class="sc">\|</span>)^2 \rceil - 1} \frac{1}{2^\mu} \ket{\mu} \ket{\nu_x} \ket{\nu_y} \ket{\nu_z} \ket{m} \ket{0} + \ket{\Psi ^\perp}</span>
 <span id="cb18-153"><a href="#cb18-153" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb18-154"><a href="#cb18-154" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-155"><a href="#cb18-155" aria-hidden="true" tabindex="-1"></a>where $B_\mu$ is the set of $\nu$ such that $|\nu_x|$, $|\nu_y|$ and $|\nu_z|$ are less than $2^{\mu - 1}$ but at least one of them has an absolute value of $2^{\mu-2}$ or greater. Note that each possible vector $\nu \in G_0$ is in $B_\mu$ for exactly one value $\mu$. This means that the corresponding sum does not directly impact the final amplitude for an individual $\nu$. The amplitude is defined by the two factors and the summation over $m$. The final amplitude for each $\nu$ is then:</span>
 <span id="cb18-156"><a href="#cb18-156" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-157"><a href="#cb18-157" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb18-158"><a href="#cb18-158" aria-hidden="true" tabindex="-1"></a>\begin{gathered}</span>
-<span id="cb18-159"><a href="#cb18-159" aria-hidden="true" tabindex="-1"></a>\frac{1}{\sqrt{M 2^{n_p + 2}}} \cdot \sqrt{\lceil M (2^{\mu - 2} / \|\nu\|) ^2 \rceil} \cdot \frac{1}{2^\mu} </span>
-<span id="cb18-160"><a href="#cb18-160" aria-hidden="true" tabindex="-1"></a>= \sqrt{\frac{\lceil M (2^{\mu - 2} / \|\nu\|) ^2 \rceil}{M 2^{n_p + 2} \cdot 2^{2\mu}}} <span class="sc">\\</span></span>
-<span id="cb18-161"><a href="#cb18-161" aria-hidden="true" tabindex="-1"></a>\approx \sqrt{\frac{M (2^{\mu - 2} / \|\nu\|) ^2}{M 2^{n_p + 2} \cdot 2^{2\mu}}} </span>
-<span id="cb18-162"><a href="#cb18-162" aria-hidden="true" tabindex="-1"></a>= \frac{\sqrt{M} 2^{\mu - 2}}{\|\nu\| \sqrt{M2^{n_p + 2}} 2^\mu} <span class="sc">\\</span></span>
-<span id="cb18-163"><a href="#cb18-163" aria-hidden="true" tabindex="-1"></a>= \frac{1}{2^2 \|\nu\| \sqrt{2^{n_p + 2}}}</span>
-<span id="cb18-164"><a href="#cb18-164" aria-hidden="true" tabindex="-1"></a>= \frac{1}{8 \sqrt{2^{n_p}}} \frac{1}{\|\nu\|}</span>
+<span id="cb18-159"><a href="#cb18-159" aria-hidden="true" tabindex="-1"></a>\frac{1}{\sqrt{M 2^{n_p + 2}}} \cdot \sqrt{\lceil M (2^{\mu - 2} / <span class="sc">\|</span>\nu<span class="sc">\|</span>) ^2 \rceil} \cdot \frac{1}{2^\mu} </span>
+<span id="cb18-160"><a href="#cb18-160" aria-hidden="true" tabindex="-1"></a>= \sqrt{\frac{\lceil M (2^{\mu - 2} / <span class="sc">\|</span>\nu<span class="sc">\|</span>) ^2 \rceil}{M 2^{n_p + 2} \cdot 2^{2\mu}}} <span class="sc">\\</span></span>
+<span id="cb18-161"><a href="#cb18-161" aria-hidden="true" tabindex="-1"></a>\approx \sqrt{\frac{M (2^{\mu - 2} / <span class="sc">\|</span>\nu<span class="sc">\|</span>) ^2}{M 2^{n_p + 2} \cdot 2^{2\mu}}} </span>
+<span id="cb18-162"><a href="#cb18-162" aria-hidden="true" tabindex="-1"></a>= \frac{\sqrt{M} 2^{\mu - 2}}{<span class="sc">\|</span>\nu<span class="sc">\|</span> \sqrt{M2^{n_p + 2}} 2^\mu} <span class="sc">\\</span></span>
+<span id="cb18-163"><a href="#cb18-163" aria-hidden="true" tabindex="-1"></a>= \frac{1}{2^2 <span class="sc">\|</span>\nu<span class="sc">\|</span> \sqrt{2^{n_p + 2}}}</span>
+<span id="cb18-164"><a href="#cb18-164" aria-hidden="true" tabindex="-1"></a>= \frac{1}{8 \sqrt{2^{n_p}}} \frac{1}{<span class="sc">\|</span>\nu<span class="sc">\|</span>}</span>
 <span id="cb18-165"><a href="#cb18-165" aria-hidden="true" tabindex="-1"></a>\end{gathered}</span>
 <span id="cb18-166"><a href="#cb18-166" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb18-167"><a href="#cb18-167" aria-hidden="true" tabindex="-1"></a></span>
@@ -2351,7 +2625,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-169"><a href="#cb18-169" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-170"><a href="#cb18-170" aria-hidden="true" tabindex="-1"></a><span class="fu">## Detailed Implementation</span></span>
 <span id="cb18-171"><a href="#cb18-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-172"><a href="#cb18-172" aria-hidden="true" tabindex="-1"></a>The implementation proceeds in several steps. First, we prepare a weighted superposition over the register $\mu$. Next, we generate candidate vectors $\nu$ and filter them to obtain the sets $B_\mu$. Finally, we introduce an auxiliary register $m$ and perform an inequality test to produce amplitudes proportional to $1/\|\nu\|$.</span>
+<span id="cb18-172"><a href="#cb18-172" aria-hidden="true" tabindex="-1"></a>The implementation proceeds in several steps. First, we prepare a weighted superposition over the register $\mu$. Next, we generate candidate vectors $\nu$ and filter them to obtain the sets $B_\mu$. Finally, we introduce an auxiliary register $m$ and perform an inequality test to produce amplitudes proportional to $1/<span class="sc">\|</span>\nu<span class="sc">\|</span>$.</span>
 <span id="cb18-173"><a href="#cb18-173" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-174"><a href="#cb18-174" aria-hidden="true" tabindex="-1"></a>Our first step is to prepare a unary encoded superposition over $\mu$ that looks like</span>
 <span id="cb18-175"><a href="#cb18-175" aria-hidden="true" tabindex="-1"></a></span>
@@ -2411,9 +2685,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-229"><a href="#cb18-229" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-230"><a href="#cb18-230" aria-hidden="true" tabindex="-1"></a>where the flag signals success when 0. This is exactly the state we wanted to reach in our first step. In the case where $n_p = 1$, we can simply use a Hadamard on the flag qubit to achieve the desired state.</span>
 <span id="cb18-231"><a href="#cb18-231" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-232"><a href="#cb18-232" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
+<span id="cb18-232"><a href="#cb18-232" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-233"><a href="#cb18-233" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-234"><a href="#cb18-234" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span>Code<span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb18-234"><a href="#cb18-234" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Code<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb18-235"><a href="#cb18-235" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-238"><a href="#cb18-238" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb18-239"><a href="#cb18-239" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prep_mu(</span>
@@ -2435,11 +2709,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-255"><a href="#cb18-255" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb18-256"><a href="#cb18-256" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb18-257"><a href="#cb18-257" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-258"><a href="#cb18-258" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb18-258"><a href="#cb18-258" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-259"><a href="#cb18-259" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-260"><a href="#cb18-260" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
+<span id="cb18-260"><a href="#cb18-260" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-261"><a href="#cb18-261" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-262"><a href="#cb18-262" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span>Test<span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb18-262"><a href="#cb18-262" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Test<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb18-263"><a href="#cb18-263" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-266"><a href="#cb18-266" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb18-267"><a href="#cb18-267" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> print_Toffoli_cost(U: tq.QCircuit <span class="op">|</span> PostselectionCircuit):</span>
@@ -2488,7 +2762,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-310"><a href="#cb18-310" aria-hidden="true" tabindex="-1"></a>test_prep_mu(<span class="dv">7</span>)</span>
 <span id="cb18-311"><a href="#cb18-311" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb18-312"><a href="#cb18-312" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-313"><a href="#cb18-313" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb18-313"><a href="#cb18-313" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-314"><a href="#cb18-314" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-315"><a href="#cb18-315" aria-hidden="true" tabindex="-1"></a>The next step is to prepare the state</span>
 <span id="cb18-316"><a href="#cb18-316" aria-hidden="true" tabindex="-1"></a></span>
@@ -2502,9 +2776,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-324"><a href="#cb18-324" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-325"><a href="#cb18-325" aria-hidden="true" tabindex="-1"></a>In our implementation we give the option to directly uncompute the used ancilla afterwards so that they can be reused for the next operation. This reduces the qubit cost but increases the Toffoli cost. In the reference the ancilla are not uncomputed, since minimizing gate cost is generally more important than minimizing qubit count. Also note that for the block encoding, we will need to use the inverted circuit again, which increases the Toffoli count further. For classical simulation, however, minimizing the qubit count is essential.</span>
 <span id="cb18-326"><a href="#cb18-326" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-327"><a href="#cb18-327" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
+<span id="cb18-327"><a href="#cb18-327" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-328"><a href="#cb18-328" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-329"><a href="#cb18-329" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span>Code<span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb18-329"><a href="#cb18-329" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Code<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb18-330"><a href="#cb18-330" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-333"><a href="#cb18-333" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb18-334"><a href="#cb18-334" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> init_nu(</span>
@@ -2562,11 +2836,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-386"><a href="#cb18-386" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb18-387"><a href="#cb18-387" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb18-388"><a href="#cb18-388" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-389"><a href="#cb18-389" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb18-389"><a href="#cb18-389" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-390"><a href="#cb18-390" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-391"><a href="#cb18-391" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
+<span id="cb18-391"><a href="#cb18-391" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-392"><a href="#cb18-392" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-393"><a href="#cb18-393" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span>Test<span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb18-393"><a href="#cb18-393" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Test<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb18-394"><a href="#cb18-394" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-397"><a href="#cb18-397" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb18-398"><a href="#cb18-398" aria-hidden="true" tabindex="-1"></a><span class="co"># testing code for init_nu</span></span>
@@ -2644,7 +2918,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-470"><a href="#cb18-470" aria-hidden="true" tabindex="-1"></a>test_init_nu(<span class="dv">4</span>)</span>
 <span id="cb18-471"><a href="#cb18-471" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb18-472"><a href="#cb18-472" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-473"><a href="#cb18-473" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb18-473"><a href="#cb18-473" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-474"><a href="#cb18-474" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-475"><a href="#cb18-475" aria-hidden="true" tabindex="-1"></a>Now we want to reduce the $\nu$ values to the set of $B_\mu$, which is the set of $\nu$ such that all $|\nu_x|$, $|\nu_y|$, $|\nu_z|$ are less than $2^{\mu - 1}$, excluding the case that they are all less than $2^{\mu - 2}$. Since the first condition is already satisfied, we only need to remove those $\nu$ for which all components are smaller than $2^{\mu - 2}$. For this we first convert the $\mu$ register to one-hot unary, meaning that for every $\mu$ only the most significant bit that is one stays one and the rest is changed to zero. This can be done by simply using CNOTs from MSB to (LSB - 1), where the bit controls an X gate on all lower bits. We then check for each $\nu$, whether the $(\mu - 1)$th qubit is 0 and flag failure otherwise. This requires Toffoli gates with four controls and needs to be done for each bit of $\nu$ except for the sign, so $n_p$ times. The state we reach then looks like:</span>
 <span id="cb18-476"><a href="#cb18-476" aria-hidden="true" tabindex="-1"></a></span>
@@ -2652,9 +2926,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-478"><a href="#cb18-478" aria-hidden="true" tabindex="-1"></a>\frac{1}{\sqrt{2^{n_p + 2}}} \sum_{\mu = 2}^{n_p + 1} \sum_{\nu \in B_\mu} \frac{1}{2^\mu} \ket{\mu} \ket{\nu_x} \ket{\nu_y} \ket{\nu_z}</span>
 <span id="cb18-479"><a href="#cb18-479" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb18-480"><a href="#cb18-480" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-481"><a href="#cb18-481" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
+<span id="cb18-481"><a href="#cb18-481" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-482"><a href="#cb18-482" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-483"><a href="#cb18-483" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span>Code<span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb18-483"><a href="#cb18-483" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Code<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb18-484"><a href="#cb18-484" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-487"><a href="#cb18-487" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb18-488"><a href="#cb18-488" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> filter_nu(</span>
@@ -2694,11 +2968,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-522"><a href="#cb18-522" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb18-523"><a href="#cb18-523" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb18-524"><a href="#cb18-524" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-525"><a href="#cb18-525" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb18-525"><a href="#cb18-525" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-526"><a href="#cb18-526" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-527"><a href="#cb18-527" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
+<span id="cb18-527"><a href="#cb18-527" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-528"><a href="#cb18-528" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-529"><a href="#cb18-529" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span>Test<span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb18-529"><a href="#cb18-529" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Test<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb18-530"><a href="#cb18-530" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-533"><a href="#cb18-533" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb18-534"><a href="#cb18-534" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decode_bits_filter_nu(idx: <span class="bu">int</span>, n_p: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">int</span>]:</span>
@@ -2799,7 +3073,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-629"><a href="#cb18-629" aria-hidden="true" tabindex="-1"></a>test_filter_nu(<span class="dv">4</span>)</span>
 <span id="cb18-630"><a href="#cb18-630" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb18-631"><a href="#cb18-631" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-632"><a href="#cb18-632" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb18-632"><a href="#cb18-632" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-633"><a href="#cb18-633" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-634"><a href="#cb18-634" aria-hidden="true" tabindex="-1"></a>Now we introduce a new register $\ket{m}$ that needs to be initialized in equal superposition from $m = 0$ to $M - 1$ where M is a power of two. As discussed above, the accuracy of the block encoding improves with increasing $M$. It should thus be chosen sufficiently large. The superposition can be achieved by using a Hadamard on each bit of the register. This leads to the state</span>
 <span id="cb18-635"><a href="#cb18-635" aria-hidden="true" tabindex="-1"></a></span>
@@ -2807,14 +3081,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-637"><a href="#cb18-637" aria-hidden="true" tabindex="-1"></a>\frac{1}{\sqrt{M2^{n_p + 2}}} \sum_{\mu = 2}^{n_p + 1} \sum_{\nu \in B_\mu} \sum_{m = 0}^{M - 1} \frac{1}{2^\mu} \ket{\mu} \ket{\nu_x} \ket{\nu_y} \ket{\nu_z} \ket{m}</span>
 <span id="cb18-638"><a href="#cb18-638" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb18-639"><a href="#cb18-639" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-640"><a href="#cb18-640" aria-hidden="true" tabindex="-1"></a>To achieve our final state we now need to change the sum over $m$ from $\sum_{m=0}^{M - 1}$ to $\sum_{m=0}^{\lceil M (2^{\mu - 2} / \|\nu\|)^2 \rceil - 1}$. This requires flagging every $m$ as failure that is larger than the upper bound $\lceil M (2^{\mu - 2} / \|\nu\|)^2 \rceil - 1$. For the states we want to keep we have</span>
+<span id="cb18-640"><a href="#cb18-640" aria-hidden="true" tabindex="-1"></a>To achieve our final state we now need to change the sum over $m$ from $\sum_{m=0}^{M - 1}$ to $\sum_{m=0}^{\lceil M (2^{\mu - 2} / <span class="sc">\|</span>\nu<span class="sc">\|</span>)^2 \rceil - 1}$. This requires flagging every $m$ as failure that is larger than the upper bound $\lceil M (2^{\mu - 2} / <span class="sc">\|</span>\nu<span class="sc">\|</span>)^2 \rceil - 1$. For the states we want to keep we have</span>
 <span id="cb18-641"><a href="#cb18-641" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-642"><a href="#cb18-642" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb18-643"><a href="#cb18-643" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
-<span id="cb18-644"><a href="#cb18-644" aria-hidden="true" tabindex="-1"></a>m &amp; \le \left\lceil M \left(\frac{2^{\mu - 2}}{\|\nu\|}\right)^2 \right\rceil - 1 <span class="sc">\\</span></span>
-<span id="cb18-645"><a href="#cb18-645" aria-hidden="true" tabindex="-1"></a>\Leftrightarrow m + 1 &amp; \le \left\lceil M \left(\frac{2^{\mu - 2}}{\|\nu\|}\right)^2 \right\rceil <span class="sc">\\</span></span>
-<span id="cb18-646"><a href="#cb18-646" aria-hidden="true" tabindex="-1"></a>\Leftrightarrow m &amp; &lt; M \left(\frac{2^{\mu - 2}}{\|\nu\|}\right)^2 <span class="sc">\\</span></span>
-<span id="cb18-647"><a href="#cb18-647" aria-hidden="true" tabindex="-1"></a>\Leftrightarrow m \cdot \|\nu\|^2 = m\left(\nu_x^2 + \nu_y^2 + \nu_z^2\right) &amp; &lt; M\left(2^{\mu - 2}\right)^2</span>
+<span id="cb18-644"><a href="#cb18-644" aria-hidden="true" tabindex="-1"></a>m &amp; \le \left\lceil M \left(\frac{2^{\mu - 2}}{<span class="sc">\|</span>\nu<span class="sc">\|</span>}\right)^2 \right\rceil - 1 <span class="sc">\\</span></span>
+<span id="cb18-645"><a href="#cb18-645" aria-hidden="true" tabindex="-1"></a>\Leftrightarrow m + 1 &amp; \le \left\lceil M \left(\frac{2^{\mu - 2}}{<span class="sc">\|</span>\nu<span class="sc">\|</span>}\right)^2 \right\rceil <span class="sc">\\</span></span>
+<span id="cb18-646"><a href="#cb18-646" aria-hidden="true" tabindex="-1"></a>\Leftrightarrow m &amp; &lt; M \left(\frac{2^{\mu - 2}}{<span class="sc">\|</span>\nu<span class="sc">\|</span>}\right)^2 <span class="sc">\\</span></span>
+<span id="cb18-647"><a href="#cb18-647" aria-hidden="true" tabindex="-1"></a>\Leftrightarrow m \cdot <span class="sc">\|</span>\nu<span class="sc">\|</span>^2 = m\left(\nu_x^2 + \nu_y^2 + \nu_z^2\right) &amp; &lt; M\left(2^{\mu - 2}\right)^2</span>
 <span id="cb18-648"><a href="#cb18-648" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
 <span id="cb18-649"><a href="#cb18-649" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb18-650"><a href="#cb18-650" aria-hidden="true" tabindex="-1"></a></span>
@@ -2864,9 +3138,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-694"><a href="#cb18-694" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-695"><a href="#cb18-695" aria-hidden="true" tabindex="-1"></a>This will leave the bits a and b untouched and change c to the result for the same level, while the last bit is a carry for the next level.</span>
 <span id="cb18-696"><a href="#cb18-696" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-697"><a href="#cb18-697" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
+<span id="cb18-697"><a href="#cb18-697" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-698"><a href="#cb18-698" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-699"><a href="#cb18-699" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span>Code<span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb18-699"><a href="#cb18-699" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Code<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb18-700"><a href="#cb18-700" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-703"><a href="#cb18-703" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb18-704"><a href="#cb18-704" aria-hidden="true" tabindex="-1"></a><span class="co"># three bit adder, a and b stay the same, c -&gt; (a + b + c)_0, carry -&gt; (a + b + c)_1</span></span>
@@ -2884,13 +3158,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-716"><a href="#cb18-716" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb18-717"><a href="#cb18-717" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb18-718"><a href="#cb18-718" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-719"><a href="#cb18-719" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb18-719"><a href="#cb18-719" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-720"><a href="#cb18-720" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-721"><a href="#cb18-721" aria-hidden="true" tabindex="-1"></a>If we now want to sum $l$ same-level bits together, we need one bit for the result on that level and $l/2$ carry bits. Then we will always take two of the input bits as a and b, the result bit as c and one of the carry bits as carry. It is possible to initialize the result bit as one of the input bits to reduce Toffoli cost. If a single bit is left, a two bit adder can be used, which also requires one Toffoli. In the end we will have combined each two bits to one carry bit and have the result for that level in the result bit. Then we can go on with the next level, adding up the defined summands for that level as well as the carries from before.</span>
 <span id="cb18-722"><a href="#cb18-722" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-723"><a href="#cb18-723" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
+<span id="cb18-723"><a href="#cb18-723" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-724"><a href="#cb18-724" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-725"><a href="#cb18-725" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span>Code<span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb18-725"><a href="#cb18-725" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Code<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb18-726"><a href="#cb18-726" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-729"><a href="#cb18-729" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb18-730"><a href="#cb18-730" aria-hidden="true" tabindex="-1"></a><span class="co"># n-bit adder: adds n bits on the same level, writes carries to n/2 individual ancilla</span></span>
@@ -2933,13 +3207,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-767"><a href="#cb18-767" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb18-768"><a href="#cb18-768" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb18-769"><a href="#cb18-769" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-770"><a href="#cb18-770" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb18-770"><a href="#cb18-770" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-771"><a href="#cb18-771" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-772"><a href="#cb18-772" aria-hidden="true" tabindex="-1"></a>Now we get to the implementation of the actual squaring. After taking a closer look at the four sums defined above, it gets clear that $\Sigma_1$ defines the bits needed to be summed on level $2^2$, $\Sigma_2$ defines those for level $2^3$ and they take turns like this up until $2^{2\lceil n/2\rceil - 1}$. Additionally to the bits defined in those sums, the carry bits from the level before need to be added. Similarly it then goes on for $\Sigma_3$ and $\Sigma_4$. Also, note that in the end we want to compute $m(\nu_x^2 + \nu_y^2 + \nu_z^2)$. Instead of computing each square separately and then summing up the three results, it is more efficient to directly sum the squaring bits on each level for each $\nu$ together. This means that we will implement a circuit that directly computes $\nu_x^2 + \nu_y^2 + \nu_z^2$.</span>
 <span id="cb18-773"><a href="#cb18-773" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-774"><a href="#cb18-774" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
+<span id="cb18-774"><a href="#cb18-774" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-775"><a href="#cb18-775" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-776"><a href="#cb18-776" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span>Code<span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb18-776"><a href="#cb18-776" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Code<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb18-777"><a href="#cb18-777" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-780"><a href="#cb18-780" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb18-781"><a href="#cb18-781" aria-hidden="true" tabindex="-1"></a><span class="co"># Implements the sigmas used for the squaring circuit</span></span>
@@ -3044,11 +3318,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-880"><a href="#cb18-880" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb18-881"><a href="#cb18-881" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb18-882"><a href="#cb18-882" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-883"><a href="#cb18-883" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb18-883"><a href="#cb18-883" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-884"><a href="#cb18-884" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-885"><a href="#cb18-885" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
+<span id="cb18-885"><a href="#cb18-885" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-886"><a href="#cb18-886" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-887"><a href="#cb18-887" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span>Test<span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb18-887"><a href="#cb18-887" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Test<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb18-888"><a href="#cb18-888" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-891"><a href="#cb18-891" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb18-892"><a href="#cb18-892" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_triple_square(n, x, y, z):</span>
@@ -3112,7 +3386,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-950"><a href="#cb18-950" aria-hidden="true" tabindex="-1"></a><span class="co">#test_triple_square(3, 7, 0, 1) qubit count too high</span></span>
 <span id="cb18-951"><a href="#cb18-951" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb18-952"><a href="#cb18-952" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-953"><a href="#cb18-953" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb18-953"><a href="#cb18-953" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-954"><a href="#cb18-954" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-955"><a href="#cb18-955" aria-hidden="true" tabindex="-1"></a><span class="fu">### Binary Multiplication</span></span>
 <span id="cb18-956"><a href="#cb18-956" aria-hidden="true" tabindex="-1"></a></span>
@@ -3124,9 +3398,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-962"><a href="#cb18-962" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-963"><a href="#cb18-963" aria-hidden="true" tabindex="-1"></a>The different sums again group bits together that need to be summed on the same level. The implementation follows the same principles as the squaring circuit.</span>
 <span id="cb18-964"><a href="#cb18-964" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-965"><a href="#cb18-965" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
+<span id="cb18-965"><a href="#cb18-965" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-966"><a href="#cb18-966" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-967"><a href="#cb18-967" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span>Code<span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb18-967"><a href="#cb18-967" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Code<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb18-968"><a href="#cb18-968" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-971"><a href="#cb18-971" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb18-972"><a href="#cb18-972" aria-hidden="true" tabindex="-1"></a><span class="co"># Binary Product (Lemma 10, p.81), LSB -&gt; MSB</span></span>
@@ -3203,7 +3477,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-1043"><a href="#cb18-1043" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb18-1044"><a href="#cb18-1044" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb18-1045"><a href="#cb18-1045" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-1046"><a href="#cb18-1046" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb18-1046"><a href="#cb18-1046" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-1047"><a href="#cb18-1047" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-1048"><a href="#cb18-1048" aria-hidden="true" tabindex="-1"></a>Now we need to compute $(2^{\mu-2})^2M$. Remember that $\mu$ is in unary representation. We can add zeros in between each two qubits to get a unary representation of $2\mu$: For example $\mu = 1$ would be changed from $0001$ to $0\underline{0}0\underline{0}0\underline{0}1\underline{0}$ where the underlined zeros are those that have been newly inserted. This will always work since the number of zeros behind the one is always doubled when larger than zero. Now we have a bitstring where only the $(\mu+2)$th bit from the right is one. In binary representation, this represents the value $2^{2\mu - 1}$ and we have $2^{2\mu - 1} \cdot 2^{-3}M = 2^{\mu - 4}M = 2^{(\mu-2)^2}M$. Since $M$ is a classically chosen value and a power of two, we have $2^{-3}M = 2^{-3}\cdot 2^{\log M} = 2^{\log M - 3}$, where $\log M$ is a natural number. To multiply a binary number by a power of two, one can simply pad it with zeros from the LSB corresponding to the number of the exponent. Thus, $(2^{\mu-2})^2M$ can be reached by padding $2^{2\mu - 1}$ with $(\log_2 M) - 3$ bits <span class="ot">[^1]</span>. This means that in total we only need to insert zeros to achieve the aspired number. It is not necessary to actually insert those qubits, instead the comparison circuit, which will be introduced next, can simply be adjusted to work with the original $\mu$ and still output the comparison result for $(2^{\mu-2})^2M$.</span>
 <span id="cb18-1049"><a href="#cb18-1049" aria-hidden="true" tabindex="-1"></a></span>
@@ -3233,9 +3507,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-1073"><a href="#cb18-1073" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-1074"><a href="#cb18-1074" aria-hidden="true" tabindex="-1"></a><span class="al">![](quantum_comparison.jpeg)</span>{width="450" fig-align="center"}</span>
 <span id="cb18-1075"><a href="#cb18-1075" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-1076"><a href="#cb18-1076" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
+<span id="cb18-1076"><a href="#cb18-1076" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-1077"><a href="#cb18-1077" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-1078"><a href="#cb18-1078" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span>Code<span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb18-1078"><a href="#cb18-1078" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Code<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb18-1079"><a href="#cb18-1079" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-1082"><a href="#cb18-1082" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb18-1083"><a href="#cb18-1083" aria-hidden="true" tabindex="-1"></a><span class="co"># comparator of 2 n-bit numbers, LSB -&gt; MSB, flag == 0 iff a &lt; b, requires n additional ancilla</span></span>
@@ -3266,13 +3540,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-1108"><a href="#cb18-1108" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb18-1109"><a href="#cb18-1109" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb18-1110"><a href="#cb18-1110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-1111"><a href="#cb18-1111" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb18-1111"><a href="#cb18-1111" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-1112"><a href="#cb18-1112" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-1113"><a href="#cb18-1113" aria-hidden="true" tabindex="-1"></a>For our specific use case however, we require further adaptations. Our input for $a$ will be $\nu_x^2 + \nu_y^2 + \nu_z^2$ and $b$ will be $(2^{\mu-2})^2M$. Unlike $a$ and $b$ as in the circuit above, these two inputs are not necessarily of the same length, which requires adaptation. Also we want to only give $\mu$ as input but receive the result for $b$ being $(2^{\mu-2})^2M$. Both necessary adaptations only require inserting additional zeros within $a$ or $b$. We need to insert $\log M - 3$ zeros as the first bits of $b$. This results in the comparing being redundant until that part, since we always have $a \ge b$ for that first part. The circuit only needs to start at the first bit, where $b$ is not an inserted zero. From that part on, we will need ancilla and Toffoli gates for every comparison, where a is still defined, but the circuit is slightly adjusted for the inserted zeros. In the case that $a$ is shorter than $b$, we will fill it with zeros, which again slightly adjusts the circuit, and in the cases, where both bits $a$ and $b$ are known to be zero, we can again skip that part.</span>
 <span id="cb18-1114"><a href="#cb18-1114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-1115"><a href="#cb18-1115" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
+<span id="cb18-1115"><a href="#cb18-1115" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-1116"><a href="#cb18-1116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-1117"><a href="#cb18-1117" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span>Code<span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb18-1117"><a href="#cb18-1117" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Code<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb18-1118"><a href="#cb18-1118" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-1121"><a href="#cb18-1121" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb18-1122"><a href="#cb18-1122" aria-hidden="true" tabindex="-1"></a><span class="co"># comparator of 2 numbers, LSB -&gt; MSB, sets flag to 0 iff a &lt; (2^(mu - 1))^2*M</span></span>
@@ -3347,11 +3621,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-1191"><a href="#cb18-1191" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb18-1192"><a href="#cb18-1192" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb18-1193"><a href="#cb18-1193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-1194"><a href="#cb18-1194" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb18-1194"><a href="#cb18-1194" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-1195"><a href="#cb18-1195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-1196"><a href="#cb18-1196" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
+<span id="cb18-1196"><a href="#cb18-1196" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-1197"><a href="#cb18-1197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-1198"><a href="#cb18-1198" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span>Test<span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb18-1198"><a href="#cb18-1198" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Test<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb18-1199"><a href="#cb18-1199" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-1202"><a href="#cb18-1202" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb18-1203"><a href="#cb18-1203" aria-hidden="true" tabindex="-1"></a><span class="co"># Testing Code for comparator_M</span></span>
@@ -3415,12 +3689,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-1261"><a href="#cb18-1261" aria-hidden="true" tabindex="-1"></a>test_comparator(a_int <span class="op">=</span> <span class="dv">23</span>, a_len <span class="op">=</span> <span class="dv">5</span>, mu_int <span class="op">=</span> <span class="dv">1</span>, mu_len <span class="op">=</span> <span class="dv">6</span>, M <span class="op">=</span> <span class="dv">16</span>) <span class="co"># a &gt; (2^(mu - 1))^2*M</span></span>
 <span id="cb18-1262"><a href="#cb18-1262" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb18-1263"><a href="#cb18-1263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-1264"><a href="#cb18-1264" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb18-1264"><a href="#cb18-1264" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-1265"><a href="#cb18-1265" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-1266"><a href="#cb18-1266" aria-hidden="true" tabindex="-1"></a>Now all necessary components are implemented and we can put them together. Note that while we always prepare the states as MSB first here, the input for the squaring circuit, the multiplication circuit and the comparing circuit are LSB first thus we will have to change the bit ordering sometimes. Also the code here always allows to uncompute the used ancilla directly, to keep the ancilla code low. In practice however it would be more important to reduce the amount of non-Clifford gates, which for this code are the Toffoli gates. This means that one would not uncompute the ancilla in between, since that always doubles the Toffoli cost, which then again gets doubled for the amplitude amplification that will follow. Instead, additional ancilla are used. In the end, we have four different flags that should be combined to one using three Toffolis, since this increases the qubit count and does not really help with the simulation, it is not implemented here. Then one round of amplitude amplification would follow, which is not implemented as well.</span>
 <span id="cb18-1267"><a href="#cb18-1267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-1268"><a href="#cb18-1268" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb18-1269"><a href="#cb18-1269" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span>Code<span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb18-1268"><a href="#cb18-1268" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb18-1269"><a href="#cb18-1269" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Code<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb18-1272"><a href="#cb18-1272" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb18-1273"><a href="#cb18-1273" aria-hidden="true" tabindex="-1"></a><span class="co"># Full circuit:</span></span>
 <span id="cb18-1274"><a href="#cb18-1274" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> state_prep_U_and_V(</span>
@@ -3484,10 +3758,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-1332"><a href="#cb18-1332" aria-hidden="true" tabindex="-1"></a>    U <span class="op">+=</span> comparator_M(result_product, <span class="bu">list</span>(<span class="bu">reversed</span>(mu)), flags[<span class="dv">3</span>], ancilla_comparison, M, uncompute)</span>
 <span id="cb18-1333"><a href="#cb18-1333" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb18-1334"><a href="#cb18-1334" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb18-1335"><a href="#cb18-1335" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb18-1335"><a href="#cb18-1335" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-1336"><a href="#cb18-1336" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-1337"><a href="#cb18-1337" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb18-1338"><a href="#cb18-1338" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span>Example use<span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb18-1337"><a href="#cb18-1337" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb18-1338"><a href="#cb18-1338" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Example use<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb18-1341"><a href="#cb18-1341" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb18-1342"><a href="#cb18-1342" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prep_state_tequila(n_p, M, uncompute):</span>
 <span id="cb18-1343"><a href="#cb18-1343" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> n_p <span class="op">+</span> <span class="dv">1</span></span>
@@ -3532,15 +3806,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-1382"><a href="#cb18-1382" aria-hidden="true" tabindex="-1"></a>M <span class="op">=</span> <span class="dv">8</span></span>
 <span id="cb18-1383"><a href="#cb18-1383" aria-hidden="true" tabindex="-1"></a>prep_state_tequila(n_p, M, <span class="va">False</span>)</span>
 <span id="cb18-1384"><a href="#cb18-1384" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb18-1385"><a href="#cb18-1385" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb18-1385"><a href="#cb18-1385" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-1386"><a href="#cb18-1386" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-1387"><a href="#cb18-1387" aria-hidden="true" tabindex="-1"></a><span class="fu">## Results</span></span>
 <span id="cb18-1388"><a href="#cb18-1388" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-1389"><a href="#cb18-1389" aria-hidden="true" tabindex="-1"></a>As discussed earlier, the accuracy of the prepared state is mainly determined by the parameter $M$. The approximation arises from neglecting the ceiling function in</span>
 <span id="cb18-1390"><a href="#cb18-1390" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-1391"><a href="#cb18-1391" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb18-1392"><a href="#cb18-1392" aria-hidden="true" tabindex="-1"></a>\sqrt{\frac{\lceil M (2^{\mu - 2} / \|\nu\|) ^2 \rceil}{M 2^{n_p + 2} \cdot 2^{2\mu}}} <span class="sc">\\</span></span>
-<span id="cb18-1393"><a href="#cb18-1393" aria-hidden="true" tabindex="-1"></a>\approx \sqrt{\frac{M (2^{\mu - 2} / \|\nu\|) ^2}{M 2^{n_p + 2} \cdot 2^{2\mu}}} </span>
+<span id="cb18-1392"><a href="#cb18-1392" aria-hidden="true" tabindex="-1"></a>\sqrt{\frac{\lceil M (2^{\mu - 2} / <span class="sc">\|</span>\nu<span class="sc">\|</span>) ^2 \rceil}{M 2^{n_p + 2} \cdot 2^{2\mu}}} <span class="sc">\\</span></span>
+<span id="cb18-1393"><a href="#cb18-1393" aria-hidden="true" tabindex="-1"></a>\approx \sqrt{\frac{M (2^{\mu - 2} / <span class="sc">\|</span>\nu<span class="sc">\|</span>) ^2}{M 2^{n_p + 2} \cdot 2^{2\mu}}} </span>
 <span id="cb18-1394"><a href="#cb18-1394" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb18-1395"><a href="#cb18-1395" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-1396"><a href="#cb18-1396" aria-hidden="true" tabindex="-1"></a>This approximation becomes more accurate when the argument of the ceiling function is large, which can be achieved by increasing $M$. Increasing $n_p$ on the other hand improves the spatial resolution of the discretized grid. However, the approximation error becomes larger near the boundary of the grid, so larger values of $n_p$ require correspondingly larger values of $M$ to maintain accuracy.</span>
@@ -3549,8 +3823,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-1399"><a href="#cb18-1399" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-1400"><a href="#cb18-1400" aria-hidden="true" tabindex="-1"></a>The high qubit count mainly arises from the final comparison which requires a lot of auxiliary qubits for the calculations and also qubits for the results. To mitigate this limitation, we implemented the circuit in Qulacs @Suzuki_2021, replacing the final comparison by a reversible classical circuit. This allows the comparison step to be simulated as a permutation matrix, eliminating the need for extra auxiliary qubits. This gives a constant need for 4 ancilla and 4 flags, to which the additional cost of $4(n_p + 1)$ qubits for the $\nu$ and $\mu$ come and the $\log_2(M)$ qubits for the $m$ register.</span>
 <span id="cb18-1401"><a href="#cb18-1401" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-1402"><a href="#cb18-1402" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb18-1403"><a href="#cb18-1403" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span>Code<span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb18-1402"><a href="#cb18-1402" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb18-1403"><a href="#cb18-1403" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Code<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb18-1404"><a href="#cb18-1404" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-1407"><a href="#cb18-1407" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb18-1408"><a href="#cb18-1408" aria-hidden="true" tabindex="-1"></a><span class="co"># helper function</span></span>
@@ -3621,7 +3895,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-1473"><a href="#cb18-1473" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> val</span>
 <span id="cb18-1474"><a href="#cb18-1474" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb18-1475"><a href="#cb18-1475" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb18-1476"><a href="#cb18-1476" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb18-1476"><a href="#cb18-1476" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb18-1477"><a href="#cb18-1477" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-1478"><a href="#cb18-1478" aria-hidden="true" tabindex="-1"></a>Here are some results for $n_p = 3$ and different values of $M$:</span>
 <span id="cb18-1479"><a href="#cb18-1479" aria-hidden="true" tabindex="-1"></a></span>
@@ -3706,27 +3980,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-1558"><a href="#cb18-1558" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-1559"><a href="#cb18-1559" aria-hidden="true" tabindex="-1"></a><span class="fu">## Success probability</span></span>
 <span id="cb18-1560"><a href="#cb18-1560" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-1561"><a href="#cb18-1561" aria-hidden="true" tabindex="-1"></a>The authors state that one round of amplitude amplification is always sufficient to reach a feasible success probability, regardless of the chosen $n_p$ and $M$ values. To confirm this statement, we compute the total success probability of our final state. As shown in the beginning, for each $\nu \in G_0 = <span class="co">[</span><span class="ot">- (2^{n_p} - 1), 2^{n_p} - 1</span><span class="co">]</span>^3 \backslash <span class="sc">\{</span>(0,0,0)<span class="sc">\}</span>$ we have a final amplitude close to $\frac{1}{8 \sqrt{2^{n_p}}} \frac{1}{\|\nu\|}$. This means that the total probability of ending up within the 'good' space is</span>
+<span id="cb18-1561"><a href="#cb18-1561" aria-hidden="true" tabindex="-1"></a>The authors state that one round of amplitude amplification is always sufficient to reach a feasible success probability, regardless of the chosen $n_p$ and $M$ values. To confirm this statement, we compute the total success probability of our final state. As shown in the beginning, for each $\nu \in G_0 = <span class="co">[</span><span class="ot">- (2^{n_p} - 1), 2^{n_p} - 1</span><span class="co">]</span>^3 \backslash <span class="sc">\{</span>(0,0,0)<span class="sc">\}</span>$ we have a final amplitude close to $\frac{1}{8 \sqrt{2^{n_p}}} \frac{1}{<span class="sc">\|</span>\nu<span class="sc">\|</span>}$. This means that the total probability of ending up within the 'good' space is</span>
 <span id="cb18-1562"><a href="#cb18-1562" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb18-1563"><a href="#cb18-1563" aria-hidden="true" tabindex="-1"></a>\sum_{\nu \in G_0} \left(\frac{1}{8 \sqrt{2^{n_p}}} \frac{1}{\|\nu\|}\right)^2</span>
-<span id="cb18-1564"><a href="#cb18-1564" aria-hidden="true" tabindex="-1"></a>= \frac{1}{64 \cdot 2^{n_p}} \sum_{\nu \in G_0} \frac{1}{\|\nu\|^2}</span>
+<span id="cb18-1563"><a href="#cb18-1563" aria-hidden="true" tabindex="-1"></a>\sum_{\nu \in G_0} \left(\frac{1}{8 \sqrt{2^{n_p}}} \frac{1}{<span class="sc">\|</span>\nu<span class="sc">\|</span>}\right)^2</span>
+<span id="cb18-1564"><a href="#cb18-1564" aria-hidden="true" tabindex="-1"></a>= \frac{1}{64 \cdot 2^{n_p}} \sum_{\nu \in G_0} \frac{1}{<span class="sc">\|</span>\nu<span class="sc">\|</span>^2}</span>
 <span id="cb18-1565"><a href="#cb18-1565" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb18-1566"><a href="#cb18-1566" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-1567"><a href="#cb18-1567" aria-hidden="true" tabindex="-1"></a>Note that $G_0$ can be rewritten as $<span class="sc">\{</span> \nu \in \mathbb{Z}^3 \mid 0 &lt; \|\nu\|_{\infty} \leq 2^{n_p} - 1<span class="sc">\}</span>$ where the infinity norm assigns the maximum magnitude of all entries. This set can be reinterpreted as the union of disjoint sets </span>
+<span id="cb18-1567"><a href="#cb18-1567" aria-hidden="true" tabindex="-1"></a>Note that $G_0$ can be rewritten as $<span class="sc">\{</span> \nu \in \mathbb{Z}^3 \mid 0 &lt; <span class="sc">\|</span>\nu<span class="sc">\|</span>_{\infty} \leq 2^{n_p} - 1<span class="sc">\}</span>$ where the infinity norm assigns the maximum magnitude of all entries. This set can be reinterpreted as the union of disjoint sets </span>
 <span id="cb18-1568"><a href="#cb18-1568" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb18-1569"><a href="#cb18-1569" aria-hidden="true" tabindex="-1"></a>\bigcup_{k = 1}^{2^{n_p} - 1} <span class="sc">\{</span> \nu \in \mathbb{Z}^3 \mid \|\nu\|_{\infty} = k <span class="sc">\}</span>.</span>
+<span id="cb18-1569"><a href="#cb18-1569" aria-hidden="true" tabindex="-1"></a>\bigcup_{k = 1}^{2^{n_p} - 1} <span class="sc">\{</span> \nu \in \mathbb{Z}^3 \mid <span class="sc">\|</span>\nu<span class="sc">\|</span>_{\infty} = k <span class="sc">\}</span>.</span>
 <span id="cb18-1570"><a href="#cb18-1570" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb18-1571"><a href="#cb18-1571" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-1572"><a href="#cb18-1572" aria-hidden="true" tabindex="-1"></a>With this we can rewrite the total probability as</span>
 <span id="cb18-1573"><a href="#cb18-1573" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-1574"><a href="#cb18-1574" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb18-1575"><a href="#cb18-1575" aria-hidden="true" tabindex="-1"></a>\frac{1}{64 \cdot 2^{n_p}} \sum_{k=1}^{2^{n_p} - 1} \sum_{\nu \in \mathbb{Z}^3, \| \nu \|_\infty = k} \frac{1}{\|\nu\|^2}.</span>
+<span id="cb18-1575"><a href="#cb18-1575" aria-hidden="true" tabindex="-1"></a>\frac{1}{64 \cdot 2^{n_p}} \sum_{k=1}^{2^{n_p} - 1} \sum_{\nu \in \mathbb{Z}^3, <span class="sc">\|</span> \nu <span class="sc">\|</span>_\infty = k} \frac{1}{<span class="sc">\|</span>\nu<span class="sc">\|</span>^2}.</span>
 <span id="cb18-1576"><a href="#cb18-1576" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb18-1577"><a href="#cb18-1577" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-1578"><a href="#cb18-1578" aria-hidden="true" tabindex="-1"></a>For each $k$ and each $\nu \in \mathbb{Z}^3$ with $\| \nu \|_\infty = k$ we have $k^2 \leq \| \nu \|^2 \leq 3k^2$. Further, we have</span>
+<span id="cb18-1578"><a href="#cb18-1578" aria-hidden="true" tabindex="-1"></a>For each $k$ and each $\nu \in \mathbb{Z}^3$ with $<span class="sc">\|</span> \nu <span class="sc">\|</span>_\infty = k$ we have $k^2 \leq <span class="sc">\|</span> \nu <span class="sc">\|</span>^2 \leq 3k^2$. Further, we have</span>
 <span id="cb18-1579"><a href="#cb18-1579" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-1580"><a href="#cb18-1580" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb18-1581"><a href="#cb18-1581" aria-hidden="true" tabindex="-1"></a>|<span class="sc">\{</span> \nu \in \mathbb{Z}^3 \mid \|\nu\|_{\infty} = k <span class="sc">\}</span>|</span>
+<span id="cb18-1581"><a href="#cb18-1581" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span><span class="sc">\{</span> \nu \in \mathbb{Z}^3 \mid <span class="sc">\|</span>\nu<span class="sc">\|</span>_{\infty} = k <span class="sc">\}</span><span class="pp">|</span></span>
 <span id="cb18-1582"><a href="#cb18-1582" aria-hidden="true" tabindex="-1"></a>= (2k + 1)^3 - (2k - 1)^3 = 24k^2 + 2</span>
 <span id="cb18-1583"><a href="#cb18-1583" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb18-1584"><a href="#cb18-1584" aria-hidden="true" tabindex="-1"></a></span>
@@ -3789,7 +4063,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-1641"><a href="#cb18-1641" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb18-1642"><a href="#cb18-1642" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-1643"><a href="#cb18-1643" aria-hidden="true" tabindex="-1"></a>The bibliography uses a citation style file from the CSL project: <span class="ot">&lt;https://citationstyles.org/&gt;</span></span>
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
@@ -3797,12 +4071,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center"><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
+    <div class="nav-footer-center">
+
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tequilahub/tequila-tutorials/blob/main/research/first_quantized_chemistry_simulations/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila-tutorials/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 

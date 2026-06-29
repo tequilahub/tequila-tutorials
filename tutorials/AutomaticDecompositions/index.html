@@ -2,15 +2,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jonas Motyl">
 <meta name="dcterms.date" content="2025-04-01">
 
-<title>Tequila Tutorials - Automatic Decompositions</title>
+<title>Automatic Decompositions – Tequila Tutorials</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -23,6 +26,7 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 /* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -69,24 +73,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../favicon.ico" rel="icon">
 <script src="../../site_libs/cookie-consent/cookie-consent.js"></script>
 <link href="../../site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
-<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-a5883e7fa1e19cde57db4ec6b11febc3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-bca227963e21cb646e747543fe28dd8e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-a5883e7fa1e19cde57db4ec6b11febc3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -95,6 +108,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -121,68 +135,260 @@ cookieconsent.run({
   "notice_banner_reject_button_hide":false,
   "preferences_center_close_button_hide":false,
   "website_name":""
+  ,
+"language":"en"
   });
 });
 </script> 
   
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="Tequila Tutorials - Automatic Decompositions">
-<meta property="og:description" content="">
-<meta property="og:image" content="https://github.com/tequilahub/tequila-tutorials/tutorials/AutomaticDecompositions/Figures/previewimage.png">
-<meta property="og:site-name" content="Tequila Tutorials">
+<meta property="og:title" content="Automatic Decompositions – Tequila Tutorials">
+<meta property="og:description" content="quantum computing, quantum chemistry and tequila">
+<meta property="og:image" content="https://tequilahub.github.io/tequila-tutorials/tutorials/AutomaticDecompositions/Figures/previewimage.png">
+<meta property="og:site_name" content="Tequila Tutorials">
 <meta property="og:image:height" content="1792">
 <meta property="og:image:width" content="2486">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../../tequila_logo.png" alt="" class="navbar-logo">
+    <img src="../../tequila_logo.png" alt="" class="navbar-logo light-content">
+    <img src="../../tequila_logo.png" alt="" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Tequila Tutorials</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../research.html" rel="" target="">
- <span class="menu-text">Research</span></a>
+    <a class="nav-link" href="../../research.html"> 
+<span class="menu-text">Research</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../tutorials.html" rel="" target="">
- <span class="menu-text">Tutorials</span></a>
+    <a class="nav-link" href="../../tutorials.html"> 
+<span class="menu-text">Tutorials</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../FAQ/FAQ.html" rel="" target="">
- <span class="menu-text">FAQ</span></a>
+    <a class="nav-link" href="../../FAQ/FAQ.html"> 
+<span class="menu-text">FAQ</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../Contribution/Contribution.html" rel="" target="">
- <span class="menu-text">Contribution</span></a>
+    <a class="nav-link" href="../../Contribution/Contribution.html"> 
+<span class="menu-text">Contribution</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../docs/sphinx/index.html" rel="" target="">
- <span class="menu-text">Docs</span></a>
+    <a class="nav-link" href="../../docs/sphinx/index.html"> 
+<span class="menu-text">Docs</span></a>
   </li>  
 </ul>
+          </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -244,10 +450,12 @@ cookieconsent.run({
   <li><a href="#appendix-visualization-of-testing-circuit" id="toc-appendix-visualization-of-testing-circuit" class="nav-link" data-scroll-target="#appendix-visualization-of-testing-circuit">Appendix: Visualization of Testing Circuit</a></li>
   <li><a href="#appendix-circuit-splitting-logic" id="toc-appendix-circuit-splitting-logic" class="nav-link" data-scroll-target="#appendix-circuit-splitting-logic">Appendix: Circuit splitting logic</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/tequilahub/tequila-tutorials/blob/main/tutorials/AutomaticDecompositions/index.qmd" class="toc-action">View source</a></p><p><a href="https://github.com/tequilahub/tequila-tutorials/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/tequilahub/tequila-tutorials/blob/main/tutorials/AutomaticDecompositions/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila-tutorials/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
 
 
 
@@ -264,12 +472,12 @@ Alternatively, a computationally less expensive approach involves leveraging spe
 <section id="fully-disconnected-circuit-decoupled" class="level1">
 <h1>Fully disconnected circuit (decoupled)</h1>
 <p>At first we look at the case <span class="math inline">\(U = AB\)</span>, where <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are entirely separate. In this scenario we can decompose the calculation of the expectation value <span class="math inline">\(\braket{H}_U\)</span>, by splitting our circuit horizontally. <span class="math display">\[  \braket{H}_U = \bra{0}U^\dagger H U\ket{0} \]</span> <span class="math display">\[ = \braket{H}_{AB} = \bra{0}(AB)^\dagger H (AB)\ket{0} \]</span> <span class="math display">\[ = \bra{0}A^\dagger H_A A\ket{0} + \bra{0}B^\dagger H_B B\ket{0} + \bra{0}(AB)^\dagger H_{AB} (AB)\ket{0} + c_H \]</span></p>
-<p>Here we decomposed the Hamiltonian <span class="math inline">\(H = \sum_{k} c_k P_k\)</span>. <br> This is done by verifying whether all qubits of the Paulistring <span class="math inline">\(P_k\)</span> are a subset of the qubits in the subcircuits <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, if this condition is satisfied, we identify the corresponding Hamiltonians <span class="math inline">\(H_A\)</span> and <span class="math inline">\(H_B\)</span>. <br> If the qubits of <span class="math inline">\(P_k\)</span> span both qubit sets of the subcircuits, we classify it as a cross-term <span class="math inline">\(H_{AB}\)</span> with Paulistring <span class="math inline">\(P_k^{AB}\)</span>. The remaining <span class="math inline">\(c_H\)</span> represents the real-valued constant of the Hamiltonian. <br> This decomposition on it’s own does not reduce the complexity of the calculation yet. If we want to do so, we have to further decompose the cross-term <span class="math inline">\(H_{AB}\)</span>: <br> <span class="math display">\[H_{AB} = \sum_k c_k P_k^{AB}\]</span> with <span class="math inline">\(P_k^{AB} = P_k^A \otimes P_k^B\)</span>, where <span class="math inline">\(P_k^A\)</span> and <span class="math inline">\(P_k^B\)</span> are Paulistrings acting on the qubit sets of subcircuits <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, respectively, the expectation value of the cross term can be expressed in a decomposed form:</p>
+<p>Here we decomposed the Hamiltonian <span class="math inline">\(H = \sum_{k}  c_k P_k\)</span>. <br> This is done by verifying whether all qubits of the Paulistring <span class="math inline">\(P_k\)</span> are a subset of the qubits in the subcircuits <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, if this condition is satisfied, we identify the corresponding Hamiltonians <span class="math inline">\(H_A\)</span> and <span class="math inline">\(H_B\)</span>. <br> If the qubits of <span class="math inline">\(P_k\)</span> span both qubit sets of the subcircuits, we classify it as a cross-term <span class="math inline">\(H_{AB}\)</span> with Paulistring <span class="math inline">\(P_k^{AB}\)</span>. The remaining <span class="math inline">\(c_H\)</span> represents the real-valued constant of the Hamiltonian. <br> This decomposition on it’s own does not reduce the complexity of the calculation yet. If we want to do so, we have to further decompose the cross-term <span class="math inline">\(H_{AB}\)</span>: <br> <span class="math display">\[H_{AB} = \sum_k c_k P_k^{AB}\]</span> with <span class="math inline">\(P_k^{AB} = P_k^A \otimes P_k^B\)</span>, where <span class="math inline">\(P_k^A\)</span> and <span class="math inline">\(P_k^B\)</span> are Paulistrings acting on the qubit sets of subcircuits <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, respectively, the expectation value of the cross term can be expressed in a decomposed form:</p>
 <p><span class="math display">\[ \bra{0}(AB)^\dagger H_{AB} (AB)\ket{0} = \sum_k c_k \cdot (\bra{0}A^\dagger P_k^A A\ket{0} \cdot \bra{0}B^\dagger P_k^B B\ket{0}) \]</span> where <span class="math inline">\(c_k\)</span> is the coefficient of the partial Paulistring of <span class="math inline">\(H_{AB}\)</span>. <br> In the following we look at the decoupled decomposition implemented in Tequila and compare the calculation time against the computation with a full (undecomposed) circuit.</p>
-<div class="cell" data-execution_count="1">
-<details>
+<div id="c33159cb" class="cell" data-execution_count="1">
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tequila <span class="im">as</span> tq</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tequila <span class="im">as</span> tq</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -372,7 +580,7 @@ Alternatively, a computationally less expensive approach involves leveraging spe
 <span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>            tmp <span class="op">*=</span> ei</span>
 <span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>        exp <span class="op">+=</span> tmp</span>
-<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> exp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> exp</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <center>
@@ -397,10 +605,10 @@ Alternatively, a computationally less expensive approach involves leveraging spe
 <p><span class="math display">\[ - abi \cdot \bra{0}(A C)^\dagger H \: A P C \ket{0} + abi \cdot \bra{0}(A P C)^\dagger H \: A C \ket{0} \]</span> <span class="math display">\[ = - abi \cdot (\bra{0}(A C)^\dagger H \: A P C \ket{0} - abi \cdot \bra{0}(A P C)^\dagger H \: A C \ket{0}) \]</span> <span class="math display">\[ = - abi \cdot (\bra{0}(A C)^\dagger H \: A P C \ket{0} - h.c) \]</span> <span class="math display">\[ = - abi \cdot (2i \cdot\textbf{Im}(\bra{0}(A C)^\dagger H \: A P C \ket{0})) \]</span> <span class="math display">\[ = 2ab\cdot \textbf{Im}(\bra{0}(A C)^\dagger H \: A P C \ket{0}) \]</span></p>
 <p>This transformation reduces the number of required steps and results in a real value. Therefore, the total expectation value <span class="math inline">\(\braket{H}_U\)</span> is given by: <span class="math display">\[  a^2 \cdot \bra{0}(AC)^\dagger H \: AC\ket{0} + b^2 \cdot \bra{0}(APC)^\dagger H \: APC \ket{0} + 2ab\cdot \textbf{Im}(\bra{0}(A C)^\dagger H \: A P C \ket{0})  \]</span></p>
 <p>For our decomposition approach, the implementation would follow this structure:</p>
-<div class="cell" data-execution_count="2">
-<details>
+<div id="6cbff905" class="cell" data-execution_count="2">
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_abc(H, A, B, C):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_abc(H, A, B, C):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Calculates the Expectation Value for the given Hamiltonian H and the Unitary U = A*B*C</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">    with the ABC-Formula.</span></span>
@@ -419,7 +627,7 @@ Alternatively, a computationally less expensive approach involves leveraging spe
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    _, img <span class="op">=</span> tq.BraKet(bra<span class="op">=</span>A<span class="op">+</span>C, ket<span class="op">=</span>A<span class="op">+</span>P<span class="op">+</span>C, operator<span class="op">=</span>H)</span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>   </span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    cross_term <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>a<span class="op">*</span>b<span class="op">*</span>(img)</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> local_term <span class="op">+</span> cross_term</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> local_term <span class="op">+</span> cross_term</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </section>
@@ -441,10 +649,10 @@ Before simplification, we must examine the standard BraKet <span class="math inl
 <section id="weakly-coupled-implementation-and-comparison" class="level2">
 <h2 class="anchored" data-anchor-id="weakly-coupled-implementation-and-comparison">Weakly coupled implementation and comparison</h2>
 <p>With every previously described step we can now implement the weakly coupled decomposition to exploit a circuit’s structure for a computational advantage. The core functionality resides in the function <strong>calculate_abc</strong>, which handles the primary decomposition calculation. Because <span class="math inline">\(\textbf{Im}(\bra{0}(A C)^\dagger H \: A P C \ket{0})\)</span> forms an overlap, <strong>small_braket</strong> gets called to further reduce the complexity.</p>
-<div class="cell" data-execution_count="3">
-<details>
+<div id="aea82db6" class="cell" data-execution_count="3">
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> convert_to_pauli(U: tq.gates.ExpPauli):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> convert_to_pauli(U: tq.gates.ExpPauli):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Converts an Exponential Pauli U of form e^(-i*angle/2 *P) to: angle and PauliGate P.</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -493,7 +701,7 @@ Before simplification, we must examine the standard BraKet <span class="math inl
 <span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> small_braket(bra_up, bra_down, ket_up, ket_down, H):</span>
 <span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co">    Calculates Overlap of the form &lt;|(AC)^{\dagger} H APC|&gt; or &lt;|(ACP)^{\dagger} H AC|&gt;.</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co">    Calculates Overlap of the form &lt;|(AC)^{</span><span class="er">\</span><span class="co">dagger} H APC|&gt; or &lt;|(ACP)^{</span><span class="er">\</span><span class="co">dagger} H AC|&gt;.</span></span>
 <span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="co">    Assumes A and C to be horizontally splitable.</span></span>
 <span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
 <span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>    result_r <span class="op">=</span> <span class="dv">0</span></span>
@@ -529,7 +737,7 @@ Before simplification, we must examine the standard BraKet <span class="math inl
 <span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>        result_bd <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> b_img <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> d_img</span>
 <span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>        result_i <span class="op">+=</span> coeff <span class="op">*</span> (result_ac <span class="op">*</span> result_bd)</span>
 <span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result_r, result_i</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result_r, result_i</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <center>
@@ -588,10 +796,10 @@ A promising use case for our weakly coupled method involves circuits with multip
 <section id="appendix-circuit-splitting-logic" class="level1">
 <h1>Appendix: Circuit splitting logic</h1>
 <p>The logic for preparing the underlying circuit for the proposed calculation method can be done like this:</p>
-<div class="cell" data-execution_count="4">
-<details>
+<div id="d8cec4fe" class="cell" data-execution_count="4">
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> split_2(U):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> split_2(U):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Deconstructs a splitable Unitary into list of independent sub circuits.</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">    If not splitable it will return [U]</span></span>
@@ -676,7 +884,7 @@ A promising use case for our weakly coupled method involves circuits with multip
 <span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>            abc.calculate_abc(H, A, B, C)</span>
 <span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Error: Could not calculate the Expectation Value"</span>)</span>
-<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 
@@ -687,158 +895,71 @@ A promising use case for our weakly coupled method involves circuits with multip
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
     }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const disableStylesheet = (stylesheets) => {
-    for (let i=0; i < stylesheets.length; i++) {
-      const stylesheet = stylesheets[i];
-      stylesheet.rel = 'prefetch';
-    }
-  }
-  const enableStylesheet = (stylesheets) => {
-    for (let i=0; i < stylesheets.length; i++) {
-      const stylesheet = stylesheets[i];
-      stylesheet.rel = 'stylesheet';
-    }
-  }
-  const manageTransitions = (selector, allowTransitions) => {
-    const els = window.document.querySelectorAll(selector);
-    for (let i=0; i < els.length; i++) {
-      const el = els[i];
-      if (allowTransitions) {
-        el.classList.remove('notransition');
-      } else {
-        el.classList.add('notransition');
-      }
-    }
-  }
-  const toggleColorMode = (alternate) => {
-    // Switch the stylesheets
-    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
-    manageTransitions('#quarto-margin-sidebar .nav-link', false);
-    if (alternate) {
-      enableStylesheet(alternateStylesheets);
-      for (const sheetNode of alternateStylesheets) {
-        if (sheetNode.id === "quarto-bootstrap") {
-          toggleBodyColorMode(sheetNode);
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
         }
       }
-    } else {
-      disableStylesheet(alternateStylesheets);
-      toggleBodyColorPrimary();
-    }
-    manageTransitions('#quarto-margin-sidebar .nav-link', true);
-    // Switch the toggles
-    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
-    for (let i=0; i < toggles.length; i++) {
-      const toggle = toggles[i];
-      if (toggle) {
-        if (alternate) {
-          toggle.classList.add("alternate");     
-        } else {
-          toggle.classList.remove("alternate");
-        }
-      }
-    }
-    // Hack to workaround the fact that safari doesn't
-    // properly recolor the scrollbar when toggling (#1455)
-    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
-      manageTransitions("body", false);
-      window.scrollTo(0, 1);
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-        manageTransitions("body", true);
-      }, 40);  
-    }
-  }
-  const isFileUrl = () => { 
-    return window.location.protocol === 'file:';
-  }
-  const hasAlternateSentinel = () => {  
-    let styleSentinel = getColorSchemeSentinel();
-    if (styleSentinel !== null) {
-      return styleSentinel === "alternate";
-    } else {
       return false;
     }
-  }
-  const setStyleSentinel = (alternate) => {
-    const value = alternate ? "alternate" : "default";
-    if (!isFileUrl()) {
-      window.localStorage.setItem("quarto-color-scheme", value);
-    } else {
-      localAlternateSentinel = value;
-    }
-  }
-  const getColorSchemeSentinel = () => {
-    if (!isFileUrl()) {
-      const storageValue = window.localStorage.getItem("quarto-color-scheme");
-      return storageValue != null ? storageValue : localAlternateSentinel;
-    } else {
-      return localAlternateSentinel;
-    }
-  }
-  let localAlternateSentinel = 'default';
-  // Dark / light mode switch
-  window.quartoToggleColorScheme = () => {
-    // Read the current dark / light value 
-    let toAlternate = !hasAlternateSentinel();
-    toggleColorMode(toAlternate);
-    setStyleSentinel(toAlternate);
-  };
-  // Ensure there is a toggle, if there isn't float one in the top right
-  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
-    const a = window.document.createElement('a');
-    a.classList.add('top-right');
-    a.classList.add('quarto-color-scheme-toggle');
-    a.href = "";
-    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
-    const i = window.document.createElement("i");
-    i.classList.add('bi');
-    a.appendChild(i);
-    window.document.body.appendChild(a);
-  }
-  // Switch to dark mode if need be
-  if (hasAlternateSentinel()) {
-    toggleColorMode(true);
-  } else {
-    toggleColorMode(false);
-  }
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
       }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
     }
-    return false;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
       for (const childEl of codeEl.children) {
         if (isCodeAnnotation(childEl)) {
           childEl.remove();
@@ -846,248 +967,400 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
       return codeEl.innerText;
     }
-  });
-  clipboard.on('success', function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  });
-  const viewSource = window.document.getElementById('quarto-view-source') ||
-                     window.document.getElementById('quarto-code-tools-source');
-  if (viewSource) {
-    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
-    viewSource.addEventListener("click", function(e) {
-      if (sourceUrl) {
-        // rstudio viewer pane
-        if (/\bcapabilities=\b/.test(window.location)) {
-          window.open(sourceUrl);
-        } else {
-          window.location.href = sourceUrl;
-        }
-      } else {
-        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
-        modal.show();
-      }
-      return false;
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
     });
-  }
-  function toggleCodeHandler(show) {
-    return function(e) {
-      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-      for (let i=0; i<detailsSrc.length; i++) {
-        const details = detailsSrc[i].parentElement;
-        if (show) {
-          details.open = true;
-        } else {
-          details.removeAttribute("open");
-        }
-      }
-      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
-      const fromCls = show ? "hidden" : "unhidden";
-      const toCls = show ? "unhidden" : "hidden";
-      for (let i=0; i<cellCodeDivs.length; i++) {
-        const codeDiv = cellCodeDivs[i];
-        if (codeDiv.classList.contains(fromCls)) {
-          codeDiv.classList.remove(fromCls);
-          codeDiv.classList.add(toCls);
-        } 
-      }
-      return false;
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
     }
-  }
-  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
-  if (hideAllCode) {
-    hideAllCode.addEventListener("click", toggleCodeHandler(false));
-  }
-  const showAllCode = window.document.getElementById("quarto-show-all-code");
-  if (showAllCode) {
-    showAllCode.addEventListener("click", toggleCodeHandler(true));
-  }
-  function tippyHover(el, contentFn) {
-    const config = {
-      allowHTML: true,
-      content: contentFn,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start'
-    };
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      return note.innerHTML;
-    });
-  }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
-        }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
           } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
+            window.location.href = sourceUrl;
           }
-        });
-      }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
       });
     }
-  }
-});
-</script>
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/tequilahub\.github\.io\/tequila-tutorials\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 <script src="https://utteranc.es/client.js" repo="tequilahub/tequila-tutorials" issue-term="pathname" theme="preferred-color-scheme" crossorigin="anonymous" async="">
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Automatic Decompositions"</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">    - name: Jonas Motyl</span></span>
@@ -1111,10 +1384,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>Alternatively, a computationally less expensive approach involves leveraging specific structural properties of the circuit for decomposition. However, this method is only applicable when such structural characteristics are present.</span>
 <span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>In this work, we present algorithms tailored for specific circuit structures and explore two distinct cases of circuit decomposition, demonstrating their implementation and advantages.</span>
 <span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>The primary advantage of splitting circuits lies in the following structural considerations.</span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;center&gt;</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">center</span><span class="dt">&gt;</span></span>
 <span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="al">![](Figures/overview.PNG)</span>{width=700}</span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/center&gt;</span></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;br&gt;</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">center</span><span class="dt">&gt;</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
 <span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>Circuits are either split horizontally if it is in a fully disconnected form, or vertially if it has a weak link holding different parts together. </span>
 <span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>For each disconnected subcircuit we can simplify the complexity of the calculations.</span>
 <span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>Both structures benefit from horizontally disconnected subcircuits, however vertical decomposition imposes specific constraints on the unsplittable part $B$, which must be expressible as a Pauli gate.</span>
@@ -1125,17 +1398,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>$$ = \braket{H}_{AB} = \bra{0}(AB)^\dagger H (AB)\ket{0} $$</span>
 <span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>$$ = \bra{0}A^\dagger H_A A\ket{0} + \bra{0}B^\dagger H_B B\ket{0} + \bra{0}(AB)^\dagger H_{AB} (AB)\ket{0} + c_H $$</span>
 <span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>Here we decomposed the Hamiltonian $H = \sum_{k}  c_k P_k$. <span class="kw">&lt;br&gt;</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>Here we decomposed the Hamiltonian $H = \sum_{k}  c_k P_k$. <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
 <span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>This is done by verifying whether all qubits of the Paulistring $P_k$ are a subset of the qubits in the subcircuits $A$ and $B$,</span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>if this condition is satisfied, we identify the corresponding Hamiltonians $H_A$ and $H_B$. <span class="kw">&lt;br&gt;</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>if this condition is satisfied, we identify the corresponding Hamiltonians $H_A$ and $H_B$. <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
 <span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>If the qubits of $P_k$ span both qubit sets of the subcircuits, we classify it as a cross-term $H_{AB}$ with Paulistring $P_k^{AB}$.</span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>The remaining $c_H$ represents the real-valued constant of the Hamiltonian. <span class="kw">&lt;br&gt;</span></span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>This decomposition on it's own does not reduce the complexity of the calculation yet. If we want to do so, we have to further decompose the cross-term $H_{AB}$: <span class="kw">&lt;br&gt;</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>The remaining $c_H$ represents the real-valued constant of the Hamiltonian. <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>This decomposition on it's own does not reduce the complexity of the calculation yet. If we want to do so, we have to further decompose the cross-term $H_{AB}$: <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
 <span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>$$H_{AB} = \sum_k c_k P_k^{AB}$$</span>
 <span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>with $P_k^{AB} = P_k^A \otimes P_k^B$, where $P_k^A$ and $P_k^B$ are Paulistrings acting on the qubit sets of subcircuits $A$ and $B$, respectively, the expectation value of the cross term can be expressed in a decomposed form:</span>
 <span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>$$ \bra{0}(AB)^\dagger H_{AB} (AB)\ket{0} = \sum_k c_k \cdot (\bra{0}A^\dagger P_k^A A\ket{0} \cdot \bra{0}B^\dagger P_k^B B\ket{0}) $$ </span>
-<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>where $c_k$ is the coefficient of the partial Paulistring of $H_{AB}$.  <span class="kw">&lt;br&gt;</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>where $c_k$ is the coefficient of the partial Paulistring of $H_{AB}$.  <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
 <span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>In the following we look at the decoupled decomposition implemented in Tequila and compare the calculation time against the computation with a full (undecomposed) circuit.</span>
 <span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a></span>
@@ -1247,11 +1520,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;center&gt;</span></span>
+<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">center</span><span class="dt">&gt;</span></span>
 <span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a><span class="al">![](Figures/Figure_1.png)</span>{width=600}</span>
-<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/center&gt;</span></span>
+<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">center</span><span class="dt">&gt;</span></span>
 <span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a>The figure illustrates the performance difference between the classical expectation value calculation on the full circuit and the proposed method for exploiting decoupled circuit structures.</span>
-<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a>From the results, we observe a significant computational advantage for circuits with more than $16$ qubits. <span class="kw">&lt;br&gt;</span></span>
+<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a>From the results, we observe a significant computational advantage for circuits with more than $16$ qubits. <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
 <span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a>The circuits were split into two parts, reducing the computational complexity of each subcircuit to half of the original complexity.</span>
 <span id="cb5-169"><a href="#cb5-169" aria-hidden="true" tabindex="-1"></a>We can see that the computational expense for preparing and splitting the circuit, compared to the overall computational time, becomes negligible for higher qubit counts but remains significant for smaller circuits.</span>
 <span id="cb5-170"><a href="#cb5-170" aria-hidden="true" tabindex="-1"></a></span>
@@ -1261,16 +1534,16 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-174"><a href="#cb5-174" aria-hidden="true" tabindex="-1"></a>Here, $P$ is a Paulistring with length $n$ and $A$ and $C$ are independent, but each connected to $B$. Since $A$ and $C$ contain fully disconnected parts, we can apply our horizontal decomposition method to each, thereby achieving a computational advantage.</span>
 <span id="cb5-175"><a href="#cb5-175" aria-hidden="true" tabindex="-1"></a>To fully decouple the circuit, we deconstruct $B$ into $n$ individual Pauligates.</span>
 <span id="cb5-176"><a href="#cb5-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-177"><a href="#cb5-177" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;center&gt;</span></span>
+<span id="cb5-177"><a href="#cb5-177" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">center</span><span class="dt">&gt;</span></span>
 <span id="cb5-178"><a href="#cb5-178" aria-hidden="true" tabindex="-1"></a><span class="al">![](Figures/pauli.png)</span>{width=480}</span>
-<span id="cb5-179"><a href="#cb5-179" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/center&gt;</span></span>
-<span id="cb5-180"><a href="#cb5-180" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;br&gt;</span></span>
-<span id="cb5-181"><a href="#cb5-181" aria-hidden="true" tabindex="-1"></a>The new Pauligates are all single-qubit gates, making them highly suitable for the horizontal decomposition. During the preperation of the subcircuits, they can be assigned to their respective groups with minimal effort.<span class="kw">&lt;br&gt;</span></span>
+<span id="cb5-179"><a href="#cb5-179" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">center</span><span class="dt">&gt;</span></span>
+<span id="cb5-180"><a href="#cb5-180" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb5-181"><a href="#cb5-181" aria-hidden="true" tabindex="-1"></a>The new Pauligates are all single-qubit gates, making them highly suitable for the horizontal decomposition. During the preperation of the subcircuits, they can be assigned to their respective groups with minimal effort.<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
 <span id="cb5-182"><a href="#cb5-182" aria-hidden="true" tabindex="-1"></a>Now lets look at the deconstruction for $B = e^{-i\cdot\frac{\theta}{2}\cdot P} = cos(\frac{\theta}{2}) - i \cdot sin(\frac{\theta}{2})\cdot P$:</span>
 <span id="cb5-183"><a href="#cb5-183" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-184"><a href="#cb5-184" aria-hidden="true" tabindex="-1"></a>$$ ABC =  cos(\frac{\theta}{2}) \cdot AC - i \cdot sin(\frac{\theta}{2})\cdot APC$$</span>
 <span id="cb5-185"><a href="#cb5-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-186"><a href="#cb5-186" aria-hidden="true" tabindex="-1"></a>For simplicity lets call $cos(\frac{\theta}{2}) = a$ and $sin(\frac{\theta}{2}) = b$. <span class="kw">&lt;br&gt;</span></span>
+<span id="cb5-186"><a href="#cb5-186" aria-hidden="true" tabindex="-1"></a>For simplicity lets call $cos(\frac{\theta}{2}) = a$ and $sin(\frac{\theta}{2}) = b$. <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
 <span id="cb5-187"><a href="#cb5-187" aria-hidden="true" tabindex="-1"></a>We can then construct the expectation value $\braket{H}_U = \bra{0}(ABC)^{\dagger} H \: ABC \ket{0}$ out of this:</span>
 <span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a>$$ = a^2 \cdot \bra{0}(AC)^\dagger H \: AC\ket{0} + b^2 \cdot \bra{0}(APC)^\dagger H \: APC \ket{0} $$</span>
 <span id="cb5-189"><a href="#cb5-189" aria-hidden="true" tabindex="-1"></a>$$ - abi \cdot \bra{0}(AC)^\dagger H \: APC \ket{0} + abi \cdot \bra{0}(APC)^\dagger H \: AC \ket{0} $$</span>
@@ -1279,7 +1552,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-192"><a href="#cb5-192" aria-hidden="true" tabindex="-1"></a>The remaining terms are overlaps, which we refer to as cross terms.</span>
 <span id="cb5-193"><a href="#cb5-193" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-194"><a href="#cb5-194" aria-hidden="true" tabindex="-1"></a><span class="fu">## Simplification of the cross terms</span></span>
-<span id="cb5-195"><a href="#cb5-195" aria-hidden="true" tabindex="-1"></a>The cross terms form an imaginary scalar. Since these terms are Hermitian conjugates, they can be rewritten in a simpler form. For any complex number $x + y \cdot i$ and its complex conjugate, the following identity holds: $(x+y\cdot i) - (x-y\cdot i) = 2yi = 2i \cdot \textbf{Im}(x+y\cdot i)$, <span class="kw">&lt;br&gt;</span></span>
+<span id="cb5-195"><a href="#cb5-195" aria-hidden="true" tabindex="-1"></a>The cross terms form an imaginary scalar. Since these terms are Hermitian conjugates, they can be rewritten in a simpler form. For any complex number $x + y \cdot i$ and its complex conjugate, the following identity holds: $(x+y\cdot i) - (x-y\cdot i) = 2yi = 2i \cdot \textbf{Im}(x+y\cdot i)$, <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
 <span id="cb5-196"><a href="#cb5-196" aria-hidden="true" tabindex="-1"></a>where $\textbf{Im}(\cdot)$ denotes the imaginary component of a complex number. Applying this identity to our cross terms yields:</span>
 <span id="cb5-197"><a href="#cb5-197" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-198"><a href="#cb5-198" aria-hidden="true" tabindex="-1"></a>$$ - abi \cdot \bra{0}(A C)^\dagger H \: A P C \ket{0} + abi \cdot \bra{0}(A P C)^\dagger H \: A C \ket{0} $$</span>
@@ -1324,22 +1597,22 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-239"><a href="#cb5-239" aria-hidden="true" tabindex="-1"></a>We know that the overlap we created $\bra{0}(A C)^\dagger H \: A P C \ket{0}$, is splitable.</span>
 <span id="cb5-240"><a href="#cb5-240" aria-hidden="true" tabindex="-1"></a>Lets split $AC$ into an $\textbf{Upper}$ and $\textbf{Lower}$ part of the full circuit. We call the parts of $APC$ the same, but mark them as $\textbf{Upper'}$ and $\textbf{Lower'}$ because they contain the extra Pauli gates from the decomposition of the circuit component $B$ that couples $A$ and $C$.</span>
 <span id="cb5-241"><a href="#cb5-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-242"><a href="#cb5-242" aria-hidden="true" tabindex="-1"></a>Before simplification, we must examine the standard BraKet $\braket{\psi | \phi}$ implementation. <span class="kw">&lt;br&gt;</span></span>
+<span id="cb5-242"><a href="#cb5-242" aria-hidden="true" tabindex="-1"></a>Before simplification, we must examine the standard BraKet $\braket{\psi | \phi}$ implementation. <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
 <span id="cb5-243"><a href="#cb5-243" aria-hidden="true" tabindex="-1"></a>The BraKet overlap gets constructed in the following circuit, such that it is able to calculate the overlap between two states.</span>
-<span id="cb5-244"><a href="#cb5-244" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;center&gt;</span></span>
+<span id="cb5-244"><a href="#cb5-244" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">center</span><span class="dt">&gt;</span></span>
 <span id="cb5-245"><a href="#cb5-245" aria-hidden="true" tabindex="-1"></a><span class="al">![](Figures/circuit.png)</span>{width=600}</span>
-<span id="cb5-246"><a href="#cb5-246" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/center&gt;</span></span>
-<span id="cb5-247"><a href="#cb5-247" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;br&gt;</span></span>
+<span id="cb5-246"><a href="#cb5-246" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">center</span><span class="dt">&gt;</span></span>
+<span id="cb5-247"><a href="#cb5-247" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
 <span id="cb5-248"><a href="#cb5-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-249"><a href="#cb5-249" aria-hidden="true" tabindex="-1"></a>For simplicity we depict the $\textbf{Upper}$ part as Unitary $U$ and $\textbf{Lower}$ as $L$. <span class="kw">&lt;br&gt;</span></span>
+<span id="cb5-249"><a href="#cb5-249" aria-hidden="true" tabindex="-1"></a>For simplicity we depict the $\textbf{Upper}$ part as Unitary $U$ and $\textbf{Lower}$ as $L$. <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
 <span id="cb5-250"><a href="#cb5-250" aria-hidden="true" tabindex="-1"></a>The calculation requires an auxiliary qubit to control the execution of these subcircuits. While this adds some overhead, the computational advantage becomes significant when $U$ and $L$ are sufficiently large, as the complexity reduction from processing them separately outweighs the control cost.</span>
 <span id="cb5-251"><a href="#cb5-251" aria-hidden="true" tabindex="-1"></a>We achive this with following method.</span>
-<span id="cb5-252"><a href="#cb5-252" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;br&gt;</span></span>
+<span id="cb5-252"><a href="#cb5-252" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
 <span id="cb5-253"><a href="#cb5-253" aria-hidden="true" tabindex="-1"></a>We define the overlap $\braket{\psi_0 | \psi_1}$ between $U \otimes L$ and the slightly modified $U' \otimes L'$ (containing the extra Pauli gates). These form following states:</span>
 <span id="cb5-254"><a href="#cb5-254" aria-hidden="true" tabindex="-1"></a>$$ (U \otimes L)\ket{0} = \ket{\psi_{0}}, \: \: \: (U' \otimes L') \ket{0} = \ket{\psi_1}$$</span>
 <span id="cb5-255"><a href="#cb5-255" aria-hidden="true" tabindex="-1"></a>After the second Hadamard gate of the auxiliary, the circuit prepares the state:</span>
 <span id="cb5-256"><a href="#cb5-256" aria-hidden="true" tabindex="-1"></a>$$ \frac{1}{\sqrt{2}} \cdot (\ket{+} \ket{\psi_0} + \ket{-} \ket{\psi_1})$$</span>
-<span id="cb5-257"><a href="#cb5-257" aria-hidden="true" tabindex="-1"></a>This is because the $X$ gates of the auxiliary qubit control / anti control - $\ket{\psi_{0}}$ and $\ket{\psi_{1}}$. <span class="kw">&lt;br&gt;</span></span>
+<span id="cb5-257"><a href="#cb5-257" aria-hidden="true" tabindex="-1"></a>This is because the $X$ gates of the auxiliary qubit control / anti control - $\ket{\psi_{0}}$ and $\ket{\psi_{1}}$. <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
 <span id="cb5-258"><a href="#cb5-258" aria-hidden="true" tabindex="-1"></a>In the end measuring the ancilla with Pauli $Z$ (displayed as measurement symbol above) gives as output:</span>
 <span id="cb5-259"><a href="#cb5-259" aria-hidden="true" tabindex="-1"></a>$$ \bra{0}(U \otimes L)^{\dagger} (U' \otimes L') \ket{0} = \braket{\psi_0 | \psi_1} $$</span>
 <span id="cb5-260"><a href="#cb5-260" aria-hidden="true" tabindex="-1"></a></span>
@@ -1407,7 +1680,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-324"><a href="#cb5-324" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-325"><a href="#cb5-325" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> small_braket(bra_up, bra_down, ket_up, ket_down, H):</span>
 <span id="cb5-326"><a href="#cb5-326" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb5-327"><a href="#cb5-327" aria-hidden="true" tabindex="-1"></a><span class="co">    Calculates Overlap of the form &lt;|(AC)^{\dagger} H APC|&gt; or &lt;|(ACP)^{\dagger} H AC|&gt;.</span></span>
+<span id="cb5-327"><a href="#cb5-327" aria-hidden="true" tabindex="-1"></a><span class="co">    Calculates Overlap of the form &lt;|(AC)^{</span><span class="er">\</span><span class="co">dagger} H APC|&gt; or &lt;|(ACP)^{</span><span class="er">\</span><span class="co">dagger} H AC|&gt;.</span></span>
 <span id="cb5-328"><a href="#cb5-328" aria-hidden="true" tabindex="-1"></a><span class="co">    Assumes A and C to be horizontally splitable.</span></span>
 <span id="cb5-329"><a href="#cb5-329" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
 <span id="cb5-330"><a href="#cb5-330" aria-hidden="true" tabindex="-1"></a>    result_r <span class="op">=</span> <span class="dv">0</span></span>
@@ -1447,13 +1720,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-364"><a href="#cb5-364" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-365"><a href="#cb5-365" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb5-366"><a href="#cb5-366" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-367"><a href="#cb5-367" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;center&gt;</span></span>
+<span id="cb5-367"><a href="#cb5-367" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">center</span><span class="dt">&gt;</span></span>
 <span id="cb5-368"><a href="#cb5-368" aria-hidden="true" tabindex="-1"></a><span class="al">![](Figures/Figure_2.png)</span>{width=600}</span>
-<span id="cb5-369"><a href="#cb5-369" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/center&gt;</span></span>
+<span id="cb5-369"><a href="#cb5-369" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">center</span><span class="dt">&gt;</span></span>
 <span id="cb5-370"><a href="#cb5-370" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-371"><a href="#cb5-371" aria-hidden="true" tabindex="-1"></a>The figure illustrates the performance difference between the classical expectation value calculation and the proposed method for exploiting weakly coupled circuit structures.</span>
 <span id="cb5-372"><a href="#cb5-372" aria-hidden="true" tabindex="-1"></a>From the results, we observe that the computational advantage becomes significant only for circuits with more than $&gt;20$ qubits.</span>
-<span id="cb5-373"><a href="#cb5-373" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;br&gt;</span></span>
+<span id="cb5-373"><a href="#cb5-373" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
 <span id="cb5-374"><a href="#cb5-374" aria-hidden="true" tabindex="-1"></a>The complexity of the calculation was reduced to multiple factors of half the original complexity.</span>
 <span id="cb5-375"><a href="#cb5-375" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-376"><a href="#cb5-376" aria-hidden="true" tabindex="-1"></a></span>
@@ -1475,7 +1748,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-392"><a href="#cb5-392" aria-hidden="true" tabindex="-1"></a>This involves the evaluation of two expectation values and an overlap, each requiring operations on the full circuit size. If $A$ and $C$ are splitable in two equal subcircuits, the overlap calculation involves four partial evaluations acting on half the qubits, but each requiring an auxiliary qubit:</span>
 <span id="cb5-393"><a href="#cb5-393" aria-hidden="true" tabindex="-1"></a>$$  \frac{1}{2} \cdot \bra{0}(U \: U') \ket{0} \cdot \bra{0}(L \: L') \ket{0} + \frac{1}{2} \cdot \bra{0}(U' \: U) \ket{0} \cdot \bra{0}(L' \: L) \ket{0} $$</span>
 <span id="cb5-394"><a href="#cb5-394" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-395"><a href="#cb5-395" aria-hidden="true" tabindex="-1"></a>The total the complexity is $2 \cdot ( 2 \cdot 2^{\frac{n}{2}} ) + 4 \cdot 2^{\frac{n}{2} + 1}$, where the first term accounts for splitting the two expectation values, each into two equally sized subcircuits, while the second term represents the evaluation of the deconstructed overlap acting on $\frac{n}{2}+ 1$ qubits, making the complexity  $\mathcal{O}(2^{\frac{n}{2} + 1})$. <span class="kw">&lt;br&gt;</span></span>
+<span id="cb5-395"><a href="#cb5-395" aria-hidden="true" tabindex="-1"></a>The total the complexity is $2 \cdot ( 2 \cdot 2^{\frac{n}{2}} ) + 4 \cdot 2^{\frac{n}{2} + 1}$, where the first term accounts for splitting the two expectation values, each into two equally sized subcircuits, while the second term represents the evaluation of the deconstructed overlap acting on $\frac{n}{2}+ 1$ qubits, making the complexity  $\mathcal{O}(2^{\frac{n}{2} + 1})$. <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
 <span id="cb5-396"><a href="#cb5-396" aria-hidden="true" tabindex="-1"></a>For unequal splits, the complexity is determined by the larger partition (denoted by size $m$), yielding a complexity of $\mathcal{O}(2^{m + 1})$.</span>
 <span id="cb5-397"><a href="#cb5-397" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-398"><a href="#cb5-398" aria-hidden="true" tabindex="-1"></a></span>
@@ -1483,10 +1756,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-400"><a href="#cb5-400" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-401"><a href="#cb5-401" aria-hidden="true" tabindex="-1"></a><span class="fu"># Outlook for recursive structures</span></span>
 <span id="cb5-402"><a href="#cb5-402" aria-hidden="true" tabindex="-1"></a>A promising use case for our weakly coupled method involves circuits with multiple weak connections distributed throughout their structure. In such scenarios, we can adapt the core methodology by decomposing the circuit recursivly. Consider an example circuit with the following structure: </span>
-<span id="cb5-403"><a href="#cb5-403" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;br&gt;</span></span>
-<span id="cb5-404"><a href="#cb5-404" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;center&gt;</span></span>
+<span id="cb5-403"><a href="#cb5-403" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb5-404"><a href="#cb5-404" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">center</span><span class="dt">&gt;</span></span>
 <span id="cb5-405"><a href="#cb5-405" aria-hidden="true" tabindex="-1"></a><span class="al">![](Figures/outlook.png)</span>{width=480}</span>
-<span id="cb5-406"><a href="#cb5-406" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/center&gt;</span></span>
+<span id="cb5-406"><a href="#cb5-406" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">center</span><span class="dt">&gt;</span></span>
 <span id="cb5-407"><a href="#cb5-407" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-408"><a href="#cb5-408" aria-hidden="true" tabindex="-1"></a>We can see that $ABC$ follows the structure we have seen before, but $C = A'B'C'$ has the same structure in itself.</span>
 <span id="cb5-409"><a href="#cb5-409" aria-hidden="true" tabindex="-1"></a>Lets write out our decomposition with $B = e^{-i\cdot\frac{\theta}{2}\cdot P}$:</span>
@@ -1500,7 +1773,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-417"><a href="#cb5-417" aria-hidden="true" tabindex="-1"></a><span class="fu"># Summary</span></span>
 <span id="cb5-418"><a href="#cb5-418" aria-hidden="true" tabindex="-1"></a>Our proposed methods achieve substantial reductions in computation time through strategic circuit decomposition. By partitioning the original circuit into smaller subcircuits, we exponentially decrease the operational dimensionality, leading to significant complexity reduction. While this tutorial specifically examines the case of dividing $n$ qubits into two (for decoupled) / multiple (for weakly coupled) - subcircuits of $\frac{n}{2}$ qubits, the methods remain valid for any partition size that satisfies the structural requirements.</span>
 <span id="cb5-419"><a href="#cb5-419" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-420"><a href="#cb5-420" aria-hidden="true" tabindex="-1"></a>We focus on 2-way decomposition for two key reasons: <span class="kw">&lt;br&gt;</span></span>
+<span id="cb5-420"><a href="#cb5-420" aria-hidden="true" tabindex="-1"></a>We focus on 2-way decomposition for two key reasons: <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
 <span id="cb5-421"><a href="#cb5-421" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-422"><a href="#cb5-422" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>The two-subcircuit case provides clearer demonstration while maintaining all essential features of the general approach</span>
 <span id="cb5-423"><a href="#cb5-423" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>If the structural properties are given, we can recursively split the resulting circuits from the first decomposition as often as we want.</span>
@@ -1510,19 +1783,19 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-427"><a href="#cb5-427" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-428"><a href="#cb5-428" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-429"><a href="#cb5-429" aria-hidden="true" tabindex="-1"></a><span class="fu"># Appendix: Visualization of Testing Circuit</span></span>
-<span id="cb5-430"><a href="#cb5-430" aria-hidden="true" tabindex="-1"></a>To test both calculation methods, suitable circuits were required. <span class="kw">&lt;br&gt;</span></span>
+<span id="cb5-430"><a href="#cb5-430" aria-hidden="true" tabindex="-1"></a>To test both calculation methods, suitable circuits were required. <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
 <span id="cb5-431"><a href="#cb5-431" aria-hidden="true" tabindex="-1"></a>For constructing fully disconnected test circuits, we begin by randomly assigning gates to an empty circuit acting on half the number of qubits in the target circuit. This circuit is then duplicated to create a second group acting on the remaining qubits. This will result in a circuit with two groups each only interacting with qubits in the same group, which makes it splitable with the fully disconnected method.</span>
 <span id="cb5-432"><a href="#cb5-432" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-433"><a href="#cb5-433" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-434"><a href="#cb5-434" aria-hidden="true" tabindex="-1"></a>In the case of weakly coupled circuits, we follow the same initial construction process but introduce a coupling between the groups, at an arbitary point (in our example we choose the middle of the circuit). The coupling is implemented through a unitary operation of the form $B = e^{-i\cdot\frac{\theta}{2}\cdot P}$, where the Paulistring $P$ is allowed to act on qubits of both groups. </span>
-<span id="cb5-435"><a href="#cb5-435" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;br&gt;</span></span>
+<span id="cb5-435"><a href="#cb5-435" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
 <span id="cb5-436"><a href="#cb5-436" aria-hidden="true" tabindex="-1"></a>The following figure shows an example circuit for testing the weakly coupled circuit calculation method, consisting of two groups with a total of 10 qubits. The groups are weakly linked by a Pauli gate (marked in pink).</span>
 <span id="cb5-437"><a href="#cb5-437" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-438"><a href="#cb5-438" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;center&gt;</span></span>
+<span id="cb5-438"><a href="#cb5-438" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">center</span><span class="dt">&gt;</span></span>
 <span id="cb5-439"><a href="#cb5-439" aria-hidden="true" tabindex="-1"></a><span class="al">![](Figures/example10q.png)</span>{width=600}</span>
-<span id="cb5-440"><a href="#cb5-440" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/center&gt;</span></span>
+<span id="cb5-440"><a href="#cb5-440" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">center</span><span class="dt">&gt;</span></span>
 <span id="cb5-441"><a href="#cb5-441" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-442"><a href="#cb5-442" aria-hidden="true" tabindex="-1"></a>We also need a Hamiltonian to form our expectation value $\braket{H}_U$. <span class="kw">&lt;br&gt;</span> For this we consider the two groups, $X$ acting on $1,2, ... \frac{n}{2}$ and $Y$ acting on $\frac{n}{2} + 1, ... n-1, n$. <span class="kw">&lt;br&gt;</span></span>
+<span id="cb5-442"><a href="#cb5-442" aria-hidden="true" tabindex="-1"></a>We also need a Hamiltonian to form our expectation value $\braket{H}_U$. <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> For this we consider the two groups, $X$ acting on $1,2, ... \frac{n}{2}$ and $Y$ acting on $\frac{n}{2} + 1, ... n-1, n$. <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
 <span id="cb5-443"><a href="#cb5-443" aria-hidden="true" tabindex="-1"></a>Our test Hamiltonian is then simply constructed with one Paulistring acting on each group and one Paulistring covering both groups:</span>
 <span id="cb5-444"><a href="#cb5-444" aria-hidden="true" tabindex="-1"></a>$$H =  \bigotimes_{i \in X} Z(i) + \bigotimes_{j \in Y} Z(j) + \bigotimes_{k \in X \cup Y} Z(k) $$</span>
 <span id="cb5-445"><a href="#cb5-445" aria-hidden="true" tabindex="-1"></a>So for the $10$ qubit case: $H = Z(1)Z(2)Z(3)Z(4)Z(5) + Z(6)Z(7)Z(8)Z(9)Z(10) + Z(1)Z(2)Z(3)Z(4)Z(5)Z(6)Z(7)Z(8)Z(9)Z(10)$</span>
@@ -1619,7 +1892,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-538"><a href="#cb5-538" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
 <span id="cb5-539"><a href="#cb5-539" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-540"><a href="#cb5-540" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
@@ -1627,12 +1900,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center"><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
+    <div class="nav-footer-center">
+
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tequilahub/tequila-tutorials/blob/main/tutorials/AutomaticDecompositions/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila-tutorials/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 

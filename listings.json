@@ -6,25 +6,14 @@
     ]
   },
   {
-    "listing": "/research.html",
-    "items": [
-      "/research/first_quantized_chemistry_simulations/index.html",
-      "/research/gaussian_convolution/index.html",
-      "/research/exvqe/Eigensolver.html",
-      "/research/molcirc/index.html",
-      "/research/quantum_classifier/quantum_classifier.html",
-      "/research/electronic-hamiltonians/index.html"
-    ]
-  },
-  {
     "listing": "/tutorials.html",
     "items": [
       "/tutorials/tq-get-started/index.html",
       "/tutorials/tq-circuits/index.html",
       "/tutorials/CircuitCompiler/CircuitCompiler.html",
-      "/tutorials/OpenQASMConversions/OpenQASMConversions.html",
       "/tutorials/QTensor/QTensor.html",
       "/tutorials/Braket/BraketTutorial.html",
+      "/tutorials/OpenQASMConversions/OpenQASMConversions.html",
       "/tutorials/optimizer/Optimizers.html",
       "/tutorials/KrylovTutorial/KrylovTutorial.html",
       "/tutorials/vqe/vqe.html",
@@ -33,6 +22,17 @@
       "/tutorials/AutomaticDecompositions/index.html",
       "/tutorials/LRZ/lrz.html",
       "/tutorials/CombinatorialOptimization/jupyter_notebook.html"
+    ]
+  },
+  {
+    "listing": "/research.html",
+    "items": [
+      "/research/first_quantized_chemistry_simulations/index.html",
+      "/research/gaussian_convolution/index.html",
+      "/research/exvqe/Eigensolver.html",
+      "/research/molcirc/index.html",
+      "/research/quantum_classifier/quantum_classifier.html",
+      "/research/electronic-hamiltonians/index.html"
     ]
   }
 ]

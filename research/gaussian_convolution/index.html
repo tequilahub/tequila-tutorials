@@ -2,15 +2,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Oliver Hüttenhofer">
 <meta name="dcterms.date" content="2024-11-23">
 
-<title>Tequila Tutorials - Building a Quantum Circuit for Gaussian Convolutions</title>
+<title>Building a Quantum Circuit for Gaussian Convolutions – Tequila Tutorials</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -23,6 +26,7 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 /* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -60,6 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -88,24 +93,33 @@ div.csl-indent {
 <link href="../../favicon.ico" rel="icon">
 <script src="../../site_libs/cookie-consent/cookie-consent.js"></script>
 <link href="../../site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
-<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-a5883e7fa1e19cde57db4ec6b11febc3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-bca227963e21cb646e747543fe28dd8e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-a5883e7fa1e19cde57db4ec6b11febc3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -114,6 +128,7 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -140,66 +155,258 @@ cookieconsent.run({
   "notice_banner_reject_button_hide":false,
   "preferences_center_close_button_hide":false,
   "website_name":""
+  ,
+"language":"en"
   });
 });
 </script> 
   
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="Tequila Tutorials - Building a Quantum Circuit for Gaussian Convolutions">
-<meta property="og:description" content="">
-<meta property="og:image" content="https://github.com/tequilahub/tequila-tutorials/research/gaussian_convolution/img/thumbnail.jpg">
-<meta property="og:site-name" content="Tequila Tutorials">
+<meta property="og:title" content="Building a Quantum Circuit for Gaussian Convolutions – Tequila Tutorials">
+<meta property="og:description" content="quantum computing, quantum chemistry and tequila">
+<meta property="og:image" content="https://tequilahub.github.io/tequila-tutorials/research/gaussian_convolution/img/thumbnail.jpg">
+<meta property="og:site_name" content="Tequila Tutorials">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../../tequila_logo.png" alt="" class="navbar-logo">
+    <img src="../../tequila_logo.png" alt="" class="navbar-logo light-content">
+    <img src="../../tequila_logo.png" alt="" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Tequila Tutorials</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../research.html" rel="" target="">
- <span class="menu-text">Research</span></a>
+    <a class="nav-link" href="../../research.html"> 
+<span class="menu-text">Research</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../tutorials.html" rel="" target="">
- <span class="menu-text">Tutorials</span></a>
+    <a class="nav-link" href="../../tutorials.html"> 
+<span class="menu-text">Tutorials</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../FAQ/FAQ.html" rel="" target="">
- <span class="menu-text">FAQ</span></a>
+    <a class="nav-link" href="../../FAQ/FAQ.html"> 
+<span class="menu-text">FAQ</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../Contribution/Contribution.html" rel="" target="">
- <span class="menu-text">Contribution</span></a>
+    <a class="nav-link" href="../../Contribution/Contribution.html"> 
+<span class="menu-text">Contribution</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../docs/sphinx/index.html" rel="" target="">
- <span class="menu-text">Docs</span></a>
+    <a class="nav-link" href="../../docs/sphinx/index.html"> 
+<span class="menu-text">Docs</span></a>
   </li>  
 </ul>
+          </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -277,10 +484,12 @@ cookieconsent.run({
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">5.7</span> References</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/tequilahub/tequila-tutorials/blob/main/research/gaussian_convolution/index.qmd" class="toc-action">View source</a></p><p><a href="https://github.com/tequilahub/tequila-tutorials/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/tequilahub/tequila-tutorials/blob/main/research/gaussian_convolution/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila-tutorials/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
 
 
 
@@ -320,7 +529,7 @@ e^{-1} &amp; 1 &amp; e^{-1} &amp; 0 \\
 <p>Then we can build the following circuit, where <span class="math inline">\(\ket{0} \bra{0}\)</span> indicates postselecting the register as <span class="math inline">\(\ket{0 \dots 0}\)</span>, i.e.&nbsp;rerunning the algorithm until a measurement of this register yields only zeros:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/full.svg" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/full.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 <p>First, we use a PREP operation which can initialize any arbitrary state to load a single column of values onto the s register, in this example this would be <span class="math display">\[ \begin{align}
@@ -385,7 +594,7 @@ e^{-1} &amp; 1 &amp; e^{-1} &amp; 0 \\
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prepare_state(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prepare_state(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    state: npt.NDArray[<span class="bu">float</span>],</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    target: Sequence[<span class="bu">int</span>]</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> tq.QCircuit:</span>
@@ -400,14 +609,14 @@ Code
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>            theta[bit, i] <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> np.arccos(np.<span class="bu">abs</span>(a0) <span class="op">/</span> r) <span class="cf">if</span> r <span class="op">!=</span> <span class="dv">0</span> <span class="cf">else</span> <span class="dv">0</span></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>            phi[bit, i] <span class="op">=</span> phase(a1) <span class="op">-</span> phase(a0)</span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>            combined[bit, i] <span class="op">=</span> rect(r, (phase(a0) <span class="op">+</span> phase(a1)) <span class="op">/</span> <span class="dv">2</span>)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <p>Now that we know the rotation angles, we can build the actual circuit. For this, we go from the most to least signifcant bit (we are doing the reverse of what was described earlier), and for each bit, iterate through states of the higher bits and apply the rotations. We implement the controls by inserting NOT gates, so that at the time of each rotation, the state we are looking at is <span class="math inline">\(\ket{1 \dots 1}\)</span>.</p>
 <details>
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>    ...</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>    ...</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    U <span class="op">=</span> tq.QCircuit()</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> bit <span class="kw">in</span> <span class="bu">range</span>(n):</span>
@@ -419,12 +628,12 @@ Code
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>            U <span class="op">+=</span> tq.gates.Ry(angle<span class="op">=</span>theta[bit, i], target<span class="op">=</span>target[bit], control<span class="op">=</span>target[:bit])</span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>            U <span class="op">+=</span> tq.gates.Rz(angle<span class="op">=</span>phi[bit, i], target<span class="op">=</span>target[bit], control<span class="op">=</span>target[:bit])</span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <p>Calling this code with a 3-qubit state yields the following circuit:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/prepare_state.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/prepare_state.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 <p>It performs the correct operation, however there are multi-controlled rotations which will likely be a problem when attempting to run this on real hardware. We could let a compiler take care of this, but we don’t know how efficient that will be. Instead we’ll manually decompose it into single-controlled rotations and Toffoli gates, using our knowledge that there are other qubits in this circuit that we can borrow.</p>
@@ -435,7 +644,7 @@ Code
 <p>For this, we use the fact that <span class="math display">\[ X \cdot R_{Y/Z}(\theta) \cdot X = R_{Y/Z}(-\theta) \]</span> to decompose the circuit in the following way:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/controlled_rotation_decomposition.svg" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/controlled_rotation_decomposition.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 <p>If we have a clean qubit in state <span class="math inline">\(\ket{0}\)</span>, the decomposition is easy: We simply run a multi-controlled NOT on the ancilla qubit, and then use that ancilla as the control for the rotation. Then we repeat the controlled NOT to uncompute the effect on the ancilla.</p>
@@ -444,7 +653,7 @@ Code
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multi_controlled_Ry(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multi_controlled_Ry(</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    angle: <span class="bu">float</span>,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    target: <span class="bu">int</span>,</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    controls: Sequence[<span class="bu">int</span>],</span>
@@ -467,13 +676,13 @@ Code
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    U <span class="op">+=</span> tq.gates.CNOT(target<span class="op">=</span>target, control<span class="op">=</span>ancillae[<span class="op">-</span><span class="dv">1</span>])</span>
 <span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <p>The code for the Z-rotation is the same, simply replace Ry with Rz.</p>
 <p>But now, even though we got rid of the multi-controlled rotation, we instead have multi-controlled NOTs, which we can also not directly execute. Luckily we can also resolve this using borrowed ancillae:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/controlled_not_decomposition.svg" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/controlled_not_decomposition.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 <p>The idea here is similar to the previous circuit. By running controlled operations twice, interleaved with controlled NOTs, we are independent of the initial state of the qubit.</p>
@@ -482,7 +691,7 @@ Code
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multi_controlled_not(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multi_controlled_not(</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    target: <span class="bu">int</span>,</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    controls: Sequence[<span class="bu">int</span>],</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    ancillae: Sequence[<span class="bu">int</span>],</span>
@@ -508,7 +717,7 @@ Code
 <span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        U <span class="op">+=</span> tq.gates.Toffoli(first<span class="op">=</span>controls[<span class="dv">0</span>], second<span class="op">=</span>controls[<span class="dv">1</span>], target<span class="op">=</span>ancillae[<span class="dv">0</span>])</span>
 <span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>        U <span class="op">+=</span> staircase</span>
 <span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <p>The Toffoli gates can be directly decomposed into CNOTs and T gates, which we will not do here.</p>
 </section>
@@ -533,7 +742,7 @@ Code
 <p>In this chapter we will implement the second building block we need: An addition circuit that adds the value of a source register to a target register. For this we will follow <span class="citation" data-cites="Takahashi_2009"><a href="#ref-Takahashi_2009" role="doc-biblioref">[4]</a></span>, which introduces the following circuit:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/addition_paper.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/addition_paper.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 <p>Here <span class="math inline">\(s\)</span> is the sum <span class="math inline">\(a + b\)</span> that we want to calculate. Unfortunately we can’t use the circuit directly, because it expects the source and target register to have the same size. In our case however, the target register might be larger, so we need to adapt it for that.</p>
@@ -548,7 +757,7 @@ Code
 <p>So if we add controlled NOTs to all target registers at the beginning and end of the circuit that run if the first increment will run, then the increments cancel out. If only one of them is running, they will operate correctly.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/addition_increment.svg" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/addition_increment.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 <p>Next, we need a way to implement an increment operation.</p>
@@ -559,14 +768,14 @@ Code
 <p>We start with this subtraction widget, which is a modified version of a VanRentergem adder and subtracts the garbage in a register and a carry bit from the value in another register:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/subtraction_widget.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/subtraction_widget.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 <details>
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _subtraction_widget(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _subtraction_widget(</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    v: Sequence[<span class="bu">int</span>],</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    g: Sequence[<span class="bu">int</span>],</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    c: <span class="bu">int</span></span>
@@ -587,7 +796,7 @@ Code
 <span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        U <span class="op">+=</span> tq.gates.CNOT(control<span class="op">=</span>g[i <span class="op">+</span> <span class="dv">1</span>], target<span class="op">=</span>g[i])</span>
 <span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        U <span class="op">+=</span> tq.gates.CNOT(control<span class="op">=</span>g[i <span class="op">+</span> <span class="dv">1</span>], target<span class="op">=</span>v[i])</span>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <p>Then we apply this widget twice, but toggle the qubits of <span class="math inline">\(g\)</span> around the second time, so the result in the <span class="math inline">\(v\)</span> register will be <span class="math display">\[ v - g - c - (-g - 1) - c
 = v - 2 c + 1 \]</span></p>
@@ -595,14 +804,14 @@ Code
 <p>As a last detail, because <span class="math inline">\(v\)</span> has one more bit than <span class="math inline">\(g\)</span>, when adding both <span class="math inline">\(g\)</span> and <span class="math inline">\(\overline{g}\)</span>, one of those will be negative, but the sign will act as a normal binary digit, toggling the high bit of <span class="math inline">\(v\)</span>. We can fix this by adding an additional NOT gate on this bit, ending up with the following circuit:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/increment_n_ancillae.svg" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/increment_n_ancillae.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 <details>
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> increment_circuit_n_ancillae(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> increment_circuit_n_ancillae(</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    target: Sequence[<span class="bu">int</span>],</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    ancillae: Sequence[<span class="bu">int</span>]</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> tq.QCircuit:</span>
@@ -631,19 +840,19 @@ Code
 <span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(v)):</span>
 <span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>        U <span class="op">+=</span> tq.gates.CNOT(control<span class="op">=</span>g[<span class="dv">0</span>], target<span class="op">=</span>v[i])</span>
 <span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <p>Next, we want to improve this from requiring <span class="math inline">\(n\)</span> ancillae, to only one. To do this, we split one large increment gates into two smaller ones, each acting on half of the register, the second one indirectly controlled by the bits of the lower register using the borrowed ancilla. Reducing the size of the increments like this gives us enough unused qubits to use our <span class="math inline">\(n\)</span> ancilla version.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/increment_1_ancilla.svg" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/increment_1_ancilla.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 <p>We already know from the previous chapter how to decompose the multi-controlled NOTs, and have enough unused qubits here. Making a controlled increment is not a problem either, since this is equivalent to a larger increment and a NOT gate.</p>
 <p>To see this, note that an increment gate is equivalent to a triangle of multi-controlled NOTs:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/controlled_increment.svg" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/controlled_increment.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 <p>There is one issue left: Since this method increases the size of the increment on the higher bits, if the size of <span class="math inline">\(v\)</span> is even, we are short one ancilla (if it is odd, we split the register so that the more significant half is one qubit smaller). This can be solved by pulling out the largest multi-controlled NOT, decreasing the size of the increment by one.</p>
@@ -651,7 +860,7 @@ Code
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> increment_circuit_single_ancilla(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> increment_circuit_single_ancilla(</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    target: Sequence[<span class="bu">int</span>],</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    ancilla: <span class="bu">int</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a> ) <span class="op">-&gt;</span> tq.QCircuit:</span>
@@ -682,7 +891,7 @@ Code
 <span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
 <span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>        U <span class="op">+=</span> increment_circuit_n_ancillae(target[split:], <span class="bu">list</span>(target[:split]) <span class="op">+</span> [ancilla])</span>
 <span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </section>
 <section id="implementation-1" class="level2" data-number="3.3">
@@ -694,7 +903,7 @@ Code
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> addition_circuit(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> addition_circuit(</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    source: Sequence[<span class="bu">int</span>],</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    target: Sequence[<span class="bu">int</span>]</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> tq.QCircuit:</span>
@@ -738,7 +947,7 @@ Code
 <span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n, <span class="bu">len</span>(b)):</span>
 <span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>            U <span class="op">+=</span> tq.gates.CNOT(control<span class="op">=</span>a[n <span class="op">-</span> <span class="dv">1</span>], target<span class="op">=</span>b[i])</span>
 <span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </section>
 <section id="gate-count-1" class="level2" data-number="3.4">
@@ -763,7 +972,7 @@ Code
 <p>For this, we need the following carry operation:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/carry_gate.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/carry_gate.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 <p>Depending on the constant <span class="math inline">\(c\)</span> that is added, some of the gates are removed, see <span class="citation" data-cites="Häner_2017"><a href="#ref-Häner_2017" role="doc-biblioref">[6]</a></span> for details.</p>
@@ -771,7 +980,7 @@ Code
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _carry_circuit(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _carry_circuit(</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    target: Sequence[<span class="bu">int</span>],</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    const: <span class="bu">int</span>,</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    carry: <span class="bu">int</span>,</span>
@@ -809,7 +1018,7 @@ Code
 <span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>    U <span class="op">+=</span> half.dagger()</span>
 <span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </section>
 <section id="implementation-2" class="level2" data-number="4.2">
@@ -817,7 +1026,7 @@ Code
 <p>This carry operation allows us to split the operation in half like described earlier:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/const_addition.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/const_addition.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 <p>Here <span class="math inline">\(x_H\)</span> is the more significant half, and <span class="math inline">\(x_L\)</span> the less significant half of the register, and similarly <span class="math inline">\(c_H\)</span> and <span class="math inline">\(c_L\)</span> are the more and less significant halves of the constant. Even though it looks like it, the carry operation doesn’t act on <span class="math inline">\(x_H\)</span>, only on <span class="math inline">\(x_L\)</span> and the <span class="math inline">\(g\)</span> ancilla.</p>
@@ -827,7 +1036,7 @@ Code
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> const_addition_circuit(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> const_addition_circuit(</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    target: Sequence[<span class="bu">int</span>],</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    const: <span class="bu">int</span>,</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    ancillae: Sequence[<span class="bu">int</span>]</span>
@@ -869,7 +1078,7 @@ Code
 <span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>    U <span class="op">+=</span> const_addition_circuit(target<span class="op">=</span>target[:split], const<span class="op">=</span>const <span class="op">&gt;&gt;</span> (n <span class="op">-</span> split), ancillae<span class="op">=</span>ancillae)</span>
 <span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>    U <span class="op">+=</span> const_addition_circuit(target<span class="op">=</span>target[split:], const<span class="op">=</span>const <span class="op">%</span> (<span class="dv">2</span> <span class="op">**</span> (n <span class="op">-</span> split)), ancillae<span class="op">=</span>ancillae)</span>
 <span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <p>With this, we have all the building blocks we need for the full circuit that implements a Toeplitz matrix and the convolution.</p>
 </section>
@@ -893,7 +1102,7 @@ Code
 <p>As a reminder, this is the circuit we want to implement:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/full.svg" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/full.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 <p>We have built all the parts in the previous chapters, but one detail was only mentioned briefly. Let <span class="math inline">\(A_d\)</span> be the diagonals of the Toeplitz matrix. Instead of directly loading the values in PREP and using UNPREP only for combining the different values to a single state, we can follow chapter 2.3 from <span class="citation" data-cites="Sünderhauf_2024"><a href="#ref-Sünderhauf_2024" role="doc-biblioref">[1]</a></span> and choose <span class="math inline">\(p = 1 / 2\)</span> (which is shown there to be optimal), resulting in <span class="math display">\[
@@ -908,7 +1117,7 @@ Code
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> toeplitz_matrix(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> toeplitz_matrix(</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    diags: npt.NDArray[<span class="bu">float</span>],</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    target: Sequence[<span class="bu">int</span>],</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    ancillae: Sequence[<span class="bu">int</span>],</span>
@@ -935,14 +1144,14 @@ Code
 <span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    unprep_values <span class="op">=</span> np.sqrt(np.<span class="bu">abs</span>(diags))</span>
 <span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    U <span class="op">+=</span> prepare_state(state<span class="op">=</span>array_to_state(unprep_values), target<span class="op">=</span>ancillae, ancillae<span class="op">=</span>target).dagger()</span>
 <span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <p>With this, we are at the point where we can implement the example matrix from the first chapter:</p>
 <details>
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">2</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">2</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">2</span> <span class="op">**</span> n</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>diags <span class="op">=</span> np.array([exp(<span class="op">-</span>i <span class="op">*</span> i) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">2</span>)])</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> ceil(log2(<span class="bu">len</span>(diags)))</span>
@@ -953,12 +1162,12 @@ Code
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> toeplitz_matrix(diags<span class="op">=</span>diags, target<span class="op">=</span>j, ancillae<span class="op">=</span>s, overflow<span class="op">=</span>overflow, offset<span class="op">=</span><span class="dv">3</span>)</span>
 <span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <p>Even this small example results in a fairly large circuit, however that is expected, given the large constant factors in the gate counts:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/complete_circuit.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/complete_circuit.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 <p>At the start there are some redundant gates which could be simplified, this is due to the small circuit size and doesn’t happen for larger circuits. Some of the constructions from the previous chapters would need special handling for small registers to fix this.</p>
@@ -968,7 +1177,7 @@ Code
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> eval_circuit(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> eval_circuit(</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    states: Union[<span class="bu">int</span>, <span class="bu">list</span>[<span class="bu">int</span>]],</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    U: tq.QCircuit,</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    ranges: Union[<span class="bu">int</span>, <span class="bu">list</span>[<span class="bu">int</span>]],</span>
@@ -999,14 +1208,14 @@ Code
 <span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> normalization <span class="op">!=</span> <span class="dv">0</span>:</span>
 <span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>        result <span class="op">/=</span> normalization</span>
 <span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result, normalization</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result, normalization</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <p>This makes visualizing the result with Pyplot simple:</p>
 <details>
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>...</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>...</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> <span class="bu">map</span>(<span class="kw">lambda</span> j: eval_circuit(states<span class="op">=</span>j, U<span class="op">=</span>U, ranges<span class="op">=</span>N, offsets<span class="op">=</span><span class="dv">1</span>, postselection_mask<span class="op">=</span><span class="bn">0b11001</span>), <span class="bu">range</span>(N))</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>columns, normalizations <span class="op">=</span> <span class="bu">zip</span>(<span class="op">*</span>results)</span>
@@ -1028,18 +1237,18 @@ Code
 <span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im1, ax<span class="op">=</span>ax[<span class="dv">1</span>])</span>
 <span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/example_visualization.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/example_visualization.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 <p>The top left corner might look wrong at first, but remember that each column has to be normalized, so we can’t get the exact matrix we intended. The third and fourth column are correct because none of the values are cut off, so the postselection has no effect.</p>
 <p>We can also remove the overflow flag from the postselection mask to see what happens without it:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/example_visualization_no_overflow.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/example_visualization_no_overflow.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 <p>This might also look wrong at first, but this is because in a 4x4 matrix with 3 diagonals we only have one diagonal with value zero. The three values in the bottom left are what was cut off before, and now that we are skipping this step, you can see that the diagonals actually all have the same value.</p>
@@ -1048,7 +1257,7 @@ Code
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">6</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">6</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">2</span> <span class="op">**</span> n</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>diags <span class="op">=</span> np.array([exp(<span class="op">-</span>i <span class="op">*</span> i <span class="op">/</span> <span class="dv">32</span>) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="op">-</span><span class="dv">15</span>, <span class="dv">16</span>)])</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> ceil(log2(<span class="bu">len</span>(diags)))</span>
@@ -1065,17 +1274,17 @@ Code
 <span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"State"</span>)</span>
 <span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Amplitude"</span>)</span>
 <span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/graph.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/graph.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 <p>For comparison, this is what the function <span class="math inline">\(g(x) = \exp((x - 32)^2 / 32)\)</span> looks like:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/graph_comparison.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/graph_comparison.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 <p>The only major difference is the scale of the y-Axis, which is due to the normalization of quantum states.</p>
@@ -1084,7 +1293,7 @@ Code
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">6</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">6</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">2</span> <span class="op">**</span> n</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>diags <span class="op">=</span> np.array([exp(<span class="op">-</span>i <span class="op">*</span> i <span class="op">/</span> <span class="dv">32</span>) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="op">-</span><span class="dv">15</span>, <span class="dv">16</span>)])</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> ceil(log2(<span class="bu">len</span>(diags)))</span>
@@ -1122,11 +1331,11 @@ Code
 <span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_ylabel(<span class="st">"Amplitude"</span>)</span>
 <span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/graph_init.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/graph_init.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 </section>
@@ -1154,7 +1363,7 @@ Code
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">4</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">4</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">2</span> <span class="op">**</span> n</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>diags <span class="op">=</span> np.array([exp(<span class="op">-</span>i <span class="op">*</span> i <span class="op">/</span> <span class="dv">4</span>) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="op">-</span><span class="dv">3</span>, <span class="dv">4</span>)])</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> ceil(log2(<span class="bu">len</span>(diags)))</span>
@@ -1169,14 +1378,14 @@ Code
 <span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> toeplitz_matrix(diags<span class="op">=</span>diags, target<span class="op">=</span>j1, ancillae<span class="op">=</span>s1, overflow<span class="op">=</span>overflow1, offset<span class="op">=</span><span class="dv">3</span>)</span>
 <span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>U <span class="op">+=</span> toeplitz_matrix(diags<span class="op">=</span>diags, target<span class="op">=</span>j2, ancillae<span class="op">=</span>s2, overflow<span class="op">=</span>overflow2, offset<span class="op">=</span><span class="dv">3</span>)</span>
 <span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <p>This is also the point where wrapping the evaluation in <code>eval_circuit</code> starts to really help, because otherwise dealing with multiple input and output registers quickly becomes hard to read. It also allows to easily parallelize the evaluation of multiple states using the Python <code>multiprocessing</code> module (at the time of writing this helped due to inefficiencies in the Tequila <code>simulate</code> function, but since version 1.9.7 this should no longer be necessary). We will not evaluate every basis state, instead, confirming that it behaves correctly in the center, at the edges and in corners should be sufficient:</p>
 <details>
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>...</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>...</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">3</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">20</span>, <span class="dv">20</span>))</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -1195,11 +1404,11 @@ Code
 <span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>        fig.colorbar(im, ax<span class="op">=</span>ax[plot_i, plot_j])</span>
 <span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/example_visualization_two_dim.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/example_visualization_two_dim.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 <p>We can again add some initialization code to see how the circuit operates on other input:</p>
@@ -1207,7 +1416,7 @@ Code
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">4</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">4</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">2</span> <span class="op">**</span> n</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>diags <span class="op">=</span> np.array([exp(<span class="op">-</span>i <span class="op">*</span> i <span class="op">/</span> <span class="dv">4</span>) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="op">-</span><span class="dv">3</span>, <span class="dv">4</span>)])</span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> ceil(log2(<span class="bu">len</span>(diags)))</span>
@@ -1248,11 +1457,11 @@ Code
 <span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im1, ax<span class="op">=</span>ax[<span class="dv">1</span>])</span>
 <span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/example_visualization_init.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/example_visualization_init.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 <p>In this example, you could also ignore the postselection because no values wrap around, so it doesn’t have any effect.</p>
@@ -1265,7 +1474,7 @@ Code
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lcu(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lcu(</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    circuits: Sequence[tq.QCircuit],</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    coefficients: npt.NDArray[<span class="bu">float</span>],</span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    flags: Sequence[<span class="bu">int</span>],</span>
@@ -1293,14 +1502,14 @@ Code
 <span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>    unprep_values <span class="op">=</span> np.sqrt(np.<span class="bu">abs</span>(coefficients))</span>
 <span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>    U <span class="op">+=</span> prepare_state(state<span class="op">=</span>array_to_state(unprep_values), target<span class="op">=</span>flags, ancillae<span class="op">=</span>ancillae).dagger()</span>
 <span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <p>As a simple example, we can reuse the previous two dimensional circuit, but add a second convolution with the same values but slightly shifted. We give a negative coefficient to this new convolution, and double the weight of the original convolution:</p>
 <details>
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">4</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">4</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">2</span> <span class="op">**</span> n</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>diags <span class="op">=</span> np.array([exp(<span class="op">-</span>i <span class="op">*</span> i <span class="op">/</span> <span class="dv">4</span>) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="op">-</span><span class="dv">3</span>, <span class="dv">4</span>)])</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> ceil(log2(<span class="bu">len</span>(diags)))</span>
@@ -1343,11 +1552,11 @@ Code
 <span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_title(<span class="st">"Result"</span>, fontsize<span class="op">=</span><span class="dv">24</span>)</span>
 <span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a>im1 <span class="op">=</span> ax[<span class="dv">1</span>].imshow(np.real(result))</span>
 <span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im1, ax<span class="op">=</span>ax[<span class="dv">1</span>])</span>
-<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/lcu_example.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="img/lcu_example.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 </section>
@@ -1359,12 +1568,12 @@ Code
 </section>
 <section id="references" class="level2" data-number="5.7">
 <h2 data-number="5.7" class="anchored" data-anchor-id="references"><span class="header-section-number">5.7</span> References</h2>
-<div id="refs" class="references csl-bib-body" role="list">
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
 <div id="ref-Sünderhauf_2024" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[1] </div><div class="csl-right-inline">C. Sünderhauf, E. Campbell, and J. Camps, <span>“Block-encoding structured matrices for data input in quantum computing,”</span> <em>Quantum</em>, vol. 8, p. 1226, Jan. 2024, doi: <a href="https://doi.org/10.22331/q-2024-01-11-1226">10.22331/q-2024-01-11-1226</a>.</div>
 </div>
 <div id="ref-Shende_2006" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[2] </div><div class="csl-right-inline">V. V. Shende, S. S. Bullock, and I. L. Markov, <span>“Synthesis of quantum-logic circuits,”</span> <em>IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems</em>, vol. 25, no. 6, pp. 1000–1010, Jun. 2006, doi: <a href="https://doi.org/10.1109/tcad.2005.855930">10.1109/tcad.2005.855930</a>.</div>
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">V. V. Shende, S. S. Bullock, and I. L. Markov, <span>“Synthesis of quantum-logic circuits,”</span> <em>IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems</em>, vol. 25, no. 6, pp. 1000–1010, June 2006, doi: <a href="https://doi.org/10.1109/tcad.2005.855930">10.1109/tcad.2005.855930</a>.</div>
 </div>
 <div id="ref-Gidney_2017" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[3] </div><div class="csl-right-inline">C. Gidney, <span>“Trouble adding constants into qubit registers.”</span> Accessed: May 31, 2024. [Online]. Available: <a href="https://algassert.com/post/1701">https://algassert.com/post/1701</a></div>
@@ -1379,7 +1588,7 @@ Code
 <div class="csl-left-margin">[6] </div><div class="csl-right-inline">T. Häner, M. Roetteler, and K. M. Svore, <span>“Factoring using 2n+2 qubits with toffoli based modular multiplication.”</span> 2017. Available: <a href="https://arxiv.org/abs/1611.07995">https://arxiv.org/abs/1611.07995</a></div>
 </div>
 <div id="ref-Guala_2015" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[7] </div><div class="csl-right-inline">D. Guala, J. Soni, and J. M. Arrazola, <span>“Linear combination of unitaries and block encodings.”</span> Accessed: Jun. 16, 2024. [Online]. Available: <a href="https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/">https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/</a></div>
+<div class="csl-left-margin">[7] </div><div class="csl-right-inline">D. Guala, J. Soni, and J. M. Arrazola, <span>“Linear combination of unitaries and block encodings.”</span> Accessed: June 16, 2024. [Online]. Available: <a href="https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/">https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/</a></div>
 </div>
 </div>
 <p>The bibliography uses a citation style file from the CSL project: <a href="https://citationstyles.org/">https://citationstyles.org/</a></p>
@@ -1392,158 +1601,71 @@ Code
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
     }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const disableStylesheet = (stylesheets) => {
-    for (let i=0; i < stylesheets.length; i++) {
-      const stylesheet = stylesheets[i];
-      stylesheet.rel = 'prefetch';
-    }
-  }
-  const enableStylesheet = (stylesheets) => {
-    for (let i=0; i < stylesheets.length; i++) {
-      const stylesheet = stylesheets[i];
-      stylesheet.rel = 'stylesheet';
-    }
-  }
-  const manageTransitions = (selector, allowTransitions) => {
-    const els = window.document.querySelectorAll(selector);
-    for (let i=0; i < els.length; i++) {
-      const el = els[i];
-      if (allowTransitions) {
-        el.classList.remove('notransition');
-      } else {
-        el.classList.add('notransition');
-      }
-    }
-  }
-  const toggleColorMode = (alternate) => {
-    // Switch the stylesheets
-    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
-    manageTransitions('#quarto-margin-sidebar .nav-link', false);
-    if (alternate) {
-      enableStylesheet(alternateStylesheets);
-      for (const sheetNode of alternateStylesheets) {
-        if (sheetNode.id === "quarto-bootstrap") {
-          toggleBodyColorMode(sheetNode);
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
         }
       }
-    } else {
-      disableStylesheet(alternateStylesheets);
-      toggleBodyColorPrimary();
-    }
-    manageTransitions('#quarto-margin-sidebar .nav-link', true);
-    // Switch the toggles
-    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
-    for (let i=0; i < toggles.length; i++) {
-      const toggle = toggles[i];
-      if (toggle) {
-        if (alternate) {
-          toggle.classList.add("alternate");     
-        } else {
-          toggle.classList.remove("alternate");
-        }
-      }
-    }
-    // Hack to workaround the fact that safari doesn't
-    // properly recolor the scrollbar when toggling (#1455)
-    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
-      manageTransitions("body", false);
-      window.scrollTo(0, 1);
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-        manageTransitions("body", true);
-      }, 40);  
-    }
-  }
-  const isFileUrl = () => { 
-    return window.location.protocol === 'file:';
-  }
-  const hasAlternateSentinel = () => {  
-    let styleSentinel = getColorSchemeSentinel();
-    if (styleSentinel !== null) {
-      return styleSentinel === "alternate";
-    } else {
       return false;
     }
-  }
-  const setStyleSentinel = (alternate) => {
-    const value = alternate ? "alternate" : "default";
-    if (!isFileUrl()) {
-      window.localStorage.setItem("quarto-color-scheme", value);
-    } else {
-      localAlternateSentinel = value;
-    }
-  }
-  const getColorSchemeSentinel = () => {
-    if (!isFileUrl()) {
-      const storageValue = window.localStorage.getItem("quarto-color-scheme");
-      return storageValue != null ? storageValue : localAlternateSentinel;
-    } else {
-      return localAlternateSentinel;
-    }
-  }
-  let localAlternateSentinel = 'default';
-  // Dark / light mode switch
-  window.quartoToggleColorScheme = () => {
-    // Read the current dark / light value 
-    let toAlternate = !hasAlternateSentinel();
-    toggleColorMode(toAlternate);
-    setStyleSentinel(toAlternate);
-  };
-  // Ensure there is a toggle, if there isn't float one in the top right
-  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
-    const a = window.document.createElement('a');
-    a.classList.add('top-right');
-    a.classList.add('quarto-color-scheme-toggle');
-    a.href = "";
-    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
-    const i = window.document.createElement("i");
-    i.classList.add('bi');
-    a.appendChild(i);
-    window.document.body.appendChild(a);
-  }
-  // Switch to dark mode if need be
-  if (hasAlternateSentinel()) {
-    toggleColorMode(true);
-  } else {
-    toggleColorMode(false);
-  }
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
       }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
     }
-    return false;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
       for (const childEl of codeEl.children) {
         if (isCodeAnnotation(childEl)) {
           childEl.remove();
@@ -1551,248 +1673,400 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
       return codeEl.innerText;
     }
-  });
-  clipboard.on('success', function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  });
-  const viewSource = window.document.getElementById('quarto-view-source') ||
-                     window.document.getElementById('quarto-code-tools-source');
-  if (viewSource) {
-    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
-    viewSource.addEventListener("click", function(e) {
-      if (sourceUrl) {
-        // rstudio viewer pane
-        if (/\bcapabilities=\b/.test(window.location)) {
-          window.open(sourceUrl);
-        } else {
-          window.location.href = sourceUrl;
-        }
-      } else {
-        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
-        modal.show();
-      }
-      return false;
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
     });
-  }
-  function toggleCodeHandler(show) {
-    return function(e) {
-      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-      for (let i=0; i<detailsSrc.length; i++) {
-        const details = detailsSrc[i].parentElement;
-        if (show) {
-          details.open = true;
-        } else {
-          details.removeAttribute("open");
-        }
-      }
-      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
-      const fromCls = show ? "hidden" : "unhidden";
-      const toCls = show ? "unhidden" : "hidden";
-      for (let i=0; i<cellCodeDivs.length; i++) {
-        const codeDiv = cellCodeDivs[i];
-        if (codeDiv.classList.contains(fromCls)) {
-          codeDiv.classList.remove(fromCls);
-          codeDiv.classList.add(toCls);
-        } 
-      }
-      return false;
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
     }
-  }
-  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
-  if (hideAllCode) {
-    hideAllCode.addEventListener("click", toggleCodeHandler(false));
-  }
-  const showAllCode = window.document.getElementById("quarto-show-all-code");
-  if (showAllCode) {
-    showAllCode.addEventListener("click", toggleCodeHandler(true));
-  }
-  function tippyHover(el, contentFn) {
-    const config = {
-      allowHTML: true,
-      content: contentFn,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start'
-    };
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      return note.innerHTML;
-    });
-  }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
-        }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
           } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
+            window.location.href = sourceUrl;
           }
-        });
-      }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
       });
     }
-  }
-});
-</script>
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/tequilahub\.github\.io\/tequila-tutorials\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 <script src="https://utteranc.es/client.js" repo="tequilahub/tequila-tutorials" issue-term="pathname" theme="preferred-color-scheme" crossorigin="anonymous" async="">
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb22" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Building a Quantum Circuit for Gaussian Convolutions"</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Oliver Hüttenhofer"</span></span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2024-11-23"</span></span>
@@ -1956,8 +2230,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-162"><a href="#cb22-162" aria-hidden="true" tabindex="-1"></a>This allows us to calculate the relative magnitude and phase of these two coefficients, giving us the angles $\theta$ and $\varphi$ for the rotations.</span>
 <span id="cb22-163"><a href="#cb22-163" aria-hidden="true" tabindex="-1"></a>But we also need to calculate the "combined" coefficient, which will then be used for the next higher bit.</span>
 <span id="cb22-164"><a href="#cb22-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-165"><a href="#cb22-165" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-166"><a href="#cb22-166" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-165"><a href="#cb22-165" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-166"><a href="#cb22-166" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-167"><a href="#cb22-167" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-168"><a href="#cb22-168" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prepare_state(</span>
 <span id="cb22-169"><a href="#cb22-169" aria-hidden="true" tabindex="-1"></a>    state: npt.NDArray[<span class="bu">float</span>],</span>
@@ -1976,14 +2250,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-182"><a href="#cb22-182" aria-hidden="true" tabindex="-1"></a>            combined[bit, i] <span class="op">=</span> rect(r, (phase(a0) <span class="op">+</span> phase(a1)) <span class="op">/</span> <span class="dv">2</span>)</span>
 <span id="cb22-183"><a href="#cb22-183" aria-hidden="true" tabindex="-1"></a>    ...</span>
 <span id="cb22-184"><a href="#cb22-184" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-185"><a href="#cb22-185" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-185"><a href="#cb22-185" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-186"><a href="#cb22-186" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-187"><a href="#cb22-187" aria-hidden="true" tabindex="-1"></a>Now that we know the rotation angles, we can build the actual circuit.</span>
 <span id="cb22-188"><a href="#cb22-188" aria-hidden="true" tabindex="-1"></a>For this, we go from the most to least signifcant bit (we are doing the reverse of what was described earlier), and for each bit, iterate through states of the higher bits and apply the rotations.</span>
 <span id="cb22-189"><a href="#cb22-189" aria-hidden="true" tabindex="-1"></a>We implement the controls by inserting NOT gates, so that at the time of each rotation, the state we are looking at is $\ket{1 \dots 1}$.</span>
 <span id="cb22-190"><a href="#cb22-190" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-191"><a href="#cb22-191" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-192"><a href="#cb22-192" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-191"><a href="#cb22-191" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-192"><a href="#cb22-192" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-193"><a href="#cb22-193" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-194"><a href="#cb22-194" aria-hidden="true" tabindex="-1"></a>    ...</span>
 <span id="cb22-195"><a href="#cb22-195" aria-hidden="true" tabindex="-1"></a>    U <span class="op">=</span> tq.QCircuit()</span>
@@ -1999,7 +2273,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-205"><a href="#cb22-205" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-206"><a href="#cb22-206" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb22-207"><a href="#cb22-207" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-208"><a href="#cb22-208" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-208"><a href="#cb22-208" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-209"><a href="#cb22-209" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-210"><a href="#cb22-210" aria-hidden="true" tabindex="-1"></a>Calling this code with a 3-qubit state yields the following circuit:</span>
 <span id="cb22-211"><a href="#cb22-211" aria-hidden="true" tabindex="-1"></a></span>
@@ -2035,8 +2309,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-241"><a href="#cb22-241" aria-hidden="true" tabindex="-1"></a>Because of this there are two additional CNOTs, which will in this case flip the second rotation, making them cancel each other out.</span>
 <span id="cb22-242"><a href="#cb22-242" aria-hidden="true" tabindex="-1"></a>Note that this also works if the ancilla is in a superposition, since each component of the superposition will reach the same result.</span>
 <span id="cb22-243"><a href="#cb22-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-244"><a href="#cb22-244" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-245"><a href="#cb22-245" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-244"><a href="#cb22-244" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-245"><a href="#cb22-245" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-246"><a href="#cb22-246" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-247"><a href="#cb22-247" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multi_controlled_Ry(</span>
 <span id="cb22-248"><a href="#cb22-248" aria-hidden="true" tabindex="-1"></a>    angle: <span class="bu">float</span>,</span>
@@ -2063,7 +2337,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-269"><a href="#cb22-269" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-270"><a href="#cb22-270" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb22-271"><a href="#cb22-271" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-272"><a href="#cb22-272" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-272"><a href="#cb22-272" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-273"><a href="#cb22-273" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-274"><a href="#cb22-274" aria-hidden="true" tabindex="-1"></a>The code for the Z-rotation is the same, simply replace Ry with Rz.</span>
 <span id="cb22-275"><a href="#cb22-275" aria-hidden="true" tabindex="-1"></a></span>
@@ -2078,8 +2352,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-284"><a href="#cb22-284" aria-hidden="true" tabindex="-1"></a>Note that the last three Toffoli gates in the circuit on the right are only necessary to uncompute the ancillae.</span>
 <span id="cb22-285"><a href="#cb22-285" aria-hidden="true" tabindex="-1"></a>In cases where we run this circuit twice, like in the decomposition of the rotation above, this is not necessary, since the two circuits will perform the same bitflips and cancel out.</span>
 <span id="cb22-286"><a href="#cb22-286" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-287"><a href="#cb22-287" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-288"><a href="#cb22-288" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-287"><a href="#cb22-287" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-288"><a href="#cb22-288" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-289"><a href="#cb22-289" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-290"><a href="#cb22-290" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multi_controlled_not(</span>
 <span id="cb22-291"><a href="#cb22-291" aria-hidden="true" tabindex="-1"></a>    target: <span class="bu">int</span>,</span>
@@ -2109,7 +2383,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-315"><a href="#cb22-315" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-316"><a href="#cb22-316" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb22-317"><a href="#cb22-317" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-318"><a href="#cb22-318" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-318"><a href="#cb22-318" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-319"><a href="#cb22-319" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-320"><a href="#cb22-320" aria-hidden="true" tabindex="-1"></a>The Toffoli gates can be directly decomposed into CNOTs and T gates, which we will not do here.</span>
 <span id="cb22-321"><a href="#cb22-321" aria-hidden="true" tabindex="-1"></a></span>
@@ -2185,8 +2459,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-391"><a href="#cb22-391" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-392"><a href="#cb22-392" aria-hidden="true" tabindex="-1"></a><span class="al">![](img/subtraction_widget.png)</span>{width=100% fig-align="center"}</span>
 <span id="cb22-393"><a href="#cb22-393" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-394"><a href="#cb22-394" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-395"><a href="#cb22-395" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-394"><a href="#cb22-394" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-395"><a href="#cb22-395" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-396"><a href="#cb22-396" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-397"><a href="#cb22-397" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _subtraction_widget(</span>
 <span id="cb22-398"><a href="#cb22-398" aria-hidden="true" tabindex="-1"></a>    v: Sequence[<span class="bu">int</span>],</span>
@@ -2211,7 +2485,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-417"><a href="#cb22-417" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-418"><a href="#cb22-418" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb22-419"><a href="#cb22-419" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-420"><a href="#cb22-420" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-420"><a href="#cb22-420" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-421"><a href="#cb22-421" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-422"><a href="#cb22-422" aria-hidden="true" tabindex="-1"></a>Then we apply this widget twice, but toggle the qubits of $g$ around the second time, so the result in the $v$ register will be</span>
 <span id="cb22-423"><a href="#cb22-423" aria-hidden="true" tabindex="-1"></a>$$ v - g - c - (-g - 1) - c</span>
@@ -2225,8 +2499,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-431"><a href="#cb22-431" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-432"><a href="#cb22-432" aria-hidden="true" tabindex="-1"></a><span class="al">![](img/increment_n_ancillae.svg)</span>{width=100% fig-align="center"}</span>
 <span id="cb22-433"><a href="#cb22-433" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-434"><a href="#cb22-434" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-435"><a href="#cb22-435" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-434"><a href="#cb22-434" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-435"><a href="#cb22-435" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-436"><a href="#cb22-436" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-437"><a href="#cb22-437" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> increment_circuit_n_ancillae(</span>
 <span id="cb22-438"><a href="#cb22-438" aria-hidden="true" tabindex="-1"></a>    target: Sequence[<span class="bu">int</span>],</span>
@@ -2259,7 +2533,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-465"><a href="#cb22-465" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-466"><a href="#cb22-466" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb22-467"><a href="#cb22-467" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-468"><a href="#cb22-468" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-468"><a href="#cb22-468" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-469"><a href="#cb22-469" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-470"><a href="#cb22-470" aria-hidden="true" tabindex="-1"></a>Next, we want to improve this from requiring $n$ ancillae, to only one.</span>
 <span id="cb22-471"><a href="#cb22-471" aria-hidden="true" tabindex="-1"></a>To do this, we split one large increment gates into two smaller ones, each acting on half of the register,</span>
@@ -2279,8 +2553,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-485"><a href="#cb22-485" aria-hidden="true" tabindex="-1"></a>Since this method increases the size of the increment on the higher bits, if the size of $v$ is even, we are short one ancilla (if it is odd, we split the register so that the more significant half is one qubit smaller).</span>
 <span id="cb22-486"><a href="#cb22-486" aria-hidden="true" tabindex="-1"></a>This can be solved by pulling out the largest multi-controlled NOT, decreasing the size of the increment by one.</span>
 <span id="cb22-487"><a href="#cb22-487" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-488"><a href="#cb22-488" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-489"><a href="#cb22-489" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-488"><a href="#cb22-488" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-489"><a href="#cb22-489" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-490"><a href="#cb22-490" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-491"><a href="#cb22-491" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> increment_circuit_single_ancilla(</span>
 <span id="cb22-492"><a href="#cb22-492" aria-hidden="true" tabindex="-1"></a>    target: Sequence[<span class="bu">int</span>],</span>
@@ -2315,7 +2589,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-521"><a href="#cb22-521" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-522"><a href="#cb22-522" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb22-523"><a href="#cb22-523" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-524"><a href="#cb22-524" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-524"><a href="#cb22-524" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-525"><a href="#cb22-525" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-526"><a href="#cb22-526" aria-hidden="true" tabindex="-1"></a><span class="fu">## Implementation</span></span>
 <span id="cb22-527"><a href="#cb22-527" aria-hidden="true" tabindex="-1"></a></span>
@@ -2328,8 +2602,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-534"><a href="#cb22-534" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-535"><a href="#cb22-535" aria-hidden="true" tabindex="-1"></a>With this we get the following implementation:</span>
 <span id="cb22-536"><a href="#cb22-536" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-537"><a href="#cb22-537" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-538"><a href="#cb22-538" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-537"><a href="#cb22-537" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-538"><a href="#cb22-538" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-539"><a href="#cb22-539" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-540"><a href="#cb22-540" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> addition_circuit(</span>
 <span id="cb22-541"><a href="#cb22-541" aria-hidden="true" tabindex="-1"></a>    source: Sequence[<span class="bu">int</span>],</span>
@@ -2377,7 +2651,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-583"><a href="#cb22-583" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-584"><a href="#cb22-584" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb22-585"><a href="#cb22-585" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-586"><a href="#cb22-586" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-586"><a href="#cb22-586" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-587"><a href="#cb22-587" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-588"><a href="#cb22-588" aria-hidden="true" tabindex="-1"></a><span class="fu">## Gate count</span></span>
 <span id="cb22-589"><a href="#cb22-589" aria-hidden="true" tabindex="-1"></a></span>
@@ -2424,8 +2698,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-630"><a href="#cb22-630" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-631"><a href="#cb22-631" aria-hidden="true" tabindex="-1"></a>Depending on the constant $c$ that is added, some of the gates are removed, see @Häner_2017 for details.</span>
 <span id="cb22-632"><a href="#cb22-632" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-633"><a href="#cb22-633" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-634"><a href="#cb22-634" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-633"><a href="#cb22-633" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-634"><a href="#cb22-634" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-635"><a href="#cb22-635" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-636"><a href="#cb22-636" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _carry_circuit(</span>
 <span id="cb22-637"><a href="#cb22-637" aria-hidden="true" tabindex="-1"></a>    target: Sequence[<span class="bu">int</span>],</span>
@@ -2467,7 +2741,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-673"><a href="#cb22-673" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-674"><a href="#cb22-674" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb22-675"><a href="#cb22-675" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-676"><a href="#cb22-676" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-676"><a href="#cb22-676" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-677"><a href="#cb22-677" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-678"><a href="#cb22-678" aria-hidden="true" tabindex="-1"></a><span class="fu">## Implementation</span></span>
 <span id="cb22-679"><a href="#cb22-679" aria-hidden="true" tabindex="-1"></a></span>
@@ -2486,8 +2760,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-692"><a href="#cb22-692" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-693"><a href="#cb22-693" aria-hidden="true" tabindex="-1"></a>Once the recursion reaches a single qubit, the addition operation is simply a NOT gate if $c = 1$.</span>
 <span id="cb22-694"><a href="#cb22-694" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-695"><a href="#cb22-695" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-696"><a href="#cb22-696" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-695"><a href="#cb22-695" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-696"><a href="#cb22-696" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-697"><a href="#cb22-697" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-698"><a href="#cb22-698" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> const_addition_circuit(</span>
 <span id="cb22-699"><a href="#cb22-699" aria-hidden="true" tabindex="-1"></a>    target: Sequence[<span class="bu">int</span>],</span>
@@ -2533,7 +2807,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-739"><a href="#cb22-739" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-740"><a href="#cb22-740" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb22-741"><a href="#cb22-741" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-742"><a href="#cb22-742" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-742"><a href="#cb22-742" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-743"><a href="#cb22-743" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-744"><a href="#cb22-744" aria-hidden="true" tabindex="-1"></a>With this, we have all the building blocks we need for the full circuit that implements a Toeplitz matrix and the convolution.</span>
 <span id="cb22-745"><a href="#cb22-745" aria-hidden="true" tabindex="-1"></a></span>
@@ -2578,8 +2852,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-784"><a href="#cb22-784" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-785"><a href="#cb22-785" aria-hidden="true" tabindex="-1"></a>Implementing the Toeplitz matrix circuit is fairly simple now:</span>
 <span id="cb22-786"><a href="#cb22-786" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-787"><a href="#cb22-787" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-788"><a href="#cb22-788" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-787"><a href="#cb22-787" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-788"><a href="#cb22-788" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-789"><a href="#cb22-789" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-790"><a href="#cb22-790" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> toeplitz_matrix(</span>
 <span id="cb22-791"><a href="#cb22-791" aria-hidden="true" tabindex="-1"></a>    diags: npt.NDArray[<span class="bu">float</span>],</span>
@@ -2610,12 +2884,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-816"><a href="#cb22-816" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-817"><a href="#cb22-817" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb22-818"><a href="#cb22-818" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-819"><a href="#cb22-819" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-819"><a href="#cb22-819" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-820"><a href="#cb22-820" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-821"><a href="#cb22-821" aria-hidden="true" tabindex="-1"></a>With this, we are at the point where we can implement the example matrix from the first chapter:</span>
 <span id="cb22-822"><a href="#cb22-822" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-823"><a href="#cb22-823" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-824"><a href="#cb22-824" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-823"><a href="#cb22-823" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-824"><a href="#cb22-824" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-825"><a href="#cb22-825" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-826"><a href="#cb22-826" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">2</span></span>
 <span id="cb22-827"><a href="#cb22-827" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">2</span> <span class="op">**</span> n</span>
@@ -2630,7 +2904,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-836"><a href="#cb22-836" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-837"><a href="#cb22-837" aria-hidden="true" tabindex="-1"></a>...</span>
 <span id="cb22-838"><a href="#cb22-838" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-839"><a href="#cb22-839" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-839"><a href="#cb22-839" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-840"><a href="#cb22-840" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-841"><a href="#cb22-841" aria-hidden="true" tabindex="-1"></a>Even this small example results in a fairly large circuit, however that is expected, given the large constant factors in the gate counts:</span>
 <span id="cb22-842"><a href="#cb22-842" aria-hidden="true" tabindex="-1"></a></span>
@@ -2644,8 +2918,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-850"><a href="#cb22-850" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-851"><a href="#cb22-851" aria-hidden="true" tabindex="-1"></a>For this, it is convenient to write a helper function to encode the input, perform the postselection, and return the result as a Numpy array/matrix instead of a Tequila wavefunction, particularly for when we later want to have multiple dimensions:</span>
 <span id="cb22-852"><a href="#cb22-852" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-853"><a href="#cb22-853" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-854"><a href="#cb22-854" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-853"><a href="#cb22-853" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-854"><a href="#cb22-854" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-855"><a href="#cb22-855" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-856"><a href="#cb22-856" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> eval_circuit(</span>
 <span id="cb22-857"><a href="#cb22-857" aria-hidden="true" tabindex="-1"></a>    states: Union[<span class="bu">int</span>, <span class="bu">list</span>[<span class="bu">int</span>]],</span>
@@ -2680,12 +2954,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-886"><a href="#cb22-886" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb22-887"><a href="#cb22-887" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result, normalization</span>
 <span id="cb22-888"><a href="#cb22-888" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-889"><a href="#cb22-889" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-889"><a href="#cb22-889" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-890"><a href="#cb22-890" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-891"><a href="#cb22-891" aria-hidden="true" tabindex="-1"></a>This makes visualizing the result with Pyplot simple:</span>
 <span id="cb22-892"><a href="#cb22-892" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-893"><a href="#cb22-893" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-894"><a href="#cb22-894" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-893"><a href="#cb22-893" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-894"><a href="#cb22-894" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-895"><a href="#cb22-895" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-896"><a href="#cb22-896" aria-hidden="true" tabindex="-1"></a>...</span>
 <span id="cb22-897"><a href="#cb22-897" aria-hidden="true" tabindex="-1"></a></span>
@@ -2711,7 +2985,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-917"><a href="#cb22-917" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
 <span id="cb22-918"><a href="#cb22-918" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
 <span id="cb22-919"><a href="#cb22-919" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-920"><a href="#cb22-920" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-920"><a href="#cb22-920" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-921"><a href="#cb22-921" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-922"><a href="#cb22-922" aria-hidden="true" tabindex="-1"></a><span class="al">![](img/example_visualization.png)</span>{width=100% fig-align="center"}</span>
 <span id="cb22-923"><a href="#cb22-923" aria-hidden="true" tabindex="-1"></a></span>
@@ -2727,8 +3001,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-933"><a href="#cb22-933" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-934"><a href="#cb22-934" aria-hidden="true" tabindex="-1"></a>To make the connection to the continuous convolution clearer, we can increase the number of qubits and plot the resulting wavefunction as a graph:</span>
 <span id="cb22-935"><a href="#cb22-935" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-936"><a href="#cb22-936" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-937"><a href="#cb22-937" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-936"><a href="#cb22-936" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-937"><a href="#cb22-937" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-938"><a href="#cb22-938" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-939"><a href="#cb22-939" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">6</span></span>
 <span id="cb22-940"><a href="#cb22-940" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">2</span> <span class="op">**</span> n</span>
@@ -2749,7 +3023,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-955"><a href="#cb22-955" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
 <span id="cb22-956"><a href="#cb22-956" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
 <span id="cb22-957"><a href="#cb22-957" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-958"><a href="#cb22-958" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-958"><a href="#cb22-958" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-959"><a href="#cb22-959" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-960"><a href="#cb22-960" aria-hidden="true" tabindex="-1"></a><span class="al">![](img/graph.png)</span>{width=100% fig-align="center"}</span>
 <span id="cb22-961"><a href="#cb22-961" aria-hidden="true" tabindex="-1"></a></span>
@@ -2763,8 +3037,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-969"><a href="#cb22-969" aria-hidden="true" tabindex="-1"></a>Usually this superposition would be the result of the previous part of a larger circuit, but in our case we can simply add some Hadamard and NOT gates to get a similar effect.</span>
 <span id="cb22-970"><a href="#cb22-970" aria-hidden="true" tabindex="-1"></a>The circuit smooths the input state, as expected from a Gaussian convolution:</span>
 <span id="cb22-971"><a href="#cb22-971" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-972"><a href="#cb22-972" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-973"><a href="#cb22-973" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-972"><a href="#cb22-972" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-973"><a href="#cb22-973" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-974"><a href="#cb22-974" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-975"><a href="#cb22-975" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">6</span></span>
 <span id="cb22-976"><a href="#cb22-976" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">2</span> <span class="op">**</span> n</span>
@@ -2806,7 +3080,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-1012"><a href="#cb22-1012" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
 <span id="cb22-1013"><a href="#cb22-1013" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
 <span id="cb22-1014"><a href="#cb22-1014" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-1015"><a href="#cb22-1015" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-1015"><a href="#cb22-1015" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-1016"><a href="#cb22-1016" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-1017"><a href="#cb22-1017" aria-hidden="true" tabindex="-1"></a><span class="al">![](img/graph_init.png)</span>{width=100% fig-align="center"}</span>
 <span id="cb22-1018"><a href="#cb22-1018" aria-hidden="true" tabindex="-1"></a></span>
@@ -2843,8 +3117,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-1049"><a href="#cb22-1049" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-1050"><a href="#cb22-1050" aria-hidden="true" tabindex="-1"></a>Now that we have implemented the one dimensional case, we can easily extend this to multiple dimensions by simply running the same circuit on multiple registers in parallel:</span>
 <span id="cb22-1051"><a href="#cb22-1051" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-1052"><a href="#cb22-1052" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-1053"><a href="#cb22-1053" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-1052"><a href="#cb22-1052" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-1053"><a href="#cb22-1053" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-1054"><a href="#cb22-1054" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-1055"><a href="#cb22-1055" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">4</span></span>
 <span id="cb22-1056"><a href="#cb22-1056" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">2</span> <span class="op">**</span> n</span>
@@ -2863,14 +3137,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-1069"><a href="#cb22-1069" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-1070"><a href="#cb22-1070" aria-hidden="true" tabindex="-1"></a>...</span>
 <span id="cb22-1071"><a href="#cb22-1071" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-1072"><a href="#cb22-1072" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-1072"><a href="#cb22-1072" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-1073"><a href="#cb22-1073" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-1074"><a href="#cb22-1074" aria-hidden="true" tabindex="-1"></a>This is also the point where wrapping the evaluation in <span class="in">`eval_circuit`</span> starts to really help, because otherwise dealing with multiple input and output registers quickly becomes hard to read.</span>
 <span id="cb22-1075"><a href="#cb22-1075" aria-hidden="true" tabindex="-1"></a>It also allows to easily parallelize the evaluation of multiple states using the Python <span class="in">`multiprocessing`</span> module (at the time of writing this helped due to inefficiencies in the Tequila <span class="in">`simulate`</span> function, but since version 1.9.7 this should no longer be necessary).</span>
 <span id="cb22-1076"><a href="#cb22-1076" aria-hidden="true" tabindex="-1"></a>We will not evaluate every basis state, instead, confirming that it behaves correctly in the center, at the edges and in corners should be sufficient:</span>
 <span id="cb22-1077"><a href="#cb22-1077" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-1078"><a href="#cb22-1078" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-1079"><a href="#cb22-1079" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-1078"><a href="#cb22-1078" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-1079"><a href="#cb22-1079" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-1080"><a href="#cb22-1080" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-1081"><a href="#cb22-1081" aria-hidden="true" tabindex="-1"></a>...</span>
 <span id="cb22-1082"><a href="#cb22-1082" aria-hidden="true" tabindex="-1"></a></span>
@@ -2893,14 +3167,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-1099"><a href="#cb22-1099" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
 <span id="cb22-1100"><a href="#cb22-1100" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
 <span id="cb22-1101"><a href="#cb22-1101" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-1102"><a href="#cb22-1102" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-1102"><a href="#cb22-1102" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-1103"><a href="#cb22-1103" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-1104"><a href="#cb22-1104" aria-hidden="true" tabindex="-1"></a><span class="al">![](img/example_visualization_two_dim.png)</span>{width=100% fig-align="center"}</span>
 <span id="cb22-1105"><a href="#cb22-1105" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-1106"><a href="#cb22-1106" aria-hidden="true" tabindex="-1"></a>We can again add some initialization code to see how the circuit operates on other input:</span>
 <span id="cb22-1107"><a href="#cb22-1107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-1108"><a href="#cb22-1108" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-1109"><a href="#cb22-1109" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-1108"><a href="#cb22-1108" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-1109"><a href="#cb22-1109" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-1110"><a href="#cb22-1110" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-1111"><a href="#cb22-1111" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">4</span></span>
 <span id="cb22-1112"><a href="#cb22-1112" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">2</span> <span class="op">**</span> n</span>
@@ -2945,7 +3219,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-1151"><a href="#cb22-1151" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
 <span id="cb22-1152"><a href="#cb22-1152" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
 <span id="cb22-1153"><a href="#cb22-1153" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-1154"><a href="#cb22-1154" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-1154"><a href="#cb22-1154" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-1155"><a href="#cb22-1155" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-1156"><a href="#cb22-1156" aria-hidden="true" tabindex="-1"></a><span class="al">![](img/example_visualization_init.png)</span>{width=100% fig-align="center"}</span>
 <span id="cb22-1157"><a href="#cb22-1157" aria-hidden="true" tabindex="-1"></a></span>
@@ -2959,8 +3233,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-1165"><a href="#cb22-1165" aria-hidden="true" tabindex="-1"></a>We will use the method described in @Guala_2015.</span>
 <span id="cb22-1166"><a href="#cb22-1166" aria-hidden="true" tabindex="-1"></a>The PREP block there is the same block we built in the second chapter, and the selection operator can be implemented in the same way as the multi controlled rotations in the PREP operator, so we get the following code:</span>
 <span id="cb22-1167"><a href="#cb22-1167" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-1168"><a href="#cb22-1168" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-1169"><a href="#cb22-1169" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-1168"><a href="#cb22-1168" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-1169"><a href="#cb22-1169" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-1170"><a href="#cb22-1170" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-1171"><a href="#cb22-1171" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lcu(</span>
 <span id="cb22-1172"><a href="#cb22-1172" aria-hidden="true" tabindex="-1"></a>    circuits: Sequence[tq.QCircuit],</span>
@@ -2992,13 +3266,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-1198"><a href="#cb22-1198" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-1199"><a href="#cb22-1199" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
 <span id="cb22-1200"><a href="#cb22-1200" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-1201"><a href="#cb22-1201" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-1201"><a href="#cb22-1201" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-1202"><a href="#cb22-1202" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-1203"><a href="#cb22-1203" aria-hidden="true" tabindex="-1"></a>As a simple example, we can reuse the previous two dimensional circuit, but add a second convolution with the same values but slightly shifted.</span>
 <span id="cb22-1204"><a href="#cb22-1204" aria-hidden="true" tabindex="-1"></a>We give a negative coefficient to this new convolution, and double the weight of the original convolution:</span>
 <span id="cb22-1205"><a href="#cb22-1205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-1206"><a href="#cb22-1206" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
-<span id="cb22-1207"><a href="#cb22-1207" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span> Code <span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb22-1206"><a href="#cb22-1206" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb22-1207"><a href="#cb22-1207" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span> Code <span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb22-1208"><a href="#cb22-1208" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
 <span id="cb22-1209"><a href="#cb22-1209" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">4</span></span>
 <span id="cb22-1210"><a href="#cb22-1210" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">2</span> <span class="op">**</span> n</span>
@@ -3045,7 +3319,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-1251"><a href="#cb22-1251" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im1, ax<span class="op">=</span>ax[<span class="dv">1</span>])</span>
 <span id="cb22-1252"><a href="#cb22-1252" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
 <span id="cb22-1253"><a href="#cb22-1253" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb22-1254"><a href="#cb22-1254" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
+<span id="cb22-1254"><a href="#cb22-1254" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb22-1255"><a href="#cb22-1255" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-1256"><a href="#cb22-1256" aria-hidden="true" tabindex="-1"></a><span class="al">![](img/lcu_example.png)</span>{width=100% fig-align="center"}</span>
 <span id="cb22-1257"><a href="#cb22-1257" aria-hidden="true" tabindex="-1"></a></span>
@@ -3069,7 +3343,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb22-1275"><a href="#cb22-1275" aria-hidden="true" tabindex="-1"></a>::: {#refs}</span>
 <span id="cb22-1276"><a href="#cb22-1276" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb22-1277"><a href="#cb22-1277" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-1278"><a href="#cb22-1278" aria-hidden="true" tabindex="-1"></a>The bibliography uses a citation style file from the CSL project: <span class="co">[</span><span class="ot">https://citationstyles.org/</span><span class="co">](https://citationstyles.org/)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-1278"><a href="#cb22-1278" aria-hidden="true" tabindex="-1"></a>The bibliography uses a citation style file from the CSL project: <span class="co">[</span><span class="ot">https://citationstyles.org/</span><span class="co">](https://citationstyles.org/)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
@@ -3077,12 +3351,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center"><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
+    <div class="nav-footer-center">
+
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tequilahub/tequila-tutorials/blob/main/research/gaussian_convolution/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila-tutorials/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 

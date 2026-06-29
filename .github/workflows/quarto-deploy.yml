@@ -35,8 +35,6 @@ jobs:
       # Set up Quarto
       - name: Setup Quarto
         uses: quarto-dev/quarto-actions/setup@v2
-        with:
-          version: 'latest'
       
       # Install TinyTeX
       - name: Install TinyTeX

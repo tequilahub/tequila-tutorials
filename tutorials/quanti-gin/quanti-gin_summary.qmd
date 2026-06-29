@@ -187,13 +187,13 @@ method_names = grouped_methods.groups.keys()
 
 # boxplot of custom_energy and fci, and SPA energy
 fig, axes = plt.subplots(
-    1, len(grouped_methods), sharey=True, figsize=(9, 5), layout="constrained"
+    1, len(grouped_methods), sharey=True, figsize=(9, 5), layout="constrained", squeeze=False
 )
 
 fig.suptitle("Method energies")
 
 fig.set_figheight(fig.get_figheight())
-for i, (axis, (method_name, method)) in enumerate(zip(axes, grouped_methods)):
+for i, (axis, (method_name, method)) in enumerate(zip(axes.flatten(), grouped_methods)):
     axis.boxplot(method.optimized_energy)
     axis.set_title(method_name)
 
@@ -218,7 +218,7 @@ for comb_list in combinations:
         energy_b = np.array(grouped_methods.get_group(b).optimized_energy)
         error = np.abs(energy_a - energy_b)
 
-        plot.boxplot(abs(energy_a - energy_b), labels=[f"{a} vs. {b}"])
+        plot.boxplot(abs(energy_a - energy_b), tick_labels=[f"{a} vs. {b}"])
 
 plt.show()
 ```

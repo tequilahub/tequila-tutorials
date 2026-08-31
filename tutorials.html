@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -44,14 +47,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a5883e7fa1e19cde57db4ec6b11febc3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-bca227963e21cb646e747543fe28dd8e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-a5883e7fa1e19cde57db4ec6b11febc3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-6816b788f5f7c21b6d99241bf8ffbe49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-4e53f9a7cac9cb8ce958252f8331ecbd.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-6816b788f5f7c21b6d99241bf8ffbe49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -137,7 +140,7 @@ cookieconsent.run({
   
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -407,7 +410,7 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(14)</span></div><div class="category" data-category="Y2hlbWlzdHJ5">chemistry <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Y29kZQ==">code <span class="quarto-category-count">(14)</span></div><div class="category" data-category="dnFl">vqe <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(15)</span></div><div class="category" data-category="Y2hlbWlzdHJ5">chemistry <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Y29kZQ==">code <span class="quarto-category-count">(15)</span></div><div class="category" data-category="dnFl">vqe <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -422,7 +425,7 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="Y29kZQ==" data-listing-date-sort="1667433600000" data-listing-file-modified-sort="1782740913751" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="586">
+<div class="quarto-post image-right" data-index="0" data-categories="Y29kZQ==" data-listing-date-sort="1667433600000" data-listing-file-modified-sort="1788176217511" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="586">
 <div class="thumbnail"><a href="./tutorials/tq-get-started/index.html" class="no-external">
 
 <img loading="lazy" src="./tutorials/tq-get-started/tq-basics-pic.png" class="thumbnail-image">
@@ -452,7 +455,7 @@ Jakob Kottmann
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="Y29kZQ==" data-listing-date-sort="1667520000000" data-listing-file-modified-sort="1782740913750" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="733">
+<div class="quarto-post image-right" data-index="1" data-categories="Y29kZQ==" data-listing-date-sort="1667520000000" data-listing-file-modified-sort="1788176217510" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="733">
 <div class="thumbnail"><a href="./tutorials/tq-circuits/index.html" class="no-external">
 
 <img loading="lazy" src="./tutorials/tq-circuits/tq-circuits-pic.png" class="thumbnail-image">
@@ -482,7 +485,7 @@ Jakob Kottmann
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-categories="Y29kZQ==" data-listing-date-sort="1716163200000" data-listing-file-modified-sort="1782740913735" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1199">
+<div class="quarto-post image-right" data-index="2" data-categories="Y29kZQ==" data-listing-date-sort="1716163200000" data-listing-file-modified-sort="1788176217489" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1199">
 <div class="thumbnail"><a href="./tutorials/CircuitCompiler/CircuitCompiler.html" class="no-external">
 
 <img loading="lazy" src="./tutorials/CircuitCompiler/Circuit_Compiler_preview_photo.png" class="thumbnail-image">
@@ -512,7 +515,7 @@ Georgios Tsilimigkounakis, Adapted by Ram Mosco
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="3" data-categories="Y29kZQ==" data-listing-date-sort="1718928000000" data-listing-file-modified-sort="1782740913743" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="345">
+<div class="quarto-post image-right" data-index="3" data-categories="Y29kZQ==" data-listing-date-sort="1718928000000" data-listing-file-modified-sort="1788176217502" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="345">
 <div class="thumbnail"><a href="./tutorials/QTensor/QTensor.html" class="no-external">
 
 <img loading="lazy" src="./tutorials/QTensor/qtensor.png" class="thumbnail-image">
@@ -542,37 +545,7 @@ Gaurav Saxena, Adapted by Elisabeth Welizky
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="4" data-categories="Y29kZQ==" data-listing-date-sort="1718928000000" data-listing-file-modified-sort="1782740913734" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2057">
-<div class="thumbnail"><a href="./tutorials/Braket/BraketTutorial.html" class="no-external">
-
-<img loading="lazy" src="./tutorials/Braket/braket_cover.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./tutorials/Braket/BraketTutorial.html" class="no-external">Braket Module</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('Y29kZQ=='); return false;">code</div>
-
-</div>
-<div class="delink listing-description"><a href="./tutorials/Braket/BraketTutorial.html" class="no-external">
-This is a tutorial to get to know the new Tequila’s function: braket.
-</a></div>
-</div>
-<div class="metadata">
-<a href="./tutorials/Braket/BraketTutorial.html" class="no-external">
-<div class="listing-date">
-Jun 21, 2024
-</div>
-<div class="listing-author">
-Francesco Scala, Adapted by Ram Mosco
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-categories="Y29kZQ==" data-listing-date-sort="1718928000000" data-listing-file-modified-sort="1782740913738" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="650">
+<div class="quarto-post image-right" data-index="4" data-categories="Y29kZQ==" data-listing-date-sort="1718928000000" data-listing-file-modified-sort="1788176217496" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="650">
 <div class="thumbnail"><a href="./tutorials/OpenQASMConversions/OpenQASMConversions.html" class="no-external">
 
 <img loading="lazy" src="./tutorials/OpenQASMConversions/OpenQASMConversions.png" class="thumbnail-image">
@@ -602,7 +575,37 @@ Claudia Zendejas-Morales, Adapted by Elisabeth Welizky
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="6" data-categories="Y29kZQ==" data-listing-date-sort="1720137600000" data-listing-file-modified-sort="1782740913747" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2808">
+<div class="quarto-post image-right" data-index="5" data-categories="Y29kZQ==" data-listing-date-sort="1718928000000" data-listing-file-modified-sort="1788176217488" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2057">
+<div class="thumbnail"><a href="./tutorials/Braket/BraketTutorial.html" class="no-external">
+
+<img loading="lazy" src="./tutorials/Braket/braket_cover.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./tutorials/Braket/BraketTutorial.html" class="no-external">Braket Module</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Y29kZQ=='); return false;">code</div>
+
+</div>
+<div class="delink listing-description"><a href="./tutorials/Braket/BraketTutorial.html" class="no-external">
+This is a tutorial to get to know the new Tequila’s function: braket.
+</a></div>
+</div>
+<div class="metadata">
+<a href="./tutorials/Braket/BraketTutorial.html" class="no-external">
+<div class="listing-date">
+Jun 21, 2024
+</div>
+<div class="listing-author">
+Francesco Scala, Adapted by Ram Mosco
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="6" data-categories="Y29kZQ==" data-listing-date-sort="1720137600000" data-listing-file-modified-sort="1788176217506" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2808">
 <div class="thumbnail"><a href="./tutorials/optimizer/Optimizers.html" class="no-external">
 
 <img loading="lazy" src="./tutorials/optimizer/optimizer.png" class="thumbnail-image">
@@ -633,7 +636,7 @@ Sumner Alperin, Adapted by Thuy Truong
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="7" data-categories="Y29kZQ==" data-listing-date-sort="1720742400000" data-listing-file-modified-sort="1782740913736" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="551">
+<div class="quarto-post image-right" data-index="7" data-categories="Y29kZQ==" data-listing-date-sort="1720742400000" data-listing-file-modified-sort="1788176217494" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="551">
 <div class="thumbnail"><a href="./tutorials/KrylovTutorial/KrylovTutorial.html" class="no-external">
 
 <img loading="lazy" src="./tutorials/KrylovTutorial/krylov.png" class="thumbnail-image">
@@ -663,7 +666,7 @@ Francesco Scala, Adapted by Thuy Truong
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="8" data-categories="Y29kZSUyQ2NoZW1pc3RyeSUyQ3ZxZQ==" data-listing-date-sort="1721347200000" data-listing-file-modified-sort="1782740913752" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="268">
+<div class="quarto-post image-right" data-index="8" data-categories="Y29kZSUyQ2NoZW1pc3RyeSUyQ3ZxZQ==" data-listing-date-sort="1721347200000" data-listing-file-modified-sort="1788176217512" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="268">
 <div class="thumbnail"><a href="./tutorials/vqe/vqe.html" class="no-external">
 
 <img loading="lazy" src="./tutorials/vqe/preview.png" class="thumbnail-image">
@@ -698,7 +701,7 @@ JKS &amp; PS
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="9" data-categories="Y29kZQ==" data-listing-date-sort="1723680000000" data-listing-file-modified-sort="1782740913725" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2658">
+<div class="quarto-post image-right" data-index="9" data-categories="Y29kZQ==" data-listing-date-sort="1723680000000" data-listing-file-modified-sort="1788176217478" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2658">
 <div class="thumbnail"><a href="./tutorials/AdaptiveMethods/jupyter_notebook.html" class="no-external">
 
 <img loading="lazy" src="./tutorials/AdaptiveMethods/AdaptiveMethods.png" class="thumbnail-image">
@@ -728,7 +731,7 @@ Korbinian Stein, Adapted by Thuy Truong
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="10" data-categories="Y29kZQ==" data-listing-date-sort="1742860800000" data-listing-file-modified-sort="1782740913750" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1669">
+<div class="quarto-post image-right" data-index="10" data-categories="Y29kZQ==" data-listing-date-sort="1742860800000" data-listing-file-modified-sort="1788176217510" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1669">
 <div class="thumbnail"><a href="./tutorials/quanti-gin/quanti-gin_summary.html" class="no-external">
 
 <img loading="lazy" src="./tutorials/quanti-gin/preview_output-circuit.png" class="thumbnail-image">
@@ -758,7 +761,7 @@ Korbinian Stein
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="11" data-categories="Y29kZQ==" data-listing-date-sort="1743465600000" data-listing-file-modified-sort="1782740913733" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="25" data-listing-word-count-sort="4859">
+<div class="quarto-post image-right" data-index="11" data-categories="Y29kZQ==" data-listing-date-sort="1743465600000" data-listing-file-modified-sort="1788176217487" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="25" data-listing-word-count-sort="4859">
 <div class="thumbnail"><a href="./tutorials/AutomaticDecompositions/index.html" class="no-external">
 
 <img loading="lazy" src="./tutorials/AutomaticDecompositions/Figures/previewimage.png" class="thumbnail-image">
@@ -788,7 +791,7 @@ Jonas Motyl
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="12" data-categories="Y29kZQ==" data-listing-date-sort="1750204800000" data-listing-file-modified-sort="1782740913736" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2335">
+<div class="quarto-post image-right" data-index="12" data-categories="Y29kZQ==" data-listing-date-sort="1750204800000" data-listing-file-modified-sort="1788176217494" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2335">
 <div class="thumbnail"><a href="./tutorials/LRZ/lrz.html" class="no-external">
 
 <img loading="lazy" src="./tutorials/LRZ/preview.png" class="thumbnail-image">
@@ -818,7 +821,7 @@ Marlene Hermelink
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="13" data-categories="Y29kZQ==" data-listing-date-sort="1763424000000" data-listing-file-modified-sort="1782740913736" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="943">
+<div class="quarto-post image-right" data-index="13" data-categories="Y29kZQ==" data-listing-date-sort="1763424000000" data-listing-file-modified-sort="1788176217490" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="943">
 <div class="thumbnail"><a href="./tutorials/CombinatorialOptimization/jupyter_notebook.html" class="no-external">
 
 <img loading="lazy" src="./tutorials/CombinatorialOptimization/preview_image.png" class="thumbnail-image">
@@ -844,6 +847,36 @@ Nov 18, 2025
 </div>
 <div class="listing-author">
 Simon Reichert, Adapted by Adelina Bärligea
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="14" data-categories="Y29kZQ==" data-listing-date-sort="1787270400000" data-listing-file-modified-sort="1788176217494" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1537">
+<div class="thumbnail"><a href="./tutorials/DQI/DQImaxCutTutorial.html" class="no-external">
+
+<img loading="lazy" src="./tutorials/DQI/DQImaxCutPreview.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./tutorials/DQI/DQImaxCutTutorial.html" class="no-external">Combinatorial Optimization with Decoded Quantum Interferometry</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Y29kZQ=='); return false;">code</div>
+
+</div>
+<div class="delink listing-description"><a href="./tutorials/DQI/DQImaxCutTutorial.html" class="no-external">
+In this tutorial, we implement Decoded Quantum Interferometry (DQI) proposed by Jordan et al.&nbsp;2025 for a small MaxCut instance using Tequila. DQI uses interference to bias…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./tutorials/DQI/DQImaxCutTutorial.html" class="no-external">
+<div class="listing-date">
+Aug 21, 2026
+</div>
+<div class="listing-author">
+Dominik Arnold, Adapted by Adelina Bärligea
 </div>
 </a>
 </div>

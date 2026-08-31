@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -14,10 +14,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -79,14 +82,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-a5883e7fa1e19cde57db4ec6b11febc3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-bca227963e21cb646e747543fe28dd8e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-a5883e7fa1e19cde57db4ec6b11febc3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-6816b788f5f7c21b6d99241bf8ffbe49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-4e53f9a7cac9cb8ce958252f8331ecbd.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-6816b788f5f7c21b6d99241bf8ffbe49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -585,87 +588,159 @@ Figure&nbsp;1: Structural Circuit with depth 2
 <p>The quanti-gin repository includes a Jupter Notebook for visualizations and analysis of the generated data.</p>
 <section id="data-visualization-example" class="level3">
 <h3 class="anchored" data-anchor-id="data-visualization-example">Data Visualization Example</h3>
-<div id="8fab57cc" class="cell" data-execution_count="1">
+<div id="31e48e27" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-stdout">
-<pre><code>Collecting quanti-gin
+<div class="ansi-escaped-output">
+<pre>Collecting quanti-gin
+
   Downloading quanti_gin-2.5.0-py3-none-any.whl.metadata (2.3 kB)
+
 Requirement already satisfied: numpy in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from quanti-gin) (2.4.6)
-Requirement already satisfied: pandas&lt;3.0.0,&gt;=2.2.2 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from quanti-gin) (2.3.3)
+
+Collecting pandas&lt;3.0.0,&gt;=2.2.2 (from quanti-gin)
+
+  Downloading pandas-2.3.3-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (91 kB)
+
 Requirement already satisfied: tequila-basic&lt;2.0.0,&gt;=1.9.8 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from quanti-gin) (1.9.11)
+
 Requirement already satisfied: python-dateutil&gt;=2.8.2 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from pandas&lt;3.0.0,&gt;=2.2.2-&gt;quanti-gin) (2.9.0.post0)
-Requirement already satisfied: pytz&gt;=2020.1 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from pandas&lt;3.0.0,&gt;=2.2.2-&gt;quanti-gin) (2026.2)
-Requirement already satisfied: tzdata&gt;=2022.7 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from pandas&lt;3.0.0,&gt;=2.2.2-&gt;quanti-gin) (2026.2)
+
+Collecting pytz&gt;=2020.1 (from pandas&lt;3.0.0,&gt;=2.2.2-&gt;quanti-gin)
+
+  Downloading pytz-2026.3.post1-py2.py3-none-any.whl.metadata (22 kB)
+
+Collecting tzdata&gt;=2022.7 (from pandas&lt;3.0.0,&gt;=2.2.2-&gt;quanti-gin)
+
+  Downloading tzdata-2026.3-py2.py3-none-any.whl.metadata (1.4 kB)
+
 Requirement already satisfied: scipy in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (1.17.1)
+
 Requirement already satisfied: sympy in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (1.14.0)
-Requirement already satisfied: autograd in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (1.9.0)
-Requirement already satisfied: setuptools in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (82.0.1)
+
+Requirement already satisfied: autograd in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (1.9.1)
+
+Requirement already satisfied: setuptools in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (84.0.0)
+
 Requirement already satisfied: pytest in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (9.1.1)
-Requirement already satisfied: openfermion~=1.0 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (1.7.1)
-Requirement already satisfied: cirq-core&gt;=1.4.1 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (1.6.1)
+
+Requirement already satisfied: openfermion~=1.0 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (1.8.1)
+
+Requirement already satisfied: cirq-core&gt;=1.6.0 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (1.7.0)
+
 Requirement already satisfied: deprecation in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (2.1.0)
-Requirement already satisfied: h5py&gt;=3.10.0 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (3.16.0)
+
+Requirement already satisfied: h5py in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (3.16.0)
+
 Requirement already satisfied: networkx in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (3.6.1)
+
 Requirement already satisfied: pubchempy in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (1.0.5)
-Requirement already satisfied: requests~=2.32.2 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (2.32.5)
-Requirement already satisfied: charset_normalizer&lt;4,&gt;=2 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from requests~=2.32.2-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (3.4.7)
-Requirement already satisfied: idna&lt;4,&gt;=2.5 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from requests~=2.32.2-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (3.18)
-Requirement already satisfied: urllib3&lt;3,&gt;=1.21.1 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from requests~=2.32.2-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (2.7.0)
-Requirement already satisfied: certifi&gt;=2017.4.17 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from requests~=2.32.2-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (2026.6.17)
-Requirement already satisfied: attrs&gt;=21.3.0 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (26.1.0)
-Requirement already satisfied: duet&gt;=0.2.8 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (0.2.9)
-Requirement already satisfied: matplotlib~=3.8 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (3.11.0)
-Requirement already satisfied: sortedcontainers~=2.0 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (2.4.0)
-Requirement already satisfied: typing_extensions&gt;=4.2 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (4.15.0)
-Requirement already satisfied: tqdm&gt;=4.12 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (4.68.3)
-Requirement already satisfied: contourpy&gt;=1.0.1 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.8-&gt;cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (1.3.3)
-Requirement already satisfied: cycler&gt;=0.10 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.8-&gt;cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (0.12.1)
-Requirement already satisfied: fonttools&gt;=4.22.0 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.8-&gt;cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (4.63.0)
-Requirement already satisfied: kiwisolver&gt;=1.3.1 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.8-&gt;cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (1.5.0)
-Requirement already satisfied: packaging&gt;=20.0 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.8-&gt;cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (26.2)
-Requirement already satisfied: pillow&gt;=9 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.8-&gt;cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (12.2.0)
-Requirement already satisfied: pyparsing&gt;=3 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.8-&gt;cirq-core&gt;=1.4.1-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (3.3.2)
+
+Requirement already satisfied: requests in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (2.34.2)
+
+Requirement already satisfied: attrs&gt;=21.3.0 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from cirq-core&gt;=1.6.0-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (26.1.0)
+
+Requirement already satisfied: duet&gt;=0.2.8 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from cirq-core&gt;=1.6.0-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (0.2.9)
+
+Requirement already satisfied: matplotlib~=3.9 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from cirq-core&gt;=1.6.0-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (3.11.1)
+
+Requirement already satisfied: tqdm&gt;=4.12 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from cirq-core&gt;=1.6.0-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (4.70.0)
+
+Requirement already satisfied: contourpy&gt;=1.0.1 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.9-&gt;cirq-core&gt;=1.6.0-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (1.3.3)
+
+Requirement already satisfied: cycler&gt;=0.10 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.9-&gt;cirq-core&gt;=1.6.0-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (0.12.1)
+
+Requirement already satisfied: fonttools&gt;=4.28.2 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.9-&gt;cirq-core&gt;=1.6.0-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (4.63.0)
+
+Requirement already satisfied: kiwisolver&gt;=1.3.1 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.9-&gt;cirq-core&gt;=1.6.0-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (1.5.1)
+
+Requirement already satisfied: packaging&gt;=20.0 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.9-&gt;cirq-core&gt;=1.6.0-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (26.3)
+
+Requirement already satisfied: pillow&gt;=9 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.9-&gt;cirq-core&gt;=1.6.0-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (12.3.0)
+
+Requirement already satisfied: pyparsing&gt;=3 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from matplotlib~=3.9-&gt;cirq-core&gt;=1.6.0-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (3.3.2)
+
 Requirement already satisfied: six&gt;=1.5 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from python-dateutil&gt;=2.8.2-&gt;pandas&lt;3.0.0,&gt;=2.2.2-&gt;quanti-gin) (1.17.0)
+
 Requirement already satisfied: iniconfig&gt;=1.0.1 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from pytest-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (2.3.0)
+
 Requirement already satisfied: pluggy&lt;2,&gt;=1.5 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from pytest-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (1.6.0)
-Requirement already satisfied: pygments&gt;=2.7.2 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from pytest-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (2.20.0)
+
+Requirement already satisfied: pygments&gt;=2.7.2 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from pytest-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (2.21.0)
+
+Requirement already satisfied: charset_normalizer&lt;4,&gt;=2 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from requests-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (3.5.1)
+
+Requirement already satisfied: idna&lt;4,&gt;=2.5 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from requests-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (3.19)
+
+Requirement already satisfied: urllib3&lt;3,&gt;=1.26 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from requests-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (2.7.0)
+
+Requirement already satisfied: certifi&gt;=2023.5.7 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from requests-&gt;openfermion~=1.0-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (2026.7.22)
+
 Requirement already satisfied: mpmath&lt;1.4,&gt;=1.1.0 in /usr/share/miniconda/envs/blogqa/lib/python3.11/site-packages (from sympy-&gt;tequila-basic&lt;2.0.0,&gt;=1.9.8-&gt;quanti-gin) (1.3.0)
+
 Downloading quanti_gin-2.5.0-py3-none-any.whl (14 kB)
-Installing collected packages: quanti-gin
-Successfully installed quanti-gin-2.5.0</code></pre>
+
+Downloading pandas-2.3.3-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (12.8 MB)
+
+   <span class="ansi-bright-black-fg">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-green-fg">0.0/12.8 MB</span> <span class="ansi-red-fg">?</span> eta <span class="ansi-cyan-fg">-:--:--</span>
+
+   <span class="ansi-bright-black-fg">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span class="ansi-green-fg">12.8/12.8 MB</span> <span class="ansi-red-fg">267.4 MB/s</span>  <span class="ansi-yellow-fg">0:00:00</span>
+
+Downloading pytz-2026.3.post1-py2.py3-none-any.whl (508 kB)
+
+Downloading tzdata-2026.3-py2.py3-none-any.whl (348 kB)
+
+Installing collected packages: pytz, tzdata, pandas, quanti-gin
+
+
+  Attempting uninstall: pandas
+
+    Found existing installation: pandas 3.0.5
+
+    Uninstalling pandas-3.0.5:
+
+      Successfully uninstalled pandas-3.0.5
+
+
+
+
+
+Successfully installed pandas-2.3.3 pytz-2026.3.post1 quanti-gin-2.5.0 tzdata-2026.3
+</pre>
+</div>
 </div>
 </div>
 <p>If you just want to visualize the different methods and their results, you can use the following code.</p>
 <p>Setup and load the data:</p>
-<div id="379b3d17" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> quanti_gin.shared <span class="im">import</span> (</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    read_data_file,</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> read_data_file(Path(<span class="st">"./example_data.csv"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="41a21fd8" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> quanti_gin.shared <span class="im">import</span> (</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    read_data_file,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> read_data_file(Path(<span class="st">"./example_data.csv"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now, <code>data.df</code> contains the data in a pandas DataFrame, which can be used for visualization and analysis. As our example data compares multiple methods against each other, we can group the data by the method and visualize the results.</p>
-<div id="7799fa78" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>grouped_methods <span class="op">=</span> data.df.groupby(<span class="st">"method"</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>method_names <span class="op">=</span> grouped_methods.groups.keys()</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplot of custom_energy and fci, and SPA energy</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span>, <span class="bu">len</span>(grouped_methods), sharey<span class="op">=</span><span class="va">True</span>, figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">5</span>), layout<span class="op">=</span><span class="st">"constrained"</span>, squeeze<span class="op">=</span><span class="va">False</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"Method energies"</span>)</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>fig.set_figheight(fig.get_figheight())</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (axis, (method_name, method)) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(axes.flatten(), grouped_methods)):</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    axis.boxplot(method.optimized_energy)</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    axis.set_title(method_name)</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="04e45a37" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>grouped_methods <span class="op">=</span> data.df.groupby(<span class="st">"method"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>method_names <span class="op">=</span> grouped_methods.groups.keys()</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplot of custom_energy and fci, and SPA energy</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span>, <span class="bu">len</span>(grouped_methods), sharey<span class="op">=</span><span class="va">True</span>, figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">5</span>), layout<span class="op">=</span><span class="st">"constrained"</span>, squeeze<span class="op">=</span><span class="va">False</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"Method energies"</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>fig.set_figheight(fig.get_figheight())</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (axis, (method_name, method)) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(axes.flatten(), grouped_methods)):</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    axis.boxplot(method.optimized_energy)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    axis.set_title(method_name)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -675,26 +750,26 @@ Successfully installed quanti-gin-2.5.0</code></pre>
 </div>
 </div>
 <p>To compare all the different methods to each other, we can use this example plot:</p>
-<div id="36eea43d" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>combinations <span class="op">=</span> []</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> method_a <span class="kw">in</span> method_names:</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    combinations.append(</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        [(method_a, method_b) <span class="cf">for</span> method_b <span class="kw">in</span> method_names <span class="cf">if</span> method_a <span class="op">!=</span> method_b]</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> comb_list <span class="kw">in</span> combinations:</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    fig, axes <span class="op">=</span> plt.subplots(</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span>, <span class="bu">len</span>(method_names) <span class="op">-</span> <span class="dv">1</span>, sharey<span class="op">=</span><span class="va">True</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>), layout<span class="op">=</span><span class="st">"constrained"</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    fig.suptitle(<span class="ss">f"</span><span class="sc">{</span>comb_list[<span class="dv">0</span>][<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> plot, (a, b) <span class="kw">in</span> <span class="bu">zip</span>(axes, comb_list):</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        energy_a <span class="op">=</span> np.array(grouped_methods.get_group(a).optimized_energy)</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>        energy_b <span class="op">=</span> np.array(grouped_methods.get_group(b).optimized_energy)</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>        error <span class="op">=</span> np.<span class="bu">abs</span>(energy_a <span class="op">-</span> energy_b)</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>        plot.boxplot(<span class="bu">abs</span>(energy_a <span class="op">-</span> energy_b), tick_labels<span class="op">=</span>[<span class="ss">f"</span><span class="sc">{</span>a<span class="sc">}</span><span class="ss"> vs. </span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">"</span>])</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="27d029fa" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>combinations <span class="op">=</span> []</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> method_a <span class="kw">in</span> method_names:</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    combinations.append(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        [(method_a, method_b) <span class="cf">for</span> method_b <span class="kw">in</span> method_names <span class="cf">if</span> method_a <span class="op">!=</span> method_b]</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> comb_list <span class="kw">in</span> combinations:</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    fig, axes <span class="op">=</span> plt.subplots(</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span>, <span class="bu">len</span>(method_names) <span class="op">-</span> <span class="dv">1</span>, sharey<span class="op">=</span><span class="va">True</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>), layout<span class="op">=</span><span class="st">"constrained"</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    fig.suptitle(<span class="ss">f"</span><span class="sc">{</span>comb_list[<span class="dv">0</span>][<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> plot, (a, b) <span class="kw">in</span> <span class="bu">zip</span>(axes, comb_list):</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        energy_a <span class="op">=</span> np.array(grouped_methods.get_group(a).optimized_energy)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        energy_b <span class="op">=</span> np.array(grouped_methods.get_group(b).optimized_energy)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        error <span class="op">=</span> np.<span class="bu">abs</span>(energy_a <span class="op">-</span> energy_b)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>        plot.boxplot(<span class="bu">abs</span>(energy_a <span class="op">-</span> energy_b), tick_labels<span class="op">=</span>[<span class="ss">f"</span><span class="sc">{</span>a<span class="sc">}</span><span class="ss"> vs. </span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">"</span>])</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -851,16 +926,16 @@ Then, you can open either of the notebooks to look at data usage and visualizati
     }
     function toggleCodeHandler(show) {
       return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
           if (show) {
             details.open = true;
           } else {
             details.removeAttribute("open");
           }
         }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
         const fromCls = show ? "hidden" : "unhidden";
         const toCls = show ? "unhidden" : "hidden";
         for (let i=0; i<cellCodeDivs.length; i++) {
@@ -1212,253 +1287,253 @@ Then, you can open either of the notebooks to look at data usage and visualizati
   </script>
 <script src="https://utteranc.es/client.js" repo="tequilahub/tequila-tutorials" issue-term="pathname" theme="preferred-color-scheme" crossorigin="anonymous" async="">
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "quanti-gin: Benchmarking VQE optimization methods against the SPA"</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">    - name: Korbinian Stein</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">      id: ks</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">      email: korbinian.stein@uni-a.de</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2025-03-25"</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="an">image:</span><span class="co"> "preview_output-circuit.png"</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [code]</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">   html:</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">      toc: true</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">   pdf:</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">      pdf-engine: xelatex</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="fu">## Introduction</span></span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>Working in the quantum domain, we often lack good tools to compare and benchmark against state-of-the-art optimization methods.</span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>Benchmarking, requires large amounts of reference data for statistically significant comparisons, so we introduce a configurable data generator which can be used to create large sets of hydrogenic test systems and their corresponding energies, with a focus on allowing quick and easy plug-in testing of custom optimization methods.</span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>In the following, we introduce the data generator quanti-gin (available at: <span class="ot">&lt;https://github.com/nylser/quanti-gin&gt;</span>) and illustrate how to use and customize it.</span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="fu">## Installation</span></span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="fu">### Prerequisites for the quanti-gin</span></span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>quanti-gin can easily be installed via <span class="in">`pip install quanti-gin`</span> in your preferred python environment or with your preferred python package manager.</span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>This will install the data generator and its dependencies.</span>
-<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data generator &amp; visualization</span></span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>For the generation and analysis of data, we introduce: 1) a parameterizable data generator for the synthesis of data, and 2) a jupyter notebook that can be used to inspect the features &amp; quality of the data, as well as 3) an experimental machine learning application notebook.</span>
-<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="fu">### Data generator</span></span>
-<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>We define <span class="in">`DataGenerator`</span> class and associated functions to generate and optimize examples of hydrogen molecules using the Tequila package. Here is a summary of the main functionalities:</span>
-<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Data Classes and Initialization**:</span>
-<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**Job Dataclass**: A data structure that stores information about a DataGenerator job, including geometry, edges, guesses, coordinates, and distances.</span>
-<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Geometry and Coordinate Generation**:</span>
-<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**generate_geometry_string**: Creates a string representation of molecular geometry from coordinates.</span>
-<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**generate_coordinates**: Generates a set of coordinates for atoms in a molecule, ensuring a minimum distance between atoms to avoid generating infeasible data.</span>
-<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Optimization and Reference Computation**:</span>
-<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**run_optimization**: Optimizes the molecular geometry molecule and calculates energies.</span>
-<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Job Generation and Execution**:</span>
-<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**generate_jobs**: Creates a list of molecular jobs with varying geometries, edges, and guesses.</span>
-<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**execute_job**: Runs the optimization for a single job.</span>
-<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**execute_jobs**: Runs the optimization for a list of jobs, displaying progress.</span>
-<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Result Processing**:</span>
-<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**create_result_df**: Generates a DataFrame from job results, including optimized energies, exact energies, and coordinates.</span>
-<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>**Main Execution**:</span>
-<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>The <span class="in">`main`</span> function parses command-line arguments, sets up job generation and execution, evaluates results, and saves the final data to a CSV file.</span>
-<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>The code is structured to generate molecular geometries, perform quantum chemistry calculations, and analyze results efficiently, leveraging parallel processing and progress tracking with <span class="in">`tqdm`</span>.</span>
-<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a><span class="fu">### Usage Instructions</span></span>
-<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Basic Command to Generate Jobs and Results**:</span>
-<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>   Run the data generator for one of the built in methods with the following command-line arguments:</span>
-<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>   <span class="in">```sh</span></span>
-<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a>   <span class="ex">python</span> <span class="at">-m</span> quanti_gin [--method <span class="dt">{fci</span><span class="op">,</span><span class="dt">spa}</span>] [--output <span class="op">&lt;</span>output_file<span class="op">&gt;</span>] <span class="op">&lt;</span>number_of_atoms<span class="op">&gt;</span> <span class="op">&lt;</span>number_of_jobs<span class="op">&gt;</span></span>
-<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a>   <span class="in">```</span></span>
-<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="in">`--method {fci,spa}`</span> (optional): Specify the method to choose one of the built-in methods.</span>
-<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="in">`--output &lt;output_file&gt;`</span> (optional): Specify the name of the output file to save results.</span>
-<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="in">`&lt;number_of_atoms&gt;`</span>: Number of atoms in the molecules (must be an even number).</span>
-<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="in">`&lt;number_of_jobs&gt;`</span>: Number of molecular jobs to generate and process.</span>
-<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a>   Example:</span>
-<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a>   <span class="in">```sh</span></span>
-<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a>   <span class="ex">python</span> <span class="at">-m</span> quanti_gin 4 100 <span class="at">--output</span> results.csv</span>
-<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a>   <span class="in">```</span></span>
-<span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-77"><a href="#cb10-77" aria-hidden="true" tabindex="-1"></a>   This will run the data generator with 100 jobs for a molecule with 4 atoms, using the default method (SPA) and save the results to <span class="in">`results.csv`</span>.</span>
-<span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Compare with custom methods and FCI**</span>
-<span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a>   To compare multiple built-in methods with a custom method, use the following command:</span>
-<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a>   <span class="in">```sh</span></span>
-<span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a>   <span class="ex">python</span> <span class="at">-m</span> quanti_gin <span class="at">--compare-to</span> fci,spa <span class="at">--custom_method</span> <span class="op">&lt;</span>path_to_method.py<span class="op">&gt;</span> <span class="op">&lt;</span>number_of_atoms<span class="op">&gt;</span> <span class="op">&lt;</span>number_of_jobs<span class="op">&gt;</span></span>
-<span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a>   <span class="in">```</span></span>
-<span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="in">`--compare-to fci,spa`</span>: Specify the methods to compare with the custom method.</span>
-<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="in">`--custom_method &lt;path_to_method.py&gt;`</span>: Specify the path to the custom method file.</span>
-<span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="in">`&lt;number_of_atoms&gt;`</span>: Number of atoms in the molecules (must be an even number).</span>
-<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="in">`&lt;number_of_jobs&gt;`</span>: Number of molecular jobs to generate and process.</span>
-<span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a>   This will run the data generator with 100 jobs for a molecule with 4 atoms, every job will be calculated with the custom method, the FCI method, and the SPA method.</span>
-<span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a><span class="fu">### Creating a custom optimization method for comparison</span></span>
-<span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a>As an example, we can create a custom optimization method that uses a different optimization algorithm or circuit structure.</span>
-<span id="cb10-93"><a href="#cb10-93" aria-hidden="true" tabindex="-1"></a>To do this, we can create a new python file with the custom optimization method and can then pass it to the <span class="in">`--custom_method`</span> argument.</span>
-<span id="cb10-94"><a href="#cb10-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-95"><a href="#cb10-95" aria-hidden="true" tabindex="-1"></a>First, we initialize our Hamiltonian and Ansatz circuit. Make note that we are only getting the molecule as an input, which is a <span class="in">`QuantumChemistryBase`</span> object from tequila.</span>
-<span id="cb10-96"><a href="#cb10-96" aria-hidden="true" tabindex="-1"></a>Using the molecule, one can easily get the geometry, basis set, and other information needed for the optimization, so there is no need to use tequila for the optimization itself.</span>
-<span id="cb10-97"><a href="#cb10-97" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb10-98"><a href="#cb10-98" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tequila <span class="im">as</span> tq</span>
-<span id="cb10-99"><a href="#cb10-99" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tequila.quantumchemistry <span class="im">import</span> QuantumChemistryBase</span>
-<span id="cb10-100"><a href="#cb10-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-101"><a href="#cb10-101" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> run_optimization(mol: QuantumChemistryBase, <span class="op">*</span>args, <span class="op">**</span>kwargs):</span>
-<span id="cb10-102"><a href="#cb10-102" aria-hidden="true" tabindex="-1"></a>        H <span class="op">=</span> mol.make_hamiltonian()</span>
-<span id="cb10-103"><a href="#cb10-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-104"><a href="#cb10-104" aria-hidden="true" tabindex="-1"></a>        U <span class="op">=</span> tq.gates.QCircuit()</span>
-<span id="cb10-105"><a href="#cb10-105" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-106"><a href="#cb10-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-107"><a href="#cb10-107" aria-hidden="true" tabindex="-1"></a>Now, for building the circuit, we populate the circuit <span class="in">`U`</span>, using a structural approach:</span>
-<span id="cb10-108"><a href="#cb10-108" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb10-109"><a href="#cb10-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-110"><a href="#cb10-110" aria-hidden="true" tabindex="-1"></a>        <span class="co"># structure of the ansatz:</span></span>
-<span id="cb10-111"><a href="#cb10-111" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 1. Ry rotations on all qubits</span></span>
-<span id="cb10-112"><a href="#cb10-112" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(coordinates) <span class="op">*</span> <span class="dv">2</span>): <span class="co"># &lt;1&gt;</span></span>
-<span id="cb10-113"><a href="#cb10-113" aria-hidden="true" tabindex="-1"></a>            U <span class="op">+=</span> tq.gates.Ry(target<span class="op">=</span>i, angle<span class="op">=</span><span class="st">"a"</span> <span class="op">+</span> <span class="bu">str</span>(i)) <span class="co"># &lt;1&gt;</span></span>
-<span id="cb10-114"><a href="#cb10-114" aria-hidden="true" tabindex="-1"></a>        depth <span class="op">=</span> <span class="dv">2</span></span>
-<span id="cb10-115"><a href="#cb10-115" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 2. Entangling layer =&gt; Alternating: CNOTs on even and odd qubits</span></span>
-<span id="cb10-116"><a href="#cb10-116" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 3. Ry rotations on all qubits</span></span>
-<span id="cb10-117"><a href="#cb10-117" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> d <span class="kw">in</span> <span class="bu">range</span>(depth): <span class="co"># &lt;2&gt;</span></span>
-<span id="cb10-118"><a href="#cb10-118" aria-hidden="true" tabindex="-1"></a>            offset <span class="op">=</span> d <span class="op">%</span> <span class="dv">2</span></span>
-<span id="cb10-119"><a href="#cb10-119" aria-hidden="true" tabindex="-1"></a>            iterations <span class="op">=</span> <span class="bu">len</span>(coordinates) <span class="op">*</span> <span class="dv">2</span></span>
-<span id="cb10-120"><a href="#cb10-120" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, iterations <span class="op">-</span> <span class="dv">1</span> <span class="op">-</span> offset, <span class="dv">2</span>): <span class="co"># &lt;3&gt;</span></span>
-<span id="cb10-121"><a href="#cb10-121" aria-hidden="true" tabindex="-1"></a>                U <span class="op">+=</span> tq.gates.CNOT(control<span class="op">=</span>offset <span class="op">+</span> i, target<span class="op">=</span>offset <span class="op">+</span> i <span class="op">+</span> <span class="dv">1</span>) <span class="co">#&lt;3&gt;</span></span>
-<span id="cb10-122"><a href="#cb10-122" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(iterations): <span class="co"># &lt;4&gt;</span></span>
-<span id="cb10-123"><a href="#cb10-123" aria-hidden="true" tabindex="-1"></a>                U <span class="op">+=</span> tq.gates.Ry(target<span class="op">=</span>i, angle<span class="op">=</span><span class="ss">f"b</span><span class="sc">{</span>d<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>) <span class="co"># &lt;4&gt;</span></span>
-<span id="cb10-124"><a href="#cb10-124" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-125"><a href="#cb10-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-126"><a href="#cb10-126" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Add an Ry rotation gate for all qubits we need to represent the atoms of the molecule.</span>
-<span id="cb10-127"><a href="#cb10-127" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Repeat while configured depth is not reached:</span>
-<span id="cb10-128"><a href="#cb10-128" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Add entangling layer: CNOTs alternating on even/odd qubits per iteration</span>
-<span id="cb10-129"><a href="#cb10-129" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Add Ry rotation on all qubits</span>
-<span id="cb10-130"><a href="#cb10-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-131"><a href="#cb10-131" aria-hidden="true" tabindex="-1"></a>The resulting circuit with the configured <span class="in">`depth = 2`</span> for 4 H-atoms is illustrated in @fig-circuit.</span>
-<span id="cb10-132"><a href="#cb10-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-133"><a href="#cb10-133" aria-hidden="true" tabindex="-1"></a><span class="al">![Structural Circuit with depth 2](./output-circuit.png)</span>{width=400 fig-align="center" #fig-circuit}</span>
-<span id="cb10-134"><a href="#cb10-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-135"><a href="#cb10-135" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb10-136"><a href="#cb10-136" aria-hidden="true" tabindex="-1"></a>    E <span class="op">=</span> tq.ExpectationValue(H<span class="op">=</span>H, U<span class="op">=</span>U) <span class="co"># &lt;1&gt;</span></span>
-<span id="cb10-137"><a href="#cb10-137" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> tq.minimize(E, silent<span class="op">=</span><span class="va">True</span>) <span class="co"># &lt;2&gt;</span></span>
-<span id="cb10-138"><a href="#cb10-138" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
-<span id="cb10-139"><a href="#cb10-139" aria-hidden="true" tabindex="-1"></a>        <span class="st">"energy"</span>: result.energy,</span>
-<span id="cb10-140"><a href="#cb10-140" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb10-141"><a href="#cb10-141" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-142"><a href="#cb10-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-143"><a href="#cb10-143" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Create an expectation value <span class="in">`E`</span> with our previously obtained Hamiltonian <span class="in">`H`</span> for the molecule, and constructed circuit <span class="in">`U`</span>.</span>
-<span id="cb10-144"><a href="#cb10-144" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>run the minimization algorithm for that expectation value via tequila.</span>
-<span id="cb10-145"><a href="#cb10-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-146"><a href="#cb10-146" aria-hidden="true" tabindex="-1"></a>The only requirement for the custom method is that it returns a dictionary in the form:</span>
-<span id="cb10-147"><a href="#cb10-147" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb10-148"><a href="#cb10-148" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb10-149"><a href="#cb10-149" aria-hidden="true" tabindex="-1"></a>    <span class="st">"energy"</span>: result.energy,</span>
-<span id="cb10-150"><a href="#cb10-150" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb10-151"><a href="#cb10-151" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-152"><a href="#cb10-152" aria-hidden="true" tabindex="-1"></a>This concludes the introduction of custom methods for the quanti-gin DataGenerator.</span>
-<span id="cb10-153"><a href="#cb10-153" aria-hidden="true" tabindex="-1"></a>If you desire to customize more or different aspects, you can use a subclass of the <span class="in">`DataGenerator`</span> class and override the methods you want to change.</span>
-<span id="cb10-154"><a href="#cb10-154" aria-hidden="true" tabindex="-1"></a>Looking at the source code of quanti-gin <span class="ot">&lt;https://github.com/nylser/quanti-gin&gt;</span> always is a good reference and starting point.</span>
-<span id="cb10-155"><a href="#cb10-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-156"><a href="#cb10-156" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data Visualization</span></span>
-<span id="cb10-157"><a href="#cb10-157" aria-hidden="true" tabindex="-1"></a>The quanti-gin repository includes a Jupter Notebook for visualizations and analysis of the generated data.</span>
-<span id="cb10-158"><a href="#cb10-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-159"><a href="#cb10-159" aria-hidden="true" tabindex="-1"></a><span class="fu">### Data Visualization Example</span></span>
-<span id="cb10-162"><a href="#cb10-162" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb10-163"><a href="#cb10-163" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb10-164"><a href="#cb10-164" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install quanti<span class="op">-</span>gin</span>
-<span id="cb10-165"><a href="#cb10-165" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-166"><a href="#cb10-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-167"><a href="#cb10-167" aria-hidden="true" tabindex="-1"></a>If you just want to visualize the different methods and their results, you can use the following code.</span>
-<span id="cb10-168"><a href="#cb10-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-169"><a href="#cb10-169" aria-hidden="true" tabindex="-1"></a>Setup and load the data:</span>
-<span id="cb10-172"><a href="#cb10-172" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb10-173"><a href="#cb10-173" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb10-174"><a href="#cb10-174" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb10-175"><a href="#cb10-175" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb10-176"><a href="#cb10-176" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
-<span id="cb10-177"><a href="#cb10-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-178"><a href="#cb10-178" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> quanti_gin.shared <span class="im">import</span> (</span>
-<span id="cb10-179"><a href="#cb10-179" aria-hidden="true" tabindex="-1"></a>    read_data_file,</span>
-<span id="cb10-180"><a href="#cb10-180" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb10-181"><a href="#cb10-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-182"><a href="#cb10-182" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> read_data_file(Path(<span class="st">"./example_data.csv"</span>))</span>
-<span id="cb10-183"><a href="#cb10-183" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-184"><a href="#cb10-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-185"><a href="#cb10-185" aria-hidden="true" tabindex="-1"></a>Now, <span class="in">`data.df`</span> contains the data in a pandas DataFrame, which can be used for visualization and analysis.</span>
-<span id="cb10-186"><a href="#cb10-186" aria-hidden="true" tabindex="-1"></a>As our example data compares multiple methods against each other, we can group the data by the method and visualize the results.</span>
-<span id="cb10-187"><a href="#cb10-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-190"><a href="#cb10-190" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb10-191"><a href="#cb10-191" aria-hidden="true" tabindex="-1"></a>grouped_methods <span class="op">=</span> data.df.groupby(<span class="st">"method"</span>)</span>
-<span id="cb10-192"><a href="#cb10-192" aria-hidden="true" tabindex="-1"></a>method_names <span class="op">=</span> grouped_methods.groups.keys()</span>
-<span id="cb10-193"><a href="#cb10-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-194"><a href="#cb10-194" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplot of custom_energy and fci, and SPA energy</span></span>
-<span id="cb10-195"><a href="#cb10-195" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(</span>
-<span id="cb10-196"><a href="#cb10-196" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span>, <span class="bu">len</span>(grouped_methods), sharey<span class="op">=</span><span class="va">True</span>, figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">5</span>), layout<span class="op">=</span><span class="st">"constrained"</span>, squeeze<span class="op">=</span><span class="va">False</span></span>
-<span id="cb10-197"><a href="#cb10-197" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb10-198"><a href="#cb10-198" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-199"><a href="#cb10-199" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"Method energies"</span>)</span>
-<span id="cb10-200"><a href="#cb10-200" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-201"><a href="#cb10-201" aria-hidden="true" tabindex="-1"></a>fig.set_figheight(fig.get_figheight())</span>
-<span id="cb10-202"><a href="#cb10-202" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (axis, (method_name, method)) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(axes.flatten(), grouped_methods)):</span>
-<span id="cb10-203"><a href="#cb10-203" aria-hidden="true" tabindex="-1"></a>    axis.boxplot(method.optimized_energy)</span>
-<span id="cb10-204"><a href="#cb10-204" aria-hidden="true" tabindex="-1"></a>    axis.set_title(method_name)</span>
-<span id="cb10-205"><a href="#cb10-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-206"><a href="#cb10-206" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb10-207"><a href="#cb10-207" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-208"><a href="#cb10-208" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-209"><a href="#cb10-209" aria-hidden="true" tabindex="-1"></a>To compare all the different methods to each other, we can use this example plot:</span>
-<span id="cb10-212"><a href="#cb10-212" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb10-213"><a href="#cb10-213" aria-hidden="true" tabindex="-1"></a>combinations <span class="op">=</span> []</span>
-<span id="cb10-214"><a href="#cb10-214" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> method_a <span class="kw">in</span> method_names:</span>
-<span id="cb10-215"><a href="#cb10-215" aria-hidden="true" tabindex="-1"></a>    combinations.append(</span>
-<span id="cb10-216"><a href="#cb10-216" aria-hidden="true" tabindex="-1"></a>        [(method_a, method_b) <span class="cf">for</span> method_b <span class="kw">in</span> method_names <span class="cf">if</span> method_a <span class="op">!=</span> method_b]</span>
-<span id="cb10-217"><a href="#cb10-217" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb10-218"><a href="#cb10-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-219"><a href="#cb10-219" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> comb_list <span class="kw">in</span> combinations:</span>
-<span id="cb10-220"><a href="#cb10-220" aria-hidden="true" tabindex="-1"></a>    fig, axes <span class="op">=</span> plt.subplots(</span>
-<span id="cb10-221"><a href="#cb10-221" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span>, <span class="bu">len</span>(method_names) <span class="op">-</span> <span class="dv">1</span>, sharey<span class="op">=</span><span class="va">True</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>), layout<span class="op">=</span><span class="st">"constrained"</span></span>
-<span id="cb10-222"><a href="#cb10-222" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb10-223"><a href="#cb10-223" aria-hidden="true" tabindex="-1"></a>    fig.suptitle(<span class="ss">f"</span><span class="sc">{</span>comb_list[<span class="dv">0</span>][<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb10-224"><a href="#cb10-224" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> plot, (a, b) <span class="kw">in</span> <span class="bu">zip</span>(axes, comb_list):</span>
-<span id="cb10-225"><a href="#cb10-225" aria-hidden="true" tabindex="-1"></a>        energy_a <span class="op">=</span> np.array(grouped_methods.get_group(a).optimized_energy)</span>
-<span id="cb10-226"><a href="#cb10-226" aria-hidden="true" tabindex="-1"></a>        energy_b <span class="op">=</span> np.array(grouped_methods.get_group(b).optimized_energy)</span>
-<span id="cb10-227"><a href="#cb10-227" aria-hidden="true" tabindex="-1"></a>        error <span class="op">=</span> np.<span class="bu">abs</span>(energy_a <span class="op">-</span> energy_b)</span>
-<span id="cb10-228"><a href="#cb10-228" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-229"><a href="#cb10-229" aria-hidden="true" tabindex="-1"></a>        plot.boxplot(<span class="bu">abs</span>(energy_a <span class="op">-</span> energy_b), tick_labels<span class="op">=</span>[<span class="ss">f"</span><span class="sc">{</span>a<span class="sc">}</span><span class="ss"> vs. </span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">"</span>])</span>
-<span id="cb10-230"><a href="#cb10-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-231"><a href="#cb10-231" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb10-232"><a href="#cb10-232" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-233"><a href="#cb10-233" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-234"><a href="#cb10-234" aria-hidden="true" tabindex="-1"></a>For more detailed analysis and visualization, you can use the provided Jupyter Notebook in the quanti-gin repository.</span>
-<span id="cb10-235"><a href="#cb10-235" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-236"><a href="#cb10-236" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- ## Prerequisites for Machine Learning and Visualization Jupyter Notebooks</span></span>
-<span id="cb10-237"><a href="#cb10-237" aria-hidden="true" tabindex="-1"></a><span class="co">To use and visualize the data that quanti-gin generates there are two example Jupyter Notebooks, one for a basic Neural Network training approach, and one for visualizing and analyzing the data that was generated by quanti-gin.</span></span>
-<span id="cb10-238"><a href="#cb10-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-239"><a href="#cb10-239" aria-hidden="true" tabindex="-1"></a><span class="co">These notebooks have specific prerequisites, the simplest way of installing the required packages is using the python [conda](https://docs.conda.io/en/latest/) `environment.yaml`, which includes all dependencies.</span></span>
-<span id="cb10-240"><a href="#cb10-240" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-241"><a href="#cb10-241" aria-hidden="true" tabindex="-1"></a><span class="co">Once a version of conda is installed (we recommend [miniconda](https://docs.anaconda.com/free/miniconda/), for a lightweight, well contained installer), you can proceed with installation and creation of the conda environment.</span></span>
-<span id="cb10-242"><a href="#cb10-242" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-243"><a href="#cb10-243" aria-hidden="true" tabindex="-1"></a><span class="co">Create the conda environment based on the environment.yaml file:</span></span>
-<span id="cb10-244"><a href="#cb10-244" aria-hidden="true" tabindex="-1"></a><span class="co">```sh</span></span>
-<span id="cb10-245"><a href="#cb10-245" aria-hidden="true" tabindex="-1"></a><span class="co">conda env create</span></span>
-<span id="cb10-246"><a href="#cb10-246" aria-hidden="true" tabindex="-1"></a><span class="co">```</span></span>
-<span id="cb10-247"><a href="#cb10-247" aria-hidden="true" tabindex="-1"></a><span class="co">After this, a new environment called metavqes should exist, that you can activate using:</span></span>
-<span id="cb10-248"><a href="#cb10-248" aria-hidden="true" tabindex="-1"></a><span class="co">```sh</span></span>
-<span id="cb10-249"><a href="#cb10-249" aria-hidden="true" tabindex="-1"></a><span class="co">conda env activate metavqes</span></span>
-<span id="cb10-250"><a href="#cb10-250" aria-hidden="true" tabindex="-1"></a><span class="co">```</span></span>
-<span id="cb10-251"><a href="#cb10-251" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-252"><a href="#cb10-252" aria-hidden="true" tabindex="-1"></a><span class="co">Then, you can open either of the notebooks to look at data usage and visualization examples:</span></span>
-<span id="cb10-253"><a href="#cb10-253" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-254"><a href="#cb10-254" aria-hidden="true" tabindex="-1"></a><span class="co">- [Visualization](../Visualization.ipynb)</span></span>
-<span id="cb10-255"><a href="#cb10-255" aria-hidden="true" tabindex="-1"></a><span class="co">- [NeuralNetwork](../NeuralNetwork.ipynb) --&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "quanti-gin: Benchmarking VQE optimization methods against the SPA"</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">    - name: Korbinian Stein</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">      id: ks</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">      email: korbinian.stein@uni-a.de</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2025-03-25"</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="an">image:</span><span class="co"> "preview_output-circuit.png"</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [code]</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">   html:</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">      toc: true</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">   pdf:</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co">      pdf-engine: xelatex</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="fu">## Introduction</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>Working in the quantum domain, we often lack good tools to compare and benchmark against state-of-the-art optimization methods.</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>Benchmarking, requires large amounts of reference data for statistically significant comparisons, so we introduce a configurable data generator which can be used to create large sets of hydrogenic test systems and their corresponding energies, with a focus on allowing quick and easy plug-in testing of custom optimization methods.</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>In the following, we introduce the data generator quanti-gin (available at: <span class="ot">&lt;https://github.com/nylser/quanti-gin&gt;</span>) and illustrate how to use and customize it.</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="fu">## Installation</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="fu">### Prerequisites for the quanti-gin</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>quanti-gin can easily be installed via <span class="in">`pip install quanti-gin`</span> in your preferred python environment or with your preferred python package manager.</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>This will install the data generator and its dependencies.</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data generator &amp; visualization</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>For the generation and analysis of data, we introduce: 1) a parameterizable data generator for the synthesis of data, and 2) a jupyter notebook that can be used to inspect the features &amp; quality of the data, as well as 3) an experimental machine learning application notebook.</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="fu">### Data generator</span></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>We define <span class="in">`DataGenerator`</span> class and associated functions to generate and optimize examples of hydrogen molecules using the Tequila package. Here is a summary of the main functionalities:</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Data Classes and Initialization**:</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**Job Dataclass**: A data structure that stores information about a DataGenerator job, including geometry, edges, guesses, coordinates, and distances.</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Geometry and Coordinate Generation**:</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**generate_geometry_string**: Creates a string representation of molecular geometry from coordinates.</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**generate_coordinates**: Generates a set of coordinates for atoms in a molecule, ensuring a minimum distance between atoms to avoid generating infeasible data.</span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Optimization and Reference Computation**:</span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**run_optimization**: Optimizes the molecular geometry molecule and calculates energies.</span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Job Generation and Execution**:</span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**generate_jobs**: Creates a list of molecular jobs with varying geometries, edges, and guesses.</span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**execute_job**: Runs the optimization for a single job.</span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**execute_jobs**: Runs the optimization for a list of jobs, displaying progress.</span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Result Processing**:</span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**create_result_df**: Generates a DataFrame from job results, including optimized energies, exact energies, and coordinates.</span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>**Main Execution**:</span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>The <span class="in">`main`</span> function parses command-line arguments, sets up job generation and execution, evaluates results, and saves the final data to a CSV file.</span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>The code is structured to generate molecular geometries, perform quantum chemistry calculations, and analyze results efficiently, leveraging parallel processing and progress tracking with <span class="in">`tqdm`</span>.</span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a><span class="fu">### Usage Instructions</span></span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Basic Command to Generate Jobs and Results**:</span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>   Run the data generator for one of the built in methods with the following command-line arguments:</span>
+<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a>   <span class="in">```sh</span></span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a>   <span class="ex">python</span> <span class="at">-m</span> quanti_gin [--method <span class="dt">{fci</span><span class="op">,</span><span class="dt">spa}</span>] [--output <span class="op">&lt;</span>output_file<span class="op">&gt;</span>] <span class="op">&lt;</span>number_of_atoms<span class="op">&gt;</span> <span class="op">&lt;</span>number_of_jobs<span class="op">&gt;</span></span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a>   <span class="in">```</span></span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="in">`--method {fci,spa}`</span> (optional): Specify the method to choose one of the built-in methods.</span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="in">`--output &lt;output_file&gt;`</span> (optional): Specify the name of the output file to save results.</span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="in">`&lt;number_of_atoms&gt;`</span>: Number of atoms in the molecules (must be an even number).</span>
+<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="in">`&lt;number_of_jobs&gt;`</span>: Number of molecular jobs to generate and process.</span>
+<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a>   Example:</span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>   <span class="in">```sh</span></span>
+<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a>   <span class="ex">python</span> <span class="at">-m</span> quanti_gin 4 100 <span class="at">--output</span> results.csv</span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a>   <span class="in">```</span></span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>   This will run the data generator with 100 jobs for a molecule with 4 atoms, using the default method (SPA) and save the results to <span class="in">`results.csv`</span>.</span>
+<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Compare with custom methods and FCI**</span>
+<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>   To compare multiple built-in methods with a custom method, use the following command:</span>
+<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a>   <span class="in">```sh</span></span>
+<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a>   <span class="ex">python</span> <span class="at">-m</span> quanti_gin <span class="at">--compare-to</span> fci,spa <span class="at">--custom_method</span> <span class="op">&lt;</span>path_to_method.py<span class="op">&gt;</span> <span class="op">&lt;</span>number_of_atoms<span class="op">&gt;</span> <span class="op">&lt;</span>number_of_jobs<span class="op">&gt;</span></span>
+<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a>   <span class="in">```</span></span>
+<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="in">`--compare-to fci,spa`</span>: Specify the methods to compare with the custom method.</span>
+<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="in">`--custom_method &lt;path_to_method.py&gt;`</span>: Specify the path to the custom method file.</span>
+<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="in">`&lt;number_of_atoms&gt;`</span>: Number of atoms in the molecules (must be an even number).</span>
+<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="in">`&lt;number_of_jobs&gt;`</span>: Number of molecular jobs to generate and process.</span>
+<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a>   This will run the data generator with 100 jobs for a molecule with 4 atoms, every job will be calculated with the custom method, the FCI method, and the SPA method.</span>
+<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a><span class="fu">### Creating a custom optimization method for comparison</span></span>
+<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a>As an example, we can create a custom optimization method that uses a different optimization algorithm or circuit structure.</span>
+<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a>To do this, we can create a new python file with the custom optimization method and can then pass it to the <span class="in">`--custom_method`</span> argument.</span>
+<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a>First, we initialize our Hamiltonian and Ansatz circuit. Make note that we are only getting the molecule as an input, which is a <span class="in">`QuantumChemistryBase`</span> object from tequila.</span>
+<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a>Using the molecule, one can easily get the geometry, basis set, and other information needed for the optimization, so there is no need to use tequila for the optimization itself.</span>
+<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tequila <span class="im">as</span> tq</span>
+<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tequila.quantumchemistry <span class="im">import</span> QuantumChemistryBase</span>
+<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> run_optimization(mol: QuantumChemistryBase, <span class="op">*</span>args, <span class="op">**</span>kwargs):</span>
+<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a>        H <span class="op">=</span> mol.make_hamiltonian()</span>
+<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a>        U <span class="op">=</span> tq.gates.QCircuit()</span>
+<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a>Now, for building the circuit, we populate the circuit <span class="in">`U`</span>, using a structural approach:</span>
+<span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a>        <span class="co"># structure of the ansatz:</span></span>
+<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 1. Ry rotations on all qubits</span></span>
+<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(coordinates) <span class="op">*</span> <span class="dv">2</span>): <span class="co"># &lt;1&gt;</span></span>
+<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a>            U <span class="op">+=</span> tq.gates.Ry(target<span class="op">=</span>i, angle<span class="op">=</span><span class="st">"a"</span> <span class="op">+</span> <span class="bu">str</span>(i)) <span class="co"># &lt;1&gt;</span></span>
+<span id="cb9-114"><a href="#cb9-114" aria-hidden="true" tabindex="-1"></a>        depth <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 2. Entangling layer =&gt; Alternating: CNOTs on even and odd qubits</span></span>
+<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 3. Ry rotations on all qubits</span></span>
+<span id="cb9-117"><a href="#cb9-117" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> d <span class="kw">in</span> <span class="bu">range</span>(depth): <span class="co"># &lt;2&gt;</span></span>
+<span id="cb9-118"><a href="#cb9-118" aria-hidden="true" tabindex="-1"></a>            offset <span class="op">=</span> d <span class="op">%</span> <span class="dv">2</span></span>
+<span id="cb9-119"><a href="#cb9-119" aria-hidden="true" tabindex="-1"></a>            iterations <span class="op">=</span> <span class="bu">len</span>(coordinates) <span class="op">*</span> <span class="dv">2</span></span>
+<span id="cb9-120"><a href="#cb9-120" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, iterations <span class="op">-</span> <span class="dv">1</span> <span class="op">-</span> offset, <span class="dv">2</span>): <span class="co"># &lt;3&gt;</span></span>
+<span id="cb9-121"><a href="#cb9-121" aria-hidden="true" tabindex="-1"></a>                U <span class="op">+=</span> tq.gates.CNOT(control<span class="op">=</span>offset <span class="op">+</span> i, target<span class="op">=</span>offset <span class="op">+</span> i <span class="op">+</span> <span class="dv">1</span>) <span class="co">#&lt;3&gt;</span></span>
+<span id="cb9-122"><a href="#cb9-122" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(iterations): <span class="co"># &lt;4&gt;</span></span>
+<span id="cb9-123"><a href="#cb9-123" aria-hidden="true" tabindex="-1"></a>                U <span class="op">+=</span> tq.gates.Ry(target<span class="op">=</span>i, angle<span class="op">=</span><span class="ss">f"b</span><span class="sc">{</span>d<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>) <span class="co"># &lt;4&gt;</span></span>
+<span id="cb9-124"><a href="#cb9-124" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-125"><a href="#cb9-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-126"><a href="#cb9-126" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Add an Ry rotation gate for all qubits we need to represent the atoms of the molecule.</span>
+<span id="cb9-127"><a href="#cb9-127" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Repeat while configured depth is not reached:</span>
+<span id="cb9-128"><a href="#cb9-128" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Add entangling layer: CNOTs alternating on even/odd qubits per iteration</span>
+<span id="cb9-129"><a href="#cb9-129" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Add Ry rotation on all qubits</span>
+<span id="cb9-130"><a href="#cb9-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-131"><a href="#cb9-131" aria-hidden="true" tabindex="-1"></a>The resulting circuit with the configured <span class="in">`depth = 2`</span> for 4 H-atoms is illustrated in @fig-circuit.</span>
+<span id="cb9-132"><a href="#cb9-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-133"><a href="#cb9-133" aria-hidden="true" tabindex="-1"></a><span class="al">![Structural Circuit with depth 2](./output-circuit.png)</span>{width=400 fig-align="center" #fig-circuit}</span>
+<span id="cb9-134"><a href="#cb9-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-135"><a href="#cb9-135" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb9-136"><a href="#cb9-136" aria-hidden="true" tabindex="-1"></a>    E <span class="op">=</span> tq.ExpectationValue(H<span class="op">=</span>H, U<span class="op">=</span>U) <span class="co"># &lt;1&gt;</span></span>
+<span id="cb9-137"><a href="#cb9-137" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> tq.minimize(E, silent<span class="op">=</span><span class="va">True</span>) <span class="co"># &lt;2&gt;</span></span>
+<span id="cb9-138"><a href="#cb9-138" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb9-139"><a href="#cb9-139" aria-hidden="true" tabindex="-1"></a>        <span class="st">"energy"</span>: result.energy,</span>
+<span id="cb9-140"><a href="#cb9-140" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-141"><a href="#cb9-141" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-142"><a href="#cb9-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-143"><a href="#cb9-143" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Create an expectation value <span class="in">`E`</span> with our previously obtained Hamiltonian <span class="in">`H`</span> for the molecule, and constructed circuit <span class="in">`U`</span>.</span>
+<span id="cb9-144"><a href="#cb9-144" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>run the minimization algorithm for that expectation value via tequila.</span>
+<span id="cb9-145"><a href="#cb9-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-146"><a href="#cb9-146" aria-hidden="true" tabindex="-1"></a>The only requirement for the custom method is that it returns a dictionary in the form:</span>
+<span id="cb9-147"><a href="#cb9-147" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb9-148"><a href="#cb9-148" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb9-149"><a href="#cb9-149" aria-hidden="true" tabindex="-1"></a>    <span class="st">"energy"</span>: result.energy,</span>
+<span id="cb9-150"><a href="#cb9-150" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-151"><a href="#cb9-151" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-152"><a href="#cb9-152" aria-hidden="true" tabindex="-1"></a>This concludes the introduction of custom methods for the quanti-gin DataGenerator.</span>
+<span id="cb9-153"><a href="#cb9-153" aria-hidden="true" tabindex="-1"></a>If you desire to customize more or different aspects, you can use a subclass of the <span class="in">`DataGenerator`</span> class and override the methods you want to change.</span>
+<span id="cb9-154"><a href="#cb9-154" aria-hidden="true" tabindex="-1"></a>Looking at the source code of quanti-gin <span class="ot">&lt;https://github.com/nylser/quanti-gin&gt;</span> always is a good reference and starting point.</span>
+<span id="cb9-155"><a href="#cb9-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-156"><a href="#cb9-156" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data Visualization</span></span>
+<span id="cb9-157"><a href="#cb9-157" aria-hidden="true" tabindex="-1"></a>The quanti-gin repository includes a Jupter Notebook for visualizations and analysis of the generated data.</span>
+<span id="cb9-158"><a href="#cb9-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-159"><a href="#cb9-159" aria-hidden="true" tabindex="-1"></a><span class="fu">### Data Visualization Example</span></span>
+<span id="cb9-162"><a href="#cb9-162" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb9-163"><a href="#cb9-163" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb9-164"><a href="#cb9-164" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install quanti<span class="op">-</span>gin</span>
+<span id="cb9-165"><a href="#cb9-165" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-166"><a href="#cb9-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-167"><a href="#cb9-167" aria-hidden="true" tabindex="-1"></a>If you just want to visualize the different methods and their results, you can use the following code.</span>
+<span id="cb9-168"><a href="#cb9-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-169"><a href="#cb9-169" aria-hidden="true" tabindex="-1"></a>Setup and load the data:</span>
+<span id="cb9-172"><a href="#cb9-172" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb9-173"><a href="#cb9-173" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb9-174"><a href="#cb9-174" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb9-175"><a href="#cb9-175" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb9-176"><a href="#cb9-176" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb9-177"><a href="#cb9-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-178"><a href="#cb9-178" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> quanti_gin.shared <span class="im">import</span> (</span>
+<span id="cb9-179"><a href="#cb9-179" aria-hidden="true" tabindex="-1"></a>    read_data_file,</span>
+<span id="cb9-180"><a href="#cb9-180" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-181"><a href="#cb9-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-182"><a href="#cb9-182" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> read_data_file(Path(<span class="st">"./example_data.csv"</span>))</span>
+<span id="cb9-183"><a href="#cb9-183" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-184"><a href="#cb9-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-185"><a href="#cb9-185" aria-hidden="true" tabindex="-1"></a>Now, <span class="in">`data.df`</span> contains the data in a pandas DataFrame, which can be used for visualization and analysis.</span>
+<span id="cb9-186"><a href="#cb9-186" aria-hidden="true" tabindex="-1"></a>As our example data compares multiple methods against each other, we can group the data by the method and visualize the results.</span>
+<span id="cb9-187"><a href="#cb9-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-190"><a href="#cb9-190" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb9-191"><a href="#cb9-191" aria-hidden="true" tabindex="-1"></a>grouped_methods <span class="op">=</span> data.df.groupby(<span class="st">"method"</span>)</span>
+<span id="cb9-192"><a href="#cb9-192" aria-hidden="true" tabindex="-1"></a>method_names <span class="op">=</span> grouped_methods.groups.keys()</span>
+<span id="cb9-193"><a href="#cb9-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-194"><a href="#cb9-194" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplot of custom_energy and fci, and SPA energy</span></span>
+<span id="cb9-195"><a href="#cb9-195" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(</span>
+<span id="cb9-196"><a href="#cb9-196" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span>, <span class="bu">len</span>(grouped_methods), sharey<span class="op">=</span><span class="va">True</span>, figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">5</span>), layout<span class="op">=</span><span class="st">"constrained"</span>, squeeze<span class="op">=</span><span class="va">False</span></span>
+<span id="cb9-197"><a href="#cb9-197" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-198"><a href="#cb9-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-199"><a href="#cb9-199" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">"Method energies"</span>)</span>
+<span id="cb9-200"><a href="#cb9-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-201"><a href="#cb9-201" aria-hidden="true" tabindex="-1"></a>fig.set_figheight(fig.get_figheight())</span>
+<span id="cb9-202"><a href="#cb9-202" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (axis, (method_name, method)) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(axes.flatten(), grouped_methods)):</span>
+<span id="cb9-203"><a href="#cb9-203" aria-hidden="true" tabindex="-1"></a>    axis.boxplot(method.optimized_energy)</span>
+<span id="cb9-204"><a href="#cb9-204" aria-hidden="true" tabindex="-1"></a>    axis.set_title(method_name)</span>
+<span id="cb9-205"><a href="#cb9-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-206"><a href="#cb9-206" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb9-207"><a href="#cb9-207" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-208"><a href="#cb9-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-209"><a href="#cb9-209" aria-hidden="true" tabindex="-1"></a>To compare all the different methods to each other, we can use this example plot:</span>
+<span id="cb9-212"><a href="#cb9-212" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb9-213"><a href="#cb9-213" aria-hidden="true" tabindex="-1"></a>combinations <span class="op">=</span> []</span>
+<span id="cb9-214"><a href="#cb9-214" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> method_a <span class="kw">in</span> method_names:</span>
+<span id="cb9-215"><a href="#cb9-215" aria-hidden="true" tabindex="-1"></a>    combinations.append(</span>
+<span id="cb9-216"><a href="#cb9-216" aria-hidden="true" tabindex="-1"></a>        [(method_a, method_b) <span class="cf">for</span> method_b <span class="kw">in</span> method_names <span class="cf">if</span> method_a <span class="op">!=</span> method_b]</span>
+<span id="cb9-217"><a href="#cb9-217" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-218"><a href="#cb9-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-219"><a href="#cb9-219" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> comb_list <span class="kw">in</span> combinations:</span>
+<span id="cb9-220"><a href="#cb9-220" aria-hidden="true" tabindex="-1"></a>    fig, axes <span class="op">=</span> plt.subplots(</span>
+<span id="cb9-221"><a href="#cb9-221" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span>, <span class="bu">len</span>(method_names) <span class="op">-</span> <span class="dv">1</span>, sharey<span class="op">=</span><span class="va">True</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>), layout<span class="op">=</span><span class="st">"constrained"</span></span>
+<span id="cb9-222"><a href="#cb9-222" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-223"><a href="#cb9-223" aria-hidden="true" tabindex="-1"></a>    fig.suptitle(<span class="ss">f"</span><span class="sc">{</span>comb_list[<span class="dv">0</span>][<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb9-224"><a href="#cb9-224" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> plot, (a, b) <span class="kw">in</span> <span class="bu">zip</span>(axes, comb_list):</span>
+<span id="cb9-225"><a href="#cb9-225" aria-hidden="true" tabindex="-1"></a>        energy_a <span class="op">=</span> np.array(grouped_methods.get_group(a).optimized_energy)</span>
+<span id="cb9-226"><a href="#cb9-226" aria-hidden="true" tabindex="-1"></a>        energy_b <span class="op">=</span> np.array(grouped_methods.get_group(b).optimized_energy)</span>
+<span id="cb9-227"><a href="#cb9-227" aria-hidden="true" tabindex="-1"></a>        error <span class="op">=</span> np.<span class="bu">abs</span>(energy_a <span class="op">-</span> energy_b)</span>
+<span id="cb9-228"><a href="#cb9-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-229"><a href="#cb9-229" aria-hidden="true" tabindex="-1"></a>        plot.boxplot(<span class="bu">abs</span>(energy_a <span class="op">-</span> energy_b), tick_labels<span class="op">=</span>[<span class="ss">f"</span><span class="sc">{</span>a<span class="sc">}</span><span class="ss"> vs. </span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">"</span>])</span>
+<span id="cb9-230"><a href="#cb9-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-231"><a href="#cb9-231" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb9-232"><a href="#cb9-232" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-233"><a href="#cb9-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-234"><a href="#cb9-234" aria-hidden="true" tabindex="-1"></a>For more detailed analysis and visualization, you can use the provided Jupyter Notebook in the quanti-gin repository.</span>
+<span id="cb9-235"><a href="#cb9-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-236"><a href="#cb9-236" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- ## Prerequisites for Machine Learning and Visualization Jupyter Notebooks</span></span>
+<span id="cb9-237"><a href="#cb9-237" aria-hidden="true" tabindex="-1"></a><span class="co">To use and visualize the data that quanti-gin generates there are two example Jupyter Notebooks, one for a basic Neural Network training approach, and one for visualizing and analyzing the data that was generated by quanti-gin.</span></span>
+<span id="cb9-238"><a href="#cb9-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-239"><a href="#cb9-239" aria-hidden="true" tabindex="-1"></a><span class="co">These notebooks have specific prerequisites, the simplest way of installing the required packages is using the python [conda](https://docs.conda.io/en/latest/) `environment.yaml`, which includes all dependencies.</span></span>
+<span id="cb9-240"><a href="#cb9-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-241"><a href="#cb9-241" aria-hidden="true" tabindex="-1"></a><span class="co">Once a version of conda is installed (we recommend [miniconda](https://docs.anaconda.com/free/miniconda/), for a lightweight, well contained installer), you can proceed with installation and creation of the conda environment.</span></span>
+<span id="cb9-242"><a href="#cb9-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-243"><a href="#cb9-243" aria-hidden="true" tabindex="-1"></a><span class="co">Create the conda environment based on the environment.yaml file:</span></span>
+<span id="cb9-244"><a href="#cb9-244" aria-hidden="true" tabindex="-1"></a><span class="co">```sh</span></span>
+<span id="cb9-245"><a href="#cb9-245" aria-hidden="true" tabindex="-1"></a><span class="co">conda env create</span></span>
+<span id="cb9-246"><a href="#cb9-246" aria-hidden="true" tabindex="-1"></a><span class="co">```</span></span>
+<span id="cb9-247"><a href="#cb9-247" aria-hidden="true" tabindex="-1"></a><span class="co">After this, a new environment called metavqes should exist, that you can activate using:</span></span>
+<span id="cb9-248"><a href="#cb9-248" aria-hidden="true" tabindex="-1"></a><span class="co">```sh</span></span>
+<span id="cb9-249"><a href="#cb9-249" aria-hidden="true" tabindex="-1"></a><span class="co">conda env activate metavqes</span></span>
+<span id="cb9-250"><a href="#cb9-250" aria-hidden="true" tabindex="-1"></a><span class="co">```</span></span>
+<span id="cb9-251"><a href="#cb9-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-252"><a href="#cb9-252" aria-hidden="true" tabindex="-1"></a><span class="co">Then, you can open either of the notebooks to look at data usage and visualization examples:</span></span>
+<span id="cb9-253"><a href="#cb9-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-254"><a href="#cb9-254" aria-hidden="true" tabindex="-1"></a><span class="co">- [Visualization](../Visualization.ipynb)</span></span>
+<span id="cb9-255"><a href="#cb9-255" aria-hidden="true" tabindex="-1"></a><span class="co">- [NeuralNetwork](../NeuralNetwork.ipynb) --&gt;</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

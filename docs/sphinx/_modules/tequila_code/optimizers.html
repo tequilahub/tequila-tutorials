@@ -87,12 +87,12 @@
     <span class="n">methods</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span>
 
 
-<span class="n">SUPPORTED_OPTIMIZERS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;scipy&#39;</span><span class="p">,</span> <span class="s1">&#39;gpyopt&#39;</span><span class="p">,</span> <span class="s1">&#39;gd&#39;</span><span class="p">]</span>
+<span class="n">SUPPORTED_OPTIMIZERS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'scipy'</span><span class="p">,</span> <span class="s1">'gpyopt'</span><span class="p">,</span> <span class="s1">'gd'</span><span class="p">]</span>
 <span class="n">INSTALLED_OPTIMIZERS</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">INSTALLED_OPTIMIZERS</span><span class="p">[</span><span class="s1">&#39;scipy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_Optimizers</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">OptimizerSciPy</span><span class="p">,</span>
+<span class="n">INSTALLED_OPTIMIZERS</span><span class="p">[</span><span class="s1">'scipy'</span><span class="p">]</span> <span class="o">=</span> <span class="n">_Optimizers</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">OptimizerSciPy</span><span class="p">,</span>
                                             <span class="n">minimize</span><span class="o">=</span><span class="n">minimize_scipy</span><span class="p">,</span>
                                             <span class="n">methods</span><span class="o">=</span><span class="n">OptimizerSciPy</span><span class="o">.</span><span class="n">available_methods</span><span class="p">())</span>
-<span class="n">INSTALLED_OPTIMIZERS</span><span class="p">[</span><span class="s1">&#39;gd&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_Optimizers</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">OptimizerGD</span><span class="p">,</span>
+<span class="n">INSTALLED_OPTIMIZERS</span><span class="p">[</span><span class="s1">'gd'</span><span class="p">]</span> <span class="o">=</span> <span class="n">_Optimizers</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">OptimizerGD</span><span class="p">,</span>
                                          <span class="n">minimize</span><span class="o">=</span><span class="n">minimize_gd</span><span class="p">,</span>
                                          <span class="n">methods</span><span class="o">=</span><span class="n">OptimizerGD</span><span class="o">.</span><span class="n">available_methods</span><span class="p">())</span>
 
@@ -101,7 +101,7 @@
     <span class="kn">from</span><span class="w"> </span><span class="nn">tequila.optimizers.optimizer_gpyopt</span><span class="w"> </span><span class="kn">import</span> <span class="n">OptimizerGPyOpt</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">tequila.optimizers.optimizer_gpyopt</span><span class="w"> </span><span class="kn">import</span> <span class="n">minimize</span> <span class="k">as</span> <span class="n">minimize_gpyopt</span>
 
-    <span class="n">INSTALLED_OPTIMIZERS</span><span class="p">[</span><span class="s1">&#39;gpyopt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_Optimizers</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">OptimizerGPyOpt</span><span class="p">,</span>
+    <span class="n">INSTALLED_OPTIMIZERS</span><span class="p">[</span><span class="s1">'gpyopt'</span><span class="p">]</span> <span class="o">=</span> <span class="n">_Optimizers</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">OptimizerGPyOpt</span><span class="p">,</span>
                                                  <span class="n">minimize</span><span class="o">=</span><span class="n">minimize_gpyopt</span><span class="p">,</span>
                                                  <span class="n">methods</span><span class="o">=</span><span class="n">OptimizerGPyOpt</span><span class="o">.</span><span class="n">available_methods</span><span class="p">())</span>
     <span class="n">has_gpyopt</span> <span class="o">=</span> <span class="kc">True</span>
@@ -111,50 +111,50 @@
 <div class="viewcode-block" id="show_available_optimizers">
 <a class="viewcode-back" href="../../optimizers.html#tequila_code.optimizers.show_available_optimizers">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">show_available_optimizers</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">        A list of available optimization methods</span>
 <span class="sd">        The list depends on optimization packages installed in your system</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">module</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;available methods for optimizer modules found on your system:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"available methods for optimizer modules found on your system:"</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;available methods for optimizer module </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">module</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"available methods for optimizer module </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">module</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">module</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">INSTALLED_OPTIMIZERS</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;module </span><span class="si">{}</span><span class="s2"> not found!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">module</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"module </span><span class="si">{}</span><span class="s2"> not found!"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">module</span><span class="p">))</span>
             <span class="n">module</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:20}</span><span class="s2"> | </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;method&quot;</span><span class="p">,</span> <span class="s2">&quot;optimizer module&quot;</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--------------------------&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="si">{:20}</span><span class="s2"> | </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">"method"</span><span class="p">,</span> <span class="s2">"optimizer module"</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"--------------------------"</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">INSTALLED_OPTIMIZERS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">module</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">module</span> <span class="o">!=</span> <span class="n">k</span><span class="p">:</span>
             <span class="k">continue</span>
         <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">methods</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:20}</span><span class="s2"> | </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="si">{:20}</span><span class="s2"> | </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">module</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Supported optimizer modules: &quot;</span><span class="p">,</span> <span class="n">SUPPORTED_OPTIMIZERS</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Installed optimizer modules: &quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">INSTALLED_OPTIMIZERS</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Supported optimizer modules: "</span><span class="p">,</span> <span class="n">SUPPORTED_OPTIMIZERS</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Installed optimizer modules: "</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">INSTALLED_OPTIMIZERS</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
 
 
 
 <div class="viewcode-block" id="minimize">
 <a class="viewcode-back" href="../../optimizers.html#tequila_code.optimizers.minimize">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">minimize</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span>
-             <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;bfgs&quot;</span><span class="p">,</span>
+             <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"bfgs"</span><span class="p">,</span>
              <span class="n">variables</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
              <span class="n">initial_values</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
              <span class="n">maxiter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
              <span class="o">*</span><span class="n">args</span><span class="p">,</span>
              <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    method: str:</span>
 <span class="sd">       The optimization method (e.g. bfgs, cobyla, nelder-mead, ...)</span>
-<span class="sd">       see &#39;tq.optimizers.show_available_methods()&#39; for an overview</span>
+<span class="sd">       see 'tq.optimizers.show_available_methods()' for an overview</span>
 <span class="sd">    objective: tq.Objective:</span>
 <span class="sd">       The abstract tequila objective to be optimized</span>
 <span class="sd">    variables: list of names:</span>
@@ -178,9 +178,9 @@
 <span class="sd">       can be a dictionary of tequila objectives representing the gradients</span>
 <span class="sd">       or a string/dictionary giving instructions for numerical gradients</span>
 <span class="sd">       examples are</span>
-<span class="sd">            gradient = &#39;2-point&#39;</span>
-<span class="sd">            gradient = {&#39;method&#39;:&#39;2-point&#39;, &#39;stepsize&#39;: 1.e-4}</span>
-<span class="sd">            gradient = {&#39;method&#39;:Callable, &#39;stepsize&#39;: 1.e-4}</span>
+<span class="sd">            gradient = '2-point'</span>
+<span class="sd">            gradient = {'method':'2-point', 'stepsize': 1.e-4}</span>
+<span class="sd">            gradient = {'method':Callable, 'stepsize': 1.e-4}</span>
 <span class="sd">            see optimizer_base.py for method examples</span>
 
 <span class="sd">        gradient = None: analytical gradients are compiled</span>
@@ -189,7 +189,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">ovtmp</span><span class="o">=</span><span class="n">objective</span><span class="o">.</span><span class="n">extract_variables</span><span class="p">()</span>
     <span class="n">fast_return</span><span class="o">=</span><span class="kc">False</span>
@@ -207,7 +207,7 @@
                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">raise</span> <span class="n">TequilaOptimizerException</span><span class="p">(</span>
-        <span class="s2">&quot;Could not find optimization method </span><span class="si">{}</span><span class="s2"> in tequila optimizers. You might miss dependencies&quot;</span><span class="p">)</span></div>
+        <span class="s2">"Could not find optimization method </span><span class="si">{}</span><span class="s2"> in tequila optimizers. You might miss dependencies"</span><span class="p">)</span></div>
 
 </pre></div>
 

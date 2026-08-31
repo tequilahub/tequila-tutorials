@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -44,14 +47,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a5883e7fa1e19cde57db4ec6b11febc3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-bca227963e21cb646e747543fe28dd8e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-a5883e7fa1e19cde57db4ec6b11febc3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-6816b788f5f7c21b6d99241bf8ffbe49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-4e53f9a7cac9cb8ce958252f8331ecbd.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-6816b788f5f7c21b6d99241bf8ffbe49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -137,7 +140,7 @@ cookieconsent.run({
   
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -407,7 +410,7 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(6)</span></div><div class="category" data-category="Y2hlbWlzdHJ5">chemistry <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Y29kZQ==">code <span class="quarto-category-count">(3)</span></div><div class="category" data-category="bXJh">mra <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dGVxdWlsYQ==">tequila <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(9)</span></div><div class="category" data-category="YmFycmVuJTIwcGxhdGVhdXM=">barren plateaus <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Y2hlbWlzdHJ5">chemistry <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Y29kZQ==">code <span class="quarto-category-count">(6)</span></div><div class="category" data-category="bXJh">mra <span class="quarto-category-count">(1)</span></div><div class="category" data-category="b3B0aW1pemVycw==">optimizers <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dGVxdWlsYQ==">tequila <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -422,7 +425,101 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-date-sort="1773792000000" data-listing-file-modified-sort="1782740913692" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="71" data-listing-word-count-sort="14030">
+<div class="quarto-post image-right" data-index="0" data-categories="Y29kZSUyQ2JhcnJlbiUyMHBsYXRlYXVz" data-listing-date-sort="1787529600000" data-listing-file-modified-sort="1788176217450" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1531">
+<div class="thumbnail"><a href="./research/vqa-init-strategies/tutorial.html" class="no-external">
+
+<img loading="lazy" src="./research/vqa-init-strategies/preview.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./research/vqa-init-strategies/tutorial.html" class="no-external">Initialization Strategies for Trainable Variational Quantum Algorithms</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Y29kZQ=='); return false;">code</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YmFycmVuJTIwcGxhdGVhdXM='); return false;">barren plateaus</div>
+
+</div>
+<div class="delink listing-description"><a href="./research/vqa-init-strategies/tutorial.html" class="no-external">
+Variational quantum algorithms are useful only when their circuit parameters can be trained efficiently <span class="citation" data-cites="Cerezo.2021-VariationalQuantumAlgorithms">(Cerezo et al. 2021)</span>. Deep hardware-efficient ansätze initialized…<span class="citation" data-cites="McClean.2018-BarrenPlateausQuantum Larocca.2025-BarrenPlateausVariational"></span><strong></strong><strong></strong>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./research/vqa-init-strategies/tutorial.html" class="no-external">
+<div class="listing-date">
+Aug 24, 2026
+</div>
+<div class="listing-author">
+Simon Reichert, Adapted by Adelina Bärligea
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="Y29kZSUyQ29wdGltaXplcnM=" data-listing-date-sort="1787270400000" data-listing-file-modified-sort="1788176217417" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1831">
+<div class="thumbnail"><a href="./research/ShotFrugalOpt/tutorial.html" class="no-external">
+
+<img loading="lazy" src="./research/ShotFrugalOpt/preview.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./research/ShotFrugalOpt/tutorial.html" class="no-external">Testing Shot-Frugal Optimizers for Variational Quantum Algorithms</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Y29kZQ=='); return false;">code</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('b3B0aW1pemVycw=='); return false;">optimizers</div>
+
+</div>
+<div class="delink listing-description"><a href="./research/ShotFrugalOpt/tutorial.html" class="no-external">
+Variational quantum algorithms (VQAs) use a classical optimizer to tune a parameterized quantum circuit from repeated estimates of a quantum objective, for example to…<em></em><em></em>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./research/ShotFrugalOpt/tutorial.html" class="no-external">
+<div class="listing-date">
+Aug 21, 2026
+</div>
+<div class="listing-author">
+Marc-Justin Scheffler, Adapted by Adelina Bärligea
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="2" data-categories="Y29kZQ==" data-listing-date-sort="1787270400000" data-listing-file-modified-sort="1788176217429" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="720">
+<div class="thumbnail"><a href="./research/pauli_decomposition/Tutorial.html" class="no-external">
+
+<img loading="lazy" src="./research/pauli_decomposition/preview.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./research/pauli_decomposition/Tutorial.html" class="no-external">Implementing Fast Pauli Decomposition with the Walsh-Hadamard Transform</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Y29kZQ=='); return false;">code</div>
+
+</div>
+<div class="delink listing-description"><a href="./research/pauli_decomposition/Tutorial.html" class="no-external">
+Pauli decompositions express quantum operators in a standard basis that is convenient for simulation, measurement, and algorithm design. This tutorial shows how all Pauli…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./research/pauli_decomposition/Tutorial.html" class="no-external">
+<div class="listing-date">
+Aug 21, 2026
+</div>
+<div class="listing-author">
+Philipp Greiner, Adapted by Adelina Bärligea
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="3" data-listing-date-sort="1773792000000" data-listing-file-modified-sort="1788176217429" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="71" data-listing-word-count-sort="14030">
 <div class="thumbnail"><a href="./research/first_quantized_chemistry_simulations/index.html" class="no-external">
 
 <img loading="lazy" src="./research/first_quantized_chemistry_simulations/preview.png" class="thumbnail-image">
@@ -447,7 +544,7 @@ Tamara Wegner
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-listing-date-sort="1732320000000" data-listing-file-modified-sort="1782740913692" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="48" data-listing-word-count-sort="9435">
+<div class="quarto-post image-right" data-index="4" data-listing-date-sort="1732320000000" data-listing-file-modified-sort="1788176217429" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="48" data-listing-word-count-sort="9435">
 <div class="thumbnail"><a href="./research/gaussian_convolution/index.html" class="no-external">
 
 <img loading="lazy" src="./research/gaussian_convolution/img/thumbnail.jpg" class="thumbnail-image">
@@ -472,7 +569,7 @@ Oliver Hüttenhofer
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-categories="bXJhJTJDY29kZQ==" data-listing-date-sort="1728950400000" data-listing-file-modified-sort="1782740913686" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2154">
+<div class="quarto-post image-right" data-index="5" data-categories="bXJhJTJDY29kZQ==" data-listing-date-sort="1728950400000" data-listing-file-modified-sort="1788176217423" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2154">
 <div class="thumbnail"><a href="./research/exvqe/Eigensolver.html" class="no-external">
 
 <img loading="lazy" src="./research/exvqe/main_image.png" class="thumbnail-image">
@@ -504,7 +601,7 @@ Elisabeth Welizky
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="3" data-categories="dGVxdWlsYSUyQ2NvZGUlMkNjaGVtaXN0cnk=" data-listing-date-sort="1726099200000" data-listing-file-modified-sort="1782740913692" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1673">
+<div class="quarto-post image-right" data-index="6" data-categories="dGVxdWlsYSUyQ2NvZGUlMkNjaGVtaXN0cnk=" data-listing-date-sort="1726099200000" data-listing-file-modified-sort="1788176217429" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1673">
 <div class="thumbnail"><a href="./research/molcirc/index.html" class="no-external">
 
 <img loading="lazy" src="./research/molcirc/molcirc.png" class="thumbnail-image">
@@ -538,7 +635,7 @@ Jakob Kottmann
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="4" data-categories="Y29kZQ==" data-listing-date-sort="1721347200000" data-listing-file-modified-sort="1782740913699" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="18" data-listing-word-count-sort="3408">
+<div class="quarto-post image-right" data-index="7" data-categories="Y29kZQ==" data-listing-date-sort="1721347200000" data-listing-file-modified-sort="1788176217443" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="18" data-listing-word-count-sort="3408">
 <div class="thumbnail"><a href="./research/quantum_classifier/quantum_classifier.html" class="no-external">
 
 <img loading="lazy" src="./research/quantum_classifier/classifier.png" class="thumbnail-image">
@@ -568,7 +665,7 @@ Simon Reichert, Adapted by Thuy Truong
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="5" data-categories="Y2hlbWlzdHJ5" data-listing-date-sort="1668038400000" data-listing-file-modified-sort="1782740913682" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1582">
+<div class="quarto-post image-right" data-index="8" data-categories="Y2hlbWlzdHJ5" data-listing-date-sort="1668038400000" data-listing-file-modified-sort="1788176217417" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1582">
 <div class="thumbnail"><a href="./research/electronic-hamiltonians/index.html" class="no-external">
 
 <img loading="lazy" src="./research/electronic-hamiltonians/Preview_Hamiltonian.png" class="thumbnail-image">

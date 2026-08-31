@@ -80,8 +80,8 @@
 <p>Before you start documenting, make sure you have the Sphinx project and <code class="docutils literal notranslate"><span class="pre">autodoc</span></code> enabled in your <code class="docutils literal notranslate"><span class="pre">conf.py</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># In conf.py, ensure these extensions are present</span>
 <span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s1">&#39;sphinx.ext.autodoc&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;sphinx.ext.napoleon&#39;</span><span class="p">,</span>  <span class="c1"># Optional: For Google/NumPy style docstrings</span>
+    <span class="s1">'sphinx.ext.autodoc'</span><span class="p">,</span>
+    <span class="s1">'sphinx.ext.napoleon'</span><span class="p">,</span>  <span class="c1"># Optional: For Google/NumPy style docstrings</span>
 <span class="p">]</span>
 </pre></div>
 </div>
@@ -91,64 +91,64 @@
 <p>reStructuredText is a lightweight markup language used in docstrings. Here’s how to write effective docstrings for different parts of your code.</p>
 <p><strong>2.1 Module-Level Docstring</strong></p>
 <p>At the top of your module (<code class="docutils literal notranslate"><span class="pre">mymodule.py</span></code>), include a general description:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">"""</span>
 <span class="sd">mymodule.py</span>
 <span class="sd">===========</span>
 
 <span class="sd">This module contains functions and classes for data processing.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 </pre></div>
 </div>
 <p><strong>2.2 Documenting Functions</strong></p>
 <p>Describe the function’s purpose, parameters, and return values. Use the following format:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">add_numbers</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Adds two numbers together.</span>
 
 <span class="sd">    :param int a: The first number.</span>
 <span class="sd">    :param int b: The second number.</span>
 <span class="sd">    :returns: The sum of `a` and `b`.</span>
 <span class="sd">    :rtype: int</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
 </pre></div>
 </div>
 <p><strong>2.3 Documenting Classes</strong></p>
 <p>For classes, include a class-level docstring and document each method:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Calculator</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A simple calculator class to perform basic arithmetic operations.</span>
 
 <span class="sd">    :param str name: The name of the calculator instance.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Initializes the calculator with a given name.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Multiplies two numbers.</span>
 
 <span class="sd">        :param int x: The first factor.</span>
 <span class="sd">        :param int y: The second factor.</span>
 <span class="sd">        :returns: The product of `x` and `y`.</span>
 <span class="sd">        :rtype: int</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
 </pre></div>
 </div>
 <p><strong>2.4 Documenting Class Attributes</strong></p>
 <p>Use the <code class="docutils literal notranslate"><span class="pre">:ivar</span></code> directive to describe class attributes:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Rectangle</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Represents a geometric rectangle.</span>
 
 <span class="sd">    :ivar float length: The length of the rectangle.</span>
 <span class="sd">    :ivar float width: The width of the rectangle.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="n">length</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
@@ -166,7 +166,7 @@
 </ul>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">divide</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Divides `x` by `y`.</span>
 
 <span class="sd">    **Parameters:**</span>
@@ -181,17 +181,17 @@
 <span class="sd">    **Raises:**</span>
 
 <span class="sd">    - `ZeroDivisionError`: If `y` is zero.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ZeroDivisionError</span><span class="p">(</span><span class="s2">&quot;Cannot divide by zero.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ZeroDivisionError</span><span class="p">(</span><span class="s2">"Cannot divide by zero."</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">/</span> <span class="n">y</span>
 </pre></div>
 </div>
 <p><strong>3.2 Cross-referencing</strong></p>
 <p>To reference other parts of the code, use the <code class="docutils literal notranslate"><span class="pre">:class:</span></code>, <code class="docutils literal notranslate"><span class="pre">:func:</span></code> and similar directives:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">"""</span>
 <span class="sd">See also :class:`Calculator` for more operations.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 </pre></div>
 </div>
 </section>

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -77,14 +80,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-a5883e7fa1e19cde57db4ec6b11febc3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-bca227963e21cb646e747543fe28dd8e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-a5883e7fa1e19cde57db4ec6b11febc3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6816b788f5f7c21b6d99241bf8ffbe49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-4e53f9a7cac9cb8ce958252f8331ecbd.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6816b788f5f7c21b6d99241bf8ffbe49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -364,10 +367,7 @@ cookieconsent.run({
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">Contribution</h1>
-                                <div class="quarto-categories">
-                <div class="quarto-category">code</div>
-              </div>
-                  </div>
+                      </div>
   </div>
     
   
@@ -387,12 +387,11 @@ cookieconsent.run({
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#how-can-you-upload-your-own-tutorial-or-research-page" id="toc-how-can-you-upload-your-own-tutorial-or-research-page" class="nav-link active" data-scroll-target="#how-can-you-upload-your-own-tutorial-or-research-page">How can you upload your own tutorial or research page?</a>
+  <li><a href="#add-a-tutorial-or-research-page" id="toc-add-a-tutorial-or-research-page" class="nav-link active" data-scroll-target="#add-a-tutorial-or-research-page">Add a tutorial or research page</a>
   <ul class="collapse">
-  <li><a href="#how-to-install-quarto" id="toc-how-to-install-quarto" class="nav-link" data-scroll-target="#how-to-install-quarto">How to install Quarto</a></li>
-  <li><a href="#how-to-set-up-the-environment-and-compile-the-blog" id="toc-how-to-set-up-the-environment-and-compile-the-blog" class="nav-link" data-scroll-target="#how-to-set-up-the-environment-and-compile-the-blog">How to set up the environment and compile the blog</a></li>
-  <li><a href="#how-to-add-your-contribution" id="toc-how-to-add-your-contribution" class="nav-link" data-scroll-target="#how-to-add-your-contribution">How to add your contribution</a></li>
-  <li><a href="#how-to-submit" id="toc-how-to-submit" class="nav-link" data-scroll-target="#how-to-submit">How to submit</a></li>
+  <li><a href="#set-up-the-website-locally" id="toc-set-up-the-website-locally" class="nav-link" data-scroll-target="#set-up-the-website-locally">Set up the website locally</a></li>
+  <li><a href="#create-your-contribution" id="toc-create-your-contribution" class="nav-link" data-scroll-target="#create-your-contribution">Create your contribution</a></li>
+  <li><a href="#submit-your-contribution" id="toc-submit-your-contribution" class="nav-link" data-scroll-target="#submit-your-contribution">Submit your contribution</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/tequilahub/tequila-tutorials/blob/main/Contribution/Contribution.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila-tutorials/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -405,89 +404,70 @@ cookieconsent.run({
 
 
 
-<p>If you find any bugs or inconveniences in tequila please don’t be shy and let us know. You can do so either by raising an issue on github or contact us directly.</p>
-<section id="how-can-you-upload-your-own-tutorial-or-research-page" class="level1">
-<h1>How can you upload your own tutorial or research page?</h1>
-<section id="how-to-install-quarto" class="level3">
-<h3 class="anchored" data-anchor-id="how-to-install-quarto">How to install Quarto</h3>
-<p>For installing and using Quarto correctly, please take a look at some helpful links:</p>
-<ul>
-<li>Installation: https://quarto.org/docs/get-started/</li>
-<li>Quarto basics: https://quarto.org/docs/get-started/hello/rstudio.html</li>
-</ul>
+<p>Found a problem in one of the tutorials or with this website? Please let us know by <a href="https://github.com/tequilahub/tequila-tutorials/issues">opening an issue on GitHub</a>. You are also very welcome to contribute a tutorial or a research page yourself.</p>
+<section id="add-a-tutorial-or-research-page" class="level2">
+<h2 class="anchored" data-anchor-id="add-a-tutorial-or-research-page">Add a tutorial or research page</h2>
+<p>Contributions to this website can be written as Jupyter notebooks (<code>.ipynb</code>) or Quarto documents (<code>.qmd</code>). A tutorial should explain a useful Tequila feature or workflow, while a research page can present an application of Tequila in a research project.</p>
+<section id="set-up-the-website-locally" class="level3">
+<h3 class="anchored" data-anchor-id="set-up-the-website-locally">Set up the website locally</h3>
+<p>First, install <a href="https://git-scm.com/downloads">Git</a> and <a href="https://quarto.org/docs/get-started/">Quarto</a>. The repository already contains an <code>environment.yml</code> file with the Python packages used by the website. From the repository root, create and activate the environment with:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env create <span class="at">-f</span> environment.yml</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate BlogQA</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> ipykernel install <span class="at">--user</span> <span class="at">--name</span> BlogQA <span class="at">--display-name</span> <span class="st">"Python (BlogQA)"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If the environment already exists, update it instead:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env update <span class="at">-f</span> environment.yml <span class="at">--prune</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate BlogQA</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>You can then build and preview the website locally:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> preview</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Quarto prints the local preview address in the terminal and automatically refreshes the page when you save a change. If your notebook needs an additional package that is not part of <code>environment.yml</code>, install it in the <code>BlogQA</code> environment and mention it in your pull request.</p>
 </section>
-<section id="how-to-set-up-the-environment-and-compile-the-blog" class="level3">
-<h3 class="anchored" data-anchor-id="how-to-set-up-the-environment-and-compile-the-blog">How to set up the environment and compile the blog</h3>
+<section id="create-your-contribution" class="level3">
+<h3 class="anchored" data-anchor-id="create-your-contribution">Create your contribution</h3>
+<p>Create one folder for your contribution in the appropriate section:</p>
+<ul>
+<li><code>tutorials/&lt;your-tutorial-name&gt;/</code> for a tutorial</li>
+<li><code>research/&lt;your-project-name&gt;/</code> for a research page</li>
+</ul>
+<p>Keep the notebook or Quarto file and all files it needs, such as images, data, and a bibliography, together in this folder. Use relative paths so that the page also works after publication.</p>
+<p>The first paragraph is shown as a short preview on the overview page. It should therefore introduce the topic in plain language before the tutorial begins with equations or code.</p>
+<p>Place a YAML header like the following at the beginning of the notebook or Quarto document:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"A clear title for your contribution"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">author</span><span class="kw">:</span><span class="at"> </span><span class="st">"Your full name"</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> </span><span class="st">"yyyy-mm-dd"</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">categories</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">code</span><span class="kw">]</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">image</span><span class="kw">:</span><span class="at"> </span><span class="st">"preview.png"</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">image-width</span><span class="kw">:</span><span class="at"> </span><span class="st">"1cm"</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">image-height</span><span class="kw">:</span><span class="at"> </span><span class="st">"1cm"</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">html</span><span class="kw">:</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">code-fold</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">jupyter</span><span class="kw">:</span><span class="at"> blogqa</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The <code>jupyter</code> entry is needed for notebooks and for Quarto documents that execute Python code. You can omit it from a purely textual <code>.qmd</code> file. Set <code>code-fold: true</code> if long implementation cells should be collapsed by default.</p>
+<p>A preview image makes the contribution easier to recognize on the overview page. You can use <code>Preview_Image.png</code> or <code>Preview_Image.key</code> from the repository root as a starting point, or create your own image with the same general proportions.</p>
+</section>
+<section id="submit-your-contribution" class="level3">
+<h3 class="anchored" data-anchor-id="submit-your-contribution">Submit your contribution</h3>
 <ol type="1">
-<li>Clone from source</li>
-<li>Create a conda environment with the name ‘BlogQa’ (concrete: opt/anaconda3/envs/BlogQA/bin/python3):</li>
+<li><p>Fork the <a href="https://github.com/tequilahub/tequila-tutorials">Tequila tutorials repository</a> to your own GitHub account and clone your fork.</p></li>
+<li><p>Add the original repository as the <code>upstream</code> remote if it is not configured yet:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> remote add upstream https://github.com/tequilahub/tequila-tutorials.git</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Fetch the latest version and create a new branch from <code>upstream/main</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> fetch upstream</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> switch <span class="at">-c</span> my-contribution upstream/main</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Add your contribution in its own folder under <code>tutorials/</code> or <code>research/</code>.</p></li>
+<li><p>Run <code>quarto preview</code> and check the page itself as well as its card on the Tutorials or Research overview page.</p></li>
+<li><p>Review <code>git status</code>, then commit only the files that belong to your contribution:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add tutorials/<span class="op">&lt;</span>your-tutorial-name<span class="op">&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Add tutorial on &lt;topic&gt;"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>For a research page, use the corresponding folder under <code>research/</code>.</p></li>
+<li><p>Push the branch to your fork:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin my-contribution</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Open a pull request from your branch to the <code>main</code> branch of <code>tequilahub/tequila-tutorials</code>.</p></li>
 </ol>
-<ul>
-<li>conda create -n BlogQA python=3.9</li>
-<li>conda env list</li>
-<li>python -m ipykernel install –user –name=BlogQA</li>
-<li>conda install ipykernel</li>
-<li>conda activate BlogQA</li>
-</ul>
-<ol start="3" type="1">
-<li>Install the dependencies as well as everything needed regarding Jupyter and the BlogQA Kernel: In particular these are the following ones:</li>
-</ol>
-<ul>
-<li>conda create -n BlogQA python=3.9</li>
-<li>pip install pyyaml</li>
-<li>pip install nbformat</li>
-<li>pip install nbclient</li>
-<li>pip install numpy</li>
-<li>pip install scipy</li>
-<li>pip install matplotlib</li>
-<li>pip install tequila-basic</li>
-<li>pip install qulacs</li>
-<li>pip install pyscf</li>
-</ul>
-<p>Also, these packages are necessary for the Documentation:</p>
-<ul>
-<li>pip install sphinx</li>
-<li>pip install sphinxcontrib</li>
-<li>pip install sphinxcontrib-programoutput</li>
-<li>pip install sphinx-rtd-theme</li>
-</ul>
-<ol start="4" type="1">
-<li>Preview with “quarto preview”</li>
-</ol>
-</section>
-<section id="how-to-add-your-contribution" class="level3">
-<h3 class="anchored" data-anchor-id="how-to-add-your-contribution">How to add your contribution</h3>
-<p>First, please make sure that only ipynb-files or quarto-files are allowed as tutorials or research pages for the website. Within these, the following HTML parameters can be placed in a separate markdown at the top, before the actual content begins:</p>
-<div id="cell-2" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>title: <span class="st">"Any titel"</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>author: <span class="st">"Your full name"</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>date: <span class="st">"yyyy-mm-dd"</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>categories: [code]</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>image: <span class="st">"Preview_Image.png"</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>image<span class="op">-</span>width: <span class="st">"1cm"</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>image<span class="op">-</span>height: <span class="st">"1cm"</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="bu">format</span>:</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    html:</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        code<span class="op">-</span>fold: false</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">eval</span>: true</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>jupyter: blogqa</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Begin and end this section with three hyphens (—)</p>
-</section>
-<section id="how-to-submit" class="level3">
-<h3 class="anchored" data-anchor-id="how-to-submit">How to submit</h3>
-<ol type="1">
-<li>Make a fork of tequila to your own github account.</li>
-<li>Checkout the devel branch and make sure it is up to date with the main github repository.</li>
-<li>Create and checkout a new branch from devel via git branch pr-my-branch-name followed by git checkout pr-my-branch-name. By typing git branch afterwards you can check which branch is currently checked out on your computer.</li>
-<li>Navigate to the tutorial/ researches folder and create your own subfolder, which you name with the tutorial/research name. This subfolder should include your ipynb/quarto-file (as well as other necessary files, such as png-files for importing images).</li>
-<li>Introduce changes to the code and commit them with git.</li>
-<li>Push the changes to your github account.</li>
-<li>Log into github and create a pull request to the main github repository. The pull request should be directed to the devel branch (but we can also change that afterwards).</li>
-</ol>
-<p>If you would like to include a preview image with your contribution, feel free to use our preview image template. It is available as a .png file (for non-macOS users) and a Keynote file (for macOS users). You can find the template in the main folder alongside the other files.</p>
-<p>If you plan to introduce major changes to the base library it can be beneficial to contact us first. This way we might be able to avoid conflicts before they arise.</p>
-<p>If you used tequila for your research, feel free to include your algorithms here, either by integrating it into the core libraries or by demonstrating it with a notebook in the tutorials section. If you let us know about it, we will also add your research article in the list of research projects that use tequila (see the github repos README).</p>
+<p>Please use a separate branch and pull request for each independent contribution. This keeps the review focused and makes later changes easier to manage.</p>
+<p>If you are planning a larger change, it is a good idea to open an issue first so that we can coordinate it with ongoing work. Changes to the Tequila library itself belong in the <a href="https://github.com/tequilahub/tequila">main Tequila repository</a>, while examples and research applications are a good fit for this tutorial website.</p>
 
 
 </section>
@@ -599,16 +579,16 @@ cookieconsent.run({
     }
     function toggleCodeHandler(show) {
       return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
           if (show) {
             details.open = true;
           } else {
             details.removeAttribute("open");
           }
         }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
         const fromCls = show ? "hidden" : "unhidden";
         const toCls = show ? "unhidden" : "hidden";
         for (let i=0; i<cellCodeDivs.length; i++) {
@@ -899,64 +879,25 @@ cookieconsent.run({
           }
         };
       }
-        const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
-        for (let i=0; i<annoteTargets.length; i++) {
-          const annoteTarget = annoteTargets[i];
-          const targetCell = annoteTarget.getAttribute("data-target-cell");
-          const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
-          const contentFn = () => {
-            const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-            if (content) {
-              const tipContent = content.cloneNode(true);
-              tipContent.classList.add("code-annotation-tip-content");
-              return tipContent.outerHTML;
-            }
-          }
-          const config = {
-            allowHTML: true,
-            content: contentFn,
-            onShow: (instance) => {
-              selectCodeLines(instance.reference);
-              instance.reference.classList.add('code-annotation-active');
-              window.tippy.hideAll();
-            },
-            onHide: (instance) => {
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
               unselectCodeLines();
-              instance.reference.classList.remove('code-annotation-active');
-            },
-            maxWidth: 300,
-            delay: [50, 0],
-            duration: [200, 0],
-            offset: [5, 10],
-            arrow: true,
-            appendTo: function(el) {
-              return el.parentElement.parentElement.parentElement;
-            },
-            interactive: true,
-            interactiveBorder: 10,
-            theme: 'quarto',
-            placement: 'right',
-            popperOptions: {
-              modifiers: [
-              {
-                name: 'flip',
-                options: {
-                  flipVariations: false, // true by default
-                  allowedAutoPlacements: ['right'],
-                  fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
-                },
-              },
-              {
-                name: 'preventOverflow',
-                options: {
-                  mainAxis: false,
-                  altAxis: false
-                }
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
               }
-              ]        
-            }      
-          };
-          window.tippy(annoteTarget, config); 
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
         }
     const findCites = (el) => {
       const parentEl = el.parentElement;

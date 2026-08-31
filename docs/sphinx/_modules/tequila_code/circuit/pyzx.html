@@ -70,11 +70,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tequila_code.circuit.pyzx</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Add to tequila the ability to make ZX-Calculus</span>
 
 <span class="sd">Using the pyzx library: https://github.com/Quantomatic/pyzx</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="n">HAS_PYZX</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">try</span><span class="p">:</span>
@@ -91,7 +91,7 @@
 <div class="viewcode-block" id="convert_to_pyzx">
 <a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.pyzx.convert_to_pyzx">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">convert_to_pyzx</span><span class="p">(</span><span class="n">circuit</span><span class="p">:</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Allow convert from Tequila circuit to pyzx circuit</span>
 
 <span class="sd">    Args:</span>
@@ -100,18 +100,18 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        pyzx.circuit.Circuit: pyzx circuit</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">HAS_PYZX</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">pyzx</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">Circuit</span><span class="o">.</span><span class="n">from_qasm</span><span class="p">(</span><span class="n">export_open_qasm</span><span class="p">(</span><span class="n">circuit</span><span class="o">=</span><span class="n">circuit</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;2.0&quot;</span><span class="p">,</span> <span class="n">zx_calculus</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">pyzx</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">Circuit</span><span class="o">.</span><span class="n">from_qasm</span><span class="p">(</span><span class="n">export_open_qasm</span><span class="p">(</span><span class="n">circuit</span><span class="o">=</span><span class="n">circuit</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">"2.0"</span><span class="p">,</span> <span class="n">zx_calculus</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Pyzx package not installed.&quot;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">"Pyzx package not installed."</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="convert_from_pyzx">
 <a class="viewcode-back" href="../../../circuit.html#tequila_code.circuit.pyzx.convert_from_pyzx">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">convert_from_pyzx</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCircuit</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Allow convert from pyzx circuit to Tequila circuit</span>
 
 <span class="sd">    Args:</span>
@@ -119,14 +119,14 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        QCircuit: Tequila circuit</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">HAS_PYZX</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">pyzx</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">Circuit</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">import_open_qasm</span><span class="p">(</span><span class="n">circuit</span><span class="o">.</span><span class="n">to_qasm</span><span class="p">(),</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;2.0&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">import_open_qasm</span><span class="p">(</span><span class="n">circuit</span><span class="o">.</span><span class="n">to_qasm</span><span class="p">(),</span> <span class="n">version</span><span class="o">=</span><span class="s2">"2.0"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Circuit provided must be of type pyzx.circuit.Circuit&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">"Circuit provided must be of type pyzx.circuit.Circuit"</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">&quot;Pyzx package not installed.&quot;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="n">TequilaException</span><span class="p">(</span><span class="s2">"Pyzx package not installed."</span><span class="p">)</span></div>
 
 </pre></div>
 

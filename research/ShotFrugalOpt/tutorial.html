@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Marc-Justin Scheffler, Adapted by Adelina Bärligea">
+<meta name="dcterms.date" content="2026-08-21">
+
+<title>Testing Shot-Frugal Optimizers for Variational Quantum Algorithms – Tequila Tutorials</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../favicon.ico" rel="icon">
+<script src="../../site_libs/cookie-consent/cookie-consent.js"></script>
+<link href="../../site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6816b788f5f7c21b6d99241bf8ffbe49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-4e53f9a7cac9cb8ce958252f8331ecbd.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-6816b788f5f7c21b6d99241bf8ffbe49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-V7DRP5E70N"></script>
+
+<script type="text/plain" cookie-consent="tracking">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-V7DRP5E70N', { 'anonymize_ip': true});
+</script>
+
+<script type="text/javascript" charset="UTF-8">
+document.addEventListener('DOMContentLoaded', function () {
+cookieconsent.run({
+  "notice_banner_type":"simple",
+  "consent_type":"express",
+  "palette":"light",
+  "language":"en",
+  "page_load_consent_levels":["strictly-necessary"],
+  "notice_banner_reject_button_hide":false,
+  "preferences_center_close_button_hide":false,
+  "website_name":""
+  ,
+"language":"en"
+  });
+});
+</script> 
+  
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Testing Shot-Frugal Optimizers for Variational Quantum Algorithms – Tequila Tutorials">
+<meta property="og:description" content="quantum computing, quantum chemistry and tequila">
+<meta property="og:image" content="https://tequilahub.github.io/tequila-tutorials/research/ShotFrugalOpt/preview.png">
+<meta property="og:site_name" content="Tequila Tutorials">
+<meta property="og:image:height" content="1792">
+<meta property="og:image:width" content="2486">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../tequila_logo.png" alt="" class="navbar-logo light-content">
+    <img src="../../tequila_logo.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Tequila Tutorials</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../research.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../FAQ/FAQ.html"> 
+<span class="menu-text">FAQ</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../Contribution/Contribution.html"> 
+<span class="menu-text">Contribution</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../docs/sphinx/index.html"> 
+<span class="menu-text">Docs</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Testing Shot-Frugal Optimizers for Variational Quantum Algorithms</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">optimizers</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Marc-Justin Scheffler, Adapted by Adelina Bärligea </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">August 21, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#why-adapt-the-number-of-shots" id="toc-why-adapt-the-number-of-shots" class="nav-link active" data-scroll-target="#why-adapt-the-number-of-shots">Why adapt the number of shots?</a></li>
+  <li><a href="#icans-individual-coupled-adaptive-number-of-shots" id="toc-icans-individual-coupled-adaptive-number-of-shots" class="nav-link" data-scroll-target="#icans-individual-coupled-adaptive-number-of-shots">iCANS (individual Coupled Adaptive Number of Shots)</a></li>
+  <li><a href="#gcans-global-coupled-adaptive-number-of-shots" id="toc-gcans-global-coupled-adaptive-number-of-shots" class="nav-link" data-scroll-target="#gcans-global-coupled-adaptive-number-of-shots">gCANS (global Coupled Adaptive Number of Shots)</a></li>
+  <li><a href="#rosalin-random-operator-sampling-for-adaptive-learning-with-individual-number-of-shots" id="toc-rosalin-random-operator-sampling-for-adaptive-learning-with-individual-number-of-shots" class="nav-link" data-scroll-target="#rosalin-random-operator-sampling-for-adaptive-learning-with-individual-number-of-shots">Rosalin (Random operator sampling for adaptive learning with individual number of shots)</a></li>
+  <li><a href="#what-differs-between-the-methods" id="toc-what-differs-between-the-methods" class="nav-link" data-scroll-target="#what-differs-between-the-methods">What differs between the methods?</a></li>
+  <li><a href="#scaling-experiment" id="toc-scaling-experiment" class="nav-link" data-scroll-target="#scaling-experiment">Scaling experiment</a>
+  <ul class="collapse">
+  <li><a href="#icans" id="toc-icans" class="nav-link" data-scroll-target="#icans">iCANS</a></li>
+  <li><a href="#gcans" id="toc-gcans" class="nav-link" data-scroll-target="#gcans">gCANS</a></li>
+  <li><a href="#rosalin" id="toc-rosalin" class="nav-link" data-scroll-target="#rosalin">Rosalin</a></li>
+  <li><a href="#direct-comparison" id="toc-direct-comparison" class="nav-link" data-scroll-target="#direct-comparison">Direct comparison</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/tequilahub/tequila-tutorials/blob/main/research/ShotFrugalOpt/tutorial.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila-tutorials/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+
+<p><a href="https://doi.org/10.1038/s42254-021-00348-9">Variational quantum algorithms</a> (VQAs) use a classical optimizer to tune a parameterized quantum circuit from repeated estimates of a quantum objective, for example to approximate the ground state of a given Hamiltonian. Because expectation values and gradient components must be estimated from a finite number of measurements, these estimates inevitably contain statistical noise. Studies by <a href="https://doi.org/10.1103/PhysRevA.109.032408">Scriva <em>et al.</em></a> and <a href="https://doi.org/10.1103/rgyh-8xw8">Bärligea <em>et al.</em></a> show that this measurement noise can pose a serious obstacle to scalable optimization. An effective optimizer must therefore decide not only where to move in parameter space, but also how to allocate the available measurement budget at each step, balancing estimation accuracy against sampling cost.</p>
+<p>This research tutorial implements and tests three proposals for adapting that measurement effort in a shot-frugal way:</p>
+<ul>
+<li><strong><a href="https://doi.org/10.22331/q-2020-05-11-263">iCANS</a></strong> assigns a separate number of shots to each gradient component.</li>
+<li><strong><a href="https://arxiv.org/abs/2108.10434">gCANS</a></strong> chooses those allocations using the expected progress of the complete gradient update.</li>
+<li><strong><a href="https://arxiv.org/abs/2004.06252">Rosalin</a></strong> combines adaptive gradient shots with random sampling of Hamiltonian terms.</li>
+</ul>
+<section id="why-adapt-the-number-of-shots" class="level2">
+<h2 class="anchored" data-anchor-id="why-adapt-the-number-of-shots">Why adapt the number of shots?</h2>
+<p>For a parameterized circuit <span class="math inline">\(U(\boldsymbol{\theta})\)</span> and Hamiltonian <span class="math inline">\(H\)</span>, a typical VQA objective is</p>
+<p><span class="math display">\[
+E(\boldsymbol{\theta})
+=\langle 0|U^\dagger(\boldsymbol{\theta})
+H U(\boldsymbol{\theta})|0\rangle.
+\]</span></p>
+<p>If a parameter enters through a Pauli rotation, its derivative can be evaluated with the parameter-shift rule,</p>
+<p><span class="math display">\[
+\partial_i E(\boldsymbol{\theta})
+=\frac{E(\boldsymbol{\theta}+\tfrac{\pi}{2}\mathbf e_i)
+-E(\boldsymbol{\theta}-\tfrac{\pi}{2}\mathbf e_i)}{2}.
+\]</span></p>
+<p>The formula is analytic, but its two expectation values are still estimated from measurements. With <span class="math inline">\(s_i\)</span> shots, the estimator variance generally decreases as <span class="math inline">\(1/s_i\)</span>. Small allocations make an iteration cheap but noisy; large allocations produce a more reliable direction but may spend measurements where they do not improve the final solution.</p>
+<p>iCANS, gCANS, and Rosalin formalize this trade-off by maximizing a model of expected objective improvement per shot. Their allocation formulas assume a fixed learning rate <span class="math inline">\(\alpha&lt;2/L\)</span>, where <span class="math inline">\(L\)</span> bounds the Lipschitz constant of the objective gradient. In practice, the gradient and variance information required by the formulas must themselves be estimated.</p>
+<div id="31bcf410" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T09:37:00.197372Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T09:37:00.197008Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T09:37:03.860917Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T09:37:03.860464Z&quot;}}" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tequila <span class="im">as</span> tq</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>SEED <span class="op">=</span> <span class="dv">7</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>np.random.seed(SEED)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="icans-individual-coupled-adaptive-number-of-shots" class="level2">
+<h2 class="anchored" data-anchor-id="icans-individual-coupled-adaptive-number-of-shots">iCANS (individual Coupled Adaptive Number of Shots)</h2>
+<p>The iCANS optimizer was introduced by <a href="https://doi.org/10.22331/q-2020-05-11-263">Kübler <em>et al.</em></a>. It estimates each partial derivative independently and assigns it a shot count based on its estimated variance and magnitude. In its simplest form, the allocation has the structure</p>
+<p><span class="math display">\[
+s_i
+=\frac{2L\alpha}{2-L\alpha}
+\frac{S_i}{g_i^2},
+\]</span></p>
+<p>where <span class="math inline">\(g_i\)</span> estimates the <span class="math inline">\(i\)</span>th gradient component and <span class="math inline">\(S_i\)</span> estimates the corresponding single-shot variance. Exponential moving averages stabilize both quantities. A cap prevents nearly converged components, for which <span class="math inline">\(g_i\approx0\)</span>, from consuming the entire budget. iCANS2 additionally reduces the learning rate along a component when the estimated expected gain is not positive.</p>
+<p>In the implementation below, the parameter-shift evaluations are sampled, while the required single-shot variances are obtained from exact first and second moments on the simulator. While this is a useful simulation oracle, it is not a free operation on hardware, as a device implementation would need to estimate these moments and include their measurements in the resource accounting.</p>
+<div id="46fb5c2d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T09:37:03.863412Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T09:37:03.862875Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T09:37:03.871099Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T09:37:03.870686Z&quot;}}" data-execution_count="2">
+<details class="code-fold">
+<summary>Show implementation</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> History:</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.energies <span class="op">=</span> []</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.angles <span class="op">=</span> []</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot(<span class="va">self</span>, key):</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> <span class="bu">hasattr</span>(<span class="va">self</span>, key):</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"No history entry '</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">'"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> <span class="bu">getattr</span>(<span class="va">self</span>, key)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> key <span class="op">==</span> <span class="st">"angles"</span>:</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>            param_keys <span class="op">=</span> <span class="bu">list</span>(data[<span class="dv">0</span>].keys())</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> k <span class="kw">in</span> param_keys:</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                plt.plot([a[k] <span class="cf">for</span> a <span class="kw">in</span> data], label<span class="op">=</span><span class="bu">str</span>(k))</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>            plt.legend()</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>            plt.plot(data)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">"iteration"</span>)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(key)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        plt.show()   </span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ICANSResult:</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.energy <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.angles <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.nfev <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.history <span class="op">=</span> History()</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.niter <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> iCANS(objective, lr, initial_values, s_min, N, L, mu, b, icans1<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> ICANSResult()</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    theta <span class="op">=</span> initial_values.copy()</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    s_tot <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> np.full(<span class="bu">len</span>(theta), s_min)</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    chi_0 <span class="op">=</span> np.full(<span class="bu">len</span>(theta), <span class="fl">0.0</span>)</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    xi_0 <span class="op">=</span> np.full(<span class="bu">len</span>(theta), <span class="fl">0.0</span>)</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    k <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    f <span class="op">=</span> tq.<span class="bu">compile</span>(objective, backend<span class="op">=</span><span class="st">"qulacs"</span>)</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    expectation <span class="op">=</span> objective.get_expectationvalues()[<span class="dv">0</span>]</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    fsq <span class="op">=</span> tq.<span class="bu">compile</span>(</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>        tq.ExpectationValue(U<span class="op">=</span>expectation.U, H<span class="op">=</span>expectation.H[<span class="dv">0</span>] <span class="op">**</span> <span class="dv">2</span>),</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>        backend<span class="op">=</span><span class="st">"qulacs"</span>,</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> s_tot <span class="op">&lt;</span> N:</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>        g <span class="op">=</span> np.zeros(<span class="bu">len</span>(theta))</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, key <span class="kw">in</span> <span class="bu">enumerate</span>(theta):</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>            theta_plus <span class="op">=</span> theta.copy()</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>            theta_minus <span class="op">=</span> theta.copy()</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>            theta_plus[key]  <span class="op">+=</span> np.pi<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>            theta_minus[key] <span class="op">-=</span> np.pi<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>            g[i] <span class="op">=</span> (f(theta_plus, samples<span class="op">=</span>s[i]) <span class="op">-</span> f(theta_minus, samples<span class="op">=</span>s[i])) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>            result.nfev <span class="op">+=</span> <span class="dv">2</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>        S <span class="op">=</span> np.zeros(<span class="bu">len</span>(theta))</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, key <span class="kw">in</span> <span class="bu">enumerate</span>(theta):</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>            theta_plus <span class="op">=</span> theta.copy()</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>            theta_minus <span class="op">=</span> theta.copy()</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>            theta_plus[key]  <span class="op">+=</span> np.pi<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>            theta_minus[key] <span class="op">-=</span> np.pi<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>            mean_plus <span class="op">=</span> f(theta_plus)</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>            second_moment_plus <span class="op">=</span> fsq(theta_plus)</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>            mean_minus <span class="op">=</span> f(theta_minus)</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>            second_moment_minus <span class="op">=</span> fsq(theta_minus)</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>            result.nfev <span class="op">+=</span> <span class="dv">4</span></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>            variance_plus <span class="op">=</span> second_moment_plus <span class="op">-</span> mean_plus<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>            variance_minus <span class="op">=</span> second_moment_minus <span class="op">-</span> mean_minus<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>            S[i] <span class="op">=</span> <span class="bu">abs</span>((variance_plus <span class="op">+</span> variance_minus) <span class="op">/</span> <span class="dv">4</span>)</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a>        s_tot <span class="op">=</span> s_tot <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> np.<span class="bu">sum</span>(s)</span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>        xi_0 <span class="op">=</span> mu <span class="op">*</span> xi_0 <span class="op">+</span> (<span class="dv">1</span> <span class="op">-</span> mu) <span class="op">*</span> S</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a>        chi_0 <span class="op">=</span> mu <span class="op">*</span> chi_0 <span class="op">+</span> (<span class="dv">1</span> <span class="op">-</span> mu) <span class="op">*</span> g</span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>        xi <span class="op">=</span> xi_0 <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> np.power(mu, k <span class="op">+</span> <span class="dv">1</span>))</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>        chi <span class="op">=</span> chi_0 <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> np.power(mu, k <span class="op">+</span> <span class="dv">1</span>))</span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>        epsilon <span class="op">=</span> np.full(<span class="bu">len</span>(theta), <span class="fl">0.0</span>)</span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, key <span class="kw">in</span> <span class="bu">enumerate</span>(theta):</span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> icans1:</span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>                step_lr <span class="op">=</span> lr</span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>                denominator <span class="op">=</span> L <span class="op">*</span> (</span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a>                    g[i] <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> S[i] <span class="op">/</span> <span class="bu">max</span>(s[i], <span class="dv">1</span>) <span class="op">+</span> b <span class="op">*</span> mu<span class="op">**</span>k</span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>                lr_check <span class="op">=</span> g[i] <span class="op">**</span> <span class="dv">2</span> <span class="op">/</span> <span class="bu">max</span>(denominator, <span class="fl">1e-12</span>)</span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a>                step_lr <span class="op">=</span> <span class="bu">min</span>(lr, lr_check)</span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a>            theta[key] <span class="op">=</span> theta[key] <span class="op">-</span> step_lr <span class="op">*</span> g[i]</span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a>            denominator <span class="op">=</span> chi[i] <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> b <span class="op">*</span> mu<span class="op">**</span>k</span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a>            s[i] <span class="op">=</span> np.ceil(</span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a>                ((<span class="dv">2</span> <span class="op">*</span> L <span class="op">*</span> lr) <span class="op">/</span> (<span class="dv">2</span> <span class="op">-</span> L <span class="op">*</span> lr))</span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a>                <span class="op">*</span> (xi[i] <span class="op">/</span> <span class="bu">max</span>(denominator, <span class="fl">1e-12</span>))</span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a>            epsilon[i] <span class="op">=</span> (<span class="fl">1.0</span> <span class="op">/</span> s[i]) <span class="op">*</span> (</span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a>                (lr <span class="op">-</span> L <span class="op">*</span> lr<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> <span class="dv">2</span>) <span class="op">*</span> chi[i] <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a>                <span class="op">-</span> (L <span class="op">*</span> lr<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> s[i])) <span class="op">*</span> xi[i]</span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a>        best_component <span class="op">=</span> <span class="bu">int</span>(np.argmax(epsilon))</span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a>        s_cap <span class="op">=</span> <span class="bu">max</span>(s_min, s[best_component])</span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a>        s <span class="op">=</span> np.clip(s, s_min, s_cap)</span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a>        k <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a>        result.niter <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a>        energy <span class="op">=</span> f(theta)</span>
+<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a>        result.nfev <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a>        result.history.energies.append(energy)</span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a>        result.history.angles.append(theta.copy()) </span>
+<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a>    result.angles <span class="op">=</span> theta</span>
+<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a>    f <span class="op">=</span> tq.<span class="bu">compile</span>(objective, backend<span class="op">=</span><span class="st">"qulacs"</span>)</span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a>    result.energy <span class="op">=</span> f(theta)</span>
+<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a>    result.nfev <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>As a small Tequila example, we first define a three-qubit variational objective with four trainable angles. The same starting point and nominal budget are reused for all three methods.</p>
+<div id="eb49d39d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T09:37:03.872435Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T09:37:03.872354Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T09:37:04.287395Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T09:37:04.286890Z&quot;}}" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># objective to optimize</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> tq.Variable(name<span class="op">=</span><span class="st">"a"</span>)<span class="op">*</span>tq.numpy.pi</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> tq.Variable(name<span class="op">=</span><span class="st">"b"</span>)<span class="op">*</span>tq.numpy.pi</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> tq.Variable(name<span class="op">=</span><span class="st">"c"</span>)<span class="op">*</span>tq.numpy.pi</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> tq.Variable(name<span class="op">=</span><span class="st">'d'</span>)<span class="op">*</span>tq.numpy.pi</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> tq.gates.Ry(tq.numpy.pi<span class="op">/</span><span class="dv">2</span>,<span class="dv">0</span>) <span class="op">+</span>tq.gates.Ry(tq.numpy.pi<span class="op">/</span><span class="dv">3</span>,<span class="dv">1</span>)<span class="op">+</span>tq.gates.Ry(tq.numpy.pi<span class="op">/</span><span class="dv">4</span>,<span class="dv">2</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>U <span class="op">+=</span> tq.gates.Rz(<span class="st">'a'</span>,<span class="dv">0</span>)<span class="op">+</span>tq.gates.Rz(<span class="st">'b'</span>,<span class="dv">1</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>U <span class="op">+=</span> tq.gates.CNOT(control<span class="op">=</span><span class="dv">0</span>,target<span class="op">=</span><span class="dv">1</span>)<span class="op">+</span>tq.gates.CNOT(control<span class="op">=</span><span class="dv">1</span>,target<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>U <span class="op">+=</span> tq.gates.Ry(<span class="st">'c'</span>,<span class="dv">1</span>) <span class="op">+</span>tq.gates.Rx(<span class="st">'d'</span>,<span class="dv">2</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>U <span class="op">+=</span> tq.gates.CNOT(control<span class="op">=</span><span class="dv">0</span>,target<span class="op">=</span><span class="dv">1</span>)<span class="op">+</span>tq.gates.CNOT(control<span class="op">=</span><span class="dv">1</span>,target<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>H <span class="op">=</span> tq.paulis.Y(<span class="dv">0</span>)<span class="op">*</span>tq.paulis.X(<span class="dv">1</span>)<span class="op">*</span>tq.paulis.Y(<span class="dv">2</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>O <span class="op">=</span> tq.ExpectationValue(H<span class="op">=</span>H, U<span class="op">=</span>U)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co"># dictionary of parameters</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(SEED)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>init <span class="op">=</span> {k: rng.uniform(<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>) <span class="cf">for</span> k <span class="kw">in</span> [<span class="st">'a'</span>, <span class="st">'b'</span>, <span class="st">'c'</span>, <span class="st">'d'</span>]}</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co"># use of icans</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>res_icans <span class="op">=</span> iCANS(O, <span class="fl">0.1</span>, init, <span class="dv">10</span>, <span class="dv">10000</span>, <span class="fl">1.0</span>, <span class="fl">0.9</span>, <span class="fl">0.01</span>, icans1<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="a673cd3d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T09:37:04.289161Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T09:37:04.289005Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T09:37:04.356387Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T09:37:04.356030Z&quot;}}" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># showing energy results</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>res_icans.history.plot(<span class="st">"energies"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"energy:</span><span class="sc">{</span>res_icans<span class="sc">.</span>energy<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tutorial_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>energy:-0.3532708765185349</code></pre>
+</div>
+</div>
+<p>The trace is noisy because each parameter-shift expectation is sampled. Here the objective is the expectation value of one Pauli string and is bounded below by <span class="math inline">\(-1\)</span>; a final value well above that bound shows that this limited-budget run is not converged. An individual run is therefore not enough to rank stochastic optimizers. Meaningful comparisons require repeated runs from controlled initial conditions and should be considered against cumulative measurement cost rather than iteration alone.</p>
+</section>
+<section id="gcans-global-coupled-adaptive-number-of-shots" class="level2">
+<h2 class="anchored" data-anchor-id="gcans-global-coupled-adaptive-number-of-shots">gCANS (global Coupled Adaptive Number of Shots)</h2>
+<p><a href="https://arxiv.org/abs/2108.10434">Gu <em>et al.</em></a> observed that optimizing every component independently need not maximize the efficiency of the complete update. gCANS instead maximizes a lower bound on the expected global improvement divided by the total shots used in the iteration. Its allocation is</p>
+<p><span class="math display">\[
+s_i
+=\frac{2L\alpha}{2-L\alpha}
+\frac{\sigma_i\sum_j\sigma_j}
+{\|\nabla E(\boldsymbol{\theta})\|_2^2},
+\]</span></p>
+<p>where <span class="math inline">\(\sigma_i\)</span> is the single-shot standard deviation of the <span class="math inline">\(i\)</span>th gradient estimator. The coupling through the full gradient norm and the sum of standard deviations is exactly the difference from iCANS. The published convergence result assumes a convex objective. As VQA landscapes are generally nonconvex, applications outside that regime remain heuristic even when the allocation formula is implemented exactly.</p>
+<div id="db534b2b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T09:37:04.357822Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T09:37:04.357724Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T09:37:04.364164Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T09:37:04.363760Z&quot;}}" data-execution_count="5">
+<details class="code-fold">
+<summary>Show implementation</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> History:</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.energies <span class="op">=</span> []</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.angles <span class="op">=</span> []</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot(<span class="va">self</span>, key):</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> <span class="bu">hasattr</span>(<span class="va">self</span>, key):</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"No history entry '</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">'"</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> <span class="bu">getattr</span>(<span class="va">self</span>, key)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> key <span class="op">==</span> <span class="st">"angles"</span>:</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>            param_keys <span class="op">=</span> <span class="bu">list</span>(data[<span class="dv">0</span>].keys())</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> k <span class="kw">in</span> param_keys:</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>                plt.plot([a[k] <span class="cf">for</span> a <span class="kw">in</span> data], label<span class="op">=</span><span class="bu">str</span>(k))</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>            plt.legend()</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>            plt.plot(data)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">"iteration"</span>)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(key)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>        plt.show()   </span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> GCANSResult:</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.energy <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.angles <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.nfev <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.history <span class="op">=</span> History()</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.niter <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gCANS(objective, lr, initial_values, s_min, N, L, mu):</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> GCANSResult()</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>    theta <span class="op">=</span> initial_values.copy()</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    s_tot <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> np.full(<span class="bu">len</span>(theta), s_min)</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>    chi_0 <span class="op">=</span> np.full(<span class="bu">len</span>(theta), <span class="fl">0.0</span>)</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    xi_0 <span class="op">=</span> np.full(<span class="bu">len</span>(theta), <span class="fl">0.0</span>)</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    k <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>    f <span class="op">=</span> tq.<span class="bu">compile</span>(objective, backend<span class="op">=</span><span class="st">"qulacs"</span>)</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>    expectation <span class="op">=</span> objective.get_expectationvalues()[<span class="dv">0</span>]</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>    fsq <span class="op">=</span> tq.<span class="bu">compile</span>(</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>        tq.ExpectationValue(U<span class="op">=</span>expectation.U, H<span class="op">=</span>expectation.H[<span class="dv">0</span>] <span class="op">**</span> <span class="dv">2</span>),</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>        backend<span class="op">=</span><span class="st">"qulacs"</span>,</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> s_tot <span class="op">&lt;</span> N:</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>        g <span class="op">=</span> np.zeros(<span class="bu">len</span>(theta))</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, key <span class="kw">in</span> <span class="bu">enumerate</span>(theta):</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>            theta_plus <span class="op">=</span> theta.copy()</span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>            theta_minus <span class="op">=</span> theta.copy()</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>            theta_plus[key]  <span class="op">+=</span> np.pi<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>            theta_minus[key] <span class="op">-=</span> np.pi<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>            g[i] <span class="op">=</span> (f(theta_plus, samples<span class="op">=</span>s[i]) <span class="op">-</span> f(theta_minus, samples<span class="op">=</span>s[i])) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>            result.nfev <span class="op">+=</span> <span class="dv">2</span></span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>        S <span class="op">=</span> np.zeros(<span class="bu">len</span>(theta))</span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, key <span class="kw">in</span> <span class="bu">enumerate</span>(theta):</span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>            theta_plus <span class="op">=</span> theta.copy()</span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>            theta_minus <span class="op">=</span> theta.copy()</span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>            theta_plus[key]  <span class="op">+=</span> np.pi<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>            theta_minus[key] <span class="op">-=</span> np.pi<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>            mean_plus <span class="op">=</span> f(theta_plus)</span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>            second_moment_plus <span class="op">=</span> fsq(theta_plus)</span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>            mean_minus <span class="op">=</span> f(theta_minus)</span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>            second_moment_minus <span class="op">=</span> fsq(theta_minus)</span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>            result.nfev <span class="op">+=</span> <span class="dv">4</span></span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>            variance_plus <span class="op">=</span> second_moment_plus <span class="op">-</span> mean_plus<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>            variance_minus <span class="op">=</span> second_moment_minus <span class="op">-</span> mean_minus<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>            S[i] <span class="op">=</span> <span class="bu">abs</span>((variance_plus <span class="op">+</span> variance_minus) <span class="op">/</span> <span class="dv">4</span>)</span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>        s_tot <span class="op">=</span> s_tot <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> np.<span class="bu">sum</span>(s)</span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>        xi_0 <span class="op">=</span> mu <span class="op">*</span> xi_0 <span class="op">+</span> (<span class="dv">1</span> <span class="op">-</span> mu) <span class="op">*</span> S</span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>        chi_0 <span class="op">=</span> mu <span class="op">*</span> chi_0 <span class="op">+</span> (<span class="dv">1</span> <span class="op">-</span> mu) <span class="op">*</span> g</span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>        xi <span class="op">=</span> xi_0 <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> np.power(mu, k <span class="op">+</span> <span class="dv">1</span>))</span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>        chi <span class="op">=</span> chi_0 <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> np.power(mu, k <span class="op">+</span> <span class="dv">1</span>))</span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>        sigma <span class="op">=</span> np.sqrt(np.maximum(xi, <span class="fl">0.0</span>))</span>
+<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>        gradient_norm_squared <span class="op">=</span> <span class="bu">max</span>(np.<span class="bu">sum</span>(chi<span class="op">**</span><span class="dv">2</span>), <span class="fl">1e-12</span>)</span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, key <span class="kw">in</span> <span class="bu">enumerate</span>(theta):</span>
+<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>            theta[key] <span class="op">=</span> theta[key] <span class="op">-</span> lr <span class="op">*</span> g[i]</span>
+<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>            s[i] <span class="op">=</span> <span class="bu">max</span>(</span>
+<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a>                np.ceil(</span>
+<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>                    ((<span class="dv">2</span> <span class="op">*</span> L <span class="op">*</span> lr) <span class="op">/</span> (<span class="dv">2</span> <span class="op">-</span> L <span class="op">*</span> lr))</span>
+<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>                    <span class="op">*</span> (sigma[i] <span class="op">*</span> np.<span class="bu">sum</span>(sigma) <span class="op">/</span> gradient_norm_squared)</span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>                ),</span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>                s_min,</span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>        k <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a>        result.niter <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a>        energy <span class="op">=</span> f(theta)</span>
+<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a>        result.nfev <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a>        result.history.energies.append(energy)</span>
+<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a>        result.history.angles.append(theta.copy()) </span>
+<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a>    result.angles <span class="op">=</span> theta</span>
+<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a>    f <span class="op">=</span> tq.<span class="bu">compile</span>(objective, backend<span class="op">=</span><span class="st">"qulacs"</span>)</span>
+<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a>    result.energy <span class="op">=</span> f(theta)</span>
+<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a>    result.nfev <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="5917e23e" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T09:37:04.365369Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T09:37:04.365287Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T09:37:04.728326Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T09:37:04.727763Z&quot;}}" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we will use the same objective as before</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>res_gcans <span class="op">=</span> gCANS(O, <span class="fl">0.1</span>, init, <span class="dv">10</span>, <span class="dv">10000</span>, <span class="fl">1.0</span>, <span class="fl">0.9</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="69ee421c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T09:37:04.729599Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T09:37:04.729512Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T09:37:04.767570Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T09:37:04.767147Z&quot;}}" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># showing energy results</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>res_gcans.history.plot(<span class="st">"energies"</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"energy:</span><span class="sc">{</span>res_gcans<span class="sc">.</span>energy<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tutorial_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>energy:-0.3424553953554086</code></pre>
+</div>
+</div>
+<p>At the same nominal budget, this one gCANS trajectory reaches a similar energy to the iCANS trajectory. However, the visual similarity does not establish equivalent efficiency as the two methods can distribute their shots differently across iterations and gradient components, and stochastic differences must be quantified over repeated, paired runs.</p>
+</section>
+<section id="rosalin-random-operator-sampling-for-adaptive-learning-with-individual-number-of-shots" class="level2">
+<h2 class="anchored" data-anchor-id="rosalin-random-operator-sampling-for-adaptive-learning-with-individual-number-of-shots">Rosalin (Random operator sampling for adaptive learning with individual number of shots)</h2>
+<p>Suppose</p>
+<p><span class="math display">\[
+H=\sum_{j=1}^{M}c_jP_j,
+\]</span></p>
+<p>with Pauli strings <span class="math inline">\(P_j\)</span>. Measuring every term at least once creates a shot floor that grows with <span class="math inline">\(M\)</span>. <a href="https://arxiv.org/abs/2004.06252">Arrasmith <em>et al.</em></a> proposed drawing a term with probability</p>
+<p><span class="math display">\[
+p_j=\frac{|c_j|}{\sum_k|c_k|}
+\]</span></p>
+<p>and using the single-shot estimator</p>
+<p><span class="math display">\[
+Y=\frac{c_j r_j}{p_j},
+\qquad r_j\in\{-1,+1\}.
+\]</span></p>
+<p>Because <span class="math inline">\(\mathbb E[Y]=\langle H\rangle\)</span>, even one randomly selected operator gives an unbiased, although potentially high-variance, estimate. Rosalin combines this weighted operator sampling with iCANS. The hybrid variant deterministically assigns the integer part of <span class="math inline">\(p_js\)</span> and distributes only the remaining shots randomly, interpolating between the low-shot random regime and weighted deterministic sampling.</p>
+<p>The implementation keeps each sampled Pauli operator coefficient-free and applies <span class="math inline">\(c_j/p_j\)</span> to its measurement result. This separation is essential for unbiasedness.</p>
+<div id="d317fee7" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T09:37:04.768930Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T09:37:04.768823Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T09:37:04.777655Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T09:37:04.777278Z&quot;}}" data-execution_count="8">
+<details class="code-fold">
+<summary>Show implementation</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> History:</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.energies <span class="op">=</span> []</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.angles <span class="op">=</span> []</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot(<span class="va">self</span>, key):</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> <span class="bu">hasattr</span>(<span class="va">self</span>, key):</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"No history entry '</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">'"</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> <span class="bu">getattr</span>(<span class="va">self</span>, key)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> key <span class="op">==</span> <span class="st">"angles"</span>:</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>            param_keys <span class="op">=</span> <span class="bu">list</span>(data[<span class="dv">0</span>].keys())</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> k <span class="kw">in</span> param_keys:</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>                plt.plot([a[k] <span class="cf">for</span> a <span class="kw">in</span> data], label<span class="op">=</span><span class="bu">str</span>(k))</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>            plt.legend()</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>            plt.plot(data)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">"iteration"</span>)</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(key)</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>        plt.show()   </span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> RosalinResult:</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.energy <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.angles <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.nfev <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.history <span class="op">=</span> History()</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.niter <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> estimate_H(theta, s_tot, c, compiled_terms, hybrid):</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>    E <span class="op">=</span> np.full(s_tot, <span class="fl">0.0</span>)</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>    l <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> np.full(<span class="bu">len</span>(c), <span class="dv">0</span>)</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> np.<span class="bu">abs</span>(c) <span class="op">/</span> np.<span class="bu">sum</span>(np.<span class="bu">abs</span>(c))</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> hybrid <span class="kw">and</span> np.floor(<span class="bu">min</span>(p <span class="op">*</span> s_tot)) <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>        s <span class="op">=</span> np.floor(p <span class="op">*</span> s_tot)</span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>        s_det <span class="op">=</span> np.<span class="bu">sum</span>(s)</span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>        s_det <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>    s_rand <span class="op">=</span> s_tot <span class="op">-</span> s_det</span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> np.random.multinomial(s_rand, p)</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>    s <span class="op">+=</span> m</span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(c)):</span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">int</span>(s[i])):</span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>            r <span class="op">=</span> compiled_terms[i](theta, samples<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>            E[l] <span class="op">=</span> (c[i]<span class="op">*</span>r) <span class="op">/</span> p[i]</span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>            l <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> E</span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> iEvaluate(theta, s_tot, key, c, compiled_terms, hybrid):</span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>    theta_plus <span class="op">=</span> theta.copy()</span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>    theta_minus <span class="op">=</span> theta.copy()</span>
+<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>    theta_plus[key]  <span class="op">+=</span> np.pi<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>    theta_minus[key] <span class="op">-=</span> np.pi<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a>    E_plus <span class="op">=</span> estimate_H(theta_plus, s_tot, c, compiled_terms, hybrid)</span>
+<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>    E_minus <span class="op">=</span> estimate_H(theta_minus, s_tot, c, compiled_terms, hybrid)</span>
+<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a>    g <span class="op">=</span> np.<span class="bu">sum</span>(E_plus <span class="op">-</span> E_minus) <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> s_tot)</span>
+<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a>    S <span class="op">=</span> np.<span class="bu">sum</span>([((E_plus[j] <span class="op">-</span> E_minus[j]) <span class="op">/</span> <span class="dv">2</span>)<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> g<span class="op">**</span><span class="dv">2</span> <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(s_tot)]) <span class="op">/</span> (s_tot <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> g, S</span>
+<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rosalin(objective, lr, initial_values, s_min, M, L, mu, b, hybrid<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> RosalinResult()</span>
+<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a>    theta <span class="op">=</span> initial_values.copy()</span>
+<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a>    s_tot <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> np.full(<span class="bu">len</span>(theta), s_min)</span>
+<span id="cb10-77"><a href="#cb10-77" aria-hidden="true" tabindex="-1"></a>    chi <span class="op">=</span> np.full(<span class="bu">len</span>(theta), <span class="fl">0.0</span>)</span>
+<span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a>    xi <span class="op">=</span> np.full(<span class="bu">len</span>(theta), <span class="fl">0.0</span>)</span>
+<span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a>    chi_0 <span class="op">=</span> np.full(<span class="bu">len</span>(theta), <span class="fl">0.0</span>)</span>
+<span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a>    xi_0 <span class="op">=</span> np.full(<span class="bu">len</span>(theta), <span class="fl">0.0</span>)</span>
+<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a>    epsilon <span class="op">=</span> np.full(<span class="bu">len</span>(theta), <span class="fl">0.0</span>)</span>
+<span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a>    g <span class="op">=</span> np.full(<span class="bu">len</span>(theta), <span class="fl">0.0</span>)</span>
+<span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a>    S <span class="op">=</span> np.full(<span class="bu">len</span>(theta), <span class="fl">0.0</span>)</span>
+<span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a>    k <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a>    f <span class="op">=</span> tq.<span class="bu">compile</span>(objective, backend<span class="op">=</span><span class="st">"qulacs"</span>)</span>
+<span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a>    h <span class="op">=</span> []</span>
+<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> []</span>
+<span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a>    H <span class="op">=</span> objective.get_expectationvalues()[<span class="dv">0</span>].H</span>
+<span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> hi, ci <span class="kw">in</span> H[<span class="dv">0</span>].items():</span>
+<span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a>        hi_dict <span class="op">=</span> {idx: pauli <span class="cf">for</span> idx, pauli <span class="kw">in</span> hi}</span>
+<span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a>        hi_op <span class="op">=</span> tq.QubitHamiltonian.from_paulistrings([tq.PauliString(hi_dict, <span class="fl">1.0</span>)])</span>
+<span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a>        h.append(hi_op)</span>
+<span id="cb10-93"><a href="#cb10-93" aria-hidden="true" tabindex="-1"></a>        c.append(ci)</span>
+<span id="cb10-94"><a href="#cb10-94" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> np.array(c)</span>
+<span id="cb10-95"><a href="#cb10-95" aria-hidden="true" tabindex="-1"></a>    compiled_terms <span class="op">=</span> [</span>
+<span id="cb10-96"><a href="#cb10-96" aria-hidden="true" tabindex="-1"></a>        tq.<span class="bu">compile</span>(tq.ExpectationValue(U<span class="op">=</span>objective.get_expectationvalues()[<span class="dv">0</span>].U, H<span class="op">=</span>term), backend<span class="op">=</span><span class="st">"qulacs"</span>)</span>
+<span id="cb10-97"><a href="#cb10-97" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> term <span class="kw">in</span> h</span>
+<span id="cb10-98"><a href="#cb10-98" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb10-99"><a href="#cb10-99" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> s_tot <span class="op">&lt;</span> M:</span>
+<span id="cb10-100"><a href="#cb10-100" aria-hidden="true" tabindex="-1"></a>        s_tot <span class="op">=</span> s_tot <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> np.<span class="bu">sum</span>(s)</span>
+<span id="cb10-101"><a href="#cb10-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-102"><a href="#cb10-102" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Estimate the complete gradient at one common parameter vector.</span></span>
+<span id="cb10-103"><a href="#cb10-103" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> l, key <span class="kw">in</span> <span class="bu">enumerate</span>(theta):</span>
+<span id="cb10-104"><a href="#cb10-104" aria-hidden="true" tabindex="-1"></a>            g[l], S[l] <span class="op">=</span> iEvaluate(</span>
+<span id="cb10-105"><a href="#cb10-105" aria-hidden="true" tabindex="-1"></a>                theta, s[l], key, c, compiled_terms, hybrid</span>
+<span id="cb10-106"><a href="#cb10-106" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb10-107"><a href="#cb10-107" aria-hidden="true" tabindex="-1"></a>            result.nfev <span class="op">+=</span> <span class="dv">2</span> <span class="op">*</span> s[l]</span>
+<span id="cb10-108"><a href="#cb10-108" aria-hidden="true" tabindex="-1"></a>            xi_0[l] <span class="op">=</span> mu <span class="op">*</span> xi_0[l] <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>mu) <span class="op">*</span> S[l]</span>
+<span id="cb10-109"><a href="#cb10-109" aria-hidden="true" tabindex="-1"></a>            chi_0[l] <span class="op">=</span> mu <span class="op">*</span> chi_0[l] <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>mu) <span class="op">*</span> g[l]</span>
+<span id="cb10-110"><a href="#cb10-110" aria-hidden="true" tabindex="-1"></a>            xi[l] <span class="op">=</span> xi_0[l] <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> mu<span class="op">**</span>(k<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb10-111"><a href="#cb10-111" aria-hidden="true" tabindex="-1"></a>            chi[l] <span class="op">=</span> chi_0[l] <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> mu<span class="op">**</span>(k<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb10-112"><a href="#cb10-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-113"><a href="#cb10-113" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Apply the vector update only after every component has been estimated.</span></span>
+<span id="cb10-114"><a href="#cb10-114" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> l, key <span class="kw">in</span> <span class="bu">enumerate</span>(theta):</span>
+<span id="cb10-115"><a href="#cb10-115" aria-hidden="true" tabindex="-1"></a>            theta[key] <span class="op">=</span> theta[key] <span class="op">-</span> lr <span class="op">*</span> g[l]</span>
+<span id="cb10-116"><a href="#cb10-116" aria-hidden="true" tabindex="-1"></a>            s[l] <span class="op">=</span> <span class="bu">max</span>(np.ceil(((<span class="dv">2</span><span class="op">*</span>L<span class="op">*</span>lr) <span class="op">/</span> (<span class="dv">2</span><span class="op">-</span>L<span class="op">*</span>lr)) <span class="op">*</span> (xi[l] <span class="op">/</span> (np.power(chi[l], <span class="dv">2</span>)<span class="op">+</span>b<span class="op">*</span>np.power(mu, k)))), <span class="dv">1</span>)</span>
+<span id="cb10-117"><a href="#cb10-117" aria-hidden="true" tabindex="-1"></a>            epsilon[l] <span class="op">=</span> (<span class="fl">1.0</span> <span class="op">/</span> s[l]) <span class="op">*</span> ((lr <span class="op">-</span> (L<span class="op">*</span>np.power(lr, <span class="dv">2</span>) <span class="op">/</span> <span class="dv">2</span>)) <span class="op">*</span> np.power(chi[l], <span class="dv">2</span>) <span class="op">-</span> (L<span class="op">*</span>np.power(lr, <span class="dv">2</span>) <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> s[l])) <span class="op">*</span> xi[l])</span>
+<span id="cb10-118"><a href="#cb10-118" aria-hidden="true" tabindex="-1"></a>        best_component <span class="op">=</span> <span class="bu">int</span>(np.argmax(epsilon))</span>
+<span id="cb10-119"><a href="#cb10-119" aria-hidden="true" tabindex="-1"></a>        s_cap <span class="op">=</span> <span class="bu">max</span>(s_min, s[best_component])</span>
+<span id="cb10-120"><a href="#cb10-120" aria-hidden="true" tabindex="-1"></a>        s <span class="op">=</span> np.clip(s, s_min, s_cap)</span>
+<span id="cb10-121"><a href="#cb10-121" aria-hidden="true" tabindex="-1"></a>        k <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb10-122"><a href="#cb10-122" aria-hidden="true" tabindex="-1"></a>        result.niter <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb10-123"><a href="#cb10-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-124"><a href="#cb10-124" aria-hidden="true" tabindex="-1"></a>        energy <span class="op">=</span> f(theta)</span>
+<span id="cb10-125"><a href="#cb10-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-126"><a href="#cb10-126" aria-hidden="true" tabindex="-1"></a>        result.nfev <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb10-127"><a href="#cb10-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-128"><a href="#cb10-128" aria-hidden="true" tabindex="-1"></a>        result.history.energies.append(energy)</span>
+<span id="cb10-129"><a href="#cb10-129" aria-hidden="true" tabindex="-1"></a>        result.history.angles.append(theta.copy())  </span>
+<span id="cb10-130"><a href="#cb10-130" aria-hidden="true" tabindex="-1"></a>    result.angles <span class="op">=</span> theta</span>
+<span id="cb10-131"><a href="#cb10-131" aria-hidden="true" tabindex="-1"></a>    f <span class="op">=</span> tq.<span class="bu">compile</span>(objective, backend<span class="op">=</span><span class="st">"qulacs"</span>)</span>
+<span id="cb10-132"><a href="#cb10-132" aria-hidden="true" tabindex="-1"></a>    result.energy <span class="op">=</span> f(theta)</span>
+<span id="cb10-133"><a href="#cb10-133" aria-hidden="true" tabindex="-1"></a>    result.nfev <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb10-134"><a href="#cb10-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-135"><a href="#cb10-135" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="760a3965" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T09:37:04.778736Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T09:37:04.778663Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T09:37:06.588477Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T09:37:06.588032Z&quot;}}" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we will use the same objective as before again</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>res_rosalin <span class="op">=</span> rosalin(O, <span class="fl">0.1</span>, init, <span class="dv">10</span>, <span class="dv">10000</span>, <span class="fl">1.0</span>, <span class="fl">0.9</span>, <span class="fl">0.01</span>, hybrid<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="dab67dc0" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-21T09:37:06.589880Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-21T09:37:06.589801Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-21T09:37:06.620803Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-21T09:37:06.620383Z&quot;}}" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># showing energy results</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>res_rosalin.history.plot(<span class="st">"energies"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"energy:</span><span class="sc">{</span>res_rosalin<span class="sc">.</span>energy<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tutorial_files/figure-html/cell-11-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>energy:-0.35244146833352025</code></pre>
+</div>
+</div>
+<p>Rosalin reaches the same broad energy range in this small test. Its larger wall-clock overhead comes mostly from sampling and dispatching individual Hamiltonian terms in Python. It should not be interpreted as a measurement-cost comparison.</p>
+</section>
+<section id="what-differs-between-the-methods" class="level2">
+<h2 class="anchored" data-anchor-id="what-differs-between-the-methods">What differs between the methods?</h2>
+<table class="table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Adaptive level</th>
+<th>Main attraction</th>
+<th>Main sensitivity</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>iCANS</td>
+<td>Gradient component</td>
+<td>Directs precision toward locally useful partial derivatives</td>
+<td>Allocation becomes unstable when estimated gradients are close to zero</td>
+</tr>
+<tr class="even">
+<td>gCANS</td>
+<td>Full gradient plus components</td>
+<td>Coordinates allocations using the progress of the whole update</td>
+<td>Depends on a reliable global gradient norm and inherits convex-theory assumptions</td>
+</tr>
+<tr class="odd">
+<td>Rosalin</td>
+<td>Gradient component and Hamiltonian term</td>
+<td>Avoids measuring every Hamiltonian term in the low-shot regime</td>
+<td>Adds operator-sampling variance and substantial implementation overhead</td>
+</tr>
+</tbody>
+</table>
+<p>All three methods target <em>measurement</em> cost. Wall-clock runtime in this notebook is not a faithful estimator for that cost: Python loops, repeated compilation, simulator overhead, and the number of Pauli terms can dominate runtime independently of the nominal shot budget.</p>
+</section>
+<section id="scaling-experiment" class="level2">
+<h2 class="anchored" data-anchor-id="scaling-experiment">Scaling experiment</h2>
+<p>For each size <span class="math inline">\(n\in\{3,4,5,6,7\}\)</span>, we draw one Sherrington–Kirkpatrick Hamiltonian</p>
+<p><span class="math display">\[
+H=\sum_{i&lt;j}J_{ij}Z_iZ_j,
+\]</span></p>
+<p>with normally distributed couplings <span class="math inline">\(J_{ij}\)</span> and normalize it by <span class="math inline">\(\sum_{i&lt;j}|J_{ij}|\)</span>. We optimize a depth-three hardware-efficient circuit containing independent <span class="math inline">\(R_x\)</span> and <span class="math inline">\(R_y\)</span> rotations on every qubit followed by a linear layer of controlled-<span class="math inline">\(Z\)</span> gates. The experiment uses ten matched random initializations per system size and cumulative budgets of <span class="math inline">\(5{,}000\)</span>, <span class="math inline">\(10{,}000\)</span>, <span class="math inline">\(20{,}000\)</span>, <span class="math inline">\(50{,}000\)</span>, and <span class="math inline">\(100{,}000\)</span> shots. The optimizer parameters are <span class="math inline">\(\alpha=0.1\)</span>, <span class="math inline">\(s_{\min}=10\)</span>, <span class="math inline">\(L=1\)</span>, <span class="math inline">\(\mu=0.99\)</span>, and <span class="math inline">\(b=10^{-6}\)</span> where applicable. Here, <span class="math inline">\(L=1\)</span> is a shared empirical allocation parameter after normalization.</p>
+<p>Notice that all terms in this Hamiltonian are diagonal in the computational basis. Consequently, iCANS and gCANS estimate the complete Hamiltonian from every measured bit string, whereas Rosalin deliberately samples one Hamiltonian term per shot. The plotted quantity is the relative energy gap</p>
+<p><span class="math display">\[
+\frac{E(\boldsymbol{\theta})-E_0}{|E_0|},
+\]</span></p>
+<p>where <span class="math inline">\(E_0\)</span> is obtained by exact enumeration. Curves show the median over the ten runs and shaded regions show the interquartile range. The <a href="optimizer_scaling_runs.csv">raw trajectories</a>, <a href="optimizer_scaling_summary.csv">aggregate statistics</a>, and <a href="optimizer_scaling_metadata.json">complete experiment configuration</a> are included with the tutorial.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="About the uncertainty band">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>About the uncertainty band
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The ten runs vary the initialization and measurement samples, but use the same SK instance for a given <span class="math inline">\(n\)</span>. The bands therefore quantify run-to-run variability on those five instances, not variability across the SK ensemble.</p>
+</div>
+</div>
+<section id="icans" class="level3">
+<h3 class="anchored" data-anchor-id="icans">iCANS</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="iCANS_scaling.png" class="img-fluid figure-img"></p>
+<figcaption>Median relative energy gap for iCANS; shaded regions show the interquartile range over ten runs.</figcaption>
+</figure>
+</div>
+<p>For every system size, additional shots lower the median energy gap. The required budget nevertheless grows rapidly with <span class="math inline">\(n\)</span>. At <span class="math inline">\(100{,}000\)</span> shots, the median gap increases from approximately <span class="math inline">\(0.005\)</span> for three qubits to <span class="math inline">\(0.56\)</span> for seven qubits. The widening band for several intermediate sizes also shows why a single optimization trace would give an unreliable picture of the overall performance.</p>
+</section>
+<section id="gcans" class="level3">
+<h3 class="anchored" data-anchor-id="gcans">gCANS</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="gCANS_scaling.png" class="img-fluid figure-img"></p>
+<figcaption>Median relative energy gap for gCANS; shaded regions show the interquartile range over ten runs.</figcaption>
+</figure>
+</div>
+<p>gCANS displays the same dominant size dependence. At the largest budget, its median gaps range from approximately <span class="math inline">\(0.005\)</span> at three qubits to <span class="math inline">\(0.58\)</span> at seven qubits. It often reaches a given budget in fewer iterations than iCANS for the smallest systems because its global rule assigns more shots to an iteration, but this does not translate into a consistent energy advantage at fixed total shots.</p>
+</section>
+<section id="rosalin" class="level3">
+<h3 class="anchored" data-anchor-id="rosalin">Rosalin</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Rosalin_scaling.png" class="img-fluid figure-img"></p>
+<figcaption>Median relative energy gap for Rosalin; shaded regions show the interquartile range over ten runs.</figcaption>
+</figure>
+</div>
+<p>Rosalin also improves steadily with the measurement budget, but it does not consistently outperform the other methods. This result is unsurprising for the present Hamiltonians, because all <span class="math inline">\(Z_iZ_j\)</span> terms can be inferred from the same computational-basis measurement, so ordinary Hamiltonian sampling already extracts every term from each shot. Rosalin’s operator sampling is designed to be most useful when estimating a Hamiltonian requires many distinct measurement settings, so this commuting Ising benchmark does not expose much of its intended advantage.</p>
+</section>
+<section id="direct-comparison" class="level3">
+<h3 class="anchored" data-anchor-id="direct-comparison">Direct comparison</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="optimizer_comparison.png" class="img-fluid figure-img"></p>
+<figcaption>Median relative energy gap at 100,000 shots; error bars show the interquartile range.</figcaption>
+</figure>
+</div>
+<p>The comparison at <span class="math inline">\(100{,}000\)</span> shots has no stable winner. gCANS is marginally best for <span class="math inline">\(n=3\)</span>, iCANS for <span class="math inline">\(n=4,5,7\)</span>, and Rosalin for <span class="math inline">\(n=6\)</span>, but the interquartile ranges overlap strongly in most cases. These small changes in ordering should therefore not be interpreted as evidence of algorithmic superiority. A robust observation is instead the common scaling trend. A budget that nearly solves the three- and four-qubit instances still leaves a substantial optimization gap for six and seven qubits.</p>
+</section>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<ol type="1">
+<li><strong>Adaptive shot allocation does not eliminate the scaling problem.</strong> All three optimizers benefit from more measurements, but their accuracy at a fixed budget deteriorates significantly as the circuit and problem grow.</li>
+<li><strong>No optimizer wins this benchmark consistently.</strong> Differences between median curves are generally smaller than the run-to-run spread.</li>
+<li><strong>The measurement structure matters.</strong> Rosalin’s term-sampling mechanism offers little advantage for a fully commuting Ising Hamiltonian whose terms can be measured together. A molecular or otherwise noncommuting Hamiltonian would test a different and more favorable regime for Rosalin.</li>
+<li><strong>Shot counts and iteration counts have to be treated differently.</strong> The global gCANS allocation can use fewer, more precise updates, which may matter when changing or submitting circuits has considerable overhead even if the final energy at a fixed shot budget is similar.</li>
+</ol>
+<p>For future research, a broader study should repeat the analysis over many problem instances, tune hyperparameters without using the test data, include fixed-shot SGD and SPSA baselines, and separately study Hamiltonians with many noncommuting measurement groups.</p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ul>
+<li>M. Cerezo, A. Arrasmith, R. Babbush, S. C. Benjamin, S. Endo, K. Fujii, J. R. McClean, K. Mitarai, X. Yuan, L. Cincio, and P. J. Coles, <a href="https://doi.org/10.1038/s42254-021-00348-9">Variational Quantum Algorithms</a>, <em>Nature Reviews Physics</em> <strong>3</strong>, 625–644 (2021).</li>
+<li>G. Scriva, N. Astrakhantsev, S. Pilati, and G. Mazzola, <a href="https://doi.org/10.1103/PhysRevA.109.032408">Challenges of Variational Quantum Optimization with Measurement Shot Noise</a>, <em>Physical Review A</em> <strong>109</strong>, 032408 (2024).</li>
+<li>A. Bärligea, B. Poggel, and J. M. Lorenz, <a href="https://doi.org/10.1103/rgyh-8xw8">Scalability challenges in variational quantum optimization under stochastic noise</a>, <em>Physical Review A</em> <strong>112</strong>, 032407 (2025).</li>
+<li>J. M. Kübler, A. Arrasmith, L. Cincio, and P. J. Coles, <a href="https://doi.org/10.22331/q-2020-05-11-263">An Adaptive Optimizer for Measurement-Frugal Variational Algorithms</a>, <em>Quantum</em> <strong>4</strong>, 263 (2020).</li>
+<li>A. Arrasmith, L. Cincio, R. D. Somma, and P. J. Coles, <a href="https://arxiv.org/abs/2004.06252">Operator Sampling for Shot-frugal Optimization in Variational Algorithms</a>, arXiv:2004.06252 (2020).</li>
+<li>A. Gu, A. Lowe, P. A. Dub, P. J. Coles, and A. Arrasmith, <a href="https://arxiv.org/abs/2108.10434">Adaptive shot allocation for fast convergence in variational quantum algorithms</a>, arXiv:2108.10434 (2021).</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/tequilahub\.github\.io\/tequila-tutorials\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="tequilahub/tequila-tutorials" issue-term="pathname" theme="preferred-color-scheme" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tequilahub/tequila-tutorials/blob/main/research/ShotFrugalOpt/tutorial.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila-tutorials/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

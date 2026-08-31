@@ -78,9 +78,9 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sympy</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">Simple Symbolic Simulator for debugging purposes</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <div class="viewcode-block" id="BackendCircuitSymbolic">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_symbolic.BackendCircuitSymbolic">[docs]</a>
@@ -88,21 +88,21 @@
 
     <span class="c1"># compiler instructions</span>
     <span class="n">compiler_arguments</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;trotterized&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;swap&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;multitarget&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;controlled_rotation&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s2">&quot;generalized_rotation&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;exponential_pauli&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;controlled_exponential_pauli&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;phase&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;power&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;hadamard_power&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;controlled_power&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;controlled_phase&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;toffoli&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;phase_to_z&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;cc_max&quot;</span><span class="p">:</span> <span class="kc">True</span>
+        <span class="s2">"trotterized"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"swap"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"multitarget"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"controlled_rotation"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">"generalized_rotation"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"exponential_pauli"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"controlled_exponential_pauli"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"phase"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"power"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"hadamard_power"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"controlled_power"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"controlled_phase"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"toffoli"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"phase_to_z"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"cc_max"</span><span class="p">:</span> <span class="kc">True</span>
     <span class="p">}</span>
 
     <span class="n">convert_to_numpy</span> <span class="o">=</span> <span class="kc">True</span>
@@ -147,7 +147,7 @@
                 <span class="k">return</span> <span class="n">QubitWaveFunction</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="n">basisfunction</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Multi-targets not supported for symbolic simulators&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">"Multi-targets not supported for symbolic simulators"</span><span class="p">)</span>
 
         <span class="n">result</span> <span class="o">=</span> <span class="n">QubitWaveFunction</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">tt</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">:</span>
@@ -160,35 +160,35 @@
 
             <span class="n">fac1</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">fac2</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">"H"</span><span class="p">:</span>
                 <span class="n">fac1</span> <span class="o">=</span> <span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">qt</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">Rational</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)))</span>
                 <span class="n">fac2</span> <span class="o">=</span> <span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">Rational</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)))</span>
-            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;CNOT&quot;</span> <span class="ow">or</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"CNOT"</span> <span class="ow">or</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"X"</span><span class="p">:</span>
                 <span class="n">fac2</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Y&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"Y"</span><span class="p">:</span>
                 <span class="n">fac2</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">I</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="n">qt</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Z&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"Z"</span><span class="p">:</span>
                 <span class="n">fac1</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="n">qt</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;RX&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"RX"</span><span class="p">:</span>
                 <span class="n">angle</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Rational</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">gate</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
                 <span class="n">fac1</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
                 <span class="n">fac2</span> <span class="o">=</span> <span class="o">-</span><span class="n">sympy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">I</span>
-            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;RY&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"RY"</span><span class="p">:</span>
                 <span class="n">angle</span> <span class="o">=</span> <span class="o">-</span><span class="n">sympy</span><span class="o">.</span><span class="n">Rational</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">gate</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
                 <span class="n">fac1</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
                 <span class="n">fac2</span> <span class="o">=</span> <span class="o">+</span><span class="n">sympy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="n">qt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;RZ&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"RZ"</span><span class="p">:</span>
                 <span class="n">angle</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Rational</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">gate</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
                 <span class="n">fac1</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">angle</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">I</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="n">qt</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Gate is not known to simulators, &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">gate</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">"Gate is not known to simulators, "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">gate</span><span class="p">))</span>
 
             <span class="k">if</span> <span class="n">fac1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">fac1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">result</span> <span class="o">+=</span> <span class="n">fac2</span> <span class="o">*</span> <span class="n">altered_state</span>
             <span class="k">elif</span> <span class="n">fac2</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">fac2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">result</span> <span class="o">+=</span> <span class="n">fac1</span> <span class="o">*</span> <span class="n">current_state</span>
             <span class="k">elif</span> <span class="n">fac1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">fac2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;???&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">"???"</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">result</span> <span class="o">+=</span> <span class="n">fac1</span> <span class="o">*</span> <span class="n">current_state</span> <span class="o">+</span> <span class="n">fac2</span> <span class="o">*</span> <span class="n">altered_state</span>
 

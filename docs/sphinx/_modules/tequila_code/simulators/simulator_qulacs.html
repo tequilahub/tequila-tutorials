@@ -79,24 +79,24 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">tequila.simulators.simulator_base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BackendCircuit</span><span class="p">,</span> <span class="n">BackendExpectationValue</span><span class="p">,</span> <span class="n">QCircuit</span><span class="p">,</span> <span class="n">change_basis</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tequila.utils.keymap</span><span class="w"> </span><span class="kn">import</span> <span class="n">KeyMapRegisterToSubregister</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">Developer Note:</span>
 <span class="sd">    Qulacs uses different Rotational Gate conventions: Rx(angle) = exp(i angle/2 X) instead of exp(-i angle/2 X)</span>
 <span class="sd">    And the same for MultiPauli rotational gates</span>
 <span class="sd">    The angles are scaled with -1.0 to keep things consistent with the rest of tequila</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <div class="viewcode-block" id="TequilaQulacsException">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.TequilaQulacsException">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">TequilaQulacsException</span><span class="p">(</span><span class="n">TequilaException</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;Error in qulacs backend:&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span></div>
+        <span class="k">return</span> <span class="s2">"Error in qulacs backend:"</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span></div>
 
 
 <div class="viewcode-block" id="BackendCircuitQulacs">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">BackendCircuitQulacs</span><span class="p">(</span><span class="n">BackendCircuit</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Class representing circuits compiled to qulacs.</span>
 <span class="sd">    See BackendCircuit for documentation of features and methods inherited therefrom</span>
 
@@ -116,31 +116,31 @@
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>
 <span class="sd">    add_noise_to_circuit:</span>
-<span class="sd">        apply a tequila NoiseModel to a qulacs circuit, by translating the NoiseModel&#39;s instructions into noise gates.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        apply a tequila NoiseModel to a qulacs circuit, by translating the NoiseModel's instructions into noise gates.</span>
+<span class="sd">    """</span>
 
     <span class="n">compiler_arguments</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;trotterized&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;swap&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s2">&quot;multitarget&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;controlled_rotation&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="c1"># needed for gates depending on variables</span>
-        <span class="s2">&quot;generalized_rotation&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;exponential_pauli&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s2">&quot;controlled_exponential_pauli&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;phase&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;power&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;hadamard_power&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;controlled_power&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;controlled_phase&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;toffoli&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s2">&quot;phase_to_z&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;cc_max&quot;</span><span class="p">:</span> <span class="kc">False</span>
+        <span class="s2">"trotterized"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"swap"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">"multitarget"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"controlled_rotation"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="c1"># needed for gates depending on variables</span>
+        <span class="s2">"generalized_rotation"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"exponential_pauli"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">"controlled_exponential_pauli"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"phase"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"power"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"hadamard_power"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"controlled_power"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"controlled_phase"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"toffoli"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">"phase_to_z"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"cc_max"</span><span class="p">:</span> <span class="kc">False</span>
     <span class="p">}</span>
 
     <span class="n">numbering</span> <span class="o">=</span> <span class="n">BitNumbering</span><span class="o">.</span><span class="n">LSB</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abstract_circuit</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -150,19 +150,19 @@
 <span class="sd">            noise to apply to the circuit.</span>
 <span class="sd">        args</span>
 <span class="sd">        kwargs</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">op_lookup</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;I&#39;</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">Identity</span><span class="p">,</span>
-            <span class="s1">&#39;X&#39;</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">X</span><span class="p">,</span>
-            <span class="s1">&#39;Y&#39;</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span>
-            <span class="s1">&#39;Z&#39;</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">Z</span><span class="p">,</span>
-            <span class="s1">&#39;H&#39;</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">H</span><span class="p">,</span>
-            <span class="s1">&#39;Rx&#39;</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">add_parametric_RX_gate</span><span class="p">,</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">RX</span><span class="p">),</span>
-            <span class="s1">&#39;Ry&#39;</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">add_parametric_RY_gate</span><span class="p">,</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">RY</span><span class="p">),</span>
-            <span class="s1">&#39;Rz&#39;</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">add_parametric_RZ_gate</span><span class="p">,</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">RZ</span><span class="p">),</span>
-            <span class="s1">&#39;SWAP&#39;</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">SWAP</span><span class="p">,</span>
-            <span class="s1">&#39;Measure&#39;</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">Measurement</span><span class="p">,</span>
-            <span class="s1">&#39;Exp-Pauli&#39;</span><span class="p">:</span> <span class="kc">None</span>
+            <span class="s1">'I'</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">Identity</span><span class="p">,</span>
+            <span class="s1">'X'</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">X</span><span class="p">,</span>
+            <span class="s1">'Y'</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span>
+            <span class="s1">'Z'</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">Z</span><span class="p">,</span>
+            <span class="s1">'H'</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">H</span><span class="p">,</span>
+            <span class="s1">'Rx'</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">add_parametric_RX_gate</span><span class="p">,</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">RX</span><span class="p">),</span>
+            <span class="s1">'Ry'</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">add_parametric_RY_gate</span><span class="p">,</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">RY</span><span class="p">),</span>
+            <span class="s1">'Rz'</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">add_parametric_RZ_gate</span><span class="p">,</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">RZ</span><span class="p">),</span>
+            <span class="s1">'SWAP'</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">SWAP</span><span class="p">,</span>
+            <span class="s1">'Measure'</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">Measurement</span><span class="p">,</span>
+            <span class="s1">'Exp-Pauli'</span><span class="p">:</span> <span class="kc">None</span>
         <span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">measurements</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="p">[]</span>
@@ -170,18 +170,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">has_noise</span><span class="o">=</span><span class="kc">False</span>
         <span class="k">if</span> <span class="n">noise</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Warning: noise in qulacs module will be dropped. Currently only works for qulacs version 0.5 or lower&quot;</span><span class="p">,</span> <span class="n">TequilaWarning</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">"Warning: noise in qulacs module will be dropped. Currently only works for qulacs version 0.5 or lower"</span><span class="p">,</span> <span class="n">TequilaWarning</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">has_noise</span><span class="o">=</span><span class="kc">True</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">noise_lookup</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s1">&#39;bit flip&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">BitFlipNoise</span><span class="p">],</span>
-                <span class="s1">&#39;phase flip&#39;</span><span class="p">:</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">target</span><span class="p">,</span> <span class="n">prob</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">Probabilistic</span><span class="p">([</span><span class="n">prob</span><span class="p">],[</span><span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">Z</span><span class="p">(</span><span class="n">target</span><span class="p">)])],</span>
-                <span class="s1">&#39;phase damp&#39;</span><span class="p">:</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">target</span><span class="p">,</span> <span class="n">prob</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">DephasingNoise</span><span class="p">(</span><span class="n">target</span><span class="p">,(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">prob</span><span class="p">)))],</span>
-                <span class="s1">&#39;amplitude damp&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">AmplitudeDampingNoise</span><span class="p">],</span>
-                <span class="s1">&#39;phase-amplitude damp&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">AmplitudeDampingNoise</span><span class="p">,</span>
+                <span class="s1">'bit flip'</span><span class="p">:</span> <span class="p">[</span><span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">BitFlipNoise</span><span class="p">],</span>
+                <span class="s1">'phase flip'</span><span class="p">:</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">target</span><span class="p">,</span> <span class="n">prob</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">Probabilistic</span><span class="p">([</span><span class="n">prob</span><span class="p">],[</span><span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">Z</span><span class="p">(</span><span class="n">target</span><span class="p">)])],</span>
+                <span class="s1">'phase damp'</span><span class="p">:</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">target</span><span class="p">,</span> <span class="n">prob</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">DephasingNoise</span><span class="p">(</span><span class="n">target</span><span class="p">,(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">prob</span><span class="p">)))],</span>
+                <span class="s1">'amplitude damp'</span><span class="p">:</span> <span class="p">[</span><span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">AmplitudeDampingNoise</span><span class="p">],</span>
+                <span class="s1">'phase-amplitude damp'</span><span class="p">:</span> <span class="p">[</span><span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">AmplitudeDampingNoise</span><span class="p">,</span>
                                          <span class="k">lambda</span> <span class="n">target</span><span class="p">,</span> <span class="n">prob</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">DephasingNoise</span><span class="p">(</span><span class="n">target</span><span class="p">,(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">prob</span><span class="p">)))</span>
                                          <span class="p">],</span>
-                <span class="s1">&#39;depolarizing&#39;</span><span class="p">:</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">target</span><span class="p">,</span><span class="n">prob</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">DepolarizingNoise</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="mi">3</span><span class="o">*</span><span class="n">prob</span><span class="o">/</span><span class="mi">4</span><span class="p">)]</span>
+                <span class="s1">'depolarizing'</span><span class="p">:</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">target</span><span class="p">,</span><span class="n">prob</span><span class="p">:</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">DepolarizingNoise</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="mi">3</span><span class="o">*</span><span class="n">prob</span><span class="o">/</span><span class="mi">4</span><span class="p">)]</span>
             <span class="p">}</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">add_noise_to_circuit</span><span class="p">(</span><span class="n">noise</span><span class="p">)</span>
@@ -197,7 +197,7 @@
 <div class="viewcode-block" id="BackendCircuitQulacs.update_variables">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.update_variables">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        set new variable values for the circuit.</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -207,7 +207,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">angle</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">angle</span><span class="p">(</span><span class="n">variables</span><span class="p">))</span></div>
 
@@ -215,7 +215,7 @@
 <div class="viewcode-block" id="BackendCircuitQulacs.do_simulate">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.do_simulate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">do_simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Helper function to perform simulation.</span>
 
 <span class="sd">        Parameters</span>
@@ -231,7 +231,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        QubitWaveFunction:</span>
 <span class="sd">            QubitWaveFunction representing result of the simulation.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">)</span>
         <span class="n">lsb</span> <span class="o">=</span> <span class="n">BitStringLSB</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">nbits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">)</span>
         <span class="n">state</span><span class="o">.</span><span class="n">set_computational_basis</span><span class="p">(</span><span class="n">BitString</span><span class="o">.</span><span class="n">from_binary</span><span class="p">(</span><span class="n">lsb</span><span class="o">.</span><span class="n">binary</span><span class="p">)</span><span class="o">.</span><span class="n">integer</span><span class="p">)</span>
@@ -244,7 +244,7 @@
 <div class="viewcode-block" id="BackendCircuitQulacs.convert_measurements">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.convert_measurements">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_measurements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend_result</span><span class="p">,</span> <span class="n">target_qubits</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitWaveFunction</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Transform backend evaluation results into QubitWaveFunction</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -255,7 +255,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        QubitWaveFunction</span>
 <span class="sd">            results transformed to tequila native QubitWaveFunction</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="n">result</span> <span class="o">=</span> <span class="n">QubitWaveFunction</span><span class="p">()</span>
         <span class="c1"># todo there are faster ways</span>
@@ -280,7 +280,7 @@
 <div class="viewcode-block" id="BackendCircuitQulacs.do_sample">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.do_sample">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">do_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">noise_model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QubitWaveFunction</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Helper function for performing sampling.</span>
 
 <span class="sd">        Parameters</span>
@@ -300,7 +300,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        QubitWaveFunction:</span>
 <span class="sd">            the results of sampling, as a Qubit Wave Function.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">)</span>
         <span class="n">lsb</span> <span class="o">=</span> <span class="n">BitStringLSB</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">nbits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">)</span>
         <span class="n">state</span><span class="o">.</span><span class="n">set_computational_basis</span><span class="p">(</span><span class="n">BitString</span><span class="o">.</span><span class="n">from_binary</span><span class="p">(</span><span class="n">lsb</span><span class="o">.</span><span class="n">binary</span><span class="p">)</span><span class="o">.</span><span class="n">integer</span><span class="p">)</span>
@@ -312,7 +312,7 @@
 <div class="viewcode-block" id="BackendCircuitQulacs.no_translation">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.no_translation">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">no_translation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abstract_circuit</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Todo: what is this for?</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -321,14 +321,14 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="kc">False</span></div>
 
 
 <div class="viewcode-block" id="BackendCircuitQulacs.initialize_circuit">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.initialize_circuit">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">initialize_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        return an empty circuit.</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -338,14 +338,14 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        qulacs.ParametricQuantumCircuit</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">ParametricQuantumCircuit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="BackendCircuitQulacs.add_exponential_pauli_gate">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_exponential_pauli_gate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_exponential_pauli_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Add a native qulacs Exponential Pauli gate to a circuit.</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -361,9 +361,9 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">assert</span> <span class="ow">not</span> <span class="n">gate</span><span class="o">.</span><span class="n">is_controlled</span><span class="p">()</span>
-        <span class="n">convert</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+        <span class="n">convert</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'x'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'y'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'z'</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
         <span class="n">pind</span> <span class="o">=</span> <span class="p">[</span><span class="n">convert</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">paulistring</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
         <span class="n">qind</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">qubit</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">paulistring</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">extract_variables</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -377,7 +377,7 @@
 <div class="viewcode-block" id="BackendCircuitQulacs.add_parametrized_gate">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_parametrized_gate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_parametrized_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        add a parametrized gate.</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -393,9 +393,9 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">op</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">op_lookup</span><span class="p">[</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;Exp-Pauli&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'Exp-Pauli'</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_exponential_pauli_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">variables</span><span class="p">)</span>
             <span class="k">return</span>
         <span class="k">else</span><span class="p">:</span>
@@ -404,7 +404,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">gate</span><span class="o">.</span><span class="n">parameter</span><span class="p">)</span>
                 <span class="n">op</span><span class="p">(</span><span class="n">circuit</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">qubit</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="o">-</span><span class="n">gate</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span><span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">))</span>
                 <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">is_controlled</span><span class="p">():</span>
-                    <span class="k">raise</span> <span class="n">TequilaQulacsException</span><span class="p">(</span><span class="s2">&quot;Gates which depend on variables can not be controlled! Gate was:</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gate</span><span class="p">))</span>
+                    <span class="k">raise</span> <span class="n">TequilaQulacsException</span><span class="p">(</span><span class="s2">"Gates which depend on variables can not be controlled! Gate was:</span><span class="se">\n</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gate</span><span class="p">))</span>
                 <span class="k">return</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">op</span> <span class="o">=</span> <span class="n">op</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -419,7 +419,7 @@
 <div class="viewcode-block" id="BackendCircuitQulacs.add_basic_gate">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_basic_gate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_basic_gate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        add an unparametrized gate to the circuit.</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -433,7 +433,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">op</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">op_lookup</span><span class="p">[</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
         <span class="n">qulacs_gate</span> <span class="o">=</span> <span class="n">op</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">qubit</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">target</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">is_controlled</span><span class="p">():</span>
@@ -447,7 +447,7 @@
 <div class="viewcode-block" id="BackendCircuitQulacs.add_measurement">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_measurement">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_measurement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">target_qubits</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Add a measurement operation to a circuit.</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -461,7 +461,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">measurements</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">target_qubits</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">circuit</span></div>
 
@@ -470,7 +470,7 @@
 <div class="viewcode-block" id="BackendCircuitQulacs.add_noise_to_circuit">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.add_noise_to_circuit">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_noise_to_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">noise_model</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Apply noise from a NoiseModel to a circuit.</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -481,7 +481,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        qulacs.ParametrizedQuantumCircuit:</span>
 <span class="sd">            self.circuit, with noise added on.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">c</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">circuit</span>
         <span class="n">n</span><span class="o">=</span><span class="n">noise_model</span>
         <span class="n">g_count</span><span class="o">=</span><span class="n">c</span><span class="o">.</span><span class="n">get_gate_count</span><span class="p">()</span>
@@ -502,7 +502,7 @@
 <div class="viewcode-block" id="BackendCircuitQulacs.optimize_circuit">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendCircuitQulacs.optimize_circuit">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">optimize_circuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">circuit</span><span class="p">,</span> <span class="n">max_block_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">silent</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        reduce circuit depth using the native qulacs optimizer.</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -519,12 +519,12 @@
 <span class="sd">        qulacs.QuantumCircuit:</span>
 <span class="sd">            optimized qulacs circuit.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">old</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">calculate_depth</span><span class="p">()</span>
         <span class="n">opt</span> <span class="o">=</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">QuantumCircuitOptimizer</span><span class="p">()</span>
         <span class="n">opt</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">max_block_size</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">silent</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;qulacs: optimized circuit depth from </span><span class="si">{}</span><span class="s2"> to </span><span class="si">{}</span><span class="s2"> with max_block_size </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">old</span><span class="p">,</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"qulacs: optimized circuit depth from </span><span class="si">{}</span><span class="s2"> to </span><span class="si">{}</span><span class="s2"> with max_block_size </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">old</span><span class="p">,</span>
                                                                                                 <span class="n">circuit</span><span class="o">.</span><span class="n">calculate_depth</span><span class="p">(),</span>
                                                                                                 <span class="n">max_block_size</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">circuit</span></div>
@@ -534,18 +534,18 @@
 <div class="viewcode-block" id="BackendExpectationValueQulacs">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">BackendExpectationValueQulacs</span><span class="p">(</span><span class="n">BackendExpectationValue</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Class representing Expectation Values compiled for Qulacs.</span>
 
 <span class="sd">    Ovverrides some methods of BackendExpectationValue, which should be seen for details.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">use_mapping</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">BackendCircuitType</span> <span class="o">=</span> <span class="n">BackendCircuitQulacs</span>
 
 <div class="viewcode-block" id="BackendExpectationValueQulacs.simulate">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.simulate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Perform simulation of this expectationvalue.</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -558,7 +558,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        numpy.array:</span>
 <span class="sd">            the result of simulation as an array.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># fast return if possible</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mf">0.0</span><span class="p">])</span>
@@ -583,7 +583,7 @@
 <div class="viewcode-block" id="BackendExpectationValueQulacs.initialize_hamiltonian">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.initialize_hamiltonian">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">initialize_hamiltonian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hamiltonians</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Convert reduced hamiltonians to native Qulacs types for efficient expectation value evaluation.</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -595,7 +595,7 @@
 <span class="sd">        list:</span>
 <span class="sd">            initialized hamiltonian objects.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="c1"># map the reduced operators to the potentially smaller qubit system</span>
         <span class="n">qubit_map</span> <span class="o">=</span> <span class="p">{}</span>
@@ -606,9 +606,9 @@
         <span class="k">for</span> <span class="n">H</span> <span class="ow">in</span> <span class="n">hamiltonians</span><span class="p">:</span>
             <span class="n">qulacs_H</span> <span class="o">=</span> <span class="n">qulacs</span><span class="o">.</span><span class="n">Observable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">ps</span> <span class="ow">in</span> <span class="n">H</span><span class="o">.</span><span class="n">paulistrings</span><span class="p">:</span>
-                <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">string</span> <span class="o">=</span> <span class="s2">""</span>
                 <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ps</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                    <span class="n">string</span> <span class="o">+=</span> <span class="n">v</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">qubit_map</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                    <span class="n">string</span> <span class="o">+=</span> <span class="n">v</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s2">" "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">qubit_map</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
                 <span class="n">qulacs_H</span><span class="o">.</span><span class="n">add_operator</span><span class="p">(</span><span class="n">ps</span><span class="o">.</span><span class="n">coeff</span><span class="p">,</span> <span class="n">string</span><span class="p">)</span>
             <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">qulacs_H</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span></div>
@@ -617,7 +617,7 @@
 <div class="viewcode-block" id="BackendExpectationValueQulacs.sample">
 <a class="viewcode-back" href="../../../simulators.html#tequila_code.simulators.simulator_qulacs.BackendExpectationValueQulacs.sample">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">samples</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Sample this Expectation Value.</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -632,7 +632,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        numpy.ndarray:</span>
 <span class="sd">            the result of sampling as a number.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_variables</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
         <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="o">.</span><span class="n">initialize_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_qubits</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>

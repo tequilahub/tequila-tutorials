@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -14,10 +14,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -79,14 +82,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-a5883e7fa1e19cde57db4ec6b11febc3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-bca227963e21cb646e747543fe28dd8e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-a5883e7fa1e19cde57db4ec6b11febc3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-6816b788f5f7c21b6d99241bf8ffbe49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-4e53f9a7cac9cb8ce958252f8331ecbd.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-6816b788f5f7c21b6d99241bf8ffbe49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -143,7 +146,7 @@ cookieconsent.run({
   
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -474,7 +477,7 @@ Alternatively, a computationally less expensive approach involves leveraging spe
 <p>At first we look at the case <span class="math inline">\(U = AB\)</span>, where <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are entirely separate. In this scenario we can decompose the calculation of the expectation value <span class="math inline">\(\braket{H}_U\)</span>, by splitting our circuit horizontally. <span class="math display">\[  \braket{H}_U = \bra{0}U^\dagger H U\ket{0} \]</span> <span class="math display">\[ = \braket{H}_{AB} = \bra{0}(AB)^\dagger H (AB)\ket{0} \]</span> <span class="math display">\[ = \bra{0}A^\dagger H_A A\ket{0} + \bra{0}B^\dagger H_B B\ket{0} + \bra{0}(AB)^\dagger H_{AB} (AB)\ket{0} + c_H \]</span></p>
 <p>Here we decomposed the Hamiltonian <span class="math inline">\(H = \sum_{k}  c_k P_k\)</span>. <br> This is done by verifying whether all qubits of the Paulistring <span class="math inline">\(P_k\)</span> are a subset of the qubits in the subcircuits <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, if this condition is satisfied, we identify the corresponding Hamiltonians <span class="math inline">\(H_A\)</span> and <span class="math inline">\(H_B\)</span>. <br> If the qubits of <span class="math inline">\(P_k\)</span> span both qubit sets of the subcircuits, we classify it as a cross-term <span class="math inline">\(H_{AB}\)</span> with Paulistring <span class="math inline">\(P_k^{AB}\)</span>. The remaining <span class="math inline">\(c_H\)</span> represents the real-valued constant of the Hamiltonian. <br> This decomposition on it’s own does not reduce the complexity of the calculation yet. If we want to do so, we have to further decompose the cross-term <span class="math inline">\(H_{AB}\)</span>: <br> <span class="math display">\[H_{AB} = \sum_k c_k P_k^{AB}\]</span> with <span class="math inline">\(P_k^{AB} = P_k^A \otimes P_k^B\)</span>, where <span class="math inline">\(P_k^A\)</span> and <span class="math inline">\(P_k^B\)</span> are Paulistrings acting on the qubit sets of subcircuits <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, respectively, the expectation value of the cross term can be expressed in a decomposed form:</p>
 <p><span class="math display">\[ \bra{0}(AB)^\dagger H_{AB} (AB)\ket{0} = \sum_k c_k \cdot (\bra{0}A^\dagger P_k^A A\ket{0} \cdot \bra{0}B^\dagger P_k^B B\ket{0}) \]</span> where <span class="math inline">\(c_k\)</span> is the coefficient of the partial Paulistring of <span class="math inline">\(H_{AB}\)</span>. <br> In the following we look at the decoupled decomposition implemented in Tequila and compare the calculation time against the computation with a full (undecomposed) circuit.</p>
-<div id="c33159cb" class="cell" data-execution_count="1">
+<div id="2e1cdb64" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tequila <span class="im">as</span> tq</span>
@@ -605,7 +608,7 @@ Alternatively, a computationally less expensive approach involves leveraging spe
 <p><span class="math display">\[ - abi \cdot \bra{0}(A C)^\dagger H \: A P C \ket{0} + abi \cdot \bra{0}(A P C)^\dagger H \: A C \ket{0} \]</span> <span class="math display">\[ = - abi \cdot (\bra{0}(A C)^\dagger H \: A P C \ket{0} - abi \cdot \bra{0}(A P C)^\dagger H \: A C \ket{0}) \]</span> <span class="math display">\[ = - abi \cdot (\bra{0}(A C)^\dagger H \: A P C \ket{0} - h.c) \]</span> <span class="math display">\[ = - abi \cdot (2i \cdot\textbf{Im}(\bra{0}(A C)^\dagger H \: A P C \ket{0})) \]</span> <span class="math display">\[ = 2ab\cdot \textbf{Im}(\bra{0}(A C)^\dagger H \: A P C \ket{0}) \]</span></p>
 <p>This transformation reduces the number of required steps and results in a real value. Therefore, the total expectation value <span class="math inline">\(\braket{H}_U\)</span> is given by: <span class="math display">\[  a^2 \cdot \bra{0}(AC)^\dagger H \: AC\ket{0} + b^2 \cdot \bra{0}(APC)^\dagger H \: APC \ket{0} + 2ab\cdot \textbf{Im}(\bra{0}(A C)^\dagger H \: A P C \ket{0})  \]</span></p>
 <p>For our decomposition approach, the implementation would follow this structure:</p>
-<div id="6cbff905" class="cell" data-execution_count="2">
+<div id="687d3c9a" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_abc(H, A, B, C):</span>
@@ -649,7 +652,7 @@ Before simplification, we must examine the standard BraKet <span class="math inl
 <section id="weakly-coupled-implementation-and-comparison" class="level2">
 <h2 class="anchored" data-anchor-id="weakly-coupled-implementation-and-comparison">Weakly coupled implementation and comparison</h2>
 <p>With every previously described step we can now implement the weakly coupled decomposition to exploit a circuit’s structure for a computational advantage. The core functionality resides in the function <strong>calculate_abc</strong>, which handles the primary decomposition calculation. Because <span class="math inline">\(\textbf{Im}(\bra{0}(A C)^\dagger H \: A P C \ket{0})\)</span> forms an overlap, <strong>small_braket</strong> gets called to further reduce the complexity.</p>
-<div id="aea82db6" class="cell" data-execution_count="3">
+<div id="9e9acc0d" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> convert_to_pauli(U: tq.gates.ExpPauli):</span>
@@ -796,7 +799,7 @@ A promising use case for our weakly coupled method involves circuits with multip
 <section id="appendix-circuit-splitting-logic" class="level1">
 <h1>Appendix: Circuit splitting logic</h1>
 <p>The logic for preparing the underlying circuit for the proposed calculation method can be done like this:</p>
-<div id="d8cec4fe" class="cell" data-execution_count="4">
+<div id="6764caf5" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> split_2(U):</span>
@@ -999,16 +1002,16 @@ A promising use case for our weakly coupled method involves circuits with multip
     }
     function toggleCodeHandler(show) {
       return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
           if (show) {
             details.open = true;
           } else {
             details.removeAttribute("open");
           }
         }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
         const fromCls = show ? "hidden" : "unhidden";
         const toCls = show ? "unhidden" : "hidden";
         for (let i=0; i<cellCodeDivs.length; i++) {

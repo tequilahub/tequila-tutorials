@@ -654,7 +654,7 @@ k_\nu = \frac{2\pi \nu}{\Omega^{1/3}}, \quad G_0 = [- (N^{1/3} - 1), N^{1/3} - 1
 <summary>
 Code
 </summary>
-<div id="a66d60b4" class="cell" data-execution_count="1">
+<div id="26325097" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prep_mu(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>        n_p: <span class="bu">int</span>,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        mu: Sequence[<span class="bu">int</span>], <span class="co"># length should be n_p + 1</span></span>
@@ -678,7 +678,7 @@ Code
 <summary>
 Test
 </summary>
-<div id="1a529a11" class="cell" data-execution_count="2">
+<div id="2199e8b2" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> print_Toffoli_cost(U: tq.QCircuit <span class="op">|</span> PostselectionCircuit):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    Toffoli_cost <span class="op">=</span> <span class="dv">0</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    circuits <span class="op">=</span> (</span>
@@ -736,7 +736,7 @@ Test
 <summary>
 Code
 </summary>
-<div id="c5842216" class="cell" data-execution_count="3">
+<div id="010e535b" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> init_nu(</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>        n_p: <span class="bu">int</span>,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        mu: Sequence[<span class="bu">int</span>],          <span class="co"># mu and nu require length n_p + 1</span></span>
@@ -796,7 +796,7 @@ Code
 <summary>
 Test
 </summary>
-<div id="2a893a4e" class="cell" data-execution_count="4">
+<div id="fee2e8d8" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># testing code for init_nu</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decode_bits_init_nu(idx: <span class="bu">int</span>, n_p: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">int</span>]:</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    mu_width <span class="op">=</span> n_p <span class="op">+</span> <span class="dv">1</span></span>
@@ -880,7 +880,7 @@ Test
 <summary>
 Code
 </summary>
-<div id="a75d69b6" class="cell" data-execution_count="5">
+<div id="65b9e300" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> filter_nu(</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>        n_p: <span class="bu">int</span>,</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        mu: Sequence[<span class="bu">int</span>],</span>
@@ -922,7 +922,7 @@ Code
 <summary>
 Test
 </summary>
-<div id="10de74e8" class="cell" data-execution_count="6">
+<div id="a68fdf38" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decode_bits_filter_nu(idx: <span class="bu">int</span>, n_p: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">int</span>]:</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    mu_width <span class="op">=</span> n_p <span class="op">+</span> <span class="dv">1</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1080,7 +1080,7 @@ m(\nu_x^2 + \nu_y^2 + \nu_z^2) &lt; (2^{\mu - 2})^2M
 <summary>
 Code
 </summary>
-<div id="eed59119" class="cell" data-execution_count="7">
+<div id="d664f58f" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># three bit adder, a and b stay the same, c -&gt; (a + b + c)_0, carry -&gt; (a + b + c)_1</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sum_triple(</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        a: <span class="bu">int</span>,</span>
@@ -1101,7 +1101,7 @@ Code
 <summary>
 Code
 </summary>
-<div id="bc98f6f9" class="cell" data-execution_count="8">
+<div id="cf6b6f3e" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># n-bit adder: adds n bits on the same level, writes carries to n/2 individual ancilla</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># If the carry bits need to be freed in the end, the circuit needs to reversed</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># and afterwards the other bits need to be recomputed.</span></span>
@@ -1147,7 +1147,7 @@ Code
 <summary>
 Code
 </summary>
-<div id="22f8b5dc" class="cell" data-execution_count="9">
+<div id="f06dd33d" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Implements the sigmas used for the squaring circuit</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sigma(</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        sigma: <span class="bu">int</span>,</span>
@@ -1254,7 +1254,7 @@ Code
 <summary>
 Test
 </summary>
-<div id="50b0bcd4" class="cell" data-execution_count="10">
+<div id="83b48ad4" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_triple_square(n, x, y, z):</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> x <span class="op">&lt;=</span> <span class="dv">2</span><span class="op">**</span>(n) <span class="op">-</span> <span class="dv">1</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> y <span class="op">&lt;=</span> <span class="dv">2</span><span class="op">**</span>(n) <span class="op">-</span> <span class="dv">1</span></span>
@@ -1328,7 +1328,7 @@ Test
 <summary>
 Code
 </summary>
-<div id="70e88fbc" class="cell" data-execution_count="11">
+<div id="8fd3ddfa" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Binary Product (Lemma 10, p.81), LSB -&gt; MSB</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> binary_product(</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        a: Sequence[<span class="bu">int</span>],</span>
@@ -1429,7 +1429,7 @@ Code
 <summary>
 Code
 </summary>
-<div id="c2b3e755" class="cell" data-execution_count="12">
+<div id="00103db5" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># comparator of 2 n-bit numbers, LSB -&gt; MSB, flag == 0 iff a &lt; b, requires n additional ancilla</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> comparator(</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>        a: Sequence[<span class="bu">int</span>],</span>
@@ -1463,7 +1463,7 @@ Code
 <summary>
 Code
 </summary>
-<div id="6e887115" class="cell" data-execution_count="13">
+<div id="c3d04950" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># comparator of 2 numbers, LSB -&gt; MSB, sets flag to 0 iff a &lt; (2^(mu - 1))^2*M</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># mu in_put is assumed to be one-hot unary</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># requires max(len(a) - log2(M) - 1, 2*len(mu) - 1) ancilla</span></span>
@@ -1540,7 +1540,7 @@ Code
 <summary>
 Test
 </summary>
-<div id="8d8bce2b" class="cell" data-execution_count="14">
+<div id="818efe9c" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Testing Code for comparator_M</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> index_to_bits_msb_to_lsb(idx, n_qubits):</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
@@ -1607,7 +1607,7 @@ Test
 <summary>
 Code
 </summary>
-<div id="e15a3f2f" class="cell" data-execution_count="15">
+<div id="da61b86c" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Full circuit:</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> state_prep_U_and_V(</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>        mu: Sequence[<span class="bu">int</span>], <span class="co"># len should be n_p + 1</span></span>
@@ -1675,7 +1675,7 @@ Code
 <summary>
 Example use
 </summary>
-<div id="0acda691" class="cell" data-execution_count="16">
+<div id="53c38a0e" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prep_state_tequila(n_p, M, uncompute):</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> n_p <span class="op">+</span> <span class="dv">1</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    len_m <span class="op">=</span> math.ceil(math.log2(M))</span>
@@ -1736,7 +1736,7 @@ Example use
 <summary>
 Code
 </summary>
-<div id="fc9305b3" class="cell" data-execution_count="17">
+<div id="c55169df" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># helper function</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decode(idx: <span class="bu">int</span>, n_p: <span class="bu">int</span>, M: <span class="bu">int</span>):</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    mu_width <span class="op">=</span> n_p <span class="op">+</span> <span class="dv">1</span></span>

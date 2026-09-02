@@ -468,7 +468,7 @@ window.Quarto = {
 <section id="sec-init" class="level1">
 <h1>Initialize Tequila Circuits</h1>
 <p>Quantum circuits can be initialized in an intuitive way by assembling <code>tq.gates</code> objects (see <a href="https://github.com/tequilahub/tequila/blob/master/src/tequila/circuit/gates.py">here</a> for a list of all gates). Take for example:</p>
-<div id="9b0f04ed" class="cell" data-execution_count="1">
+<div id="fea61ef6" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tequila <span class="im">as</span> tq</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> tq.gates.Ry(target<span class="op">=</span><span class="dv">0</span>, angle<span class="op">=</span><span class="fl">1.0</span>) <span class="op">+</span> tq.gates.X(control<span class="op">=</span><span class="dv">0</span>,target<span class="op">=</span><span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -482,7 +482,7 @@ window.Quarto = {
 </ul>
 <p>the <code>angle</code> is optional for some gates that have a defined default value - like <code>X</code>, <code>Y</code>, <code>Z</code> and <code>H</code>.</p>
 <p>We can simulate the circuit and get the corresponding wavefunction back. This is convenient, although not the main purpose of tequila</p>
-<div id="6e55d259" class="cell" data-execution_count="2">
+<div id="1f6114a5" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>wfn <span class="op">=</span> tq.simulate(U)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(wfn)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -490,7 +490,7 @@ window.Quarto = {
 </div>
 </div>
 <p>In the code block above, we did not specify the simulator to be used, tequila determines this automatically. You can however specify the similator via the <code>backend</code> keyword. If you are not sure which simulators are installed on your system, use <code>tq.show_available_simulators()</code></p>
-<div id="3ebb99ec" class="cell" data-execution_count="3">
+<div id="e72ec1e6" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>wfn <span class="op">=</span> tq.simulate(U, backend<span class="op">=</span><span class="st">"cirq"</span>)</span>
@@ -504,7 +504,7 @@ window.Quarto = {
 <p><span class="math display">\[ U(\theta) = e^{-i\frac{\theta}{2} G}  \]</span></p>
 <p>were <span class="math inline">\(G\)</span> is the so called <strong>generator</strong> of the gate. With <span class="math inline">\(G=X\)</span> we obtain the standard <span class="math inline">\(R_x(\theta)\)</span> rotation gate while with <span class="math inline">\(G=\left(X-1\right)\)</span> and <span class="math inline">\(\theta=\pi\)</span> we obtain the standard Pauli-<span class="math inline">\(X\)</span> gate. In the same way, initializing <code>tq.gates.X(target=0, angle="a")</code> defines the gate <span class="math display">\[ e^{-i\frac{a}{2} \left(X-1\right)} = X^{\frac{a}{\pi}}.\]</span><br>
 Usually it is convenient to leave gates like <span class="math inline">\(X,Y,Z,H\)</span> and <span class="math inline">\(CNOT\)</span> unparametrized and use parametrized gates generated from single tensor products of Pauli operators. The latter can be viewed as the native gate set of tequila. An example is</p>
-<div id="bfe07934" class="cell" data-execution_count="4">
+<div id="99a536a0" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> tq.gates.Rp(paulistring<span class="op">=</span><span class="st">"X(0)Y(2)"</span>, angle<span class="op">=</span><span class="st">"a"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>which initialize the gate <span class="math inline">\(e^{-i\frac{a}{2} \left(X(0)Y(2)\right)}\)</span>.</p>
@@ -517,7 +517,7 @@ Usually it is convenient to leave gates like <span class="math inline">\(X,Y,Z,H
 <li>any callable type that returns a float when given a dictionary of variables</li>
 </ul>
 <p>we have already seen an example for the first type. Let’s do it again for the other two. Let’s start with strings</p>
-<div id="193f44dc" class="cell" data-execution_count="5">
+<div id="e5d1edfd" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> tq.gates.Ry(<span class="st">"a"</span>,<span class="dv">0</span>) <span class="op">+</span> tq.gates.CNOT(<span class="dv">0</span>,<span class="dv">1</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>wfn <span class="op">=</span> tq.simulate(U, variables<span class="op">=</span>{<span class="st">"a"</span>:<span class="fl">1.0</span>})</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(wfn)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -526,7 +526,7 @@ Usually it is convenient to leave gates like <span class="math inline">\(X,Y,Z,H
 </div>
 </div>
 <p>note that we need to specify the values of all parameters when we are simulating the circuit. The same example with the <code>tq.Variable</code> type</p>
-<div id="63196155" class="cell" data-execution_count="6">
+<div id="230993ab" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> tq.Variable(<span class="st">"a"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> tq.gates.Ry(a,<span class="dv">0</span>) <span class="op">+</span> tq.gates.CNOT(<span class="dv">0</span>,<span class="dv">1</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>wfn <span class="op">=</span> tq.simulate(U, variables<span class="op">=</span>{<span class="st">"a"</span>:<span class="fl">1.0</span>})</span>
@@ -537,7 +537,7 @@ Usually it is convenient to leave gates like <span class="math inline">\(X,Y,Z,H
 </div>
 <p>note here, that the variables dictionary does not need to be initialized with the variable type, the plain names (as hashable types like strings) are enough - in the background this will all be converted to <code>tq.Variable</code>.</p>
 <p>For the last datatype, we already saw an example, that is <code>tq.Variable</code> itself, as it can be evaluated</p>
-<div id="f9d06e5e" class="cell" data-execution_count="7">
+<div id="99ae7a96" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>variable <span class="op">=</span> tq.Variable(<span class="st">"name"</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>evaluated <span class="op">=</span> variable(variables<span class="op">=</span>{<span class="st">"name"</span>:<span class="fl">1.0</span>})</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(evaluated)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -546,7 +546,7 @@ Usually it is convenient to leave gates like <span class="math inline">\(X,Y,Z,H
 </div>
 </div>
 <p>as this alone would be boring, we can manipulate the variable object, here is some example in which we initialize a circuit parameterized by the function <span class="math display">\[ f(a) = \sin^2\left(\frac{a}{2}\pi\right) \]</span></p>
-<div id="b04b9c65" class="cell" data-execution_count="8">
+<div id="c75c7a94" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> numpy <span class="im">import</span> pi,sin</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> tq.Variable(<span class="st">"a"</span>)</span>
@@ -566,7 +566,7 @@ Usually it is convenient to leave gates like <span class="math inline">\(X,Y,Z,H
 <section id="add-controls" class="level2">
 <h2 class="anchored" data-anchor-id="add-controls">Add Controls</h2>
 <p>You can take one circuit and add control-options to it</p>
-<div id="7cf95b08" class="cell" data-execution_count="9">
+<div id="c67273ec" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>cU <span class="op">=</span> U.add_controls([<span class="dv">3</span>,<span class="dv">4</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="quarto-figure quarto-figure-center">
@@ -584,7 +584,7 @@ Usually it is convenient to leave gates like <span class="math inline">\(X,Y,Z,H
 </section>
 <section id="re-parametrize" class="level2">
 <h2 class="anchored" data-anchor-id="re-parametrize">Re-Parametrize</h2>
-<div id="6209d4e8" class="cell" data-execution_count="10">
+<div id="44f3e919" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>UX <span class="op">=</span> U.map_variables({<span class="st">"a"</span>:<span class="st">"b"</span>})</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>UY <span class="op">=</span> UX.map_variables({<span class="st">"b"</span>:<span class="fl">1.0</span>})</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"angles in U :"</span>,U.extract_variables())</span>
@@ -599,7 +599,7 @@ angles in UY: []</code></pre>
 </section>
 <section id="map-qubits" class="level2">
 <h2 class="anchored" data-anchor-id="map-qubits">Map-Qubits</h2>
-<div id="24cf9b31" class="cell" data-execution_count="11">
+<div id="5d6a60a6" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>UZ <span class="op">=</span> U.map_qubits({<span class="dv">0</span>:<span class="dv">1</span>,<span class="dv">1</span>:<span class="dv">2</span>}) </span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(UZ)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -613,7 +613,7 @@ X(target=(2,), control=(1,))
 <section id="decompose-gates" class="level2">
 <h2 class="anchored" data-anchor-id="decompose-gates">Decompose Gates</h2>
 <p>Tequila can decompose gates automatically (e.g.&nbsp;for differentiation or translation to backend), you can however also do this manually with <code>tq.compile_circuit</code>. The default compiles down to the lowest lever (only standard single qubit gates and controlled-nots). You can specifiy the compile options with keywords like <code>controlled_rotation=False</code>. See <a href="https://github.com/tequilahub/tequila/blob/master/src/tequila/circuit/compiler.py">here</a> for all keywords.</p>
-<div id="39e8f180" class="cell" data-execution_count="12">
+<div id="f8461bb2" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>U1 <span class="op">=</span> tq.gates.H(<span class="dv">0</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>U1<span class="op">+=</span> tq.gates.Ry(<span class="st">"a"</span>,<span class="dv">0</span>,control<span class="op">=</span><span class="dv">1</span>) </span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>U1<span class="op">+=</span> tq.gates.ExpPauli(angle<span class="op">=</span><span class="st">"b"</span>, paulistring<span class="op">=</span><span class="st">"X(0)X(2)"</span>)</span>
@@ -651,7 +651,7 @@ X(target=(2,), control=(1,))
 <section id="get-generators" class="level2">
 <h2 class="anchored" data-anchor-id="get-generators">Get Generators</h2>
 <p>The generators of individual gates can be constructed with the <code>make_generator</code> function. Here we can include the control qubits in the definition of the generator. Take for example</p>
-<div id="598d93d5" class="cell" data-execution_count="13">
+<div id="a7705f8d" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> tq.gates.Ry(angle<span class="op">=</span><span class="st">"a"</span>, target<span class="op">=</span><span class="dv">0</span>) <span class="op">+</span> tq.gates.X(control<span class="op">=</span><span class="dv">0</span>, target<span class="op">=</span><span class="dv">1</span>) </span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> gate <span class="kw">in</span> U.gates:</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    generator <span class="op">=</span> gate.make_generator()</span>

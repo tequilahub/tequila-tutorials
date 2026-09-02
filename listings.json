@@ -28,6 +28,7 @@
   {
     "listing": "/research.html",
     "items": [
+      "/research/PCE/tutorial.html",
       "/research/vqa-init-strategies/tutorial.html",
       "/research/ShotFrugalOpt/tutorial.html",
       "/research/pauli_decomposition/Tutorial.html",

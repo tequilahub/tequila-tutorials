@@ -477,7 +477,7 @@ Alternatively, a computationally less expensive approach involves leveraging spe
 <p>At first we look at the case <span class="math inline">\(U = AB\)</span>, where <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are entirely separate. In this scenario we can decompose the calculation of the expectation value <span class="math inline">\(\braket{H}_U\)</span>, by splitting our circuit horizontally. <span class="math display">\[  \braket{H}_U = \bra{0}U^\dagger H U\ket{0} \]</span> <span class="math display">\[ = \braket{H}_{AB} = \bra{0}(AB)^\dagger H (AB)\ket{0} \]</span> <span class="math display">\[ = \bra{0}A^\dagger H_A A\ket{0} + \bra{0}B^\dagger H_B B\ket{0} + \bra{0}(AB)^\dagger H_{AB} (AB)\ket{0} + c_H \]</span></p>
 <p>Here we decomposed the Hamiltonian <span class="math inline">\(H = \sum_{k}  c_k P_k\)</span>. <br> This is done by verifying whether all qubits of the Paulistring <span class="math inline">\(P_k\)</span> are a subset of the qubits in the subcircuits <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, if this condition is satisfied, we identify the corresponding Hamiltonians <span class="math inline">\(H_A\)</span> and <span class="math inline">\(H_B\)</span>. <br> If the qubits of <span class="math inline">\(P_k\)</span> span both qubit sets of the subcircuits, we classify it as a cross-term <span class="math inline">\(H_{AB}\)</span> with Paulistring <span class="math inline">\(P_k^{AB}\)</span>. The remaining <span class="math inline">\(c_H\)</span> represents the real-valued constant of the Hamiltonian. <br> This decomposition on it’s own does not reduce the complexity of the calculation yet. If we want to do so, we have to further decompose the cross-term <span class="math inline">\(H_{AB}\)</span>: <br> <span class="math display">\[H_{AB} = \sum_k c_k P_k^{AB}\]</span> with <span class="math inline">\(P_k^{AB} = P_k^A \otimes P_k^B\)</span>, where <span class="math inline">\(P_k^A\)</span> and <span class="math inline">\(P_k^B\)</span> are Paulistrings acting on the qubit sets of subcircuits <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, respectively, the expectation value of the cross term can be expressed in a decomposed form:</p>
 <p><span class="math display">\[ \bra{0}(AB)^\dagger H_{AB} (AB)\ket{0} = \sum_k c_k \cdot (\bra{0}A^\dagger P_k^A A\ket{0} \cdot \bra{0}B^\dagger P_k^B B\ket{0}) \]</span> where <span class="math inline">\(c_k\)</span> is the coefficient of the partial Paulistring of <span class="math inline">\(H_{AB}\)</span>. <br> In the following we look at the decoupled decomposition implemented in Tequila and compare the calculation time against the computation with a full (undecomposed) circuit.</p>
-<div id="2e1cdb64" class="cell" data-execution_count="1">
+<div id="e5c5671a" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tequila <span class="im">as</span> tq</span>
@@ -608,7 +608,7 @@ Alternatively, a computationally less expensive approach involves leveraging spe
 <p><span class="math display">\[ - abi \cdot \bra{0}(A C)^\dagger H \: A P C \ket{0} + abi \cdot \bra{0}(A P C)^\dagger H \: A C \ket{0} \]</span> <span class="math display">\[ = - abi \cdot (\bra{0}(A C)^\dagger H \: A P C \ket{0} - abi \cdot \bra{0}(A P C)^\dagger H \: A C \ket{0}) \]</span> <span class="math display">\[ = - abi \cdot (\bra{0}(A C)^\dagger H \: A P C \ket{0} - h.c) \]</span> <span class="math display">\[ = - abi \cdot (2i \cdot\textbf{Im}(\bra{0}(A C)^\dagger H \: A P C \ket{0})) \]</span> <span class="math display">\[ = 2ab\cdot \textbf{Im}(\bra{0}(A C)^\dagger H \: A P C \ket{0}) \]</span></p>
 <p>This transformation reduces the number of required steps and results in a real value. Therefore, the total expectation value <span class="math inline">\(\braket{H}_U\)</span> is given by: <span class="math display">\[  a^2 \cdot \bra{0}(AC)^\dagger H \: AC\ket{0} + b^2 \cdot \bra{0}(APC)^\dagger H \: APC \ket{0} + 2ab\cdot \textbf{Im}(\bra{0}(A C)^\dagger H \: A P C \ket{0})  \]</span></p>
 <p>For our decomposition approach, the implementation would follow this structure:</p>
-<div id="687d3c9a" class="cell" data-execution_count="2">
+<div id="f22a7372" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_abc(H, A, B, C):</span>
@@ -652,7 +652,7 @@ Before simplification, we must examine the standard BraKet <span class="math inl
 <section id="weakly-coupled-implementation-and-comparison" class="level2">
 <h2 class="anchored" data-anchor-id="weakly-coupled-implementation-and-comparison">Weakly coupled implementation and comparison</h2>
 <p>With every previously described step we can now implement the weakly coupled decomposition to exploit a circuit’s structure for a computational advantage. The core functionality resides in the function <strong>calculate_abc</strong>, which handles the primary decomposition calculation. Because <span class="math inline">\(\textbf{Im}(\bra{0}(A C)^\dagger H \: A P C \ket{0})\)</span> forms an overlap, <strong>small_braket</strong> gets called to further reduce the complexity.</p>
-<div id="9e9acc0d" class="cell" data-execution_count="3">
+<div id="6f107b6f" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> convert_to_pauli(U: tq.gates.ExpPauli):</span>
@@ -799,7 +799,7 @@ A promising use case for our weakly coupled method involves circuits with multip
 <section id="appendix-circuit-splitting-logic" class="level1">
 <h1>Appendix: Circuit splitting logic</h1>
 <p>The logic for preparing the underlying circuit for the proposed calculation method can be done like this:</p>
-<div id="6764caf5" class="cell" data-execution_count="4">
+<div id="939b4afb" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> split_2(U):</span>

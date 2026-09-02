@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Elisabeth Welizky, Adapted by Adelina Bärligea">
+<meta name="dcterms.date" content="2026-08-31">
+
+<title>Pauli Correlation Encoding for Qubit-Efficient MaxCut – Tequila Tutorials</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../favicon.ico" rel="icon">
+<script src="../../site_libs/cookie-consent/cookie-consent.js"></script>
+<link href="../../site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6816b788f5f7c21b6d99241bf8ffbe49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-4e53f9a7cac9cb8ce958252f8331ecbd.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-6816b788f5f7c21b6d99241bf8ffbe49.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-V7DRP5E70N"></script>
+
+<script type="text/plain" cookie-consent="tracking">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-V7DRP5E70N', { 'anonymize_ip': true});
+</script>
+
+<script type="text/javascript" charset="UTF-8">
+document.addEventListener('DOMContentLoaded', function () {
+cookieconsent.run({
+  "notice_banner_type":"simple",
+  "consent_type":"express",
+  "palette":"light",
+  "language":"en",
+  "page_load_consent_levels":["strictly-necessary"],
+  "notice_banner_reject_button_hide":false,
+  "preferences_center_close_button_hide":false,
+  "website_name":""
+  ,
+"language":"en"
+  });
+});
+</script> 
+  
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Pauli Correlation Encoding for Qubit-Efficient MaxCut – Tequila Tutorials">
+<meta property="og:description" content="quantum computing, quantum chemistry and tequila">
+<meta property="og:image" content="https://tequilahub.github.io/tequila-tutorials/research/PCE/preview.png">
+<meta property="og:site_name" content="Tequila Tutorials">
+<meta property="og:image:height" content="1792">
+<meta property="og:image:width" content="2486">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../tequila_logo.png" alt="" class="navbar-logo light-content">
+    <img src="../../tequila_logo.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Tequila Tutorials</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../research.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../FAQ/FAQ.html"> 
+<span class="menu-text">FAQ</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../Contribution/Contribution.html"> 
+<span class="menu-text">Contribution</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../docs/sphinx/index.html"> 
+<span class="menu-text">Docs</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Pauli Correlation Encoding for Qubit-Efficient MaxCut</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">quantum optimization</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Elisabeth Welizky, Adapted by Adelina Bärligea </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">August 31, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#from-maxcut-to-pauli-correlations" id="toc-from-maxcut-to-pauli-correlations" class="nav-link active" data-scroll-target="#from-maxcut-to-pauli-correlations">From MaxCut to Pauli correlations</a>
+  <ul class="collapse">
+  <li><a href="#maxcut" id="toc-maxcut" class="nav-link" data-scroll-target="#maxcut">MaxCut</a></li>
+  <li><a href="#pauli-correlation-encoding" id="toc-pauli-correlation-encoding" class="nav-link" data-scroll-target="#pauli-correlation-encoding">Pauli Correlation Encoding</a></li>
+  </ul></li>
+  <li><a href="#constructing-the-encoding-in-tequila" id="toc-constructing-the-encoding-in-tequila" class="nav-link" data-scroll-target="#constructing-the-encoding-in-tequila">Constructing the encoding in Tequila</a>
+  <ul class="collapse">
+  <li><a href="#divide-variables-among-pauli-families" id="toc-divide-variables-among-pauli-families" class="nav-link" data-scroll-target="#divide-variables-among-pauli-families">Divide variables among Pauli families</a></li>
+  <li><a href="#assign-k-qubit-correlations" id="toc-assign-k-qubit-correlations" class="nav-link" data-scroll-target="#assign-k-qubit-correlations">Assign <span class="math inline">\(k\)</span>-qubit correlations</a></li>
+  <li><a href="#determine-the-required-number-of-qubits" id="toc-determine-the-required-number-of-qubits" class="nav-link" data-scroll-target="#determine-the-required-number-of-qubits">Determine the required number of qubits</a></li>
+  <li><a href="#build-the-variational-circuit" id="toc-build-the-variational-circuit" class="nav-link" data-scroll-target="#build-the-variational-circuit">Build the variational circuit</a></li>
+  </ul></li>
+  <li><a href="#example-a-three-node-maxcut-instance" id="toc-example-a-three-node-maxcut-instance" class="nav-link" data-scroll-target="#example-a-three-node-maxcut-instance">Example: a three-node MaxCut instance</a>
+  <ul class="collapse">
+  <li><a href="#construct-the-encoded-observables" id="toc-construct-the-encoded-observables" class="nav-link" data-scroll-target="#construct-the-encoded-observables">1. Construct the encoded observables</a></li>
+  <li><a href="#evaluate-the-pauli-correlations" id="toc-evaluate-the-pauli-correlations" class="nav-link" data-scroll-target="#evaluate-the-pauli-correlations">2. Evaluate the Pauli correlations</a></li>
+  <li><a href="#relax-the-maxcut-loss-function" id="toc-relax-the-maxcut-loss-function" class="nav-link" data-scroll-target="#relax-the-maxcut-loss-function">3. Relax the MaxCut loss function</a></li>
+  <li><a href="#optimize-the-circuit-parameters" id="toc-optimize-the-circuit-parameters" class="nav-link" data-scroll-target="#optimize-the-circuit-parameters">4. Optimize the circuit parameters</a></li>
+  <li><a href="#decode-the-partitions" id="toc-decode-the-partitions" class="nav-link" data-scroll-target="#decode-the-partitions">5. Decode the partitions</a></li>
+  </ul></li>
+  <li><a href="#experiment-pce-parameter-study" id="toc-experiment-pce-parameter-study" class="nav-link" data-scroll-target="#experiment-pce-parameter-study">Experiment: PCE parameter study</a>
+  <ul class="collapse">
+  <li><a href="#feasible-region-and-register-compression" id="toc-feasible-region-and-register-compression" class="nav-link" data-scroll-target="#feasible-region-and-register-compression">Feasible region and register compression</a></li>
+  <li><a href="#locality-and-qubit-ratio-within-each-encoding" id="toc-locality-and-qubit-ratio-within-each-encoding" class="nav-link" data-scroll-target="#locality-and-qubit-ratio-within-each-encoding">Locality and qubit ratio within each encoding</a></li>
+  <li><a href="#run-to-run-variation" id="toc-run-to-run-variation" class="nav-link" data-scroll-target="#run-to-run-variation">Run-to-run variation</a></li>
+  <li><a href="#comparison-of-the-four-pauli-family-choices" id="toc-comparison-of-the-four-pauli-family-choices" class="nav-link" data-scroll-target="#comparison-of-the-four-pauli-family-choices">Comparison of the four Pauli-family choices</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/tequilahub/tequila-tutorials/blob/main/research/PCE/tutorial.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila-tutorials/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+
+<p>Many quantum algorithms for binary optimization such as QAOA <span class="citation" data-cites="farhi2014qaoa"><a href="#ref-farhi2014qaoa" role="doc-biblioref">[1]</a></span> use one qubit for each decision variable, making the register size a direct bottleneck when trying to solve large instances. Pauli Correlation Encoding (PCE) <span class="citation" data-cites="sciorilli2025pce"><a href="#ref-sciorilli2025pce" role="doc-biblioref">[2]</a></span> instead represents binary variables through multi-qubit Pauli correlations, resulting in a polynomial compression of the problem’s space requirements <span class="citation" data-cites="alonso2026benchmarkpaulicorrelationencoding friedhoff2026"><a href="#ref-alonso2026benchmarkpaulicorrelationencoding" role="doc-biblioref">[3]</a>, <a href="#ref-friedhoff2026" role="doc-biblioref">[4]</a></span>. This tutorial constructs the method in Tequila, follows a three-node MaxCut example from Pauli strings to a decoded partition, and examines the solution behavior observed in a numerical parameter study.</p>
+<section id="from-maxcut-to-pauli-correlations" class="level2">
+<h2 class="anchored" data-anchor-id="from-maxcut-to-pauli-correlations">From MaxCut to Pauli correlations</h2>
+<section id="maxcut" class="level3">
+<h3 class="anchored" data-anchor-id="maxcut">MaxCut</h3>
+<p>Before introducing the PCE principle, we first consider MaxCut, one of the most widely studied NP-hard combinatorial optimization problems and a canonical benchmark for quantum optimization methods <span class="citation" data-cites="kochenberger maxCut farhi2014qaoa"><a href="#ref-farhi2014qaoa" role="doc-biblioref">[1]</a>, <a href="#ref-kochenberger" role="doc-biblioref">[5]</a>, <a href="#ref-maxCut" role="doc-biblioref">[6]</a></span>.</p>
+<p>Given an undirected weighted graph <span class="math inline">\(G=(V,E,w)\)</span> with <span class="math inline">\(N=|V|\)</span> nodes and edge weights <span class="math inline">\(w_{ij} \geq 0\)</span>, a spin assignment <span class="math inline">\(z_i\in\{-1,+1\}\)</span> places each node in one of two partitions. Its cut value is</p>
+<p><span class="math display">\[
+C_G(z)=\sum_{(i,j)\in E}\frac{w_{ij}}{2}\left(1-z_i z_j\right),
+\]</span></p>
+<p>where an edge <span class="math inline">\((i,j)\in E\)</span> contributes its weight exactly when its two connected nodes are in different partitions, i.e., <span class="math inline">\(z_i,z_j\)</span> have opposite signs. MaxCut then asks for the assignment with the largest cut value.</p>
+<div id="fig-MaxCut" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" width="50%">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-MaxCut-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="MaxCut.png" id="fig-MaxCut" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-MaxCut-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1
+</figcaption>
+</figure>
+</div>
+<p>The partition in <a href="#fig-MaxCut" class="quarto-xref">Figure&nbsp;1</a> separates the vertices into <span class="math inline">\(\{1,3,4\}\)</span> and <span class="math inline">\(\{2,5\}\)</span>; the highlighted crossing edges determine the cut value.</p>
+</section>
+<section id="pauli-correlation-encoding" class="level3">
+<h3 class="anchored" data-anchor-id="pauli-correlation-encoding">Pauli Correlation Encoding</h3>
+<p>PCE does not store a variable in the computational state of one dedicated qubit. Instead, a variable <span class="math inline">\(i\)</span> is assigned to</p>
+<ul>
+<li>a <span class="math inline">\(k\)</span>-qubit support <span class="math inline">\(s(i)\subseteq\{0,\ldots,n-1\}\)</span>,</li>
+<li>a Pauli axis <span class="math inline">\(p(i)\in\{X,Y,Z\}\)</span>, and</li>
+<li>the corresponding Pauli string</li>
+</ul>
+<p><span class="math display">\[
+\Pi_i=\prod_{q\in s(i)}p(i)_q.
+\]</span></p>
+<p>The final binary value <span class="math inline">\(z_i\)</span> is then decoded from a variational state <span class="math inline">\(|\psi(\theta)\rangle\)</span> via</p>
+<p><span class="math display">\[
+z_i=\operatorname{sgn}\!\left(\langle\psi(\theta)|\Pi_i|\psi(\theta)\rangle\right).
+\]</span></p>
+<p>Using every <span class="math inline">\(k\)</span>-qubit support once within each Pauli family provides up to <span class="math inline">\(3\binom{n}{k}\)</span> variables. All <span class="math inline">\(X\)</span>-type strings, all <span class="math inline">\(Y\)</span>-type strings, and all <span class="math inline">\(Z\)</span>-type strings can be measured in three global basis settings, respectively <span class="citation" data-cites="sciorilli2025pce"><a href="#ref-sciorilli2025pce" role="doc-biblioref">[2]</a></span>.</p>
+<div id="fig-PCE-qubits" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" width="70%">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-PCE-qubits-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="PCE_qubits.png" id="fig-PCE-qubits" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-PCE-qubits-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2
+</figcaption>
+</figure>
+</div>
+<p><a href="#fig-PCE-qubits" class="quarto-xref">Figure&nbsp;2</a> illustrates the quadratic case <span class="math inline">\(N=9\)</span>, <span class="math inline">\(n=3\)</span>, and <span class="math inline">\(k=2\)</span>. Concretely, the nine possible encodings are</p>
+<p><span class="math display">\[
+\{X_0X_1,Y_0Y_1,Z_0Z_1,X_0X_2,Y_0Y_2,Z_0Z_2,X_1X_2,Y_1Y_2,Z_1Z_2\}.
+\]</span></p>
+<p>This assignment represents nine optimization variables with only three qubits and makes the relation <span class="math inline">\(n&lt;N\)</span> concrete. Note that the Pauli assignment is part of the encoding and does not depend on whether two graph vertices are adjacent.</p>
+</section>
+</section>
+<section id="constructing-the-encoding-in-tequila" class="level2">
+<h2 class="anchored" data-anchor-id="constructing-the-encoding-in-tequila">Constructing the encoding in Tequila</h2>
+<p>We begin with the imports used throughout the tutorial.</p>
+<div id="36487637" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2026-09-01T15:48:31.374619Z&quot;,&quot;start_time&quot;:&quot;2026-09-01T15:48:23.598722Z&quot;}}" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tequila <span class="im">as</span> tq</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> combinations</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="divide-variables-among-pauli-families" class="level3">
+<h3 class="anchored" data-anchor-id="divide-variables-among-pauli-families">Divide variables among Pauli families</h3>
+<p>For nine variables, the standard three-Pauli encoding divides the indices into equally sized <span class="math inline">\(X\)</span>, <span class="math inline">\(Y\)</span>, and <span class="math inline">\(Z\)</span> groups.</p>
+<div id="f655cde3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2026-09-01T15:49:04.374894Z&quot;,&quot;start_time&quot;:&quot;2026-09-01T15:49:04.350977Z&quot;}}" data-execution_count="3">
+<details class="code-fold">
+<summary>Show the three-family variable split</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>num_nodes <span class="op">=</span> <span class="dv">9</span>  <span class="co"># example: 9 optimization variables</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>list_size <span class="op">=</span> num_nodes <span class="op">//</span> <span class="dv">3</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>node_x <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(list_size)]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>node_y <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(list_size, <span class="dv">2</span> <span class="op">*</span> list_size)]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>node_z <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span> <span class="op">*</span> list_size, num_nodes)]</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"X-group:"</span>, node_x)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Y-group:"</span>, node_y)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Z-group:"</span>, node_z)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>X-group: [0, 1, 2]
+Y-group: [3, 4, 5]
+Z-group: [6, 7, 8]</code></pre>
+</div>
+</div>
+<p>While the standard formulation usually relies on all three Pauli operators <span class="math inline">\(X\)</span>, <span class="math inline">\(Y\)</span>, <span class="math inline">\(Z\)</span>, this tutorial assesses, whether a two-operator scheme, which is structually simpler, will achieve comparable performance. For this, it compares three restricted encodings:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Case</th>
+<th>Pauli families</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td><span class="math inline">\(X,Y,Z\)</span></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><span class="math inline">\(X,Y\)</span></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><span class="math inline">\(X,Z\)</span></td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td><span class="math inline">\(Y,Z\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>In Case 1, the implementation assigns <span class="math inline">\(\lfloor N/3\rfloor\)</span> variables to <span class="math inline">\(X\)</span>, the same number to <span class="math inline">\(Y\)</span>, and the remaining variables to <span class="math inline">\(Z\)</span>. In Cases 2–4, the first family receives <span class="math inline">\(\lfloor N/2\rfloor\)</span> variables and the second receives the remainder. This convention is kept fixed when the cases are compared.</p>
+<div id="d4624667" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2026-09-01T15:49:08.431170Z&quot;,&quot;start_time&quot;:&quot;2026-09-01T15:49:08.399617Z&quot;}}" data-execution_count="4">
+<details class="code-fold">
+<summary>Show all four Pauli-family assignments</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>case <span class="op">=</span> <span class="dv">1</span>  <span class="co"># 1: X,Y,Z   2: X,Y   3: X,Z   4: Y,Z</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>node_x, node_y, node_z <span class="op">=</span> [], [], []</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> case <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    list_size <span class="op">=</span> num_nodes <span class="op">//</span> <span class="dv">3</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    node_x <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(list_size)]</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    node_y <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(list_size, <span class="dv">2</span> <span class="op">*</span> list_size)]</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    node_z <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span> <span class="op">*</span> list_size, num_nodes)]</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> case <span class="op">==</span> <span class="dv">2</span>:</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    list_size <span class="op">=</span> num_nodes <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    node_x <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(list_size)]</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    node_y <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(list_size, num_nodes)]</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> case <span class="op">==</span> <span class="dv">3</span>:</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    list_size <span class="op">=</span> num_nodes <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    node_x <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(list_size)]</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    node_z <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(list_size, num_nodes)]</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> case <span class="op">==</span> <span class="dv">4</span>:</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    list_size <span class="op">=</span> num_nodes <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    node_y <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(list_size)]</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    node_z <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(list_size, num_nodes)]</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Distribution of variables: "</span>, node_x, node_y, node_z)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Distribution of variables:  [0, 1, 2] [3, 4, 5] [6, 7, 8]</code></pre>
+</div>
+</div>
+</section>
+<section id="assign-k-qubit-correlations" class="level3">
+<h3 class="anchored" data-anchor-id="assign-k-qubit-correlations">Assign <span class="math inline">\(k\)</span>-qubit correlations</h3>
+<p>For a selected Pauli family, the construction proceeds in four steps:</p>
+<ol type="1">
+<li>Generate all <span class="math inline">\(\binom{n}{k}\)</span> supports of size <span class="math inline">\(k\)</span>.</li>
+<li>Shuffle the support list.</li>
+<li>Assign each variable in the family a support pattern that has not yet been used by that family.</li>
+<li>Multiply the selected single-qubit Pauli operator over the assigned support.</li>
+</ol>
+<p>For four qubits and <span class="math inline">\(k=2\)</span>, for example, the available supports are <span class="math inline">\((0,1)\)</span>, <span class="math inline">\((0,2)\)</span>, <span class="math inline">\((0,3)\)</span>, <span class="math inline">\((1,2)\)</span>, <span class="math inline">\((1,3)\)</span>, and <span class="math inline">\((2,3)\)</span>. Which variable receives which combination is therefore random, but every support remains unique within a Pauli family.</p>
+<p>For example, assigning support <span class="math inline">\((0,1)\)</span> to an <span class="math inline">\(X\)</span>-type variable produces <span class="math inline">\(\Pi_i=X_0X_1\)</span>. Different Pauli families may reuse the same support because the Pauli axis still distinguishes the resulting strings.</p>
+<div id="10dce585" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2026-09-01T15:49:12.447668Z&quot;,&quot;start_time&quot;:&quot;2026-09-01T15:49:12.415177Z&quot;}}" data-execution_count="5">
+<details class="code-fold">
+<summary>Show the Pauli correlation encoding function</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> build_pauli_correlation_encoding(pauli_type, node_list, num_qubits, k<span class="op">=</span><span class="dv">2</span>):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    all_combos <span class="op">=</span> <span class="bu">list</span>(combinations(<span class="bu">range</span>(num_qubits), k))</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    random.shuffle(all_combos)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    used_combos <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    pauli_encodings <span class="op">=</span> []</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> node <span class="kw">in</span> node_list:</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        assigned_combo <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> combo <span class="kw">in</span> all_combos:</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> combo <span class="kw">in</span> used_combos:</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                <span class="cf">continue</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>            assigned_combo <span class="op">=</span> combo</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> assigned_combo <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"Cannot assign valid combination for node </span><span class="sc">{</span>node<span class="sc">}</span><span class="ss">."</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>        used_combos.add(assigned_combo)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>        pauli_op <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> qubit_idx <span class="kw">in</span> assigned_combo:</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> pauli_type <span class="op">==</span> <span class="st">"X"</span>:</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>                single_pauli <span class="op">=</span> tq.paulis.X(qubit_idx)</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>            <span class="cf">elif</span> pauli_type <span class="op">==</span> <span class="st">"Y"</span>:</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>                single_pauli <span class="op">=</span> tq.paulis.Y(qubit_idx)</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>            <span class="cf">elif</span> pauli_type <span class="op">==</span> <span class="st">"Z"</span>:</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>                single_pauli <span class="op">=</span> tq.paulis.Z(qubit_idx)</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>            pauli_op <span class="op">=</span> single_pauli <span class="cf">if</span> pauli_op <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> pauli_op <span class="op">*</span> single_pauli</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>        pauli_encodings.append(pauli_op)</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pauli_encodings</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>example_encodings <span class="op">=</span> build_pauli_correlation_encoding(<span class="st">"X"</span>, node_x, num_qubits<span class="op">=</span><span class="dv">4</span>, k<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Example with 4 qubits, k=2, applied to the X-group"</span>, example_encodings)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Example with 4 qubits, k=2, applied to the X-group [+1.0000X(0)X(3), +1.0000X(0)X(2), +1.0000X(0)X(1)]</code></pre>
+</div>
+</div>
+</section>
+<section id="determine-the-required-number-of-qubits" class="level3">
+<h3 class="anchored" data-anchor-id="determine-the-required-number-of-qubits">Determine the required number of qubits</h3>
+<p>Let <span class="math inline">\(M\)</span> denote the size of the largest Pauli family. The encoding is feasible whenever</p>
+<p><span class="math display">\[
+\binom{n}{k}\geq M.
+\]</span></p>
+<p>Under the grouping convention above,</p>
+<p><span class="math display">\[
+M=
+\begin{cases}
+\left\lfloor N/3\right\rfloor+(N\bmod 3), &amp; \text{Case 1},\\
+\left\lceil N/2\right\rceil, &amp; \text{Cases 2--4}.
+\end{cases}
+\]</span></p>
+<p>For <span class="math inline">\(k=2\)</span>, solving <span class="math inline">\(\binom{n}{2}\geq M\)</span> gives</p>
+<p><span class="math display">\[
+n_{\min}=
+\left\lceil\frac{1+\sqrt{1+8M}}{2}\right\rceil.
+\]</span></p>
+<p>For a fixed locality <span class="math inline">\(k\)</span>, this capacity relation gives <span class="math inline">\(n_{\min}=\Theta(N^{1/k})\)</span>. Note that this is a statement about register size, and it cannot by itself determine circuit depth, parameter count, optimization difficulty, or total runtime.</p>
+<div id="a624b7b9" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2026-09-01T15:49:15.189657Z&quot;,&quot;start_time&quot;:&quot;2026-09-01T15:49:15.151836Z&quot;}}" data-execution_count="6">
+<details class="code-fold">
+<summary>Show the minimum-qubit calculation</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> min_num_qubits(num_nodes, k, case<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> case <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        max_connections <span class="op">=</span> num_nodes <span class="op">//</span> <span class="dv">3</span> <span class="op">+</span> num_nodes <span class="op">%</span> <span class="dv">3</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> case <span class="kw">in</span> [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>]:</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        max_connections <span class="op">=</span> (num_nodes <span class="op">+</span> <span class="dv">1</span>) <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"Invalid case: </span><span class="sc">{</span>case<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> k</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        binom <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, k <span class="op">+</span> <span class="dv">1</span>):</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>            binom <span class="op">*=</span> (n <span class="op">+</span> <span class="dv">1</span> <span class="op">-</span> i) <span class="op">/</span> i</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> binom <span class="op">&gt;=</span> max_connections:</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> n</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        n <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Minimum number of qubits: "</span>,min_num_qubits(num_nodes, k<span class="op">=</span><span class="dv">2</span>, case<span class="op">=</span><span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Minimum number of qubits:  3</code></pre>
+</div>
+</div>
+</section>
+<section id="build-the-variational-circuit" class="level3">
+<h3 class="anchored" data-anchor-id="build-the-variational-circuit">Build the variational circuit</h3>
+<p>After assigning the Pauli combinations to the variables, the ansatz must be built. The tutorial uses a hardware-efficient circuit <span class="citation" data-cites="kandala2017hea"><a href="#ref-kandala2017hea" role="doc-biblioref">[7]</a></span> with alternating <span class="math inline">\(R_y\)</span> and <span class="math inline">\(R_z\)</span> rotations followed by a nearest-neighbor CNOT chain, which is a sufficiently expressive ansatz that is easily implementable on near-term quantum devices.</p>
+<div id="bbaf8f80" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2026-09-01T15:49:18.029658Z&quot;,&quot;start_time&quot;:&quot;2026-09-01T15:49:18.016413Z&quot;}}" data-execution_count="7">
+<details class="code-fold">
+<summary>Show the variational circuit construction</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> build_ansatz(num_qubits, reps):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Build ansatz with Ry and Rz gates"""</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    U <span class="op">=</span> tq.QCircuit()</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    param_idx <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> rep <span class="kw">in</span> <span class="bu">range</span>(reps):</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(num_qubits):</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>            U <span class="op">+=</span> tq.gates.Ry(angle<span class="op">=</span><span class="ss">f"theta_</span><span class="sc">{</span>param_idx<span class="sc">}</span><span class="ss">"</span>, target<span class="op">=</span>i)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>            param_idx <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>            U <span class="op">+=</span> tq.gates.Rz(angle<span class="op">=</span><span class="ss">f"theta_</span><span class="sc">{</span>param_idx<span class="sc">}</span><span class="ss">"</span>, target<span class="op">=</span>i)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>            param_idx <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(num_qubits <span class="op">-</span> <span class="dv">1</span>):</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>            U <span class="op">+=</span> tq.gates.CX(control<span class="op">=</span>i, target<span class="op">=</span>i <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> U</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>ansatz <span class="op">=</span> build_ansatz(num_qubits<span class="op">=</span><span class="dv">4</span>, reps<span class="op">=</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+</section>
+<section id="example-a-three-node-maxcut-instance" class="level2">
+<h2 class="anchored" data-anchor-id="example-a-three-node-maxcut-instance">Example: a three-node MaxCut instance</h2>
+<p>A mechanism is now needed to tell how good the quantum state <span class="math inline">\(|\psi(\theta)\rangle\)</span> is in terms of maximizing the cut. The cost function prepares the state, computes the Pauli expectation values, maps them back to graph nodes, and evaluates the relaxed MaxCut loss.</p>
+<p>We now follow one complete optimization for a triangle graph. Case 1 assigns one graph vertex to each Pauli family. With <span class="math inline">\(k=2\)</span>, the minimum register contains two qubits, and the three variables are represented by the <span class="math inline">\(XX\)</span>, <span class="math inline">\(YY\)</span>, and <span class="math inline">\(ZZ\)</span> correlators on that pair.</p>
+<section id="construct-the-encoded-observables" class="level3">
+<h3 class="anchored" data-anchor-id="construct-the-encoded-observables">1. Construct the encoded observables</h3>
+<p>The dictionary below stores the Pauli observables by family. The helper function preserves the variable order when the expectation values are mapped back to graph nodes.</p>
+<div id="15ea83cd" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2026-09-01T15:49:21.044904Z&quot;,&quot;start_time&quot;:&quot;2026-09-01T15:49:21.012256Z&quot;}}" data-execution_count="8">
+<details class="code-fold">
+<summary>Show the triangle encoding setup</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example with 3 nodes and case 1 (X, Y, Z)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>num_nodes <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>list_size <span class="op">=</span> num_nodes <span class="op">//</span> <span class="dv">3</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>node_x <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(list_size)]</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>node_y <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(list_size, <span class="dv">2</span> <span class="op">*</span> list_size)]</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>node_z <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span> <span class="op">*</span> list_size, num_nodes)]</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>num_qubits <span class="op">=</span> min_num_qubits(num_nodes, k<span class="op">=</span><span class="dv">2</span>, case<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>pauli_encodings <span class="op">=</span> {}</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>pauli_encodings[<span class="st">"X"</span>] <span class="op">=</span> build_pauli_correlation_encoding(<span class="st">"X"</span>, node_x, num_qubits, k<span class="op">=</span><span class="dv">2</span>) <span class="cf">if</span> node_x <span class="cf">else</span> []</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>pauli_encodings[<span class="st">"Y"</span>] <span class="op">=</span> build_pauli_correlation_encoding(<span class="st">"Y"</span>, node_y, num_qubits, k<span class="op">=</span><span class="dv">2</span>) <span class="cf">if</span> node_y <span class="cf">else</span> []</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>pauli_encodings[<span class="st">"Z"</span>] <span class="op">=</span> build_pauli_correlation_encoding(<span class="st">"Z"</span>, node_z, num_qubits, k<span class="op">=</span><span class="dv">2</span>) <span class="cf">if</span> node_z <span class="cf">else</span> []</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> map_expectation_values_to_nodes(expectation_values, pauli_encodings, node_x, node_y, node_z):</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    node_exp_map <span class="op">=</span> {}</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    idx <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> pauli_type, node_list <span class="kw">in</span> [(<span class="st">'X'</span>, node_x), (<span class="st">'Y'</span>, node_y), (<span class="st">'Z'</span>, node_z)]:</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(pauli_encodings[pauli_type])):</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> i <span class="op">&lt;</span> <span class="bu">len</span>(node_list):</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>                node_exp_map[node_list[i]] <span class="op">=</span> expectation_values[idx]</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>            idx <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> node_exp_map</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"qubits:"</span>, <span class="st">"X:"</span>, node_x, <span class="st">"Y:"</span>, node_y, <span class="st">"Z:"</span>, node_z)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>qubits: X: [0] Y: [1] Z: [2]</code></pre>
+</div>
+</div>
+</section>
+<section id="evaluate-the-pauli-correlations" class="level3">
+<h3 class="anchored" data-anchor-id="evaluate-the-pauli-correlations">2. Evaluate the Pauli correlations</h3>
+<p>For each encoded observable <span class="math inline">\(\Pi_i\)</span>, Tequila constructs</p>
+<p><span class="math display">\[
+e_i(\theta)=\langle\psi(\theta)|\Pi_i|\psi(\theta)\rangle\in[-1,1].
+\]</span></p>
+<p>The expectation values are returned as a flat list in the same fixed order used above, <span class="math inline">\(X\rightarrow Y\rightarrow Z\)</span>, before they are mapped into a dictionary keyed by graph vertices.</p>
+<p>The observables are evaluated at a small illustrative parameter vector and then associated with the corresponding graph vertices.</p>
+<div id="f79a8875" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2026-09-01T15:49:25.038028Z&quot;,&quot;start_time&quot;:&quot;2026-09-01T15:49:25.008444Z&quot;}}" data-execution_count="9">
+<details class="code-fold">
+<summary>Show the expectation-value evaluation</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ansatz <span class="op">=</span> build_ansatz(num_qubits, reps<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>variables <span class="op">=</span> <span class="bu">sorted</span>(ansatz.extract_variables())</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>exp_vals <span class="op">=</span> []</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> H <span class="kw">in</span> pauli_encodings[<span class="st">'X'</span>]:</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    exp_vals.append(tq.ExpectationValue(H<span class="op">=</span>H, U<span class="op">=</span>ansatz))</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> H <span class="kw">in</span> pauli_encodings[<span class="st">'Y'</span>]:</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    exp_vals.append(tq.ExpectationValue(H<span class="op">=</span>H, U<span class="op">=</span>ansatz))</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> H <span class="kw">in</span> pauli_encodings[<span class="st">'Z'</span>]:</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    exp_vals.append(tq.ExpectationValue(H<span class="op">=</span>H, U<span class="op">=</span>ansatz))</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co"># simulate for an example parameter set</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>param_dict <span class="op">=</span> {var: <span class="fl">0.01</span> <span class="cf">for</span> var <span class="kw">in</span> variables}</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>expectation_values <span class="op">=</span> []</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> exp_val <span class="kw">in</span> exp_vals:</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> tq.simulate(exp_val, variables<span class="op">=</span>param_dict, backend<span class="op">=</span><span class="st">"qulacs"</span>)</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    expectation_values.append(<span class="bu">float</span>(result))</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>node_exp_map <span class="op">=</span> map_expectation_values_to_nodes(expectation_values, pauli_encodings, node_x, node_y, node_z)</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(node_exp_map)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>{0: 0.010098800054376493, 1: -0.009897341981725516, 2: 0.9997500170828262}</code></pre>
+</div>
+</div>
+</section>
+<section id="relax-the-maxcut-loss-function" class="level3">
+<h3 class="anchored" data-anchor-id="relax-the-maxcut-loss-function">3. Relax the MaxCut loss function</h3>
+<p>Maximizing the cut value is equivalent, up to an additive constant and a positive factor, to minimizing the Ising energy</p>
+<p><span class="math display">\[
+E_G(z)=\sum_{(i,j)\in E}w_{ij}z_i z_j
+\]</span></p>
+<p>for nonnegative edge weights <span class="citation" data-cites="lucas2014ising"><a href="#ref-lucas2014ising" role="doc-biblioref">[8]</a></span>. PCE replaces each discrete spin by the smooth quantity</p>
+<p><span class="math display">\[
+y_i(\theta)=\tanh\!\left(\alpha e_i(\theta)\right).
+\]</span></p>
+<p>The sign function is used only for the final decoding. During optimization, <span class="math inline">\(\tanh\)</span> supplies a smooth surrogate; the scale <span class="math inline">\(\alpha&gt;1\)</span> keeps small correlators from remaining entirely in its nearly linear regime <span class="citation" data-cites="sciorilli2025pce alonso2026benchmarkpaulicorrelationencoding"><a href="#ref-sciorilli2025pce" role="doc-biblioref">[2]</a>, <a href="#ref-alonso2026benchmarkpaulicorrelationencoding" role="doc-biblioref">[3]</a></span>.</p>
+<div id="fb603cc1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2026-09-01T15:49:43.519512Z&quot;,&quot;start_time&quot;:&quot;2026-09-01T15:49:43.286406Z&quot;}}" data-execution_count="10">
+<details class="code-fold">
+<summary>Show the plotting code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="fl">5.0</span>, <span class="fl">5.0</span>, <span class="dv">500</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>sign_x <span class="op">=</span> np.where(x <span class="op">&gt;=</span> <span class="fl">0.0</span>, <span class="fl">1.0</span>, <span class="op">-</span><span class="fl">1.0</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>smooth_x <span class="op">=</span> np.tanh(x)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="fl">7.2</span>, <span class="fl">4.2</span>))</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>ax.step(x, sign_x, where<span class="op">=</span><span class="st">"post"</span>, color<span class="op">=</span><span class="st">"#d97706"</span>, linewidth<span class="op">=</span><span class="fl">2.2</span>, label<span class="op">=</span><span class="vs">r"</span><span class="dv">$</span><span class="er">\</span><span class="vs">operatorname{sgn}</span><span class="kw">(</span><span class="vs">x</span><span class="kw">)</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>ax.plot(x, smooth_x, color<span class="op">=</span><span class="st">"#16803a"</span>, linewidth<span class="op">=</span><span class="fl">2.4</span>, label<span class="op">=</span><span class="vs">r"</span><span class="dv">$</span><span class="ch">\t</span><span class="vs">anh</span><span class="kw">(</span><span class="vs">x</span><span class="kw">)</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="fl">0.0</span>, color<span class="op">=</span><span class="st">"#6b7280"</span>, linewidth<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>ax.axvline(<span class="fl">0.0</span>, color<span class="op">=</span><span class="st">"#6b7280"</span>, linewidth<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="vs">r"</span><span class="dv">$</span><span class="vs">x</span><span class="dv">$</span><span class="vs">"</span>, ylabel<span class="op">=</span><span class="st">"value"</span>, xlim<span class="op">=</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>), ylim<span class="op">=</span>(<span class="op">-</span><span class="fl">1.15</span>, <span class="fl">1.15</span>))</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>ax.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tutorial_files/figure-html/cell-10-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The sign function is a step function: it remains constant on either side of zero and jumps abruptly from <span class="math inline">\(-1\)</span> to <span class="math inline">\(+1\)</span>. The <span class="math inline">\(\tanh\)</span> function instead varies smoothly and continuously, as the plot above illustrates.</p>
+<p>The implemented MaxCut loss is</p>
+<p><span class="math display">\[
+\mathcal{L}(\theta)=
+\sum_{(i,j)\in E}w_{ij}y_i(\theta)y_j(\theta)
++\beta\nu
+\left[
+\frac{1}{N}\sum_{i=1}^{N}y_i(\theta)^2
+\right]^2.
+\]</span></p>
+<p>The first term favors opposite signs on adjacent vertices. The regularizer penalizes large correlator magnitudes and keeps the optimization in a region where more sign patterns remain accessible; it does not directly prefer one partition over another because it depends only on <span class="math inline">\(y_i^2\)</span> <span class="citation" data-cites="sciorilli2025pce"><a href="#ref-sciorilli2025pce" role="doc-biblioref">[2]</a></span>. The primary PCE prescription uses the Edwards–Erdos scale <span class="math inline">\(\nu=|E|/2+(N-1)/4\)</span>. In the implementation below, each undirected edge weight is stored in both orientations, so <code>total_edge_weight / 2</code> evaluates to <span class="math inline">\(|E|\)</span> and the objective uses <span class="math inline">\(\nu=|E|+(N-1)/4\)</span> instead. In either convention, <span class="math inline">\(\beta\)</span> controls the regularization strength.</p>
+<div id="15795650" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2026-09-01T15:50:26.277955Z&quot;,&quot;start_time&quot;:&quot;2026-09-01T15:50:26.252031Z&quot;}}" data-execution_count="11">
+<details class="code-fold">
+<summary>Show the relaxed MaxCut loss calculation</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>example_graph <span class="op">=</span> nx.Graph()</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>example_graph.add_weighted_edges_from([(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">1.0</span>), (<span class="dv">1</span>, <span class="dv">2</span>, <span class="fl">1.0</span>), (<span class="dv">0</span>, <span class="dv">2</span>, <span class="fl">1.0</span>)])</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>edges <span class="op">=</span> example_graph.edges()</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>edge_weights <span class="op">=</span> {}</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> u, v, data <span class="kw">in</span> example_graph.edges(data<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> data.get(<span class="st">'weight'</span>, <span class="fl">1.0</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    edge_weights[(u, v)] <span class="op">=</span> w</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    edge_weights[(v, u)] <span class="op">=</span> w</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>external_field <span class="op">=</span> np.zeros(num_nodes)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>alpha <span class="op">=</span> num_qubits</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>loss <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> edge <span class="kw">in</span> edges:</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    edge0, edge1 <span class="op">=</span> edge[<span class="dv">0</span>], edge[<span class="dv">1</span>]</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> edge0 <span class="kw">in</span> node_exp_map <span class="kw">and</span> edge1 <span class="kw">in</span> node_exp_map:</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>        weight <span class="op">=</span> edge_weights.get((edge0, edge1), <span class="fl">0.0</span>)</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">+=</span> weight <span class="op">*</span> np.tanh(alpha <span class="op">*</span> node_exp_map[edge0]) <span class="op">*</span> np.tanh(alpha <span class="op">*</span> node_exp_map[edge1])</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> np.<span class="bu">any</span>(external_field <span class="op">!=</span> <span class="dv">0</span>):</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(num_nodes):</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i <span class="kw">in</span> node_exp_map:</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>            loss <span class="op">+=</span> external_field[i] <span class="op">*</span> np.tanh(alpha <span class="op">*</span> node_exp_map[i])</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>regulation_term <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(num_nodes):</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i <span class="kw">in</span> node_exp_map:</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>        regulation_term <span class="op">+=</span> np.tanh(alpha <span class="op">*</span> node_exp_map[i]) <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>regulation_term <span class="op">=</span> regulation_term <span class="op">/</span> num_nodes</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>regulation_term <span class="op">=</span> regulation_term <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>beta <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>total_edge_weight <span class="op">=</span> <span class="bu">sum</span>(edge_weights.values())</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> total_edge_weight <span class="op">/</span> <span class="dv">2</span> <span class="op">+</span> (num_nodes <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> <span class="dv">4</span></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>regulation_term <span class="op">=</span> beta <span class="op">*</span> v <span class="op">*</span> regulation_term</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>loss <span class="op">=</span> loss <span class="op">+</span> regulation_term</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="optimize-the-circuit-parameters" class="level3">
+<h3 class="anchored" data-anchor-id="optimize-the-circuit-parameters">4. Optimize the circuit parameters</h3>
+<p>COBYLA minimizes the relaxed loss without evaluating gradients. Each objective call simulates the encoded observables, maps them back to vertices, and evaluates the edge and regularization terms.</p>
+<div id="b800b7c5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2026-09-01T15:50:53.097838Z&quot;,&quot;start_time&quot;:&quot;2026-09-01T15:50:52.536806Z&quot;}}" data-execution_count="12">
+<details class="code-fold">
+<summary>Show the COBYLA objective and optimization</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cost_function(params):</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    param_dict <span class="op">=</span> {var: params[i] <span class="cf">for</span> i, var <span class="kw">in</span> <span class="bu">enumerate</span>(variables)}</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    expectation_values <span class="op">=</span> []</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> exp_val <span class="kw">in</span> exp_vals:</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> tq.simulate(exp_val, variables<span class="op">=</span>param_dict, backend<span class="op">=</span><span class="st">"qulacs"</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>        expectation_values.append(<span class="bu">float</span>(result))</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    node_exp_map <span class="op">=</span> map_expectation_values_to_nodes(expectation_values, pauli_encodings, node_x, node_y, node_z)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    alpha <span class="op">=</span> num_qubits</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> edge <span class="kw">in</span> edges:</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>        edge0, edge1 <span class="op">=</span> edge[<span class="dv">0</span>], edge[<span class="dv">1</span>]</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> edge0 <span class="kw">in</span> node_exp_map <span class="kw">and</span> edge1 <span class="kw">in</span> node_exp_map:</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>            weight <span class="op">=</span> edge_weights.get((edge0, edge1), <span class="fl">0.0</span>)</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>            loss <span class="op">+=</span> weight <span class="op">*</span> np.tanh(alpha <span class="op">*</span> node_exp_map[edge0]) <span class="op">*</span> np.tanh(alpha <span class="op">*</span> node_exp_map[edge1])</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    regulation_term <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(num_nodes):</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i <span class="kw">in</span> node_exp_map:</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>            regulation_term <span class="op">+=</span> np.tanh(alpha <span class="op">*</span> node_exp_map[i]) <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>    regulation_term <span class="op">=</span> (regulation_term <span class="op">/</span> num_nodes) <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>    beta <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>    total_edge_weight <span class="op">=</span> <span class="bu">sum</span>(edge_weights.values())</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>    v <span class="op">=</span> total_edge_weight <span class="op">/</span> <span class="dv">2</span> <span class="op">+</span> (num_nodes <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> <span class="dv">4</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">+=</span> beta <span class="op">*</span> v <span class="op">*</span> regulation_term</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> loss</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>initial_params <span class="op">=</span> np.random.uniform(<span class="op">-</span><span class="fl">0.01</span>, <span class="fl">0.01</span>, <span class="bu">len</span>(variables))</span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> minimize(</span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>    cost_function,</span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>    initial_params,</span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>    method<span class="op">=</span><span class="st">"COBYLA"</span>,</span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>    options<span class="op">=</span>{<span class="st">"maxiter"</span>: <span class="dv">150</span>, <span class="st">"disp"</span>: <span class="va">True</span>},</span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Return from COBYLA because the objective function has been evaluated MAXFUN times.
+Number of function values = 150   Least value of F = -0.32127013317737596
+The corresponding X is:
+[ 1.18795417  0.06040485  0.66932385 -0.21571513 -0.00960264  1.18276821
+ -0.10270061 -0.25007571]
+</code></pre>
+</div>
+</div>
+<p>The stored run reaches the budget of 150 objective evaluations instead of satisfying a convergence condition. Its decoded partition should therefore be read as the best point found within this illustrative budget, not as evidence that COBYLA has converged generally.</p>
+</section>
+<section id="decode-the-partitions" class="level3">
+<h3 class="anchored" data-anchor-id="decode-the-partitions">5. Decode the partitions</h3>
+<p>The optimized circuit is evaluated once more, and the sign of each correlator determines the final partition.</p>
+<div id="beeb7b7e" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2026-09-01T15:51:34.411898Z&quot;,&quot;start_time&quot;:&quot;2026-09-01T15:51:34.379523Z&quot;}}" data-execution_count="13">
+<details class="code-fold">
+<summary>Show the partition decoding</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>final_param_dict <span class="op">=</span> {var: result.x[i] <span class="cf">for</span> i, var <span class="kw">in</span> <span class="bu">enumerate</span>(variables)}</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>final_expectation_values <span class="op">=</span> []</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> exp_val <span class="kw">in</span> exp_vals:</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> tq.simulate(exp_val, variables<span class="op">=</span>final_param_dict, backend<span class="op">=</span><span class="st">"qulacs"</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    final_expectation_values.append(<span class="bu">float</span>(r))</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>final_exp_map <span class="op">=</span> map_expectation_values_to_nodes(final_expectation_values, pauli_encodings, node_x, node_y, node_z)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>partition_0 <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>partition_1 <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> final_exp_map:</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> final_exp_map[i] <span class="op">&gt;=</span> <span class="dv">0</span>:</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>        partition_0.add(i)</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>        partition_1.add(i)</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"partition0"</span>, partition_0, <span class="st">", partition1"</span>, partition_1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>partition0 {0, 2} , partition1 {1}</code></pre>
+</div>
+</div>
+<p>The returned partition <span class="math inline">\(\{0,2\}\,|\,\{1\}\)</span> cuts two of the triangle’s three unit-weight edges. Its cut value is therefore <span class="math inline">\(2\)</span>, which is optimal for this three-node instance. This provides a compact end-to-end check of the encoding, relaxed objective, optimization, and sign decoding.</p>
+</section>
+</section>
+<section id="experiment-pce-parameter-study" class="level2">
+<h2 class="anchored" data-anchor-id="experiment-pce-parameter-study">Experiment: PCE parameter study</h2>
+<p>The goal of this experiment is to investigate how few qubits PCE can use while retaining good solution quality. This numerical study varies the graph size <span class="math inline">\(N\in\{3,\ldots,20\}\)</span>, the register size <span class="math inline">\(n\)</span>, the locality <span class="math inline">\(k\in\{2,\ldots,20\}\)</span>, and the four choices of Pauli families. Each parameter combination contains ten independent optimization runs. Performance is summarized by the normalized approximation ratio</p>
+<p><span class="math display">\[
+r=
+\frac{C_{\mathrm{PCE}}-C_{\min}}
+     {C_{\max}-C_{\min}},
+\]</span></p>
+<p>where <span class="math inline">\(C_{\max}\)</span> and <span class="math inline">\(C_{\min}\)</span> are the best and worst cut values obtained by brute force and <span class="math inline">\(C_{\mathrm{PCE}}\)</span> is the decoded PCE cut value. Thus <span class="math inline">\(r=1\)</span> denotes an optimal cut for the tested instance.</p>
+<p>The figures compare the tested configurations descriptively. Because graph size, qubit count, locality, circuit size, and optimizer behavior can change together, however, the plots do not isolate a causal benefit from compression and do not establish an advantage over an uncompressed variational or classical baseline.</p>
+<section id="feasible-region-and-register-compression" class="level3">
+<h3 class="anchored" data-anchor-id="feasible-region-and-register-compression">Feasible region and register compression</h3>
+<p>The following heatmaps show Case 1, which uses all three Pauli families. Each colored cell reports the mean approximation ratio over ten runs; the number in parentheses is <span class="math inline">\(n/N\)</span>. White cells do not satisfy the encoding constraints, and red outlines mark the minimum feasible qubit count used in the study.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href=""><span class="math inline">\(k=2\)</span>–<span class="math inline">\(6\)</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href=""><span class="math inline">\(k=7\)</span>–<span class="math inline">\(11\)</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href=""><span class="math inline">\(k=12\)</span>–<span class="math inline">\(16\)</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href=""><span class="math inline">\(k=17\)</span>–<span class="math inline">\(20\)</span></a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p><img src="Case1_1.png" class="img-fluid" style="width:100.0%"></p>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p><img src="Case1_2.png" class="img-fluid" style="width:100.0%"></p>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<p><img src="Case1_3.png" class="img-fluid" style="width:100.0%"></p>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<p><img src="Case1_4.png" class="img-fluid" style="width:100.0%"></p>
+</div>
+</div>
+</div>
+<p>The staircase boundary is set by <span class="math inline">\(n\geq k\)</span> together with <span class="math inline">\(\binom{n}{k}\geq M\)</span>. No consistent improvement in the approximation ratio is visible as <span class="math inline">\(k\)</span> increases. High mean ratios occur frequently near the lower feasible qubit counts, especially for the smaller locality orders. This is encouraging for qubit compression within the tested setup, but it is also compatible with an easier classical optimization caused by fewer circuit parameters. A matched comparison would be needed to separate these effects.</p>
+</section>
+<section id="locality-and-qubit-ratio-within-each-encoding" class="level3">
+<h3 class="anchored" data-anchor-id="locality-and-qubit-ratio-within-each-encoding">Locality and qubit ratio within each encoding</h3>
+<p>Each figure below contains two summaries. The left panel groups the mean ratio by qubit count and locality <span class="math inline">\(k\)</span> and shows how strongly the paths differ across locality orders. The right panel groups it by the qubit-to-variable ratio <span class="math inline">\(n/N\)</span> and can reveal whether performance reaches a saturation region; the shaded area shows the spread across the aggregated runs.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Case 1: <span class="math inline">\(X,Y,Z\)</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Case 2: <span class="math inline">\(X,Y\)</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">Case 3: <span class="math inline">\(X,Z\)</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-4" role="tab" aria-controls="tabset-2-4" aria-selected="false" href="">Case 4: <span class="math inline">\(Y,Z\)</span></a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<p><img src="B1_B3_Analysis_Case_1.png" class="img-fluid" style="width:100.0%"></p>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<p><img src="B1_B3_Analysis_Case_2.png" class="img-fluid" style="width:100.0%"></p>
+</div>
+<div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
+<p><img src="B1_B3_Analysis_Case_3.png" class="img-fluid" style="width:100.0%"></p>
+</div>
+<div id="tabset-2-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-4-tab">
+<p><img src="B1_B3_Analysis_Case_4.png" class="img-fluid" style="width:100.0%"></p>
+</div>
+</div>
+</div>
+<p>Across the four cases, most aggregated ratios lie roughly between <span class="math inline">\(0.8\)</span> and <span class="math inline">\(0.9\)</span>. Case 3 is slightly higher for several qubit counts, whereas Case 4 is slightly lower in parts of the range. The curves overlap substantially, however, and the qubit-ratio panels show no clear monotonic saturation point. These plots therefore do not support a robust ranking of the Pauli-family choices.</p>
+</section>
+<section id="run-to-run-variation" class="level3">
+<h3 class="anchored" data-anchor-id="run-to-run-variation">Run-to-run variation</h3>
+<p>The aggregated means hide substantial variation between independent optimization runs. The scatter plots retain all ten outcomes for each tested configuration; color denotes <span class="math inline">\(k\)</span>, and the dashed line is the mean across locality orders.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">Case 1: <span class="math inline">\(X,Y,Z\)</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">Case 2: <span class="math inline">\(X,Y\)</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" role="tab" aria-controls="tabset-3-3" aria-selected="false" href="">Case 3: <span class="math inline">\(X,Z\)</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-4" role="tab" aria-controls="tabset-3-4" aria-selected="false" href="">Case 4: <span class="math inline">\(Y,Z\)</span></a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<p><img src="QubitRatio_vs_ApproxRatio_Case_1_Nodes_3_to_20.png" class="img-fluid" style="width:100.0%"></p>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<p><img src="QubitRatio_vs_ApproxRatio_Case_2_Nodes_3_to_20.png" class="img-fluid" style="width:100.0%"></p>
+</div>
+<div id="tabset-3-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-3-tab">
+<p><img src="QubitRatio_vs_ApproxRatio_Case_3_Nodes_3_to_20.png" class="img-fluid" style="width:100.0%"></p>
+</div>
+<div id="tabset-3-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-4-tab">
+<p><img src="QubitRatio_vs_ApproxRatio_Case_4_Nodes_3_to_20.png" class="img-fluid" style="width:100.0%"></p>
+</div>
+</div>
+</div>
+<p>It is useful to distinguish the vertical and horizontal directions in these plots. Vertically, the outcomes span a broad range at many fixed values of <span class="math inline">\(n/N\)</span>; horizontally, no distinct clustering by <span class="math inline">\(k\)</span> is visible. For these experiments, initialization and optimizer variability are therefore at least as important as locality when interpreting a single run. The mean curve summarizes the tested runs but is not an uncertainty bound.</p>
+</section>
+<section id="comparison-of-the-four-pauli-family-choices" class="level3">
+<h3 class="anchored" data-anchor-id="comparison-of-the-four-pauli-family-choices">Comparison of the four Pauli-family choices</h3>
+<p>The final cross-case comparison directly contrasts all four encodings: the left panel tracks how the ratio changes with graph size, while the right panel shows which cases access the smallest qubit-to-variable ratios.</p>
+<div id="fig-cross-case" class="quarto-float quarto-figure quarto-figure-center anchored" width="100%">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cross-case-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Cross_Case_Comparison_Nodes_3_to_20.png" id="fig-cross-case" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-cross-case-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3
+</figcaption>
+</figure>
+</div>
+<p>The left panel of <a href="#fig-cross-case" class="quarto-xref">Figure&nbsp;3</a> shows a gradual decline in the mean ratio as the number of vertices increases, while all four cases follow similar trajectories. The right panel shows that Case 1 reaches the smallest <span class="math inline">\(n/N\)</span> values because it distributes variables across three Pauli families. Beyond that strongly compressed region, the four curves remain close; Case 4 is somewhat lower for several ratios, but the figure contains no paired uncertainty estimate with which to establish a significant difference.</p>
+<p>The decline with graph size may reflect several simultaneous changes, including a larger search space, more variational parameters, and a fixed optimization budget. The data do not identify any one of these mechanisms as the cause.</p>
+</section>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>Pauli Correlation Encoding replaces the one-variable-per-qubit representation of standard quantum optimization algorithms by signs of <span class="math inline">\(k\)</span>-body Pauli correlations. The construction supports <span class="math inline">\(O(n^k)\)</span> variables on <span class="math inline">\(n\)</span> qubits for fixed <span class="math inline">\(k\)</span>, while retaining three measurement settings when the <span class="math inline">\(X\)</span>, <span class="math inline">\(Y\)</span>, and <span class="math inline">\(Z\)</span> families are used. The triangle example demonstrated in this tutorial implements the full pipeline in Tequila and recovers an optimal cut.</p>
+<p>In numerical experiments, this tutorial investigated whether all three Pauli families are equally useful and how the locality order and qubit count influence the results. The parameter experiment finds broadly similar mean approximation ratios for the four tested Pauli-family choices. Strong compression is possible with the three-family encoding, but the run-to-run spread is large and no family dominates consistently. The current results therefore demonstrate the behavior of the implementation rather than a computational advantage from using fewer qubits.</p>
+<p>A future benchmark should therefore keep graph instances, initialization seeds, circuit parameter budgets, and optimizer evaluations matched across encodings; report confidence intervals; and compare against uncompressed variational and classical baselines.</p>
+<p>Recent work has begun to study PCE across other optimization problems <span class="citation" data-cites="alonso2026benchmarkpaulicorrelationencoding"><a href="#ref-alonso2026benchmarkpaulicorrelationencoding" role="doc-biblioref">[3]</a></span>, constrained formulations <span class="citation" data-cites="martinez2026"><a href="#ref-martinez2026" role="doc-biblioref">[9]</a></span>, applications <span class="citation" data-cites="friedhoff2026 soloviev2026 sciorilli2026"><a href="#ref-friedhoff2026" role="doc-biblioref">[4]</a>, <a href="#ref-soloviev2026" role="doc-biblioref">[10]</a>, <a href="#ref-sciorilli2026" role="doc-biblioref">[11]</a></span>, and classically simulable circuit families <span class="citation" data-cites="bosco2026"><a href="#ref-bosco2026" role="doc-biblioref">[12]</a></span>.</p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="ref-farhi2014qaoa" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">E. Farhi, J. Goldstone, and S. Gutmann, <span>“A quantum approximate optimization algorithm.”</span> 2014. Available: <a href="https://arxiv.org/abs/1411.4028">https://arxiv.org/abs/1411.4028</a></div>
+</div>
+<div id="ref-sciorilli2025pce" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">M. Sciorilli <em>et al.</em>, <span>“Towards large-scale quantum optimization solvers with few qubits,”</span> <em>Nature Communications</em>, vol. 16, no. 1, Jan. 2025, doi: <a href="https://doi.org/10.1038/s41467-024-55346-z">10.1038/s41467-024-55346-z</a>.</div>
+</div>
+<div id="ref-alonso2026benchmarkpaulicorrelationencoding" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">F. Alonso, C. Samprón, J. Veiga, M. M. Juane, and A. Gómez, <span>“Benchmark of pauli correlation encoding for different optimisation problems.”</span> 2026. Available: <a href="https://arxiv.org/abs/2606.18914">https://arxiv.org/abs/2606.18914</a></div>
+</div>
+<div id="ref-friedhoff2026" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[4] </div><div class="csl-right-inline">T. Friedhoff, M. Metkar, W. Davis, V. Kumar, and A. Galda, <span>“Pauli correlation encoding for mRNA secondary structure prediction: Problem-aware decoding for dense-constraint QUBOs.”</span> 2026. Available: <a href="https://arxiv.org/abs/2605.20163">https://arxiv.org/abs/2605.20163</a></div>
+</div>
+<div id="ref-kochenberger" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[5] </div><div class="csl-right-inline">G. A. Kochenberger, J.-K. Hao, Z. Lü, H. Wang, and F. Glover, <span>“Solving large scale max cut problems via tabu search,”</span> <em>Journal of Heuristics</em>, vol. 19, no. 4, pp. 565–571, Aug. 2013, doi: <a href="https://doi.org/10.1007/s10732-011-9189-8">10.1007/s10732-011-9189-8</a>.</div>
+</div>
+<div id="ref-maxCut" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[6] </div><div class="csl-right-inline">L. Trevisan, <span>“Max cut and the smallest eigenvalue,”</span> in <em>Proceedings of the forty-first annual ACM symposium on theory of computing</em>, in STOC ’09. New York, NY, USA: Association for Computing Machinery, 2009, pp. 263–272. doi: <a href="https://doi.org/10.1145/1536414.1536452">10.1145/1536414.1536452</a>.</div>
+</div>
+<div id="ref-kandala2017hea" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[7] </div><div class="csl-right-inline">A. Kandala <em>et al.</em>, <span>“Hardware-efficient variational quantum eigensolver for small molecules and quantum magnets,”</span> <em>Nature</em>, vol. 549, no. 7671, pp. 242–246, Sept. 2017, doi: <a href="https://doi.org/10.1038/nature23879">10.1038/nature23879</a>.</div>
+</div>
+<div id="ref-lucas2014ising" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[8] </div><div class="csl-right-inline">A. Lucas, <span>“Ising formulations of many NP problems,”</span> <em>Frontiers in Physics</em>, vol. 2, 2014, doi: <a href="https://doi.org/10.3389/fphy.2014.00005">10.3389/fphy.2014.00005</a>.</div>
+</div>
+<div id="ref-martinez2026" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[9] </div><div class="csl-right-inline">J. Padín-Martínez, V. P. Soloviev, A. Borrallo-Rentero, A. Rodríguez-Otero, R. Alfonso-Rodríguez, and M. Krompiec, <span>“Pauli correlation encoding for budget-constrained optimization.”</span> 2026. Available: <a href="https://arxiv.org/abs/2602.17479">https://arxiv.org/abs/2602.17479</a></div>
+</div>
+<div id="ref-soloviev2026" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[10] </div><div class="csl-right-inline">V. Soloviev and M. Krompiec, <span>“Large-scale portfolio optimization using pauli correlation encoding,”</span> <em>Scientific Reports</em>, June 2026, doi: <a href="https://doi.org/10.1038/s41598-026-54244-2">10.1038/s41598-026-54244-2</a>.</div>
+</div>
+<div id="ref-sciorilli2026" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[11] </div><div class="csl-right-inline">M. Sciorilli, G. Camilo, T. O. Maciel, A. Canabarro, L. Borges, and L. Aolita, <span>“A competitive NISQ and qubit-efficient solver for the LABS problem.”</span> 2026. Available: <a href="https://arxiv.org/abs/2506.17391">https://arxiv.org/abs/2506.17391</a></div>
+</div>
+<div id="ref-bosco2026" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[12] </div><div class="csl-right-inline">D. L. Bosco <em>et al.</em>, <span>“Efficiently simulable pauli correlation encoding.”</span> 2026. Available: <a href="https://arxiv.org/abs/2607.20409">https://arxiv.org/abs/2607.20409</a></div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/tequilahub\.github\.io\/tequila-tutorials\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="tequilahub/tequila-tutorials" issue-term="pathname" theme="preferred-color-scheme" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tequilahub/tequila-tutorials/blob/main/research/PCE/tutorial.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila-tutorials/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

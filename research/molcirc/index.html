@@ -494,7 +494,7 @@ The molecular graph will take the role as a guiding heuristic helping with placi
 <section id="example" class="level2">
 <h2 class="anchored" data-anchor-id="example">Example</h2>
 <p>In the <a href="https://arxiv.org/abs/2207.12421">article</a> the linear H4 system has been used to illustrate the construction of quantum circuits from chemical graphs. We will use the H4 example from the paper and provide the code that reproduces it. First we initialize the molecule and represent the Hamiltonian in a minimal basis. Note that we are using (orthonormalized) atomic orbitals as our second quantized basis and not canonical Hartree-Fock orbitals.</p>
-<div id="c02ad63a" class="cell" data-execution_count="1">
+<div id="24cccfa8" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tequila <span class="im">as</span> tq</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> numpy <span class="im">import</span> pi, eye</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -513,7 +513,7 @@ The molecular graph will take the role as a guiding heuristic helping with placi
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>exact <span class="op">=</span> mol.compute_energy(<span class="st">"fci"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>As initial state we can construct an <a href="[separable pair approximation](https://arxiv.org/abs/2105.03836)">SPA</a> circuit using the first graph in the figure above. In this first graph, the H<span class="math inline">\(_4\)</span> molecule is interpreted as two H<span class="math inline">\(_2\)</span> molecules. We initializing the graph, by assigning basis orbitals to the vertices. Here we have 4 basis orbitals (atomic s-type orbitals located on the individual atoms), so the assignment is straightforward.</p>
-<div id="4e58368d" class="cell" data-execution_count="2">
+<div id="c4586c06" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># graph is</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># H--H  H--H</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>graph <span class="op">=</span> [(<span class="dv">0</span>,<span class="dv">1</span>),(<span class="dv">2</span>,<span class="dv">3</span>)]</span>
@@ -527,7 +527,7 @@ The molecular graph will take the role as a guiding heuristic helping with placi
 </div>
 </div>
 <p>we see, that the SPA does not perform well – the reason is that we are currently in an atomic orbital basis. In order to rotate the basis, we add orbital rotations to the initial circuit. Here we will use a static angle that will mix the orbitals in a equally weighted fashion (corresponding to Eq.19 in the article, here explicitly represented with unitary circuits). This represents the SPA in a basis that would correspond to the optimized setting in two isolated H2 molecules (<em>i.e.</em> the first graph)</p>
-<div id="03da0d6d" class="cell" data-execution_count="3">
+<div id="230583c4" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>UR0 <span class="op">=</span> tq.QCircuit()</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> edge <span class="kw">in</span> graph:</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    UR0 <span class="op">+=</span> mol.UR(edge[<span class="dv">0</span>],edge[<span class="dv">1</span>],angle<span class="op">=</span>pi<span class="op">/</span><span class="dv">2</span>)</span>
@@ -542,7 +542,7 @@ The molecular graph will take the role as a guiding heuristic helping with placi
 </div>
 </div>
 <p>The error is now 40 millihartree. We can bring it further down by allowing the orbitals to relax which can be achieved by adding more orbital rotations with variable angles. We initialize the angles to zero (<em>i.e.</em> we are starting from our previous result as guess). We chose the same pattern as in the <span class="math inline">\(U_\text{RR}\)</span> circuits in the article</p>
-<div id="174cc8c9" class="cell" data-execution_count="4">
+<div id="8b881b7b" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>URR0 <span class="op">=</span> mol.UR(<span class="dv">0</span>,<span class="dv">1</span>,angle<span class="op">=</span><span class="st">"b"</span>)</span>
@@ -560,7 +560,7 @@ The molecular graph will take the role as a guiding heuristic helping with placi
 </div>
 </div>
 <p>Alternatively we can optimize the orbitals with respect to the SPA wavefunction (the strategy from the article) and use this as our orbital basis. As the SPA wavefunction is entirelty within the Hardcode-boson quasiparticle approximation, we can perform the optimization within that approximation reducing our simulation time significantly (see code in the article for the equivalent optimization without HCB approximation)</p>
-<div id="787fd777" class="cell" data-execution_count="5">
+<div id="9b47f348" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>UHCB <span class="op">=</span> mol.make_ansatz(name<span class="op">=</span><span class="st">"HCB-SPA"</span>, edges<span class="op">=</span>graph)</span>
@@ -594,7 +594,7 @@ The molecular graph will take the role as a guiding heuristic helping with placi
 U_G = U_R^\dagger U_C U_R
 \]</span> that corresponds to 1. rotate into a new orbital basis that resembles the graph structure 2. correlate the quasi particles in this orbital basis 3. rotate back</p>
 <p>In the following we will do this for the H4 system using the two graphs indicated in the picture above. The first graph is used for the SPA initalization, and the second graph will add further correlation to the initial SPA state. Note that we included an approximation by neglecting one edge in the second graph which we will not correlated. The code-block is identical as the on in the appendix of the article.</p>
-<div id="27b669a3" class="cell" data-execution_count="6">
+<div id="a73f4339" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dependencies: tequila &gt;= 1.8.7, pyscf~=1.7, scipy~=1.7</span></span>
@@ -656,7 +656,7 @@ U_G = U_R^\dagger U_C U_R
 <span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(energies)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="ffd38d60" class="cell" data-execution_count="7">
+<div id="0ea75b49" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k,v <span class="kw">in</span> energies.items():</span>

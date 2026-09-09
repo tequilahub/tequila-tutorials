@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ram Mosco">
+<meta name="author" content="Adapted by Adelina Bärligea">
+<meta name="dcterms.date" content="2026-08-20">
+
+<title>Benchmarking Noise-Resilient Optimizers for Variational Quantum Algorithms – Tequila Tutorials</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../favicon.ico" rel="icon">
+<script src="../../site_libs/cookie-consent/cookie-consent.js"></script>
+<link href="../../site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-a72572e7f1d4e6a0fb2d1b856e720319.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-ed78174d9571d702433373dba9df36b5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-a72572e7f1d4e6a0fb2d1b856e720319.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-V7DRP5E70N"></script>
+
+<script type="text/plain" cookie-consent="tracking">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-V7DRP5E70N', { 'anonymize_ip': true});
+</script>
+
+<script type="text/javascript" charset="UTF-8">
+document.addEventListener('DOMContentLoaded', function () {
+cookieconsent.run({
+  "notice_banner_type":"simple",
+  "consent_type":"express",
+  "palette":"light",
+  "language":"en",
+  "page_load_consent_levels":["strictly-necessary"],
+  "notice_banner_reject_button_hide":false,
+  "preferences_center_close_button_hide":false,
+  "website_name":""
+  ,
+"language":"en"
+  });
+});
+</script> 
+  
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Benchmarking Noise-Resilient Optimizers for Variational Quantum Algorithms – Tequila Tutorials">
+<meta property="og:description" content="quantum computing, quantum chemistry and tequila">
+<meta property="og:image" content="https://tequilahub.github.io/tequila-tutorials/research/vqa_optimizers_benchmarking/heatmap_anatra.png">
+<meta property="og:site_name" content="Tequila Tutorials">
+<meta property="og:image:height" content="1800">
+<meta property="og:image:width" content="3000">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../tequila_logo.png" alt="" class="navbar-logo light-content">
+    <img src="../../tequila_logo.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Tequila Tutorials</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../research.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../FAQ/FAQ.html"> 
+<span class="menu-text">FAQ</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../Contribution/Contribution.html"> 
+<span class="menu-text">Contribution</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../docs/sphinx/index.html"> 
+<span class="menu-text">Docs</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Benchmarking Noise-Resilient Optimizers for Variational Quantum Algorithms</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">optimization</div>
+                <div class="quarto-category">noise resilience</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Authors</div>
+      <div class="quarto-title-meta-contents">
+               <p>Ram Mosco </p>
+               <p>Adapted by Adelina Bärligea </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">August 20, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction-and-motivation" id="toc-introduction-and-motivation" class="nav-link active" data-scroll-target="#introduction-and-motivation">1. Introduction and Motivation</a></li>
+  <li><a href="#mathematical-foundations" id="toc-mathematical-foundations" class="nav-link" data-scroll-target="#mathematical-foundations">2. Mathematical Foundations</a>
+  <ul class="collapse">
+  <li><a href="#harmonic-oscillator-based-particle-swarm-optimization-hopso" id="toc-harmonic-oscillator-based-particle-swarm-optimization-hopso" class="nav-link" data-scroll-target="#harmonic-oscillator-based-particle-swarm-optimization-hopso">2.1 Harmonic Oscillator Based Particle Swarm Optimization (HOPSO)</a></li>
+  <li><a href="#adaptive-shot-and-trust-region-optimizers" id="toc-adaptive-shot-and-trust-region-optimizers" class="nav-link" data-scroll-target="#adaptive-shot-and-trust-region-optimizers">2.2 Adaptive Shot and Trust-Region Optimizers</a>
+  <ul class="collapse">
+  <li><a href="#icans-individual-coupled-adaptive-number-of-shots" id="toc-icans-individual-coupled-adaptive-number-of-shots" class="nav-link" data-scroll-target="#icans-individual-coupled-adaptive-number-of-shots">iCANS (individual Coupled Adaptive Number of Shots)</a></li>
+  <li><a href="#gcans-global-coupled-adaptive-number-of-shots" id="toc-gcans-global-coupled-adaptive-number-of-shots" class="nav-link" data-scroll-target="#gcans-global-coupled-adaptive-number-of-shots">gCANS (global Coupled Adaptive Number of Shots)</a></li>
+  <li><a href="#rosalin-random-operator-sampling-for-adaptive-learning-with-individual-number-of-shots" id="toc-rosalin-random-operator-sampling-for-adaptive-learning-with-individual-number-of-shots" class="nav-link" data-scroll-target="#rosalin-random-operator-sampling-for-adaptive-learning-with-individual-number-of-shots">Rosalin (Random Operator Sampling for Adaptive Learning with Individual Number of Shots)</a></li>
+  <li><a href="#anatra-adaptive-noisy-model-based-trust-region-algorithm" id="toc-anatra-adaptive-noisy-model-based-trust-region-algorithm" class="nav-link" data-scroll-target="#anatra-adaptive-noisy-model-based-trust-region-algorithm">ANATRA (Adaptive Noisy Model-Based Trust-Region Algorithm)</a></li>
+  </ul></li>
+  <li><a href="#standard-baseline-optimizers" id="toc-standard-baseline-optimizers" class="nav-link" data-scroll-target="#standard-baseline-optimizers">2.3 Standard Baseline Optimizers</a></li>
+  </ul></li>
+  <li><a href="#experimental-setup" id="toc-experimental-setup" class="nav-link" data-scroll-target="#experimental-setup">3. Experimental Setup</a></li>
+  <li><a href="#results-and-analysis" id="toc-results-and-analysis" class="nav-link" data-scroll-target="#results-and-analysis">4. Results and Analysis</a>
+  <ul class="collapse">
+  <li><a href="#gradient-based-optimizers-adam-sgd" id="toc-gradient-based-optimizers-adam-sgd" class="nav-link" data-scroll-target="#gradient-based-optimizers-adam-sgd">4.1 Gradient-Based Optimizers (ADAM, SGD)</a></li>
+  <li><a href="#gradient-free-direct-search-cobyla-powell" id="toc-gradient-free-direct-search-cobyla-powell" class="nav-link" data-scroll-target="#gradient-free-direct-search-cobyla-powell">4.2 Gradient-Free Direct Search (COBYLA, POWELL)</a></li>
+  <li><a href="#variance-adaptive-and-swarm-based-approaches-rosalin-hopso" id="toc-variance-adaptive-and-swarm-based-approaches-rosalin-hopso" class="nav-link" data-scroll-target="#variance-adaptive-and-swarm-based-approaches-rosalin-hopso">4.3 Variance-Adaptive and Swarm-Based Approaches (ROSALIN, HOPSO)</a></li>
+  <li><a href="#model-based-trust-region-optimization-anatra" id="toc-model-based-trust-region-optimization-anatra" class="nav-link" data-scroll-target="#model-based-trust-region-optimization-anatra">4.4 Model-Based Trust-Region Optimization (ANATRA)</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/tequilahub/tequila-tutorials/blob/main/research/vqa_optimizers_benchmarking/tutorial_vqa_optimizers.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila-tutorials/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+
+<section id="introduction-and-motivation" class="level1">
+<h1>1. Introduction and Motivation</h1>
+<p>Variational Quantum Algorithms (VQAs) <span class="citation" data-cites="Cerezo2021">(<a href="#ref-Cerezo2021" role="doc-biblioref">Cerezo et al. 2021</a>)</span> are designed to extract utility from Noisy Intermediate-Scale Quantum (NISQ) hardware <span class="citation" data-cites="Preskill2018">(<a href="#ref-Preskill2018" role="doc-biblioref">Preskill 2018</a>)</span>. In these hybrid quantum-classical algorithms, a quantum device evaluates expectation values of a parametrized circuit, while a classical optimizer updates circuit parameters iteratively.</p>
+<p>Because quantum evaluation relies on finite measurement counts (shots), expectation value estimates are subject to <strong>shot noise</strong>. As demonstrated by Bärligea et al. <span class="citation" data-cites="barligea_scalability_2025">(<a href="#ref-barligea_scalability_2025" role="doc-biblioref">Bärligea et al. 2025</a>)</span>, optimizing under high stochastic noise presents significant scalability challenges, necessitating robust classical optimization strategies.</p>
+<p>In this tutorial, we review the mathematical foundations of several noise-resilient optimizers, detail an experimental benchmarking framework using Tequila <span class="citation" data-cites="kottmann_tequila_2021">(<a href="#ref-kottmann_tequila_2021" role="doc-biblioref">Kottmann et al. 2021</a>)</span>, and analyze how these optimizers perform under noisy conditions by testing various system sizes and shot numbers and measuring their relative error.</p>
+</section>
+<section id="mathematical-foundations" class="level1">
+<h1>2. Mathematical Foundations</h1>
+<section id="harmonic-oscillator-based-particle-swarm-optimization-hopso" class="level2">
+<h2 class="anchored" data-anchor-id="harmonic-oscillator-based-particle-swarm-optimization-hopso">2.1 Harmonic Oscillator Based Particle Swarm Optimization (HOPSO)</h2>
+<p>Harmonic Oscillator-based PSO (HOPSO) replaces the algebraic velocity update of conventional PSO with the physics of a damped harmonic oscillator <span class="citation" data-cites="chernyak_harmonic_2025">(<a href="#ref-chernyak_harmonic_2025" role="doc-biblioref">Chernyak et al. 2025</a>)</span>. The core idea is that every particle is attached to a virtual spring anchored at an attractor <span class="math inline">\(a_{j,d}\)</span>, which is a weighted average of the particle’s personal best and the global best.</p>
+<p>Each particle’s position in dimension <span class="math inline">\(d\)</span> follows the underdamped harmonic oscillator equation: <span class="math display">\[ x(t) = A_0\, e^{-\lambda t}\cos(\omega t + \theta) + a_{j,d} \]</span></p>
+<p>To prevent particles from freezing entirely when their personal and global bests converge prematurely, HOPSO enforces a <strong>threshold amplitude</strong> <span class="math inline">\(A_{\mathrm{th}}\)</span> <span class="citation" data-cites="mohammad_hopso_2025">(<a href="#ref-mohammad_hopso_2025" role="doc-biblioref">Mohammad et al. 2025</a>)</span>: <span class="math display">\[ A_{\mathrm{th},j,d} = \frac{|p_{j,d} - g_d|}{2} \cdot m \]</span></p>
+<p><strong>Circular Attractor Computation:</strong> Quantum parameters are angles periodic with <span class="math inline">\(2\pi\)</span>. A naive average between <span class="math inline">\(10^\circ\)</span> and <span class="math inline">\(350^\circ\)</span> gives <span class="math inline">\(180^\circ\)</span>, placing the attractor on the wrong side of the circle. HOPSO detects the shortest path on the circle and corrects the calculation by adding or subtracting <span class="math inline">\(2\pi\)</span> to maintain the correct periodic topology.</p>
+<div id="02059bf1" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># HOPSO Velocity &amp; Position Update Snippet</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(population_size):</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Circular/periodic shortest deltas</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    d_pb <span class="op">=</span> (P[i] <span class="op">-</span> X[i] <span class="op">+</span> np.pi) <span class="op">%</span> (<span class="dv">2</span> <span class="op">*</span> np.pi) <span class="op">-</span> np.pi</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    d_gb <span class="op">=</span> (G <span class="op">-</span> X[i] <span class="op">+</span> np.pi) <span class="op">%</span> (<span class="dv">2</span> <span class="op">*</span> np.pi) <span class="op">-</span> np.pi</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate attractor</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    attractor_delta <span class="op">=</span> (c1 <span class="op">*</span> d_pb <span class="op">+</span> c2 <span class="op">*</span> d_gb) <span class="op">/</span> (c1 <span class="op">+</span> c2)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    attractor <span class="op">=</span> X[i] <span class="op">+</span> attractor_delta</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Update velocity via Damped Harmonic Oscillator physics</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    amp <span class="op">=</span> amplitude_factor <span class="op">*</span> np.<span class="bu">abs</span>(d_pb <span class="op">-</span> d_gb)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    V[i] <span class="op">=</span> inertia <span class="op">*</span> damping <span class="op">*</span> V[i] <span class="op">+</span> amp <span class="op">*</span> (attractor <span class="op">-</span> X[i])</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    X[i] <span class="op">=</span> X[i] <span class="op">+</span> V[i]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="adaptive-shot-and-trust-region-optimizers" class="level2">
+<h2 class="anchored" data-anchor-id="adaptive-shot-and-trust-region-optimizers">2.2 Adaptive Shot and Trust-Region Optimizers</h2>
+<p>To optimize Variational Quantum Algorithms efficiently on noisy hardware, classical optimizers must balance measurement accuracy against total quantum resource consumption. Rather than using a fixed, large number of shots for every evaluation, adaptive optimizers dynamically adjust shot counts based on local noise levels.</p>
+<section id="icans-individual-coupled-adaptive-number-of-shots" class="level3">
+<h3 class="anchored" data-anchor-id="icans-individual-coupled-adaptive-number-of-shots">iCANS (individual Coupled Adaptive Number of Shots)</h3>
+<p>Inspired by classical adaptive sampling methods, <strong>iCANS</strong> dynamically adjusts the number of measurement shots for <em>each gradient component individually</em>. In regions where a parameter’s gradient is strong and steep, fewer shots are needed. In flat regions or near local minima where noise dominates, iCANS increases the shot allocation for that specific coordinate.</p>
+</section>
+<section id="gcans-global-coupled-adaptive-number-of-shots" class="level3">
+<h3 class="anchored" data-anchor-id="gcans-global-coupled-adaptive-number-of-shots">gCANS (global Coupled Adaptive Number of Shots)</h3>
+<p><strong>gCANS</strong> shares the same adaptive principle as iCANS, but instead of adjusting shot counts coordinate-by-coordinate, it evaluates the variance of the <em>entire gradient vector globally</em>. It allocates a uniform, optimal shot count across all parameters for each optimization step.</p>
+</section>
+<section id="rosalin-random-operator-sampling-for-adaptive-learning-with-individual-number-of-shots" class="level3">
+<h3 class="anchored" data-anchor-id="rosalin-random-operator-sampling-for-adaptive-learning-with-individual-number-of-shots">Rosalin (Random Operator Sampling for Adaptive Learning with Individual Number of Shots)</h3>
+<p>In VQE, evaluating the energy requires measuring a Hamiltonian composed of a sum of many individual Pauli operators (<span class="math inline">\(H = \sum_i c_i P_i\)</span>). Evaluating all operators at every step becomes computationally expensive. <strong>Rosalin</strong> combines the individual shot adaptation of iCANS with <strong>random operator sampling</strong>. Meaning that instead of measuring every Pauli term in every step, it randomly samples terms according to their weights, providing an unbiased energy estimate while conserving quantum shots.</p>
+</section>
+<section id="anatra-adaptive-noisy-model-based-trust-region-algorithm" class="level3">
+<h3 class="anchored" data-anchor-id="anatra-adaptive-noisy-model-based-trust-region-algorithm">ANATRA (Adaptive Noisy Model-Based Trust-Region Algorithm)</h3>
+<p>The Adaptive Noisy Model-Based Trust-Region Algorithm (ANATRA) <span class="citation" data-cites="larson_novel_2025">(<a href="#ref-larson_novel_2025" role="doc-biblioref">Larson et al. 2025</a>)</span> is a derivative-free optimizer designed for noisy objective functions. Instead of estimating gradients directly, ANATRA constructs a local quadratic surrogate model from energy values evaluated at sample points around the current parameter iterate <span class="math inline">\(\theta_k\)</span>.</p>
+<p>Optimization steps are calculated by minimizing this surrogate model within a local Trust Region (a spherical neighborhood of radius <span class="math inline">\(\Delta_k\)</span>).</p>
+<p>ANATRA achieves noise resilience through two key mechanisms:</p>
+<ul>
+<li><strong>Surrogate Smoothing:</strong> Fitting a quadratic interpolation model over multiple points averages out stochastic shot noise across the local sample set.</li>
+<li><strong>Adaptive Sampling Radius:</strong> Standard trust-region methods shrink <span class="math inline">\(\Delta_k\)</span> upon unsuccessful steps. Under shot noise, shrinking the radius too far causes sample points to collapse together, making energy differences indistinguishable from evaluation noise. ANATRA decouples the sampling radius from the trust region, enforcing a minimum sampling distance proportional to the square root of the noise level, to ensure sample points remain sufficiently separated to capture true objective gradients above the noise floor.</li>
+</ul>
+<div id="573928dc" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ANATRA Noise-Aware Sampling Radius &amp; Geometry Check </span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Compute Lipschitz constant &amp; noise-aware minimum sampling radius</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> valid_geometry:</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    L_new <span class="op">=</span> np.<span class="bu">max</span>(np.linalg.eigvals(H_hessian))</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    L <span class="op">=</span> np.maximum(L_new, <span class="fl">1.0</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>min_sample_delta <span class="op">=</span> np.sqrt(<span class="fl">2.0</span> <span class="op">*</span> r <span class="op">*</span> epsilon <span class="op">/</span> L)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Decouple sampling radius (delta_bar) from trust-region step radius (delta_k)</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>delta_bar <span class="op">=</span> <span class="bu">max</span>(delta_k, min_sample_delta)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Test if function variation across sample set is dominated by evaluation noise</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>noise_dominated <span class="op">=</span> np.<span class="bu">all</span>(np.<span class="bu">abs</span>(hF[Mind] <span class="op">-</span> hF[xk_center]) <span class="op">&lt;</span> epsilon)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> noise_dominated:</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Trigger geometry improvement subroutine (Improving poisedness of X)</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    Mdir, mp, valid, Cres, Gres, Hres, Mind <span class="op">=</span> formquad_lagrange(</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        X[<span class="dv">0</span>:nf <span class="op">+</span> <span class="dv">1</span>, :], Res[<span class="dv">0</span>:nf <span class="op">+</span> <span class="dv">1</span>, :], delta_bar, xk_center, np_max, Par, <span class="dv">0</span>, Mind</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+</section>
+<section id="standard-baseline-optimizers" class="level2">
+<h2 class="anchored" data-anchor-id="standard-baseline-optimizers">2.3 Standard Baseline Optimizers</h2>
+<p>To benchmark specialized noise-resilient algorithms, we also evaluate widely used classical optimizers. ADAM and SGD are integrated into the tequila library, whereas preimplementations of COBYLA and POWELL are imported from the SciPy library.</p>
+<ul>
+<li><strong>ADAM &amp; SGD (Gradient-Based):</strong>
+<ul>
+<li><strong>SGD</strong> updates parameters along the direction of the estimated gradient.</li>
+<li><strong>ADAM</strong> (Adaptive Moment Estimation) incorporates exponential moving averages of past gradients (momentum) and squared gradients (adaptive learning rates) to stabilize parameter updates under stochastic noise.</li>
+</ul></li>
+<li><strong>COBYLA &amp; POWELL (Gradient-Free Direct Search):</strong>
+<ul>
+<li><strong>COBYLA</strong> constructs local linear approximations over a simplex trust region without requiring derivative evaluations.</li>
+<li><strong>POWELL</strong> performs sequential line searches along conjugate directions using function values alone.</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="experimental-setup" class="level1">
+<h1>3. Experimental Setup</h1>
+<p>To systematically benchmark these optimizers under simulated NISQ conditions, we conducted large-scale computational experiments. The key experimental parameters were:</p>
+<ul>
+<li><strong>System Size (<span class="math inline">\(N\)</span>):</strong> Scaled from 3 to 8 qubits to evaluate performance in increasing search space dimensions.</li>
+<li><strong>Shot Noise:</strong> Evaluated shot counts ranging from <span class="math inline">\(10\)</span> to <span class="math inline">\(100,000\)</span> shots per function evaluation.</li>
+<li><strong>Hamiltonian:</strong> Random instances of the Sherrington-Kirkpatrick (SK) spin glass model.</li>
+<li><strong>Ansatz:</strong> Hardware-Efficient Ansatz (HEA) utilizing <span class="math inline">\(R_y\)</span> and <span class="math inline">\(R_z\)</span> rotations with CNOT entanglement layers.</li>
+<li><strong>Statistics:</strong> To ensure statistical reliability, each parameter pair (<span class="math inline">\(N\)</span> qubits, <span class="math inline">\(S\)</span> shots) was evaluated across <strong>100 independent runs</strong> (10 problem instances <span class="math inline">\(\times\)</span> 10 initialization seeds).</li>
+</ul>
+<p>Below is a compact excerpt of the execution wrapper demonstrating trial initialization and parallel dispatch:</p>
+<div id="baf400e7" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> worker_task(args_tuple):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">""" Executes a single optimization run """</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    n, nshots, p_idx, r_idx, optimizer, ansatz, n_layers <span class="op">=</span> args_tuple</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 1. Establish deterministic seeds</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    seed_problem <span class="op">=</span> p_idx</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    seed_run <span class="op">=</span> <span class="dv">1000</span> <span class="op">*</span> p_idx <span class="op">+</span> r_idx</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 2. Build the random SK Model and Tequila Ansatz</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    prob <span class="op">=</span> IsingProblem.create_random_instance(n<span class="op">=</span>n, which<span class="op">=</span><span class="st">"SK"</span>, seed<span class="op">=</span>seed_problem)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    ref_min <span class="op">=</span> prob.get_min_cost_value() <span class="co"># Calculate the exact analytical minimum</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    O, vars_ <span class="op">=</span> build_ising_random(n<span class="op">=</span>n, seed<span class="op">=</span>seed_problem, n_layers<span class="op">=</span>n_layers, ansatz<span class="op">=</span>ansatz)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 3. Initialize parameters normally around 0</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    rng <span class="op">=</span> np.random.default_rng(seed_run)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    init <span class="op">=</span> {v: <span class="bu">float</span>(rng.normal(<span class="fl">0.0</span>, <span class="fl">0.1</span>)) <span class="cf">for</span> v <span class="kw">in</span> vars_}</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 4. Dispatch to the corresponding Optimizer</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> optimizer.lower() <span class="op">==</span> <span class="st">"hopso"</span>:</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        kwargs <span class="op">=</span> {<span class="st">"population_size"</span>: <span class="dv">10</span>, <span class="st">"maxiter"</span>: <span class="dv">30</span>, <span class="st">"seed"</span>: seed_run, <span class="st">"samples"</span>: nshots, <span class="st">"c1"</span>: <span class="fl">1.0</span>, <span class="st">"c2"</span>: <span class="fl">2.0</span>}</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> run_hopso(O, vars_, init, <span class="op">**</span>kwargs)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> optimizer.lower() <span class="kw">in</span> [<span class="st">"icans"</span>, <span class="st">"rosalin"</span>, <span class="st">"anatra"</span>]:</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> run_custom_optimizer(O, optimizer, vars_, init, extra_kwargs<span class="op">=</span>{<span class="st">"s_min"</span>: <span class="dv">10</span>, <span class="st">"samples"</span>: nshots})</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>        <span class="st">"found_min"</span>: res[<span class="st">"energy"</span>],</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ref_min"</span>: ref_min,</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>        <span class="st">"nfev"</span>: res.get(<span class="st">"fes"</span>, <span class="dv">0</span>)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="results-and-analysis" class="level1">
+<h1>4. Results and Analysis</h1>
+<p>After aggregating the benchmark runs, we evaluate optimization performance using the Mean Relative Error between the found energy and the exact ground state energy:</p>
+<p><span class="math display">\[ \text{Relative Error} = \frac{|E_{\text{found}} - E_{\text{exact}}|}{|E_{\text{exact}}|} \]</span></p>
+<p>We visualize these errors in heatmaps, where the Y-axis represents system size <span class="math inline">\(N\)</span> (<span class="math inline">\(3\)</span> to <span class="math inline">\(8\)</span> qubits), the X-axis represents the shot budget per evaluation (<span class="math inline">\(10\)</span> to <span class="math inline">\(100,000\)</span> shots), and the color scale reflects optimization accuracy (green/yellow for low relative error, red for optimization failure).</p>
+<p>We categorize the evaluated optimizers by their empirical scaling behaviors and noise resilience.</p>
+<section id="gradient-based-optimizers-adam-sgd" class="level2">
+<h2 class="anchored" data-anchor-id="gradient-based-optimizers-adam-sgd">4.1 Gradient-Based Optimizers (ADAM, SGD)</h2>
+<p>Standard gradient methods (<strong>ADAM</strong> and <strong>SGD</strong>) demonstrated strong noise resilience across all tested configurations.</p>
+<p>ADAM exhibited particularly robust low-shot performance, achieving relative errors near <span class="math inline">\(0.000\)</span> at <span class="math inline">\(N=3\)</span> qubits even under heavy shot noise (<span class="math inline">\(10\)</span> shots). As the system size scales up to <span class="math inline">\(N=8\)</span> qubits, ADAM maintains mean relative errors between <span class="math inline">\(0.022\)</span> and <span class="math inline">\(0.036\)</span> across all shot budgets.</p>
+<p>Overall, gradient-based methods display low sensitivity to shot noise, maintaining consistent parameter progress regardless of whether <span class="math inline">\(10\)</span> or <span class="math inline">\(100,000\)</span> shots are allocated per function evaluation.</p>
+<p><img src="heatmap_adam.png" class="img-fluid" style="width:80.0%"></p>
+</section>
+<section id="gradient-free-direct-search-cobyla-powell" class="level2">
+<h2 class="anchored" data-anchor-id="gradient-free-direct-search-cobyla-powell">4.2 Gradient-Free Direct Search (COBYLA, POWELL)</h2>
+<p>Direct search methods, like COBYLA and POWELL, show a clear trade-off on the heatmaps. We see that as the system size grows, significantly more shots are needed to reach low error.</p>
+<p>At smaller system sizes (<span class="math inline">\(N=3\)</span>), high shot counts (<span class="math inline">\(1,000\)</span> shots or higher) enable COBYLA to converge near zero error. However, as the dimensionality increases to <span class="math inline">\(N=8\)</span> qubits, performance degrades significantly, with mean relative errors plateauing around <span class="math inline">\(0.10\)</span> even at <span class="math inline">\(100,000\)</span> shots. This reflects the high measurement precision required by direct search algorithms when navigating higher-dimensional parameter spaces.</p>
+<p><img src="heatmap_cobyla.png" class="img-fluid" style="width:80.0%"></p>
+</section>
+<section id="variance-adaptive-and-swarm-based-approaches-rosalin-hopso" class="level2">
+<h2 class="anchored" data-anchor-id="variance-adaptive-and-swarm-based-approaches-rosalin-hopso">4.3 Variance-Adaptive and Swarm-Based Approaches (ROSALIN, HOPSO)</h2>
+<p>The variance-adaptive shot method (<strong>ROSALIN</strong>) failed to achieve effective convergence under simulated shot noise, exhibiting relative errors near <span class="math inline">\(1.0\)</span> across all tested settings. Local variance-based shot adjustments proved inadequate when energy evaluation noise dominated the parameter space.</p>
+<p><img src="heatmap_rosalin.png" class="img-fluid" style="width:80.0%"></p>
+<p>Similarly, harmonic oscillator based particle swarm optimization (<strong>HOPSO</strong>) exhibited elevated mean relative errors ranging from <span class="math inline">\(0.38\)</span> to <span class="math inline">\(0.71\)</span>. Notably, increasing the shot budget from <span class="math inline">\(10\)</span> to <span class="math inline">\(100,000\)</span> shots yielded no significant performance gain, indicating that measurement precision alone does not resolve HOPSO’s convergence plateau on this objective landscape.</p>
+<p><img src="heatmap_hopso.png" class="img-fluid" style="width:80.0%"></p>
+</section>
+<section id="model-based-trust-region-optimization-anatra" class="level2">
+<h2 class="anchored" data-anchor-id="model-based-trust-region-optimization-anatra">4.4 Model-Based Trust-Region Optimization (ANATRA)</h2>
+<p>The model-based trust-region algorithm (<strong>ANATRA</strong>) demonstrated noise resilience comparable to standard gradient methods at higher shot counts. At <span class="math inline">\(N=8\)</span> qubits, ANATRA systematically reduced mean relative error from <span class="math inline">\(0.477\)</span> at <span class="math inline">\(10\)</span> shots down to <span class="math inline">\(0.027\)</span> at <span class="math inline">\(100,000\)</span> shots.</p>
+<p><img src="heatmap_anatra.png" class="img-fluid" style="width:80.0%"></p>
+<p>As a conclusion, these empirical results show that model-based and gradient-based methods scale most reliably under shot noise, while variance-adaptive and swarm-based approaches had their limitations in the setting of our experiment.</p>
+
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-barligea_scalability_2025" class="csl-entry" role="listitem">
+Bärligea, Adelina, Benedikt Poggel, and Jeanette Miriam Lorenz. 2025. <span>“Scalability Challenges in Variational Quantum Optimization Under Stochastic Noise.”</span> <em>Physical Review A</em> 112 (3): 032407. <a href="https://doi.org/10.1103/rgyh-8xw8">https://doi.org/10.1103/rgyh-8xw8</a>.
+</div>
+<div id="ref-Cerezo2021" class="csl-entry" role="listitem">
+Cerezo, M., Andrew Arrasmith, Ryan Babbush, et al. 2021. <span>“Variational Quantum Algorithms.”</span> <em>Nature Reviews Physics</em> 3 (9): 625–44. <a href="https://doi.org/10.1038/s42254-021-00348-9">https://doi.org/10.1038/s42254-021-00348-9</a>.
+</div>
+<div id="ref-chernyak_harmonic_2025" class="csl-entry" role="listitem">
+Chernyak, Yury, Ijaz Ahamed Mohammad, Nikolas Masnicak, Matej Pivoluska, and Martin Plesch. 2025. <span>“Harmonic Oscillator Based Particle Swarm Optimization.”</span> <em><span>PLOS</span> One</em> 20 (6): e0326173. <a href="https://doi.org/10.1371/journal.pone.0326173">https://doi.org/10.1371/journal.pone.0326173</a>.
+</div>
+<div id="ref-kottmann_tequila_2021" class="csl-entry" role="listitem">
+Kottmann, Jakob S., Sumner Alperin-Lea, Teresa Tamayo-Mendoza, et al. 2021. <span>“Tequila: A Platform for Rapid Development of Quantum Algorithms.”</span> <em>Quantum Science and Technology</em> 6 (2): 024009. <a href="https://doi.org/10.1088/2058-9565/abe567">https://doi.org/10.1088/2058-9565/abe567</a>.
+</div>
+<div id="ref-larson_novel_2025" class="csl-entry" role="listitem">
+Larson, Jeffrey, Matt Menickelly, and Jiahao Shi. 2025. <span>“A Novel Noise-Aware Classical Optimizer for Variational Quantum Algorithms.”</span> <em><span>INFORMS</span> Journal on Computing</em> 37 (1): 63–85. <a href="https://doi.org/10.1287/ijoc.2024.0578">https://doi.org/10.1287/ijoc.2024.0578</a>.
+</div>
+<div id="ref-mohammad_hopso_2025" class="csl-entry" role="listitem">
+Mohammad, Ijaz Ahamed, Yury Chernyak, and Martin Plesch. 2025. <em><span>HOPSO</span>: A Robust Classical Optimizer for <span>VQE</span></em>. <span>arXiv</span>. <a href="https://doi.org/10.48550/ARXIV.2508.13651">https://doi.org/10.48550/ARXIV.2508.13651</a>.
+</div>
+<div id="ref-Preskill2018" class="csl-entry" role="listitem">
+Preskill, John. 2018. <span>“Quantum Computing in the NISQ Era and Beyond.”</span> <em>Quantum</em> 2 (August): 79. <a href="https://doi.org/10.22331/q-2018-08-06-79">https://doi.org/10.22331/q-2018-08-06-79</a>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/tequilahub\.github\.io\/tequila-tutorials\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+        for (let i=0; i<annoteTargets.length; i++) {
+          const annoteTarget = annoteTargets[i];
+          const targetCell = annoteTarget.getAttribute("data-target-cell");
+          const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+          const contentFn = () => {
+            const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+            if (content) {
+              const tipContent = content.cloneNode(true);
+              tipContent.classList.add("code-annotation-tip-content");
+              return tipContent.outerHTML;
+            }
+          }
+          const config = {
+            allowHTML: true,
+            content: contentFn,
+            onShow: (instance) => {
+              selectCodeLines(instance.reference);
+              instance.reference.classList.add('code-annotation-active');
+              window.tippy.hideAll();
+            },
+            onHide: (instance) => {
+              unselectCodeLines();
+              instance.reference.classList.remove('code-annotation-active');
+            },
+            maxWidth: 300,
+            delay: [50, 0],
+            duration: [200, 0],
+            offset: [5, 10],
+            arrow: true,
+            appendTo: function(el) {
+              return el.parentElement.parentElement.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'quarto',
+            placement: 'right',
+            popperOptions: {
+              modifiers: [
+              {
+                name: 'flip',
+                options: {
+                  flipVariations: false, // true by default
+                  allowedAutoPlacements: ['right'],
+                  fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                },
+              },
+              {
+                name: 'preventOverflow',
+                options: {
+                  mainAxis: false,
+                  altAxis: false
+                }
+              }
+              ]        
+            }      
+          };
+          window.tippy(annoteTarget, config); 
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="tequilahub/tequila-tutorials" issue-term="pathname" theme="preferred-color-scheme" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tequilahub/tequila-tutorials/blob/main/research/vqa_optimizers_benchmarking/tutorial_vqa_optimizers.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/tequilahub/tequila-tutorials/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

@@ -1,0 +1,191 @@
+
+% pso original paper 
+
+@inproceedings{kennedy_particle_1995,
+	location = {Perth, {WA}, Australia},
+	title = {Particle swarm optimization},
+	volume = {4},
+	isbn = {978-0-7803-2768-9},
+	url = {http://ieeexplore.ieee.org/document/488968/},
+	doi = {10.1109/ICNN.1995.488968},
+	eventtitle = {{ICNN}'95 - International Conference on Neural Networks},
+	pages = {1942--1948},
+	booktitle = {Proceedings of {ICNN}'95 - International Conference on Neural Networks},
+	publisher = {{IEEE}},
+	author = {Kennedy, J. and Eberhart, R.},
+	urldate = {2026-05-29},
+	date = {1995},
+}
+
+% hopso arxiv papaer 
+
+@misc{mohammad_hopso_2025,
+	title = {{HOPSO}: A Robust Classical Optimizer for {VQE}},
+	rights = {Creative Commons Attribution 4.0 International},
+	url = {https://arxiv.org/abs/2508.13651},
+	doi = {10.48550/ARXIV.2508.13651},
+	shorttitle = {{HOPSO}},
+	abstract = {Variational Quantum Eigensolver ({VQE}) algorithm is one of few approaches where the hope for near-term quantum advantage concentrates. However, they face challenges connected with measurement stochastic noise, barren plateaus, and optimization difficulties in periodic parameter spaces. While most of the efforts concentrates on optimizing the quantum part of the procedure, here we aim to enhance the classical optimization by utilizing a modified version of Harmonic Oscillator-based Particle Swarm Optimization ({HOPSO}). By adapting its dynamics to respect the periodicity of quantum parameters and enhance noise resilience, we show its strengths on hydrogen (H2) and lithium hydride ({LiH}) molecules modeled as 4- and 8-qubit Hamiltonians. {HOPSO} achieves competitive ground-state energy approximations and demonstrates improved robustness compared to {COBYLA}, Differential Evolution ({DE}), and standard Particle Swarm Optimization ({PSO}) methods in all situations and outperforms other methods under realistic noise conditions. These results suggest that a properly tailored classical part of {VQE} algorithms can tackle with current problems and gives hope for its scalability for larger systems.},
+	publisher = {{arXiv}},
+	author = {Mohammad, Ijaz Ahamed and Chernyak, Yury and Plesch, Martin},
+	urldate = {2026-05-29},
+	date = {2025},
+	note = {Version Number: 1},
+	keywords = {{FOS}: Physical sciences, Quantum Physics (quant-ph)},
+	annotation = {Other
+20 pages, 8 figures},
+}
+
+
+% hopso journal paper with classical optimisation 
+
+@article{chernyak_harmonic_2025,
+	title = {Harmonic oscillator based particle swarm optimization},
+	volume = {20},
+	issn = {1932-6203},
+	url = {https://dx.plos.org/10.1371/journal.pone.0326173},
+	doi = {10.1371/journal.pone.0326173},
+	abstract = {Numerical optimization techniques are widely applied across various fields of science and technology, ranging from determining the minimal energy of systems in physics and chemistry to identifying optimal routes in logistics or strategies for high-speed trading. Here, we present a novel method that integrates particle swarm optimization ({PSO}), a highly effective and widely used algorithm inspired by the collective behavior of bird flocks searching for food, with the physical principle of conserving energy and damping in harmonic oscillators. This physics-based approach allows smoother convergence throughout the optimization process and wider tunability options. We evaluated our method on a standard set of test functions and demonstrated that, in most cases, it outperforms its natural competitors, including the original {PSO}, as well as commonly used optimization methods such as {COBYLA} and Differential Evolution.},
+	pages = {e0326173},
+	number = {6},
+	journaltitle = {{PLOS} One},
+	shortjournal = {{PLoS} One},
+	author = {Chernyak, Yury and Mohammad, Ijaz Ahamed and Masnicak, Nikolas and Pivoluska, Matej and Plesch, Martin},
+	editor = {Liu, Yuanchao},
+	urldate = {2026-05-29},
+	date = {2025-06-27},
+	langid = {english},
+	file = {Full Text PDF:/Users/rammosco/Zotero/storage/RE8B2A9S/Chernyak et al. - 2025 - Harmonic oscillator based particle swarm optimization.pdf:application/pdf},
+}
+
+% adelinas paper with scalability, noise etc. - for introduction 
+
+@article{barligea_scalability_2025,
+	title = {Scalability challenges in variational quantum optimization under stochastic noise},
+	volume = {112},
+	issn = {2469-9926, 2469-9934},
+	url = {https://link.aps.org/doi/10.1103/rgyh-8xw8},
+	doi = {10.1103/rgyh-8xw8},
+	abstract = {With rapid advances in quantum hardware, a central question is whether quantum devices with or without full error correction can outperform classical computers on practically relevant problems. Variational quantum algorithms ({VQAs}) have gained significant attention as promising candidates in this pursuit, particularly for combinatorial optimization problems. While reports of their challenges and limitations continue to accumulate, many studies remain optimistic based on small-scale, idealized testing setups, leaving doubt about the scalability of {VQAs} for large-scale problems. We systematically investigate this scaling behavior by analyzing how classical optimizers minimize variational quantum loss functions for random Quadratic Unconstrained Binary Optimization instances in the presence of uncertainty, modeled as effective Gaussian noise. We find that the critical noise threshold for successful optimization decreases rapidly as system size grows. This decline exceeds what can be explained solely by shrinking loss variance, confirming deeper, fundamental limitations in the loss landscapes of {VQAs} beyond barren plateaus. Translating these thresholds into required measurement shots reveals that achieving sufficient precision in the evaluated loss values quickly becomes impractical, even for moderatelysized problems. Our findings demonstrate serious scalability challenges for {VQAs} in optimization stemming from mere uncertainty, indicating potential barriers to achieving practical quantum advantage with current hybrid approaches.},
+	pages = {032407},
+	number = {3},
+	journaltitle = {Physical Review A},
+	shortjournal = {Phys. Rev. A},
+	author = {Bärligea, Adelina and Poggel, Benedikt and Lorenz, Jeanette Miriam},
+	urldate = {2026-06-30},
+	date = {2025-09-03},
+	langid = {english},
+	file = {Volltext:/Users/rammosco/Zotero/storage/8F2ILY4Y/Bärligea et al. - 2025 - Scalability challenges in variational quantum optimization under stochastic noise.pdf:application/pdf},
+}
+
+% another paper with 2. noise-aware algo
+
+@article{larson_novel_2025,
+	title = {A Novel Noise-Aware Classical Optimizer for Variational Quantum Algorithms},
+	volume = {37},
+	issn = {1091-9856, 1526-5528},
+	url = {http://arxiv.org/abs/2401.10121},
+	doi = {10.1287/ijoc.2024.0578},
+	abstract = {A key component of variational quantum algorithms ({VQAs}) is the choice of classical optimizer employed to update the parameterization of an ansatz. It is well recognized that quantum algorithms will, for the foreseeable future, necessarily be run on noisy devices with limited fidelities. Thus, the evaluation of an objective function (e.g., the guiding function in the quantum approximate optimization algorithm ({QAOA}) or the expectation of the electronic Hamiltonian in variational quantum eigensolver ({VQE})) required by a classical optimizer is subject not only to stochastic error from estimating an expected value but also to error resulting from intermittent hardware noise. Model-based derivative-free optimization methods have emerged as popular choices of a classical optimizer in the noisy {VQA} setting, based on empirical studies. However, these optimization methods were not explicitly designed with the consideration of noise. In this work we adapt recent developments from the ``noise-aware numerical optimization'' literature to these commonly used derivative-free model-based methods. We introduce the key defining characteristics of these novel noise-aware derivative-free model-based methods that separate them from standard model-based methods. We study an implementation of such noise-aware derivative-free model-based methods and compare its performance on demonstrative {VQA} simulations to classical solvers packaged in {\textbackslash}texttt\{scikit-quant\}.},
+	pages = {63--85},
+	number = {1},
+	journaltitle = {{INFORMS} Journal on Computing},
+	shortjournal = {{INFORMS} Journal on Computing},
+	author = {Larson, Jeffrey and Menickelly, Matt and Shi, Jiahao},
+	urldate = {2026-06-30},
+	date = {2025-01},
+	eprinttype = {arxiv},
+	eprint = {2401.10121 [quant-ph]},
+	keywords = {Mathematics - Optimization and Control, Quantum Physics},
+	file = {Preprint PDF:/Users/rammosco/Zotero/storage/FLUQTVA4/Larson et al. - 2025 - A Novel Noise-Aware Classical Optimizer for Variational Quantum Algorithms.pdf:application/pdf;Snapshot:/Users/rammosco/Zotero/storage/P4V6DPUF/2401.html:text/html},
+}
+
+% tequila by kottmann 
+
+@article{kottmann_tequila_2021,
+	title = {Tequila: A platform for rapid development of quantum algorithms},
+	volume = {6},
+	issn = {2058-9565},
+	url = {http://arxiv.org/abs/2011.03057},
+	doi = {10.1088/2058-9565/abe567},
+	shorttitle = {Tequila},
+	abstract = {Variational quantum algorithms are currently the most promising class of algorithms for deployment on near-term quantum computers. In contrast to classical algorithms, there are almost no standardized methods in quantum algorithmic development yet, and the field continues to evolve rapidly. As in classical computing, heuristics play a crucial role in the development of new quantum algorithms, resulting in high demand for flexible and reliable ways to implement, test, and share new ideas. Inspired by this demand, we introduce tequila, a development package for quantum algorithms in python, designed for fast and flexible implementation, prototyping, and deployment of novel quantum algorithms in electronic structure and other fields. Tequila operates with abstract expectation values which can be combined, transformed, differentiated, and optimized. On evaluation, the abstract data structures are compiled to run on state-of-the-art quantum simulators or interfaces.},
+	pages = {024009},
+	number = {2},
+	journaltitle = {Quantum Science and Technology},
+	shortjournal = {Quantum Sci. Technol.},
+	author = {Kottmann, Jakob S. and Alperin-Lea, Sumner and Tamayo-Mendoza, Teresa and Cervera-Lierta, Alba and Lavigne, Cyrille and Yen, Tzu-Ching and Verteletskyi, Vladyslav and Schleich, Philipp and Anand, Abhinav and Degroote, Matthias and Chaney, Skylar and Kesibi, Maha and Curnow, Naomi Grace and Solo, Brandon and Tsilimigkounakis, Georgios and Zendejas-Morales, Claudia and Izmaylov, Artur F. and Aspuru-Guzik, Alán},
+	urldate = {2026-06-30},
+	date = {2021-04-01},
+	eprinttype = {arxiv},
+	eprint = {2011.03057 [quant-ph]},
+	keywords = {Physics - Chemical Physics, Physics - Computational Physics, Quantum Physics},
+	file = {Preprint PDF:/Users/rammosco/Zotero/storage/PGFVTQC6/Kottmann et al. - 2021 - Tequila A platform for rapid development of quantum algorithms.pdf:application/pdf;Snapshot:/Users/rammosco/Zotero/storage/2G8XQRVZ/2011.html:text/html},
+}
+
+% COCO BBOB suit whose functions are used in the journal paper 
+
+@article{hansen2021coco,
+  author = {Hansen, N. and Auger, A. and Ros, R. and Mersmann, O. and Tu{\v s}ar, T. and Brockhoff, D.},
+  title = {{COCO}: A Platform for Comparing Continuous Optimizers in a Black-Box Setting},
+  journal = {Optimization Methods and Software},
+  doi = {https://doi.org/10.1080/10556788.2020.1808977},
+  pages = {114--144},
+  issue = {1},
+  volume = {36},
+  year = 2021
+}
+
+% added by Adelina
+@article{Preskill2018,
+  title = {Quantum Computing in the NISQ era and beyond},
+  volume = {2},
+  ISSN = {2521-327X},
+  url = {http://dx.doi.org/10.22331/q-2018-08-06-79},
+  DOI = {10.22331/q-2018-08-06-79},
+  journal = {Quantum},
+  publisher = {Verein zur Forderung des Open Access Publizierens in den Quantenwissenschaften},
+  author = {Preskill,  John},
+  year = {2018},
+  month = Aug,
+  pages = {79}
+}
+
+@article{Cerezo2021,
+  title = {Variational quantum algorithms},
+  volume = {3},
+  ISSN = {2522-5820},
+  url = {http://dx.doi.org/10.1038/s42254-021-00348-9},
+  DOI = {10.1038/s42254-021-00348-9},
+  number = {9},
+  journal = {Nature Reviews Physics},
+  publisher = {Springer Science and Business Media LLC},
+  author = {Cerezo,  M. and Arrasmith,  Andrew and Babbush,  Ryan and Benjamin,  Simon C. and Endo,  Suguru and Fujii,  Keisuke and McClean,  Jarrod R. and Mitarai,  Kosuke and Yuan,  Xiao and Cincio,  Lukasz and Coles,  Patrick J.},
+  year = {2021},
+  month = Aug,
+  pages = {625–644}
+}
+@article{Peruzzo.2014-VariationalEigenvalueSolver,
+    title = {A variational eigenvalue solver on a photonic quantum processor},
+    volume = {5},
+    doi = {10.1038/ncomms5213},
+    journal = {Nature communications},
+    author = {Peruzzo, Alberto and McClean, Jarrod and Shadbolt, Peter and Yung, Man-Hong and Zhou, Xiao-Qi and Love, Peter J. and Aspuru-Guzik, Alán and O'Brien, Jeremy L.},
+    month = jan,
+    year = {2014},
+    pages = {4213},
+}
+
+@article{Wang2021,
+  title = {Noise-induced barren plateaus in variational quantum algorithms},
+  volume = {12},
+  ISSN = {2041-1723},
+  url = {http://dx.doi.org/10.1038/s41467-021-27045-6},
+  DOI = {10.1038/s41467-021-27045-6},
+  number = {1},
+  journal = {Nature Communications},
+  publisher = {Springer Science and Business Media LLC},
+  author = {Wang,  Samson and Fontana,  Enrico and Cerezo,  M. and Sharma,  Kunal and Sone,  Akira and Cincio,  Lukasz and Coles,  Patrick J.},
+  year = {2021},
+  month = Nov 
+}

@@ -1,131 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/FAQ/FAQ.html</loc>
-    <lastmod>2026-09-09T14:49:34.632Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/FAQ.html</loc>
-    <lastmod>2026-09-09T14:49:34.632Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/Braket/BraketTutorial.html</loc>
-    <lastmod>2026-09-09T14:49:34.770Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/OpenQASMConversions/OpenQASMConversions.html</loc>
-    <lastmod>2026-09-09T14:49:34.775Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/optimizer/Optimizers.html</loc>
-    <lastmod>2026-09-09T14:49:34.785Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/AdaptiveMethods/jupyter_notebook.html</loc>
-    <lastmod>2026-09-09T14:49:34.760Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/tq-get-started/index.html</loc>
-    <lastmod>2026-09-09T14:49:34.790Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/DQI/DQImaxCutTutorial.html</loc>
-    <lastmod>2026-09-09T14:49:34.773Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/vqe/vqe.html</loc>
-    <lastmod>2026-09-09T14:49:34.791Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/research/first_quantized_chemistry_simulations/index.html</loc>
-    <lastmod>2026-09-09T14:49:34.703Z</lastmod>
-  </url>
-  <url>
     <loc>https://tequilahub.github.io/tequila-tutorials/research/electronic-hamiltonians/index.html</loc>
-    <lastmod>2026-09-09T14:49:34.692Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/research/quantum_classifier/quantum_classifier.html</loc>
-    <lastmod>2026-09-09T14:49:34.712Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/research/vqa_optimizers_benchmarking/tutorial.html</loc>
-    <lastmod>2026-09-09T14:49:34.731Z</lastmod>
+    <lastmod>2026-10-09T13:41:56.324Z</lastmod>
   </url>
   <url>
     <loc>https://tequilahub.github.io/tequila-tutorials/research/exvqe/Eigensolver.html</loc>
-    <lastmod>2026-09-09T14:49:34.698Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/research/vqa-init-strategies/tutorial.html</loc>
-    <lastmod>2026-09-09T14:49:34.715Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials.html</loc>
-    <lastmod>2026-09-09T14:49:34.735Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/index.html</loc>
-    <lastmod>2026-09-09T14:49:34.691Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/research.html</loc>
-    <lastmod>2026-09-09T14:49:34.691Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/research/PCE/tutorial.html</loc>
-    <lastmod>2026-09-09T14:49:34.691Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/research/molcirc/index.html</loc>
-    <lastmod>2026-09-09T14:49:34.704Z</lastmod>
+    <lastmod>2026-10-09T13:41:56.329Z</lastmod>
   </url>
   <url>
     <loc>https://tequilahub.github.io/tequila-tutorials/research/ShotFrugalOpt/tutorial.html</loc>
-    <lastmod>2026-09-09T14:49:34.692Z</lastmod>
+    <lastmod>2026-10-09T13:41:56.324Z</lastmod>
   </url>
   <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/research/pauli_decomposition/Tutorial.html</loc>
-    <lastmod>2026-09-09T14:49:34.704Z</lastmod>
+    <loc>https://tequilahub.github.io/tequila-tutorials/research/vqa-init-strategies/tutorial.html</loc>
+    <lastmod>2026-10-09T13:41:56.345Z</lastmod>
   </url>
   <url>
     <loc>https://tequilahub.github.io/tequila-tutorials/research/gaussian_convolution/index.html</loc>
-    <lastmod>2026-09-09T14:49:34.703Z</lastmod>
+    <lastmod>2026-10-09T13:41:56.334Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/research/PCE/tutorial.html</loc>
+    <lastmod>2026-10-09T13:41:56.323Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/FAQ/FAQ.html</loc>
+    <lastmod>2026-10-09T13:41:56.269Z</lastmod>
   </url>
   <url>
     <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/CombinatorialOptimization/jupyter_notebook.html</loc>
-    <lastmod>2026-09-09T14:49:34.772Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/CircuitCompiler/CircuitCompiler.html</loc>
-    <lastmod>2026-09-09T14:49:34.771Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/AutomaticDecompositions/index.html</loc>
-    <lastmod>2026-09-09T14:49:34.769Z</lastmod>
+    <lastmod>2026-10-09T13:41:56.392Z</lastmod>
   </url>
   <url>
     <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/tq-circuits/index.html</loc>
-    <lastmod>2026-09-09T14:49:34.789Z</lastmod>
-  </url>
-  <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/quanti-gin/quanti-gin_summary.html</loc>
-    <lastmod>2026-09-09T14:49:34.789Z</lastmod>
+    <lastmod>2026-10-09T13:41:56.414Z</lastmod>
   </url>
   <url>
     <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/KrylovTutorial/KrylovTutorial.html</loc>
-    <lastmod>2026-09-09T14:49:34.773Z</lastmod>
+    <lastmod>2026-10-09T13:41:56.393Z</lastmod>
   </url>
   <url>
-    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/LRZ/lrz.html</loc>
-    <lastmod>2026-09-09T14:49:34.773Z</lastmod>
+    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/optimizer/Optimizers.html</loc>
+    <lastmod>2026-10-09T13:41:56.410Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/Quanti-Gin-extensions/quanti-gin_extensions.html</loc>
+    <lastmod>2026-10-09T13:41:56.406Z</lastmod>
   </url>
   <url>
     <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/QTensor/QTensor.html</loc>
-    <lastmod>2026-09-09T14:49:34.781Z</lastmod>
+    <lastmod>2026-10-09T13:41:56.401Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/Braket/BraketTutorial.html</loc>
+    <lastmod>2026-10-09T13:41:56.390Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/quanti-gin/quanti-gin_summary.html</loc>
+    <lastmod>2026-10-09T13:41:56.414Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials.html</loc>
+    <lastmod>2026-10-09T13:41:56.359Z</lastmod>
   </url>
   <url>
     <loc>https://tequilahub.github.io/tequila-tutorials/Contribution/Contribution.html</loc>
-    <lastmod>2026-09-09T14:49:34.631Z</lastmod>
+    <lastmod>2026-10-09T13:41:56.269Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/FAQ.html</loc>
+    <lastmod>2026-10-09T13:41:56.269Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/index.html</loc>
+    <lastmod>2026-10-09T13:41:56.323Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/AdaptiveMethods/jupyter_notebook.html</loc>
+    <lastmod>2026-10-09T13:41:56.382Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/DQI/DQImaxCutTutorial.html</loc>
+    <lastmod>2026-10-09T13:41:56.393Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/CircuitCompiler/CircuitCompiler.html</loc>
+    <lastmod>2026-10-09T13:41:56.392Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/AutomaticDecompositions/index.html</loc>
+    <lastmod>2026-10-09T13:41:56.390Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/OpenQASMConversions/OpenQASMConversions.html</loc>
+    <lastmod>2026-10-09T13:41:56.395Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/tq-get-started/index.html</loc>
+    <lastmod>2026-10-09T13:41:56.415Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/vqe/vqe.html</loc>
+    <lastmod>2026-10-09T13:41:56.416Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/tutorials/LRZ/lrz.html</loc>
+    <lastmod>2026-10-09T13:41:56.394Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/research.html</loc>
+    <lastmod>2026-10-09T13:41:56.323Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/research/molcirc/index.html</loc>
+    <lastmod>2026-10-09T13:41:56.335Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/research/pauli_decomposition/Tutorial.html</loc>
+    <lastmod>2026-10-09T13:41:56.335Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/research/quantum_classifier/quantum_classifier.html</loc>
+    <lastmod>2026-10-09T13:41:56.342Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/research/first_quantized_chemistry_simulations/index.html</loc>
+    <lastmod>2026-10-09T13:41:56.334Z</lastmod>
+  </url>
+  <url>
+    <loc>https://tequilahub.github.io/tequila-tutorials/research/vqa_optimizers_benchmarking/tutorial.html</loc>
+    <lastmod>2026-10-09T13:41:56.355Z</lastmod>
   </url>
 </urlset>

@@ -1,19 +1,13 @@
 [
   {
-    "listing": "/FAQ.html",
-    "items": [
-      "/FAQ/FAQ.html"
-    ]
-  },
-  {
     "listing": "/tutorials.html",
     "items": [
       "/tutorials/tq-get-started/index.html",
       "/tutorials/tq-circuits/index.html",
       "/tutorials/CircuitCompiler/CircuitCompiler.html",
-      "/tutorials/OpenQASMConversions/OpenQASMConversions.html",
       "/tutorials/Braket/BraketTutorial.html",
       "/tutorials/QTensor/QTensor.html",
+      "/tutorials/OpenQASMConversions/OpenQASMConversions.html",
       "/tutorials/optimizer/Optimizers.html",
       "/tutorials/KrylovTutorial/KrylovTutorial.html",
       "/tutorials/vqe/vqe.html",
@@ -22,7 +16,14 @@
       "/tutorials/AutomaticDecompositions/index.html",
       "/tutorials/LRZ/lrz.html",
       "/tutorials/CombinatorialOptimization/jupyter_notebook.html",
-      "/tutorials/DQI/DQImaxCutTutorial.html"
+      "/tutorials/DQI/DQImaxCutTutorial.html",
+      "/tutorials/Quanti-Gin-extensions/quanti-gin_extensions.html"
+    ]
+  },
+  {
+    "listing": "/FAQ.html",
+    "items": [
+      "/FAQ/FAQ.html"
     ]
   },
   {
@@ -31,8 +32,8 @@
       "/research/vqa_optimizers_benchmarking/tutorial.html",
       "/research/PCE/tutorial.html",
       "/research/vqa-init-strategies/tutorial.html",
-      "/research/ShotFrugalOpt/tutorial.html",
       "/research/pauli_decomposition/Tutorial.html",
+      "/research/ShotFrugalOpt/tutorial.html",
       "/research/first_quantized_chemistry_simulations/index.html",
       "/research/gaussian_convolution/index.html",
       "/research/exvqe/Eigensolver.html",

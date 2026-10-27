@@ -18,9 +18,9 @@ format:
 
 ## Introduction
 
-Working in the quantum domain, we often lack good tools to compare and benchmark against state-of-the-art optimization methods. Benchmarking, requires large amounts of reference data for statistically significant comparisons, so we introduce a configurable data generator which can be used to create large sets of hydrogenic test systems and their corresponding energies, with a focus on allowing quick and easy plug-in testing of custom optimization methods. In the following, we introduce the data generator quanti-gin (available at: <https://github.com/nylser/quanti-gin>) and illustrate how to use and customize it.
+Working in the quantum domain, we often lack good tools to compare and benchmark against state-of-the-art optimization methods. Benchmarking, requires large amounts of reference data for statistically significant comparisons, so we introduce a configurable data generator which can be used to create large sets of hydrogenic test systems and their corresponding energies, with a focus on allowing quick and easy plug-in testing of custom optimization methods. In the following, we introduce the data generator quanti-gin (available at: <https://github.com/tequilahub/quanti-gin>) and illustrate how to use and customize it.
 The Separable Pair Ansatz (SPA) provides a structured approach for constructing such variational states. An important part of the SPA initialization is the choice of edges, where each edge connects two orbitals that form a separable pair.
-For a system with an even number of atoms, the initialization problem can therefore be formulated as a graph matching problem. The Quanti-Gin framework was extended by a few graph matching heuristics and suitable bechmarking and visualisation tools.
+For a system with an even number of atoms, the initialization problem can therefore be formulated as a graph matching problem. The Quanti-Gin framework was extended by a few graph matching heuristics and suitable benchmarking and visualization tools.
 The implemented SPA initialization strategies include:
 
     - brute force
